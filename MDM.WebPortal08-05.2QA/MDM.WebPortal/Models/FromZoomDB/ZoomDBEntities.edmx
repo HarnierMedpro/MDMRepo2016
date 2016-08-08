@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ZoomDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Pos_Tab">
+          <Key>
+            <PropertyRef Name="I_Pos_Tab" />
+          </Key>
+          <Property Name="DB#" Type="bigint" />
+          <Property Name="DatabaseName" Type="varchar" MaxLength="75" />
+          <Property Name="Facility ID" Type="bigint" />
+          <Property Name="Fac NAME" Type="varchar" MaxLength="75" />
+          <Property Name="Fac Address 1" Type="varchar" MaxLength="50" />
+          <Property Name="Fac Address 2" Type="varchar" MaxLength="50" />
+          <Property Name="Fac City" Type="varchar" MaxLength="50" />
+          <Property Name="Fac State" Type="varchar" MaxLength="50" />
+          <Property Name="Fac Zip" Type="varchar" MaxLength="27" />
+          <Property Name="Fac PHONE" Type="varchar" MaxLength="50" />
+          <Property Name="Fac FAX" Type="varchar" MaxLength="50" />
+          <Property Name="Fac Email" Type="varchar" MaxLength="50" />
+          <Property Name="Billing Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Billing Address2" Type="varchar" MaxLength="75" />
+          <Property Name="Billing City" Type="varchar" MaxLength="50" />
+          <Property Name="Billing State" Type="varchar" MaxLength="50" />
+          <Property Name="Billing Zip" Type="varchar" MaxLength="50" />
+          <Property Name="Billing Phone" Type="varchar" MaxLength="50" />
+          <Property Name="Billing Fax" Type="varchar" MaxLength="50" />
+          <Property Name="Billing Email" Type="varchar" MaxLength="50" />
+          <Property Name="Federal Tax ID" Type="bigint" />
+          <Property Name="CLIA'ID" Type="varchar" MaxLength="50" />
+          <Property Name="POS" Type="varchar" MaxLength="50" />
+          <Property Name="NPI" Type="bigint" />
+          <Property Name="CheckPayableTo" Type="varchar" MaxLength="50" />
+          <Property Name="MamographyCertificationNo" Type="varchar" MaxLength="50" />
+          <Property Name="FacilityCode" Type="varchar" MaxLength="50" />
+          <Property Name="Facility Type" Type="varchar" MaxLength="50" />
+          <Property Name="I_Pos_Tab" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="ZoomDBModelStoreContainer">
+          <EntitySet Name="Pos_Tab" EntityType="Self.Pos_Tab" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ZoomDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Pos_Tab">
+          <Key>
+            <PropertyRef Name="I_Pos_Tab" />
+          </Key>
+          <Property Name="DB_" Type="Int64" />
+          <Property Name="DatabaseName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="Facility_ID" Type="Int64" />
+          <Property Name="Fac_NAME" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="Fac_Address_1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fac_Address_2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fac_City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fac_State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fac_Zip" Type="String" MaxLength="27" FixedLength="false" Unicode="false" />
+          <Property Name="Fac_PHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fac_FAX" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fac_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Billing_Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Billing_Address2" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="Billing_City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Billing_State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Billing_Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Billing_Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Billing_Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Billing_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Federal_Tax_ID" Type="Int64" />
+          <Property Name="CLIA_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="POS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NPI" Type="Int64" />
+          <Property Name="CheckPayableTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MamographyCertificationNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FacilityCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Facility_Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="I_Pos_Tab" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityContainer Name="ZoomDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Pos_Tab" EntityType="Self.Pos_Tab" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ZoomDBModelStoreContainer" CdmEntityContainer="ZoomDBEntities">
+          <EntitySetMapping Name="Pos_Tab">
+            <EntityTypeMapping TypeName="ZoomDBModel.Pos_Tab">
+              <MappingFragment StoreEntitySet="Pos_Tab">
+                <ScalarProperty Name="DB_" ColumnName="DB#" />
+                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+                <ScalarProperty Name="Facility_ID" ColumnName="Facility ID" />
+                <ScalarProperty Name="Fac_NAME" ColumnName="Fac NAME" />
+                <ScalarProperty Name="Fac_Address_1" ColumnName="Fac Address 1" />
+                <ScalarProperty Name="Fac_Address_2" ColumnName="Fac Address 2" />
+                <ScalarProperty Name="Fac_City" ColumnName="Fac City" />
+                <ScalarProperty Name="Fac_State" ColumnName="Fac State" />
+                <ScalarProperty Name="Fac_Zip" ColumnName="Fac Zip" />
+                <ScalarProperty Name="Fac_PHONE" ColumnName="Fac PHONE" />
+                <ScalarProperty Name="Fac_FAX" ColumnName="Fac FAX" />
+                <ScalarProperty Name="Fac_Email" ColumnName="Fac Email" />
+                <ScalarProperty Name="Billing_Address1" ColumnName="Billing Address1" />
+                <ScalarProperty Name="Billing_Address2" ColumnName="Billing Address2" />
+                <ScalarProperty Name="Billing_City" ColumnName="Billing City" />
+                <ScalarProperty Name="Billing_State" ColumnName="Billing State" />
+                <ScalarProperty Name="Billing_Zip" ColumnName="Billing Zip" />
+                <ScalarProperty Name="Billing_Phone" ColumnName="Billing Phone" />
+                <ScalarProperty Name="Billing_Fax" ColumnName="Billing Fax" />
+                <ScalarProperty Name="Billing_Email" ColumnName="Billing Email" />
+                <ScalarProperty Name="Federal_Tax_ID" ColumnName="Federal Tax ID" />
+                <ScalarProperty Name="CLIA_ID" ColumnName="CLIA'ID" />
+                <ScalarProperty Name="POS" ColumnName="POS" />
+                <ScalarProperty Name="NPI" ColumnName="NPI" />
+                <ScalarProperty Name="CheckPayableTo" ColumnName="CheckPayableTo" />
+                <ScalarProperty Name="MamographyCertificationNo" ColumnName="MamographyCertificationNo" />
+                <ScalarProperty Name="FacilityCode" ColumnName="FacilityCode" />
+                <ScalarProperty Name="Facility_Type" ColumnName="Facility Type" />
+                <ScalarProperty Name="I_Pos_Tab" ColumnName="I_Pos_Tab" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

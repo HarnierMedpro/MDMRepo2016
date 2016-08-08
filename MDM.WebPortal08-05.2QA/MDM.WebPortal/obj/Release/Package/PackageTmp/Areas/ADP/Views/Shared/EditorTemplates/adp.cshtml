@@ -1,0 +1,21 @@
+﻿@using Kendo.Mvc.UI
+@(Html.Kendo().AutoComplete()
+      .Name("id")
+      .DataTextField("id")
+      .Filter("contains")
+      .MinLength(3)
+      .HtmlAttributes(new { style = "width:100%" })
+      .Template("#= ADP_ID #  #= LName #, #= FName #")
+      .Height(520)
+      .DataSource(source =>
+      {
+           
+          source.Read(read =>
+          {
+              read.Action("Virtualization_Read", "Edgemed_Logons"); 
+          })
+          .ServerFiltering(false);
+      })
+)
+
+

@@ -1,0 +1,26 @@
+﻿@model MDM.WebPortal.Models.ViewModel.VMActionSystem
+@{
+    //required in order to render validation attributes
+    ViewContext.FormContext = new FormContext();
+}
+
+<div class="k-edit-label">
+    @(Html.LabelFor(model => model.ControllerID))
+</div>
+<div data-container-for="title" class="k-edit-field">
+    @*@(Html.TextBoxFor(model => model.ControllerID, new { @class = "k-textbox", style = "border-radius: 3px !important; width:100%;" }))*@
+    @(Html.Kendo().DropDownListFor(x => x.ControllerID)
+          .DataTextField("Cont_Name") //Specify which property of the Controller to be used by the DropDownList as a text.
+          .DataValueField("ControllerID") //Specify which property of the Controller to be used by the DropDownList as a value.
+          .BindTo((IEnumerable<MDM.WebPortal.Models.ViewModel.VMControllerSystem>) ViewData["Controllers"]) //Pass the list of Controller to the DropDownList using the ViewData that I populate in the Index method.
+          .HtmlAttributes(new {style = "border-radius: 3px !important; width:100%;"})
+          )
+</div>
+
+<div class="k-edit-label">
+    @(Html.LabelFor(model => model.Act_Name))
+</div>
+<div data-container-for="title" class="k-edit-field">
+    @(Html.TextBoxFor(model => model.Act_Name, new { @class = "k-textbox", style = "border-radius: 3px !important; width:100%;" }))
+   
+</div>

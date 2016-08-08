@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ZoomDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Pos_Tab">
+    <Key>
+      <PropertyRef Name="I_Pos_Tab" />
+    </Key>
+    <Property Name="DB_" Type="Int64" />
+    <Property Name="DatabaseName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+    <Property Name="Facility_ID" Type="Int64" />
+    <Property Name="Fac_NAME" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+    <Property Name="Fac_Address_1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Fac_Address_2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Fac_City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Fac_State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Fac_Zip" Type="String" MaxLength="27" FixedLength="false" Unicode="false" />
+    <Property Name="Fac_PHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Fac_FAX" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Fac_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Billing_Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Billing_Address2" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+    <Property Name="Billing_City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Billing_State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Billing_Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Billing_Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Billing_Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Billing_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Federal_Tax_ID" Type="Int64" />
+    <Property Name="CLIA_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="POS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="NPI" Type="Int64" />
+    <Property Name="CheckPayableTo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MamographyCertificationNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FacilityCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Facility_Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="I_Pos_Tab" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityContainer Name="ZoomDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Pos_Tab" EntityType="Self.Pos_Tab" />
+  </EntityContainer>
+</Schema>

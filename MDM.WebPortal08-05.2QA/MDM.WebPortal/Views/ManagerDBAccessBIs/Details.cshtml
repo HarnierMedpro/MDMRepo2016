@@ -1,0 +1,67 @@
+﻿@model MDM.WebPortal.Models.FromDB.ManagerDBAccessBI
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ManagerDBAccessBI</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FvP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FvP)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DB)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DB)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Manager)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Manager)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AliasName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AliasName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NTUser)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NTUser)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.active)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.active)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

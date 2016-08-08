@@ -1,0 +1,23 @@
+﻿@model MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels.VMManager_Master
+
+<script type="text/javascript">
+    function filterFacilities() {
+        return {
+            ManagerTypeID: $("#ManagerTypeID").data("kendoDropDownList").value()
+        };
+    }
+</script>
+
+@(Html.Kendo().DropDownListFor(m => m.ManagerTypeID)
+
+                      .ValuePrimitive(true)
+                      .OptionLabel("Select CLASSIFICATION...")
+                      .DataTextField("Name")
+                      .DataValueField("ManagerTypeID")
+                      .DataSource(dataSource =>
+                      {
+                          dataSource.Read(read => read.Action("GetAvailablesManager_Type", "Manager_Master").Data("filterFacilities"))
+                              .ServerFiltering(true);
+                      })
+)
+@Html.ValidationMessageFor(m => m.ManagerTypeID)

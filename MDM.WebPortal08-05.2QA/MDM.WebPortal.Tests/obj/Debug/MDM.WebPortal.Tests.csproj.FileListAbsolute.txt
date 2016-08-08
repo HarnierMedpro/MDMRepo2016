@@ -1,0 +1,1 @@
+C:\DEV\Testing\MDM.WebPortal\MDM.WebPortal.Tests\obj\Debug\MDM.WebPortal.Tests.csprojResolveAssemblyReference.cache

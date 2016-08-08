@@ -1,0 +1,76 @@
+﻿@model MDM.WebPortal.Models.ViewModel.VMPermission
+@{
+    //required in order to render validation attributes
+    ViewContext.FormContext = new FormContext();
+}
+
+<script type="text/javascript">
+    function filterActions() {
+        return {
+            ControllerID: $("#Controller").data("kendoDropDownList").value()
+        };
+    }
+</script>
+
+<div class="k-edit-label">
+    @(Html.LabelFor(model => model.ControllerID))
+</div>
+<div data-container-for="title" class="k-edit-field">
+    @*@(Html.TextBoxFor(model => model.ControllerID, new { @class = "k-textbox", style = "border-radius: 3px !important; width:100%;" }))*@
+    @(Html.Kendo().DropDownListFor(x => x.ControllerID)
+      .Name("Controller")
+      .ValuePrimitive(true)
+      //.OptionLabel("Select Controller...")
+      .DataTextField("Cont_Name") //Specify which property of the Controller to be used by the DropDownList as a text.
+      .DataValueField("ControllerID") //Specify which property of the Controller to be used by the DropDownList as a value.
+      //.BindTo((IEnumerable<MDM.WebPortal.Models.ViewModel.VMControllerSystem>)ViewData["Controllers"])  //Pass the list of Controller to the DropDownList using the ViewData that I populate in the Index method.
+      .HtmlAttributes(new { style = "border-radius: 3px !important; width:100%;" })
+      .DataSource(dataSource =>
+        {
+            dataSource.Read(read => read.Action("Controllers", "Permissions"))
+            .ServerFiltering(true);
+        })
+    )
+</div>
+
+<div class="k-edit-label">
+    @(Html.LabelFor(model => model.ActionID))
+</div>
+@*<div data-container-for="title" class="k-edit-field">
+    @(Html.Kendo().DropDownListFor(x => x.ActionID)
+          .DataTextField("Act_Name")
+          .DataValueField("ActionID")
+          .BindTo((IEnumerable<MDM.WebPortal.Models.ViewModel.VMActionSystem>) ViewData["Actions"]) //Server Binding
+          .HtmlAttributes(new {style = "border-radius: 3px !important; width:100%;"})
+          )
+</div>*@
+
+<div data-container-for="title" class="k-edit-field">
+    @(Html.Kendo().DropDownListFor(m => m.ActionID)
+        .AutoBind(false)
+        .ValuePrimitive(true)
+        //.OptionLabel("Select Action...")
+        .DataTextField("Act_Name")
+        .DataValueField("ActionID")
+        .HtmlAttributes(new { style = "border-radius: 3px !important; width:100%;" })
+        .DataSource(dataSource =>
+           {
+             dataSource.Read(read => read.Action("GetCascadeActions", "Permissions").Data("filterActions"))
+               .ServerFiltering(true);
+           })
+       .CascadeFrom("Controller")
+    )
+    @Html.ValidationMessageFor(m => m.ActionID)
+</div>
+
+<div class="k-edit-label">
+    @(Html.Label("ROLES"))
+</div>
+
+<div data-container-for="title" class="k-edit-field">
+    @(Html.EditorFor(model => model.Roles))
+</div>
+
+<div data-container-for="title" class="k-edit-field">
+    @(Html.Kendo().CheckBoxFor(x => x.Active))
+</div>

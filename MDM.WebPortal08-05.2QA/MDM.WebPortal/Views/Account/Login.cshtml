@@ -1,0 +1,84 @@
+﻿@model IdentitySample.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Log in";
+}
+
+<header class="main-header">
+    <div class="container">
+        <h1 class="page-title"></h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="@Url.Action("Index","Home")"> <i class="fa fa-home"></i> HOME</a></li>
+            <li class="active">Login</li>
+        </ol>
+    </div>
+</header>
+
+<div class="admin-container">
+    <div class="row">
+        <div class="col-lg-4 col-lg-offset-1 col-md-5">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger ">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="Close">&times;</a>
+                    <p>@ViewBag.Error</p>
+                </div>
+            }
+            <h2 class="section-title no-margin-top">Are you registered?</h2>
+            <div class="panel panel-primary animated fadeInDown animation-delay-2">
+                <div class="panel-heading text-center">ACCES ACCOUNT</div>
+                <div class="panel-body">
+                    @using (Html.BeginForm("Login", "Account", new {ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="input-group login-input">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    @Html.TextBoxFor(m => m.Email, new {@class = "form-control", @placeholder = "Username"})
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Email, "", new {@class = "text-danger"})
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="input-group login-input">
+                                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                    @Html.PasswordFor(m => m.Password, new {@class = "form-control", @placeholder = "Password"})
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Password, "", new {@class = "text-danger"})
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="checkbox">
+                                    <input type="checkbox" name="Remember" id="checkbox_remember">
+                                    <label for="checkbox_remember">Remember me</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @*<section id="socialLoginForm">
+                            @Html.Partial("_ExternalLoginsListPartial", new IdentitySample.Models.ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                        </section>*@
+                        <hr>
+                        @*<a href="#" id="btnCreate" class="btn btn-ar btn-success pull-right">Create Account</a>*@
+                        <button type="submit" class="btn btn-ar btn-primary pull-right">Login</button>
+                        <a href="@Url.Action("ForgotPassword")" class="btn btn-ar btn-warning">Password Recovery</a>
+                        <div class="clearfix"></div>
+
+                    }
+                </div>
+            </div>
+        </div>
+       
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

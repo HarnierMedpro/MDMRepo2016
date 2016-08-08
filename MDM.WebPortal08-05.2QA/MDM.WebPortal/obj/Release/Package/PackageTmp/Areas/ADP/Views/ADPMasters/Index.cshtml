@@ -1,0 +1,91 @@
+﻿@using Kendo.Mvc.UI
+  @*@model IEnumerable<MDM.WebPortal.Models.FromDB.ADPMaster>*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<header class="main-header">
+    <div class="container">
+        <h1 class="page-title"></h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="@Url.Action("Index", "Home", new {area = ""})"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active">ADP_Master</li>
+        </ol>
+    </div>
+</header>
+
+<div class="container">
+    @(Html.Kendo().Grid<MDM.WebPortal.Areas.ADP.Models.VMAdpMaster>()
+          .Name("ADPArea")
+          .ToolBar(tools => tools.Excel())
+          .Excel(excel => excel
+              .AllPages(true)
+              .FileName("ExportADP.xlsx")
+              .Filterable(false))
+
+          .Columns(columns =>
+          {
+              columns.Bound(x => x.ADPMaster_ID).Hidden(true);
+
+              columns.Bound(p => p.ADP).Width(70);
+
+              columns.Bound(x => x.LName).Width(110);
+
+              columns.Bound(x => x.FName).Width(110);
+
+              columns.Bound(p => p.Title).Width(110);
+
+              columns.Bound(p => p.Manager).Width(110);
+
+              columns.Bound(p => p.Active).Width(110);
+
+              columns.Command(commands =>
+              {
+                  commands.Edit();
+              }).Title("COMMANDS").Width(110);
+          })
+
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .ServerOperation(true)
+              .PageSize(10)
+              .Model(model =>
+              {
+                  model.Id(x => x.ADPMaster_ID);
+                  model.Field(x => x.ADPMaster_ID).Editable(false);
+                  model.Field(x => x.ADP).Editable(false);
+              })
+              .Events(events => events.Error("error_handler"))
+              .Update(update => update.Action("Update_Adp", "ADPMasters"))
+              .Read(read => read.Action("Read_Adp", "ADPMasters"))
+          )
+          .Filterable()
+          .Pageable(ps => ps.Refresh(true)
+          .PreviousNext(true).PageSizes(true))
+          .Sortable()
+          .Groupable()
+          .Reorderable(r => r.Columns(true))
+          .Resizable(r => r.Columns(true))
+            //.Selectable(s => s.Enabled(true) ERROR: Additional information: An item with the same key has already been added.
+          //.Type(GridSelectionType.Row)
+          //.Mode(GridSelectionMode.Single))
+          )
+</div>
+<script src="~/Scripts/kendo/jszip.min.js"></script>
+<script>
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>

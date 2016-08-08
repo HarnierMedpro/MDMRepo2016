@@ -1,0 +1,78 @@
+﻿@model MDM.WebPortal.Models.FromDB.BI_DB_FvP_Access
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<header class="main-header">
+    <div class="container">
+        <h1 class="page-title"></h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="@Url.Action("Index", "Home", new {area = ""})"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="@Url.Action("Index")"> BI_DB_FvP_Access</a></li>
+            <li class="active">NEW</li>
+        </ol>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="panel panel-primary box-panel-admin">
+                <div class="panel-heading"><p class="text-bold text-uppercase">BI_DB_FvP_Access</p></div>
+                <div class="panel-body">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("Active", true)
+                        <div class="form-horizontal">
+
+                            <hr />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                <div class="col-md-offset-1 col-md-10">
+                                    @Html.LabelFor(model => model.ManagerID, "MANAGER", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("ManagerID", null, htmlAttributes: new {id="dd_Manager", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ManagerID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-1 col-md-10">
+                                    @Html.LabelFor(model => model.DB_ID, "DB", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("DB_ID", null, htmlAttributes: new {id="dd_DB", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.DB_ID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-1 col-md-10">
+                                    @Html.LabelFor(model => model.FvPID, "FvP", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("FvPID", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.FvPID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <div class="form-group">
+                                    <input type="submit" value="Create" class="btn btn-ar btn-primary"/>
+                                    <a href="@Url.Action("Index")" class="btn btn-ar btn-danger">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/Content/lib/select2/select2.min.css" rel="stylesheet" />
+<script src="~/Scripts/lib/select2/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#dd_Manager').select2();
+        $('#dd_DB').select2();
+    });
+</script>

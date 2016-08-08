@@ -1,0 +1,81 @@
+﻿@model IEnumerable<MDM.WebPortal.Models.FromDB.ManagerDBAccessBI>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@*<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.4.0/jszip.min.js"></script>*@
+<script src="~/Scripts/kendo/jszip.min.js"></script>
+<div class="container">
+    <h2 class="section-title"> Manager's DB Access For BI</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+
+    @(Html.Kendo().Grid<MDM.WebPortal.Models.FromDB.ManagerDBAccessBI>()
+    .Name("GridManager")
+    .DataSource(dataSource => dataSource
+          .Ajax()
+          .ServerOperation(true)
+          .PageSize(10)
+          .Model(model =>
+          {
+              model.Id(x => x.id); // Specify the property which is the unique identifier of the model
+              model.Field(x => x.id).Editable(false); // Make the ProductID property not editable
+          })
+                .Update(update => update.Action("Products_Update", "ManagerDBA"))  // Action invoked when the user saves an updated data item
+                .Read(read => read.Action("Products_Read", "ManagerDBA")) // Set the action method which will return the data in JSON format
+            //.Destroy(destroy => destroy.Action("Products_Destroy", "CollNoteTypeCatPriorities")) // Action invoked when the user removes a data item
+       )
+
+    //.Editable(editable => editable.Mode(GridEditMode.InLine)) // Use inline editing mode
+
+   .Columns(columns =>
+    {    
+
+        columns.Bound(x => x.FvP).Title("FvP").Width(300);
+
+        columns.Bound(p => p.DB).Title("DBNum").Width(300);
+
+        columns.Bound(p => p.Manager).Title("Manager").Width(300);
+
+        columns.Bound(p => p.AliasName).Title("AliasName").Width(300);
+        columns.Bound(p => p.NTUser).Visible(false);
+
+        columns.Bound(p => p.active).Title("Active").Width(300);
+
+        columns.Command(commands =>
+        {
+            commands.Edit(); // The "edit" command will edit and update data items
+            //commands.Destroy(); // The "destroy" command removes data items
+        }).Title("Commands").Width(200);
+    })
+
+
+             .ToolBar(tools => tools.Excel())
+                .Excel(excel => excel
+                    .AllPages(true)
+                    .FileName("ExportData.xlsx")
+                    .Filterable(false)
+                        .ProxyURL(Url.Action("Excel_Export_Save", "ManagerDBA")))
+
+            .Filterable()
+            .Pageable(ps => ps.Refresh(true)
+            .PreviousNext(true).PageSizes(true))
+            .Sortable()
+            .Groupable()
+            .Reorderable(r => r.Columns(true))
+            .Resizable(r => r.Columns(true))
+            .Selectable(s => s.Enabled(true)
+                                        .Type(GridSelectionType.Row)
+                                        .Mode(GridSelectionMode.Single))
+    )
+
+
+</div>
+
+
+
+

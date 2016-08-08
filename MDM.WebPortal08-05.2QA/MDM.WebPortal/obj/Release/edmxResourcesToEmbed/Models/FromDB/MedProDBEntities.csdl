@@ -1,0 +1,455 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MedProDBEntities" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="ADPMaster">
+    <Key>
+      <PropertyRef Name="ADPMasterID" />
+    </Key>
+    <Property Name="ADPMasterID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ADP_ID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Title" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Manager" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="NTUser" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Edgemed_Logons" Relationship="Self.FK_Edgemed_Logons_ADPMaster" FromRole="ADPMaster" ToRole="Edgemed_Logons" />
+  </EntityType>
+  <EntityType Name="BI_DB_FvP_Access">
+    <Key>
+      <PropertyRef Name="BIDbFvPID" />
+    </Key>
+    <Property Name="BIDbFvPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ManagerID" Type="Int32" Nullable="false" />
+    <Property Name="DB_ID" Type="Int32" Nullable="false" />
+    <Property Name="FvPID" Type="Int32" Nullable="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="DBList" Relationship="Self.FK_BI_DB_FvP_Access_DBList" FromRole="BI_DB_FvP_Access" ToRole="DBList" />
+    <NavigationProperty Name="FvPList" Relationship="Self.FK_BI_DB_FvP_Access_FvPList" FromRole="BI_DB_FvP_Access" ToRole="FvPList" />
+    <NavigationProperty Name="Manager_Master" Relationship="Self.FK_BI_DB_FvP_Access_Manager_Master" FromRole="BI_DB_FvP_Access" ToRole="Manager_Master" />
+  </EntityType>
+  <EntityType Name="Corp_DBs">
+    <Key>
+      <PropertyRef Name="ID_PK" />
+    </Key>
+    <Property Name="ID_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="corpID" Type="Int32" Nullable="false" />
+    <Property Name="DB_ID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CorporateMasterList" Relationship="Self.FK_Corp_DBs_CorporateMasterList" FromRole="Corp_DBs" ToRole="CorporateMasterList" />
+    <NavigationProperty Name="DBList" Relationship="Self.FK_Corp_DBs_DBList" FromRole="Corp_DBs" ToRole="DBList" />
+  </EntityType>
+  <EntityType Name="Corp_Owner">
+    <Key>
+      <PropertyRef Name="corpOwnerID" />
+    </Key>
+    <Property Name="corpOwnerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="corpID" Type="Int32" Nullable="false" />
+    <Property Name="OwnersID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CorporateMasterList" Relationship="Self.FK_Corp_Owner_CorporateMasterList" FromRole="Corp_Owner" ToRole="CorporateMasterList" />
+    <NavigationProperty Name="OwnerList" Relationship="Self.FK_Corp_Owner_OwnerList" FromRole="Corp_Owner" ToRole="OwnerList" />
+  </EntityType>
+  <EntityType Name="CorporateMasterList">
+    <Key>
+      <PropertyRef Name="corpID" />
+    </Key>
+    <Property Name="corpID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CorporateName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="active" Type="Boolean" />
+    <NavigationProperty Name="Corp_DBs" Relationship="Self.FK_Corp_DBs_CorporateMasterList" FromRole="CorporateMasterList" ToRole="Corp_DBs" />
+    <NavigationProperty Name="Corp_Owner" Relationship="Self.FK_Corp_Owner_CorporateMasterList" FromRole="CorporateMasterList" ToRole="Corp_Owner" />
+  </EntityType>
+  <EntityType Name="CPTData">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CPT" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CPT_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="ShortD" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="NTUser" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Active" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="DBList">
+    <Key>
+      <PropertyRef Name="DB_ID" />
+    </Key>
+    <Property Name="DB_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DB" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="databaseName" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+    <Property Name="active" Type="Boolean" />
+    <NavigationProperty Name="BI_DB_FvP_Access" Relationship="Self.FK_BI_DB_FvP_Access_DBList" FromRole="DBList" ToRole="BI_DB_FvP_Access" />
+    <NavigationProperty Name="Corp_DBs" Relationship="Self.FK_Corp_DBs_DBList" FromRole="DBList" ToRole="Corp_DBs" />
+  </EntityType>
+  <EntityType Name="Edgemed_Logons">
+    <Key>
+      <PropertyRef Name="Edgemed_LogID" />
+    </Key>
+    <Property Name="Edgemed_LogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ADPMasterID" Type="Int32" Nullable="false" />
+    <Property Name="Edgemed_UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Zno" Type="Int32" Nullable="false" />
+    <Property Name="EdgeMed_ID" Type="Int32" Nullable="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="ADPMaster" Relationship="Self.FK_Edgemed_Logons_ADPMaster" FromRole="Edgemed_Logons" ToRole="ADPMaster" />
+  </EntityType>
+  <EntityType Name="Facitity_DBs">
+    <Key>
+      <PropertyRef Name="IDPK" />
+    </Key>
+    <Property Name="IDPK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DB" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="DatabaseName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+    <Property Name="Facility_ID" Type="Int64" />
+    <Property Name="Fac_NAME" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FvPList">
+    <Key>
+      <PropertyRef Name="FvPID" />
+    </Key>
+    <Property Name="FvPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FvPName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="BI_DB_FvP_Access" Relationship="Self.FK_BI_DB_FvP_Access_FvPList" FromRole="FvPList" ToRole="BI_DB_FvP_Access" />
+  </EntityType>
+  <EntityType Name="Manager_Master">
+    <Key>
+      <PropertyRef Name="ManagerID" />
+    </Key>
+    <Property Name="ManagerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ManagerTypeID" Type="Int32" Nullable="false" />
+    <Property Name="AliasName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="BI_DB_FvP_Access" Relationship="Self.FK_BI_DB_FvP_Access_Manager_Master" FromRole="Manager_Master" ToRole="BI_DB_FvP_Access" />
+    <NavigationProperty Name="Manager_Type" Relationship="Self.FK_Manager_Master_Manager_Type" FromRole="Manager_Master" ToRole="Manager_Type" />
+  </EntityType>
+  <EntityType Name="Manager_Type">
+    <Key>
+      <PropertyRef Name="ManagerTypeID" />
+    </Key>
+    <Property Name="ManagerTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Manager_Master" Relationship="Self.FK_Manager_Master_Manager_Type" FromRole="Manager_Type" ToRole="Manager_Master" />
+  </EntityType>
+  <EntityType Name="MDM_POS_ListName">
+    <Key>
+      <PropertyRef Name="MDMPOS_ListNameID" />
+    </Key>
+    <Property Name="MDMPOS_ListNameID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PosName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="active" Type="Boolean" />
+    <NavigationProperty Name="MDM_POS_Name_DBPOS_grp" Relationship="Self.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" FromRole="MDM_POS_ListName" ToRole="MDM_POS_Name_DBPOS_grp" />
+  </EntityType>
+  <EntityType Name="MDM_POS_Name_DBPOS_grp">
+    <Key>
+      <PropertyRef Name="MDMPOS_NameID" />
+    </Key>
+    <Property Name="MDMPOS_NameID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DB_ID" Type="Int32" Nullable="false" />
+    <Property Name="FacilityID" Type="Int64" Nullable="false" />
+    <Property Name="Extra" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="MDMPOS_ListNameID" Type="Int32" Nullable="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="MDM_POS_ListName" Relationship="Self.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" FromRole="MDM_POS_Name_DBPOS_grp" ToRole="MDM_POS_ListName" />
+  </EntityType>
+  <EntityType Name="OwnerList">
+    <Key>
+      <PropertyRef Name="OwnersID" />
+    </Key>
+    <Property Name="OwnersID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="active" Type="Boolean" />
+    <NavigationProperty Name="Corp_Owner" Relationship="Self.FK_Corp_Owner_OwnerList" FromRole="OwnerList" ToRole="Corp_Owner" />
+  </EntityType>
+  <Association Name="FK_Edgemed_Logons_ADPMaster">
+    <End Role="ADPMaster" Type="Self.ADPMaster" Multiplicity="1" />
+    <End Role="Edgemed_Logons" Type="Self.Edgemed_Logons" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ADPMaster">
+        <PropertyRef Name="ADPMasterID" />
+      </Principal>
+      <Dependent Role="Edgemed_Logons">
+        <PropertyRef Name="ADPMasterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BI_DB_FvP_Access_DBList">
+    <End Role="DBList" Type="Self.DBList" Multiplicity="1" />
+    <End Role="BI_DB_FvP_Access" Type="Self.BI_DB_FvP_Access" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DBList">
+        <PropertyRef Name="DB_ID" />
+      </Principal>
+      <Dependent Role="BI_DB_FvP_Access">
+        <PropertyRef Name="DB_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BI_DB_FvP_Access_FvPList">
+    <End Role="FvPList" Type="Self.FvPList" Multiplicity="1" />
+    <End Role="BI_DB_FvP_Access" Type="Self.BI_DB_FvP_Access" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FvPList">
+        <PropertyRef Name="FvPID" />
+      </Principal>
+      <Dependent Role="BI_DB_FvP_Access">
+        <PropertyRef Name="FvPID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BI_DB_FvP_Access_Manager_Master">
+    <End Role="Manager_Master" Type="Self.Manager_Master" Multiplicity="1" />
+    <End Role="BI_DB_FvP_Access" Type="Self.BI_DB_FvP_Access" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Manager_Master">
+        <PropertyRef Name="ManagerID" />
+      </Principal>
+      <Dependent Role="BI_DB_FvP_Access">
+        <PropertyRef Name="ManagerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Corp_DBs_CorporateMasterList">
+    <End Role="CorporateMasterList" Type="Self.CorporateMasterList" Multiplicity="1" />
+    <End Role="Corp_DBs" Type="Self.Corp_DBs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CorporateMasterList">
+        <PropertyRef Name="corpID" />
+      </Principal>
+      <Dependent Role="Corp_DBs">
+        <PropertyRef Name="corpID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Corp_DBs_DBList">
+    <End Role="DBList" Type="Self.DBList" Multiplicity="1" />
+    <End Role="Corp_DBs" Type="Self.Corp_DBs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DBList">
+        <PropertyRef Name="DB_ID" />
+      </Principal>
+      <Dependent Role="Corp_DBs">
+        <PropertyRef Name="DB_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Corp_Owner_CorporateMasterList">
+    <End Role="CorporateMasterList" Type="Self.CorporateMasterList" Multiplicity="1" />
+    <End Role="Corp_Owner" Type="Self.Corp_Owner" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CorporateMasterList">
+        <PropertyRef Name="corpID" />
+      </Principal>
+      <Dependent Role="Corp_Owner">
+        <PropertyRef Name="corpID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Corp_Owner_OwnerList">
+    <End Role="OwnerList" Type="Self.OwnerList" Multiplicity="1" />
+    <End Role="Corp_Owner" Type="Self.Corp_Owner" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OwnerList">
+        <PropertyRef Name="OwnersID" />
+      </Principal>
+      <Dependent Role="Corp_Owner">
+        <PropertyRef Name="OwnersID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Manager_Master_Manager_Type">
+    <End Role="Manager_Type" Type="Self.Manager_Type" Multiplicity="1" />
+    <End Role="Manager_Master" Type="Self.Manager_Master" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Manager_Type">
+        <PropertyRef Name="ManagerTypeID" />
+      </Principal>
+      <Dependent Role="Manager_Master">
+        <PropertyRef Name="ManagerTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName">
+    <End Role="MDM_POS_ListName" Type="Self.MDM_POS_ListName" Multiplicity="1" />
+    <End Role="MDM_POS_Name_DBPOS_grp" Type="Self.MDM_POS_Name_DBPOS_grp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MDM_POS_ListName">
+        <PropertyRef Name="MDMPOS_ListNameID" />
+      </Principal>
+      <Dependent Role="MDM_POS_Name_DBPOS_grp">
+        <PropertyRef Name="MDMPOS_ListNameID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="ADPMasters" EntityType="Self.ADPMaster" />
+    <EntitySet Name="BI_DB_FvP_Access" EntityType="Self.BI_DB_FvP_Access" />
+    <EntitySet Name="Corp_DBs" EntityType="Self.Corp_DBs" />
+    <EntitySet Name="Corp_Owner" EntityType="Self.Corp_Owner" />
+    <EntitySet Name="CorporateMasterLists" EntityType="Self.CorporateMasterList" />
+    <EntitySet Name="CPTDatas" EntityType="Self.CPTData" />
+    <EntitySet Name="DBLists" EntityType="Self.DBList" />
+    <EntitySet Name="Edgemed_Logons" EntityType="Self.Edgemed_Logons" />
+    <EntitySet Name="Facitity_DBs" EntityType="Self.Facitity_DBs" />
+    <EntitySet Name="FvPLists" EntityType="Self.FvPList" />
+    <EntitySet Name="Manager_Master" EntityType="Self.Manager_Master" />
+    <EntitySet Name="Manager_Type" EntityType="Self.Manager_Type" />
+    <EntitySet Name="MDM_POS_ListName" EntityType="Self.MDM_POS_ListName" />
+    <EntitySet Name="MDM_POS_Name_DBPOS_grp" EntityType="Self.MDM_POS_Name_DBPOS_grp" />
+    <EntitySet Name="OwnerLists" EntityType="Self.OwnerList" />
+    <AssociationSet Name="FK_Edgemed_Logons_ADPMaster" Association="Self.FK_Edgemed_Logons_ADPMaster">
+      <End Role="ADPMaster" EntitySet="ADPMasters" />
+      <End Role="Edgemed_Logons" EntitySet="Edgemed_Logons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BI_DB_FvP_Access_DBList" Association="Self.FK_BI_DB_FvP_Access_DBList">
+      <End Role="DBList" EntitySet="DBLists" />
+      <End Role="BI_DB_FvP_Access" EntitySet="BI_DB_FvP_Access" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BI_DB_FvP_Access_FvPList" Association="Self.FK_BI_DB_FvP_Access_FvPList">
+      <End Role="FvPList" EntitySet="FvPLists" />
+      <End Role="BI_DB_FvP_Access" EntitySet="BI_DB_FvP_Access" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BI_DB_FvP_Access_Manager_Master" Association="Self.FK_BI_DB_FvP_Access_Manager_Master">
+      <End Role="Manager_Master" EntitySet="Manager_Master" />
+      <End Role="BI_DB_FvP_Access" EntitySet="BI_DB_FvP_Access" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Corp_DBs_CorporateMasterList" Association="Self.FK_Corp_DBs_CorporateMasterList">
+      <End Role="CorporateMasterList" EntitySet="CorporateMasterLists" />
+      <End Role="Corp_DBs" EntitySet="Corp_DBs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Corp_DBs_DBList" Association="Self.FK_Corp_DBs_DBList">
+      <End Role="DBList" EntitySet="DBLists" />
+      <End Role="Corp_DBs" EntitySet="Corp_DBs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Corp_Owner_CorporateMasterList" Association="Self.FK_Corp_Owner_CorporateMasterList">
+      <End Role="CorporateMasterList" EntitySet="CorporateMasterLists" />
+      <End Role="Corp_Owner" EntitySet="Corp_Owner" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Corp_Owner_OwnerList" Association="Self.FK_Corp_Owner_OwnerList">
+      <End Role="OwnerList" EntitySet="OwnerLists" />
+      <End Role="Corp_Owner" EntitySet="Corp_Owner" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Manager_Master_Manager_Type" Association="Self.FK_Manager_Master_Manager_Type">
+      <End Role="Manager_Type" EntitySet="Manager_Type" />
+      <End Role="Manager_Master" EntitySet="Manager_Master" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" Association="Self.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName">
+      <End Role="MDM_POS_ListName" EntitySet="MDM_POS_ListName" />
+      <End Role="MDM_POS_Name_DBPOS_grp" EntitySet="MDM_POS_Name_DBPOS_grp" />
+    </AssociationSet>
+    <EntitySet Name="ActionCodeDicts" EntityType="MedProDBEntities.ActionCodeDict" />
+    <EntitySet Name="Categories" EntityType="MedProDBEntities.Category" />
+    <AssociationSet Name="FK_ActionCodeDict_Category" Association="MedProDBEntities.FK_ActionCodeDict_Category">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="ActionCodeDict" EntitySet="ActionCodeDicts" />
+    </AssociationSet>
+    <EntitySet Name="ManagerDBAccessBIs" EntityType="MedProDBEntities.ManagerDBAccessBI" />
+    <EntitySet Name="CollNoteTypeCatPriorities" EntityType="MedProDBEntities.CollNoteTypeCatPriority" />
+    <EntitySet Name="MasterUserLists" EntityType="MedProDBEntities.MasterUserList" />
+    <EntitySet Name="ACCategories" EntityType="MedProDBEntities.ACCategory" />
+    <EntitySet Name="ACPriorities" EntityType="MedProDBEntities.ACPriority" />
+    <EntitySet Name="ACtypes" EntityType="MedProDBEntities.ACtype" />
+  </EntityContainer>
+  <EntityType Name="ActionCodeDict">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CollNoteType" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CategoryID" Type="Int32" Nullable="false" />
+    <Property Name="Priority" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="NTUser" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <Property Name="ParsingYN" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="ACType" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Category" Relationship="MedProDBEntities.FK_ActionCodeDict_Category" FromRole="ActionCodeDict" ToRole="Category" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="CategoryID" />
+    </Key>
+    <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ActionCodeDicts" Relationship="MedProDBEntities.FK_ActionCodeDict_Category" FromRole="Category" ToRole="ActionCodeDict" />
+  </EntityType>
+  <Association Name="FK_ActionCodeDict_Category">
+    <End Type="MedProDBEntities.Category" Role="Category" Multiplicity="1" />
+    <End Type="MedProDBEntities.ActionCodeDict" Role="ActionCodeDict" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="CategoryID" />
+      </Principal>
+      <Dependent Role="ActionCodeDict">
+        <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ManagerDBAccessBI">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FvP" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="DB" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+    <Property Name="Manager" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="AliasName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="NTUser" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="active" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="CollNoteTypeCatPriority">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CollNoteType" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CollNoteCat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Priority" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="NTUser" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <Property Name="ParsingYN" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="ACType" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="MasterUserList">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ADP_ID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="EmployeeName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ADP_ID_" Type="Int64" />
+    <Property Name="Edgemed_UserName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ZoomServer" Type="Int64" />
+    <Property Name="EdgeMed_ID" Type="Int64" />
+    <Property Name="Job_Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Staff_Manager" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="User_Active" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Middle_Init" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="NTUser" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Type" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="ACCategory">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="ACPriority">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PriorityName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="ACtype">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ACTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>

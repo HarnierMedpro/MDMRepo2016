@@ -1,0 +1,646 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MedProDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.ADP_Staging' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="ADP_Staging">
+          <Property Name="File Number" Type="nvarchar" MaxLength="255" />
+          <Property Name="First Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Last Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Job Title Description" Type="nvarchar" MaxLength="255" />
+          <Property Name="Reports To Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Position Status" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.credentialing_loc_data' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="credentialing_loc_data">
+          <Property Name="id" Type="float" />
+          <Property Name="zoomDB" Type="float" />
+          <Property Name="Location_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Tax_Id" Type="float" />
+          <Property Name="NPI" Type="float" />
+          <Property Name="Time_Zone" Type="nvarchar" MaxLength="255" />
+          <Property Name="Entity_Type" Type="nvarchar" MaxLength="255" />
+          <Property Name="DBA_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="255" />
+          <Property Name="City" Type="nvarchar" MaxLength="255" />
+          <Property Name="State" Type="nvarchar" MaxLength="255" />
+          <Property Name="Zip" Type="float" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.EraPayorList' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="EraPayorList">
+          <Property Name="EraPayorID" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.EraPayorList837s' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="EraPayorList837s">
+          <Property Name="InsName" Type="varchar" MaxLength="255" />
+          <Property Name="EraPayorID" Type="varchar" MaxLength="5" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.MDM_Facilities_dups' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.tmp_2015_Q3_Q4' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.tmp_2015_Q3_Q4_2016_Q1_Q2' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.tmp_2015_Q3_Q4_2016_Q1_Q2_left3' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.tmp_2015_Q3_Q4_left3' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.tmp_A' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.tmp_allowables_MODE_tmp_table' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tmp_allowables_MODE_tmp_table">
+          <Property Name="CPT" Type="varchar" MaxLength="25" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+          <Property Name="MODE_Pays" Type="money" />
+          <Property Name="count_of_CLMID" Type="int" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.tmp_allowables_MODE_tmp_table_else' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tmp_allowables_MODE_tmp_table_else">
+          <Property Name="CPT" Type="varchar" MaxLength="25" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+          <Property Name="MODE_Pays" Type="money" />
+          <Property Name="count_of_CLMID" Type="int" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.tmp_allowables_MODE_tmp_table_finclass' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tmp_allowables_MODE_tmp_table_finclass">
+          <Property Name="CPT" Type="varchar" MaxLength="25" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+          <Property Name="MODE_Pays" Type="money" />
+          <Property Name="count_of_CLMID" Type="int" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.tmp_B' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.tmp_grt_eq_2016_01_01' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.tmp_grt_eq_2016_01_01_left3' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.tmp_mode_calc_left3' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP_mode_value' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP_mode_value">
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP_mode_value_02' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP_mode_value_02">
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP_mode_value_02b' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP_mode_value_02b">
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP_mode_value_02b2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP_mode_value_02b2">
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP_mode_value_02b3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP_mode_value_02b3">
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP_mode_value_03' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP_mode_value_03">
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP_mode_value_03c' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP_mode_value_03c">
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP_mode_value_03c2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP_mode_value_03c2">
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP_mode_value_03c3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP_mode_value_03c3">
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP_mode_valuea' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP_mode_valuea">
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP_mode_valuea2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP_mode_valuea2">
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP_mode_valuea3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP_mode_valuea3">
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.tmp_to_join_FV' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.tmp_to_join_FV_02' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.tmp_to_join_FV_FINAL' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01a' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01a">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01a2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01a2">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01a3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01a3">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01aA2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01aA2">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01aA3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01aA3">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01b' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01b">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01b2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01b2">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01b3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01b3">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01bA2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01bA2">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01bA3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01bA3">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01c' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01c">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01c2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01c2">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01c3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01c3">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01cA2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01cA2">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP01cA3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP01cA3">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP02' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP02">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP02a' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP02a">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP02aA2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP02aA2">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP02aA3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP02aA3">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP02b' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP02b">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP02bA2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP02bA2">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP02bA3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP02bA3">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP02c' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP02c">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP02cA2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP02cA2">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP02cA3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP02cA3">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP04_FinA' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP04_FinA">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="MODE" Type="money" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP04_FinA_A2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP04_FinA_A2">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="MODE" Type="money" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP04_FinA_A3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP04_FinA_A3">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="cInsCo" Type="varchar" MaxLength="75" />
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="MODE" Type="money" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP04_FinB' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP04_FinB">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="MODE" Type="money" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP04_FinB_A2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP04_FinB_A2">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="MODE" Type="money" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP04_FinB_A3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP04_FinB_A3">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="MODE" Type="money" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP04_FinC' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP04_FinC">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="MODE" Type="money" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP04_FinC_A2' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP04_FinC_A2">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="MODE" Type="money" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP04_FinC_A3' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP04_FinC_A3">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Level_CPT" Type="varchar" MaxLength="66" />
+          <Property Name="MODE" Type="money" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP06' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP06">
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP07' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP07">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP08' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP08">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="MODE" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMP09_FinB' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMP09_FinB">
+          <Property Name="BillState" Type="varchar" MaxLength="50" />
+          <Property Name="Fin_Class" Type="varchar" MaxLength="25" />
+          <Property Name="Level/CPT" Type="varchar" MaxLength="66" />
+          <Property Name="MODE_Fin_Class" Type="money" />
+          <Property Name="sum_of_pays" Type="money" />
+          <Property Name="cnt_of_pays" Type="int" />
+          <Property Name="avg_of_pays" Type="money" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.TMPDATA' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="TMPDATA">
+          <Property Name="BillingStaff" Type="nvarchar" MaxLength="255" />
+          <Property Name="USER_ID" Type="float" />
+          <Property Name="USER_NAME" Type="nvarchar" MaxLength="255" />
+          <Property Name="EdgeMED_Num" Type="float" />
+          <Property Name="fullName" Type="nvarchar" MaxLength="255" />
+          <Property Name="FName" Type="nvarchar" MaxLength="255" />
+          <Property Name="Lname" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.uCollNotes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'MedProDB.dbo.UsersFromZoomFlatFile' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.UsersImportedFromZoom' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="UsersImportedFromZoom">
+          <Property Name="zno" Type="float" />
+          <Property Name="Num" Type="float" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="255" />
+          <Property Name="Active" Type="nvarchar" MaxLength="255" />
+          <Property Name="Last_Signin" Type="datetime" />
+          <Property Name="Last_Signoff" Type="datetime" />
+          <Property Name="AMOS" Type="nvarchar" MaxLength="255" />
+          <Property Name="Admin" Type="nvarchar" MaxLength="255" />
+          <Property Name="AdminExt" Type="nvarchar" MaxLength="255" />
+          <Property Name="Databases" Type="nvarchar" MaxLength="255" />
+          <Property Name="UpdatedON" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.z_ADP_Staging' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="z_ADP_Staging">
+          <Property Name="File Number" Type="nvarchar" MaxLength="255" />
+          <Property Name="First Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Last Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Job Title Description" Type="nvarchar" MaxLength="255" />
+          <Property Name="Reports To Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Position Status" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.zoom_master_insurance_stage' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="zoom_master_insurance_stage">
+          <Property Name="Plan #" Type="varchar" MaxLength="50" />
+          <Property Name="Plan Name" Type="varchar" MaxLength="100" />
+          <Property Name="Address 1" Type="varchar" MaxLength="100" />
+          <Property Name="Address 2" Type="varchar" MaxLength="100" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="Zip" Type="varchar" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.zoom_Pat_demog_up_stage' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="zoom_Pat_demog_up_stage">
+          <Property Name="SSN" Type="varchar" MaxLength="50" />
+          <Property Name="First Name" Type="varchar" MaxLength="100" />
+          <Property Name="MI" Type="char" MaxLength="1" />
+          <Property Name="Last Name" Type="varchar" MaxLength="100" />
+          <Property Name="Address1" Type="varchar" MaxLength="100" />
+          <Property Name="Address2" Type="varchar" MaxLength="100" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="Zip" Type="varchar" MaxLength="50" />
+          <Property Name="Home Phone" Type="varchar" MaxLength="50" />
+          <Property Name="Work Phone" Type="varchar" MaxLength="50" />
+          <Property Name="DOB" Type="varchar" MaxLength="50" />
+          <Property Name="SEX" Type="char" MaxLength="1" />
+          <Property Name="DR" Type="varchar" MaxLength="100" />
+          <Property Name="Ref Dr" Type="varchar" MaxLength="100" />
+          <Property Name="Date Acct" Type="varchar" MaxLength="50" />
+          <Property Name="DOL Visit" Type="varchar" MaxLength="50" />
+          <Property Name="Ins 1 Name" Type="varchar" MaxLength="100" />
+          <Property Name="Ins 1 ID" Type="varchar" MaxLength="50" />
+          <Property Name="Ins 1 Group" Type="varchar" MaxLength="50" />
+          <Property Name="Ins 1 City" Type="varchar" MaxLength="50" />
+          <Property Name="Ins 1 State " Type="varchar" MaxLength="50" />
+          <Property Name="Ins 1 Zip" Type="varchar" MaxLength="50" />
+          <Property Name="Ins 2 Name" Type="varchar" MaxLength="100" />
+          <Property Name="Ins 2 ID" Type="varchar" MaxLength="50" />
+          <Property Name="Ins 2 Group" Type="varchar" MaxLength="50" />
+          <Property Name="Ins 2 Add1" Type="varchar" MaxLength="100" />
+          <Property Name="Ins Add2" Type="varchar" MaxLength="100" />
+          <Property Name="Ins 2 City" Type="varchar" MaxLength="50" />
+          <Property Name="Ins 2 State " Type="varchar" MaxLength="50" />
+          <Property Name="Ins 2 Zip" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MedProDB.dbo.zoom_ref_dr_stage' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="zoom_ref_dr_stage">
+          <Property Name="id" Type="varchar" MaxLength="50" />
+          <Property Name="fname" Type="varchar" MaxLength="100" />
+          <Property Name="lname" Type="varchar" MaxLength="100" />
+          <Property Name="groupName" Type="varchar" MaxLength="100" />
+          <Property Name="salesRep" Type="varchar" MaxLength="100" />
+          <Property Name="npi" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+  <EntityContainer Name="MedProDBModelStoreContainer" />
+</Schema>

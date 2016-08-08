@@ -1,0 +1,64 @@
+﻿@model IEnumerable<MDM.WebPortal.Models.FromDB.ManagerDBAccessBI>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FvP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DB)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Manager)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AliasName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NTUser)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.active)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FvP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DB)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Manager)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AliasName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NTUser)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.active)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

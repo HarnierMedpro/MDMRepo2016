@@ -1,0 +1,35 @@
+﻿@model MDM.WebPortal.Models.FromDB.Corp_DBs
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Corp_DBs</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CorporateMasterList.CorporateName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CorporateMasterList.CorporateName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DBList.DB)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DBList.DB)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID_PK }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

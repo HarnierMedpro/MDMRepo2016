@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d06f693510bc41608816329a792477ad" Name="Diagram1">
+        <EntityTypeShape EntityType="MedProDBEntities.ADPMaster" Width="1.5" PointX="0.5" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.BI_DB_FvP_Access" Width="1.5" PointX="10.625" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.Corp_DBs" Width="1.5" PointX="8.25" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.Corp_Owner" Width="1.5" PointX="5.75" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.CorporateMasterList" Width="1.5" PointX="8.125" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.CPTData" Width="1.5" PointX="0.5" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.DBList" Width="1.5" PointX="8.375" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.Edgemed_Logons" Width="1.5" PointX="2.75" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.Facitity_DBs" Width="1.5" PointX="2.5" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.FvPList" Width="1.5" PointX="13.25" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.Manager_Master" Width="1.5" PointX="10.75" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.Manager_Type" Width="1.5" PointX="10.875" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.MDM_POS_ListName" Width="1.5" PointX="0.5" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.MDM_POS_Name_DBPOS_grp" Width="1.5" PointX="2.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.OwnerList" Width="1.5" PointX="5.75" PointY="3.375" IsExpanded="true" />
+        <AssociationConnector Association="MedProDBEntities.FK_Edgemed_Logons_ADPMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="MedProDBEntities.FK_BI_DB_FvP_Access_DBList" ManuallyRouted="false" />
+        <AssociationConnector Association="MedProDBEntities.FK_BI_DB_FvP_Access_FvPList" ManuallyRouted="false" />
+        <AssociationConnector Association="MedProDBEntities.FK_BI_DB_FvP_Access_Manager_Master" ManuallyRouted="false" />
+        <AssociationConnector Association="MedProDBEntities.FK_Corp_DBs_CorporateMasterList" ManuallyRouted="false" />
+        <AssociationConnector Association="MedProDBEntities.FK_Corp_DBs_DBList" ManuallyRouted="false" />
+        <AssociationConnector Association="MedProDBEntities.FK_Corp_Owner_CorporateMasterList" ManuallyRouted="false" />
+        <AssociationConnector Association="MedProDBEntities.FK_Corp_Owner_OwnerList" ManuallyRouted="false" />
+        <AssociationConnector Association="MedProDBEntities.FK_Manager_Master_Manager_Type" ManuallyRouted="false" />
+        <AssociationConnector Association="MedProDBEntities.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MedProDBEntities.ActionCodeDict" Width="1.5" PointX="5.375" PointY="6.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.Category" Width="1.5" PointX="5.5" PointY="10.75" />
+        <AssociationConnector Association="MedProDBEntities.FK_ActionCodeDict_Category" />
+        <EntityTypeShape EntityType="MedProDBEntities.ManagerDBAccessBI" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.CollNoteTypeCatPriority" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.MasterUserList" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.ACCategory" Width="1.5" PointX="10.375" PointY="4.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.ACPriority" Width="1.5" PointX="12.375" PointY="4.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.ACtype" Width="1.5" PointX="3.375" PointY="13.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

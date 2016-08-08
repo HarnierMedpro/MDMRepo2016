@@ -1,0 +1,42 @@
+﻿@model MDM.WebPortal.Models.FromDB.CPTData
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CPTData</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CPT)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CPT)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CPT_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CPT_Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ShortD)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ShortD)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
