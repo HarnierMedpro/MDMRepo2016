@@ -12,9 +12,11 @@ namespace MDM.WebPortal.Models.ViewModel
         public int MDMPOS_NameID { get; set; }
 
         //FK for DBList
+        [Display(Name = "DB")]
         public int DB_ID { get; set; }
 
         //FK for Fac in Pos_Tab
+        [Display(Name = "FACILITY")]
         public long FacilityID { get; set; }
 
         public string Extra { get; set; }
@@ -23,6 +25,7 @@ namespace MDM.WebPortal.Models.ViewModel
         public bool Active { get; set; }
 
         //FK for MDM_POS_ListName
+        [Display(Name = "POS")]
         public int MDMPOS_ListNameID { get; set; }
     }
 }

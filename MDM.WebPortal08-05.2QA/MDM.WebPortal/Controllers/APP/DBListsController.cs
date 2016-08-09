@@ -90,52 +90,7 @@ namespace MDM.WebPortal.Controllers.APP
             }         
             return Json(new[] { dBList }.ToDataSourceResult(request, ModelState));
         }
-
-       
-
-        // GET: DBLists/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: DBLists/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "DB_ID,DB,databaseName")] DBList dBList)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    if (await db.DBLists.AnyAsync(x => x.DB == dBList.DB))
-                    {
-                        ViewBag.Error = "This DB is already in the system.";
-                        return View(dBList);
-                    }
-                    db.DBLists.Add(dBList);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
-                }
-                catch (Exception)
-                {
-                    ViewBag.Error = "Something failed. Please try again!";
-                    return View(dBList);
-                }
-                
-            }
-
-            return View(dBList);
-        }
-
-       
-
-      
-
-      
-
+        
         [AllowAnonymous]
         [AcceptVerbs(HttpVerbs.Get)]
         public ActionResult CheckDB(string term)

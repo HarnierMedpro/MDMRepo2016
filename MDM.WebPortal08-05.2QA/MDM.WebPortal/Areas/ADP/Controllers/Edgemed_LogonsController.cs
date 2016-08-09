@@ -21,23 +21,19 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
         
         public ActionResult Index()
         {
-            ViewData["ADP"] =  db.ADPMasters.Select(s => new {ADPID = s.ADPMasterID, INFO = s.ADP_ID + " " + s.LName + "," + " " + s.FName}).ToList();
+            ViewData["ADP"] = db.ADPMasters.Select(s => new { s.ADPMasterID, INFO = s.LName + "," + " " + s.FName }).ToList();
             return View();
         }
 
         /*Get all the ADPMaster without duplicates values*/
-        public async Task<ActionResult> ADP([DataSourceRequest] DataSourceRequest request)
+        public ActionResult ADP([DataSourceRequest] DataSourceRequest request)
         {
-            var POS = await db.Edgemed_Logons.Include(x => x.ADPMaster).Select(x => x.ADPMaster).Distinct().ToListAsync();
-            return Json(POS.ToDataSourceResult(request, x => new VMAdpMaster
+            var POS = db.Edgemed_Logons.Include(x => x.ADPMaster).Select(x => x.ADPMaster).Distinct();
+            return Json(POS.ToDataSourceResult(request, x => new VMAdp_Edgemed
             {
-                ADPMaster_ID = x.ADPMasterID,
-                ADP = x.ADP_ID,
-                FName = x.FName,
+                ADPMasterID = x.ADPMasterID,
                 LName = x.LName,
-                Title = x.Title,
-                Manager = x.Manager,
-                Active = x.Active
+                FName = x.FName
             }),JsonRequestBehavior.AllowGet);
         }
 
@@ -63,16 +59,24 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
         }
 
         public async Task<ActionResult> UpdateEdgemed([DataSourceRequest] DataSourceRequest request,
-            [Bind(Include = "Edgemed_LogID,ADPMasterID,Edgemed_UserName,Zno,EdgeMed_ID,Active")] Edgemed_Logons edgemed_Logons)
+            [Bind(Include = "Edgemed_LogID,ADPMasterID,Edgemed_UserName,Zno,EdgeMed_ID,Active")] VMEdgemed_Logons edgemed_Logons)
         {
-            /*Some logic Here*/
-            if (edgemed_Logons != null && ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                var toStore = new Edgemed_Logons
+                {
+                    Edgemed_LogID = edgemed_Logons.Edgemed_LogID,
+                    Edgemed_UserName = edgemed_Logons.Edgemed_UserName,
+                    Zno = edgemed_Logons.Zno,
+                    EdgeMed_ID = edgemed_Logons.EdgeMed_ID,
+                    Active = edgemed_Logons.Active,
+                    ADPMasterID = edgemed_Logons.ADPMasterID
+                };
                 try
                 {
+                    db.Edgemed_Logons.Attach(toStore);
                     db.Entry(edgemed_Logons).State = EntityState.Modified;
                     await db.SaveChangesAsync();
-                    return Json(new[] { edgemed_Logons }.ToDataSourceResult(request));
                 }
                 catch (Exception)
                 {
@@ -80,22 +84,28 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
                     return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
                 }
             }
-            ModelState.AddModelError("", "Something failed. Please try again!");
             return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
         }
 
         public async Task<ActionResult> CreateEdgemed([DataSourceRequest] DataSourceRequest request,
-            [Bind(Include = "Edgemed_LogID,ADPMasterID,Edgemed_UserName,Zno,EdgeMed_ID,Active")] Edgemed_Logons edgemed_Logons, int ParentID)
+            [Bind(Include = "Edgemed_LogID,ADPMasterID,Edgemed_UserName,Zno,EdgeMed_ID,Active")] VMEdgemed_Logons edgemed_Logons, int ParentID)
         {
-            /*Some logic Here*/
-            if (edgemed_Logons != null && ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                var toStore = new Edgemed_Logons
+                {
+                    Edgemed_UserName = edgemed_Logons.Edgemed_UserName,
+                    Zno = edgemed_Logons.Zno,
+                    EdgeMed_ID = edgemed_Logons.EdgeMed_ID,
+                    Active = edgemed_Logons.Active,
+                    ADPMasterID = ParentID
+                };
                 try
                 {
-                    edgemed_Logons.ADPMasterID = ParentID;
-                    db.Edgemed_Logons.Add(edgemed_Logons);
+                    db.Edgemed_Logons.Add(toStore);
                     await db.SaveChangesAsync();
-                    return Json(new[] { edgemed_Logons }.ToDataSourceResult(request));
+                    edgemed_Logons.Edgemed_LogID = toStore.Edgemed_LogID;
+                    edgemed_Logons.ADPMasterID = toStore.ADPMasterID;
                 }
                 catch (Exception)
                 {
@@ -103,7 +113,34 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
                     return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
                 }
             }
-            ModelState.AddModelError("", "Something failed. Please try again!");
+            return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
+        }
+
+        public async Task<ActionResult> Create_General([DataSourceRequest] DataSourceRequest request,
+           [Bind(Include = "Edgemed_LogID,ADPMasterID,Edgemed_UserName,Zno,EdgeMed_ID,Active")] VMAdp_Edgemed edgemed_Logons)
+        {
+            if (ModelState.IsValid)
+            {
+                var toStore = new Edgemed_Logons
+                {
+                    Edgemed_UserName = edgemed_Logons.Edgemed_UserName,
+                    Zno = edgemed_Logons.Zno,
+                    EdgeMed_ID = edgemed_Logons.EdgeMed_ID,
+                    Active = edgemed_Logons.Active,
+                    ADPMasterID = edgemed_Logons.ADPMasterID
+                };
+                try
+                {
+                    db.Edgemed_Logons.Add(toStore);
+                    await db.SaveChangesAsync();
+                    edgemed_Logons.Edgemed_LogID = toStore.Edgemed_LogID;
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Something failed. Please try again!");
+                    return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
+                }
+            }
             return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
         }
         
@@ -152,25 +189,11 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
         }
         /*------------------------------------AUTOCOMPLETE ------------------------------------------------*/
 
-        // GET: ADP/Edgemed_Logons/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Edgemed_Logons edgemed_Logons = await db.Edgemed_Logons.FindAsync(id);
-            if (edgemed_Logons == null)
-            {
-                return HttpNotFound();
-            }
-            return View(edgemed_Logons);
-        }
+       
 
         // GET: ADP/Edgemed_Logons/Create
         public ActionResult Create()
         {
-            //ViewBag.id = new SelectList(db.ADPMasters.Select(x => new { ADPID = x.id, INFO = x.ADP_ID + " " + x.LName + "," + " " + x.FName }), "ADPID", "INFO");
             return View();
         }
 
@@ -198,65 +221,6 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
             }
             //ViewBag.id = new SelectList(db.ADPMasters, "id", "ADP_ID", edgemed_Logons.id);
             return View(edgemed_Logons);
-        }
-
-        // GET: ADP/Edgemed_Logons/Edit/5
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Edgemed_Logons edgemed_Logons = await db.Edgemed_Logons.FindAsync(id);
-            if (edgemed_Logons == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.id = new SelectList(db.ADPMasters, "id", "ADP_ID", edgemed_Logons.ADPMasterID);
-            return View(edgemed_Logons);
-        }
-
-        // POST: ADP/Edgemed_Logons/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Edgemed_LogID,id,Edgemed_UserName,Zno,EdgeMed_ID,Active")] Edgemed_Logons edgemed_Logons)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(edgemed_Logons).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            ViewBag.id = new SelectList(db.ADPMasters, "id", "ADP_ID", edgemed_Logons.ADPMasterID);
-            return View(edgemed_Logons);
-        }
-
-        // GET: ADP/Edgemed_Logons/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Edgemed_Logons edgemed_Logons = await db.Edgemed_Logons.FindAsync(id);
-            if (edgemed_Logons == null)
-            {
-                return HttpNotFound();
-            }
-            return View(edgemed_Logons);
-        }
-
-        // POST: ADP/Edgemed_Logons/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Edgemed_Logons edgemed_Logons = await db.Edgemed_Logons.FindAsync(id);
-            db.Edgemed_Logons.Remove(edgemed_Logons);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

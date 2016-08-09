@@ -14,8 +14,7 @@
 </header>
 
 <div class="container-fluid">
-
-    @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMControllerSystem>()
+@(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMControllerSystem>()
 .Name("ControllerSystem")
 .ToolBar(tools =>
 {
@@ -64,6 +63,7 @@
     function error_handler(e) {
         if (e.errors) {
             var message = "Errors:\n";
+            // Create a message containing all errors.
             $.each(e.errors, function (key, value) {
                 if ('errors' in value) {
                     $.each(value.errors, function () {
@@ -71,11 +71,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#ControllerSystem").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
-
-    $("#inContName").change(function () {
-        alert("change");
-    });
 </script>

@@ -16,7 +16,7 @@
     </div>
 </header>
 
-<div class="container">
+<div class="container-fluid">
     @(Html.Kendo().Grid<MDM.WebPortal.Areas.ADP.Models.VMAdpMaster>()
           .Name("ADPArea")
           .ToolBar(tools => tools.Excel())
@@ -68,12 +68,51 @@
           .Groupable()
           .Reorderable(r => r.Columns(true))
           .Resizable(r => r.Columns(true))
-            //.Selectable(s => s.Enabled(true) ERROR: Additional information: An item with the same key has already been added.
+          .ClientDetailTemplateId("template")
+          //.Selectable(s => s.Enabled(true) ERROR: Additional information: An item with the same key has already been added.
           //.Type(GridSelectionType.Row)
           //.Mode(GridSelectionMode.Single))
           )
 </div>
 <script src="~/Scripts/kendo/jszip.min.js"></script>
+<script id="template" type="text/kendo-tmpl">
+    @(Html.Kendo().Grid<MDM.WebPortal.Areas.ADP.Models.VMEdgemed_Logons>()
+    .Name("EdgemedLog_#=ADPMaster_ID#")
+    .ToolBar(tools => tools.Create().Text("NEW EDGEMED_LOGONS"))
+    .Columns(columns =>
+     {    
+         columns.Bound(o => o.Edgemed_UserName).Width(110);
+
+         columns.Bound(o => o.Zno).Width(70);
+
+         columns.Bound(o => o.EdgeMed_ID).Width(110);
+
+         columns.Bound(o => o.Active).Width(110);
+
+         columns.Command(commands =>
+         {
+             commands.Edit();
+         }).Title("COMMANDS").Width(110);
+     })
+     .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Model(model =>
+          {
+              model.Id(x => x.Edgemed_LogID);
+              model.Field(x => x.Edgemed_LogID).Editable(false);
+          })
+        .Events(events => events.Error("error_handler"))
+        .Read(read => read.Action("EdgeMedLogonsforAdp", "Edgemed_Logons", new { ADPMasterID = "#=ADPMaster_ID#" }))
+        .Update(update => update.Action("UpdateEdgemed", "Edgemed_Logons", new { ADPMasterID = "#=ADPMaster_ID#" }))
+        .Create(create => create.Action("CreateEdgemed", "Edgemed_Logons", new { ParentID = "#=ADPMaster_ID#" }))
+    )
+    .Pageable()
+    .Sortable()
+    .ToClientTemplate()
+    )
+</script>
+
 <script>
     function error_handler(e) {
         if (e.errors) {
@@ -85,7 +124,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#ADPArea").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>

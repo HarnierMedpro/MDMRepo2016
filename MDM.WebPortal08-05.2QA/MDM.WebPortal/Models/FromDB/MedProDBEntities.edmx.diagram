@@ -30,15 +30,16 @@
         <AssociationConnector Association="MedProDBEntities.FK_Corp_Owner_OwnerList" ManuallyRouted="false" />
         <AssociationConnector Association="MedProDBEntities.FK_Manager_Master_Manager_Type" ManuallyRouted="false" />
         <AssociationConnector Association="MedProDBEntities.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="MedProDBEntities.ActionCodeDict" Width="1.5" PointX="5.375" PointY="6.75" />
-        <EntityTypeShape EntityType="MedProDBEntities.Category" Width="1.5" PointX="5.5" PointY="10.75" />
-        <AssociationConnector Association="MedProDBEntities.FK_ActionCodeDict_Category" />
-        <EntityTypeShape EntityType="MedProDBEntities.ManagerDBAccessBI" Width="1.5" PointX="10.375" PointY="0.75" />
         <EntityTypeShape EntityType="MedProDBEntities.CollNoteTypeCatPriority" Width="1.5" PointX="12.375" PointY="0.75" />
-        <EntityTypeShape EntityType="MedProDBEntities.MasterUserList" Width="1.5" PointX="0.75" PointY="12.75" />
-        <EntityTypeShape EntityType="MedProDBEntities.ACCategory" Width="1.5" PointX="10.375" PointY="4.75" />
-        <EntityTypeShape EntityType="MedProDBEntities.ACPriority" Width="1.5" PointX="12.375" PointY="4.75" />
-        <EntityTypeShape EntityType="MedProDBEntities.ACtype" Width="1.5" PointX="3.375" PointY="13.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.ACCategory" Width="1.5" PointX="3.375" PointY="15" />
+        <EntityTypeShape EntityType="MedProDBEntities.ACPriority" Width="1.5" PointX="8.625" PointY="18" />
+        <EntityTypeShape EntityType="MedProDBEntities.ActionCode" Width="1.5" PointX="5.625" PointY="14" />
+        <EntityTypeShape EntityType="MedProDBEntities.ACtype" Width="1.5" PointX="3.375" PointY="22.25" />
+        <EntityTypeShape EntityType="MedProDBEntities.CodeMasterList" Width="1.5" PointX="6.25" PointY="20" />
+        <AssociationConnector Association="MedProDBEntities.FK_ActionCode_ACCategory" />
+        <AssociationConnector Association="MedProDBEntities.FK_ActionCode_ACPriority" />
+        <AssociationConnector Association="MedProDBEntities.FK_ActionCode_ACtypes" />
+        <AssociationConnector Association="MedProDBEntities.FK_ActionCode_CodeMasterList" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

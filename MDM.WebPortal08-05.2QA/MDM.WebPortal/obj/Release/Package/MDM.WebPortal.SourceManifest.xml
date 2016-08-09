@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <sitemanifest>
-  <IisApp path="D:\Dev\Projects\MDM.WebPortal07-21\MDM.WebPortal\obj\Release\Package\PackageTmp" />
-  <setAcl path="D:\Dev\Projects\MDM.WebPortal07-21\MDM.WebPortal\obj\Release\Package\PackageTmp" setAclResourceType="Directory" />
-  <setAcl path="D:\Dev\Projects\MDM.WebPortal07-21\MDM.WebPortal\obj\Release\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
+  <IisApp path="C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\Package\PackageTmp" />
+  <setAcl path="C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\Package\PackageTmp" setAclResourceType="Directory" />
+  <setAcl path="C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
 </sitemanifest>

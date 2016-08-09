@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\hsuarez\Documents\GitHub\MDM2016\MDM.WebPortal07-21\MDM.WebPortal\Models\FromDB\MedProDBEntities.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\Models\FromDB\MedProDBEntities.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

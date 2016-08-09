@@ -2879,7 +2879,7 @@ textarea.form-control:focus {
 .panel-warning-dark .panel-plus-link a:hover,
 .panel-danger-dark .panel-plus-link a:hover,
 .panel-royal-dark .panel-plus-link a:hover {
-  background-color: none;
+ /*background-color: none;*/ 
 }
 .panel-primary .panel-header a,
 .panel-primary .panel-footer a,

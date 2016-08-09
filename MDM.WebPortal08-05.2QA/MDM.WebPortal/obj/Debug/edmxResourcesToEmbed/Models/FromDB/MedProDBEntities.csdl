@@ -337,66 +337,29 @@
       <End Role="MDM_POS_ListName" EntitySet="MDM_POS_ListName" />
       <End Role="MDM_POS_Name_DBPOS_grp" EntitySet="MDM_POS_Name_DBPOS_grp" />
     </AssociationSet>
-    <EntitySet Name="ActionCodeDicts" EntityType="MedProDBEntities.ActionCodeDict" />
-    <EntitySet Name="Categories" EntityType="MedProDBEntities.Category" />
-    <AssociationSet Name="FK_ActionCodeDict_Category" Association="MedProDBEntities.FK_ActionCodeDict_Category">
-      <End Role="Category" EntitySet="Categories" />
-      <End Role="ActionCodeDict" EntitySet="ActionCodeDicts" />
-    </AssociationSet>
-    <EntitySet Name="ManagerDBAccessBIs" EntityType="MedProDBEntities.ManagerDBAccessBI" />
     <EntitySet Name="CollNoteTypeCatPriorities" EntityType="MedProDBEntities.CollNoteTypeCatPriority" />
-    <EntitySet Name="MasterUserLists" EntityType="MedProDBEntities.MasterUserList" />
     <EntitySet Name="ACCategories" EntityType="MedProDBEntities.ACCategory" />
     <EntitySet Name="ACPriorities" EntityType="MedProDBEntities.ACPriority" />
+    <EntitySet Name="ActionCodes" EntityType="MedProDBEntities.ActionCode" />
     <EntitySet Name="ACtypes" EntityType="MedProDBEntities.ACtype" />
+    <EntitySet Name="CodeMasterLists" EntityType="MedProDBEntities.CodeMasterList" />
+    <AssociationSet Name="FK_ActionCode_ACCategory" Association="MedProDBEntities.FK_ActionCode_ACCategory">
+      <End Role="ACCategory" EntitySet="ACCategories" />
+      <End Role="ActionCode" EntitySet="ActionCodes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ActionCode_ACPriority" Association="MedProDBEntities.FK_ActionCode_ACPriority">
+      <End Role="ACPriority" EntitySet="ACPriorities" />
+      <End Role="ActionCode" EntitySet="ActionCodes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ActionCode_ACtypes" Association="MedProDBEntities.FK_ActionCode_ACtypes">
+      <End Role="ACtype" EntitySet="ACtypes" />
+      <End Role="ActionCode" EntitySet="ActionCodes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ActionCode_CodeMasterList" Association="MedProDBEntities.FK_ActionCode_CodeMasterList">
+      <End Role="CodeMasterList" EntitySet="CodeMasterLists" />
+      <End Role="ActionCode" EntitySet="ActionCodes" />
+    </AssociationSet>
   </EntityContainer>
-  <EntityType Name="ActionCodeDict">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CollNoteType" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CategoryID" Type="Int32" Nullable="false" />
-    <Property Name="Priority" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="NTUser" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Active" Type="Boolean" Nullable="false" />
-    <Property Name="ParsingYN" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="ACType" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Category" Relationship="MedProDBEntities.FK_ActionCodeDict_Category" FromRole="ActionCodeDict" ToRole="Category" />
-  </EntityType>
-  <EntityType Name="Category">
-    <Key>
-      <PropertyRef Name="CategoryID" />
-    </Key>
-    <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="ActionCodeDicts" Relationship="MedProDBEntities.FK_ActionCodeDict_Category" FromRole="Category" ToRole="ActionCodeDict" />
-  </EntityType>
-  <Association Name="FK_ActionCodeDict_Category">
-    <End Type="MedProDBEntities.Category" Role="Category" Multiplicity="1" />
-    <End Type="MedProDBEntities.ActionCodeDict" Role="ActionCodeDict" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Category">
-        <PropertyRef Name="CategoryID" />
-      </Principal>
-      <Dependent Role="ActionCodeDict">
-        <PropertyRef Name="CategoryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="ManagerDBAccessBI">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="FvP" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="DB" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
-    <Property Name="Manager" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="AliasName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="NTUser" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="active" Type="Boolean" />
-  </EntityType>
   <EntityType Name="CollNoteTypeCatPriority">
     <Key>
       <PropertyRef Name="id" />
@@ -411,45 +374,102 @@
     <Property Name="ParsingYN" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
     <Property Name="ACType" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="MasterUserList">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ADP_ID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="EmployeeName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="ADP_ID_" Type="Int64" />
-    <Property Name="Edgemed_UserName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="ZoomServer" Type="Int64" />
-    <Property Name="EdgeMed_ID" Type="Int64" />
-    <Property Name="Job_Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="Staff_Manager" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="User_Active" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="FirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="Middle_Init" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-    <Property Name="LastName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="NTUser" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Type" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-  </EntityType>
   <EntityType Name="ACCategory">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="CatogoryID" />
     </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CatogoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ActionCodes" Relationship="MedProDBEntities.FK_ActionCode_ACCategory" FromRole="ACCategory" ToRole="ActionCode" />
   </EntityType>
   <EntityType Name="ACPriority">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="PriorityID" />
     </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PriorityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="PriorityName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ActionCodes" Relationship="MedProDBEntities.FK_ActionCode_ACPriority" FromRole="ACPriority" ToRole="ActionCode" />
+  </EntityType>
+  <EntityType Name="ActionCode">
+    <Key>
+      <PropertyRef Name="ActionCodeID" />
+    </Key>
+    <Property Name="ActionCodeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CollNoteType" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="CodeID" Type="Int32" Nullable="false" />
+    <Property Name="CategoryID" Type="Int32" Nullable="false" />
+    <Property Name="PriorityID" Type="Int32" Nullable="false" />
+    <Property Name="ACTypeID" Type="Int32" Nullable="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <Property Name="ParsingYN" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="SortOrder" Type="Int32" />
+    <NavigationProperty Name="ACCategory" Relationship="MedProDBEntities.FK_ActionCode_ACCategory" FromRole="ActionCode" ToRole="ACCategory" />
+    <NavigationProperty Name="ACPriority" Relationship="MedProDBEntities.FK_ActionCode_ACPriority" FromRole="ActionCode" ToRole="ACPriority" />
+    <NavigationProperty Name="ACtype" Relationship="MedProDBEntities.FK_ActionCode_ACtypes" FromRole="ActionCode" ToRole="ACtype" />
+    <NavigationProperty Name="CodeMasterList" Relationship="MedProDBEntities.FK_ActionCode_CodeMasterList" FromRole="ActionCode" ToRole="CodeMasterList" />
   </EntityType>
   <EntityType Name="ACtype">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="ACTypeID" />
     </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ACTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="ACTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ActionCodes" Relationship="MedProDBEntities.FK_ActionCode_ACtypes" FromRole="ACtype" ToRole="ActionCode" />
   </EntityType>
+  <EntityType Name="CodeMasterList">
+    <Key>
+      <PropertyRef Name="CodeID" />
+    </Key>
+    <Property Name="CodeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ActionCodes" Relationship="MedProDBEntities.FK_ActionCode_CodeMasterList" FromRole="CodeMasterList" ToRole="ActionCode" />
+  </EntityType>
+  <Association Name="FK_ActionCode_ACCategory">
+    <End Type="MedProDBEntities.ACCategory" Role="ACCategory" Multiplicity="1" />
+    <End Type="MedProDBEntities.ActionCode" Role="ActionCode" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ACCategory">
+        <PropertyRef Name="CatogoryID" />
+      </Principal>
+      <Dependent Role="ActionCode">
+        <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ActionCode_ACPriority">
+    <End Type="MedProDBEntities.ACPriority" Role="ACPriority" Multiplicity="1" />
+    <End Type="MedProDBEntities.ActionCode" Role="ActionCode" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ACPriority">
+        <PropertyRef Name="PriorityID" />
+      </Principal>
+      <Dependent Role="ActionCode">
+        <PropertyRef Name="PriorityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ActionCode_ACtypes">
+    <End Type="MedProDBEntities.ACtype" Role="ACtype" Multiplicity="1" />
+    <End Type="MedProDBEntities.ActionCode" Role="ActionCode" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ACtype">
+        <PropertyRef Name="ACTypeID" />
+      </Principal>
+      <Dependent Role="ActionCode">
+        <PropertyRef Name="ACTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ActionCode_CodeMasterList">
+    <End Type="MedProDBEntities.CodeMasterList" Role="CodeMasterList" Multiplicity="1" />
+    <End Type="MedProDBEntities.ActionCode" Role="ActionCode" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CodeMasterList">
+        <PropertyRef Name="CodeID" />
+      </Principal>
+      <Dependent Role="ActionCode">
+        <PropertyRef Name="CodeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

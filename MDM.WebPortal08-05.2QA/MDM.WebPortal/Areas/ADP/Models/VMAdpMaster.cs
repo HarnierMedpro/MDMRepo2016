@@ -15,11 +15,13 @@ namespace MDM.WebPortal.Areas.ADP.Models
         [Required]
         [Display(Name = "FIRST NAME")]
         [StringLength(50)]
+        [RegularExpression(@"^([a-zA-Z \\&\'\-]+)$", ErrorMessage = "Invalid First Name.")]
         public string FName { get; set; }
 
         [Required]
         [Display(Name = "LAST NAME")]
         [StringLength(50)]
+        [RegularExpression(@"^([a-zA-Z \\&\'\-]+)$", ErrorMessage = "Invalid Last Name.")]
         public string LName { get; set; }
 
         [Required]

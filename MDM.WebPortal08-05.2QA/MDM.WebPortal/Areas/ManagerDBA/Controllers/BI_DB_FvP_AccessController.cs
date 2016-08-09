@@ -19,13 +19,6 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
     {
         private MedProDBEntities db = new MedProDBEntities();
 
-        // GET: ManagerDBA/BI_DB_FvP_Access
-        //public async Task<ActionResult> Index()
-        //{
-        //    var bI_DB_FvP_Access = db.BI_DB_FvP_Access.Include(b => b.DBList).Include(b => b.FvPList).Include(b => b.Manager_Master);
-        //    return View(await bI_DB_FvP_Access.ToListAsync());
-        //}
-
         public ActionResult Index()
         {
             ViewData["Manager"] = db.Manager_Master.Select(manager => new {manager.ManagerID, manager.AliasName});
@@ -41,7 +34,8 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
             {
                 ManagerID = x.ManagerID, //PK from Manager_Master table
                 AliasName = x.AliasName,
-                Active = x.Active
+                Active = x.Active, 
+                Classification = x.Manager_Type.Name
             }), JsonRequestBehavior.AllowGet);
         }
 
@@ -70,46 +64,39 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
         public async Task<ActionResult> Update_BI_DB_FvP([DataSourceRequest] DataSourceRequest request,
             [Bind(Include = "BIDbFvPID,ManagerID,DB_ID,FvPID,Active")] VMBI_DB_FvP bI_DB_FvP_Access)
         {
-            /*Some Logic Here*/
-            if (bI_DB_FvP_Access != null && ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    //var storedInDb = await db.BI_DB_FvP_Access.FindAsync(bI_DB_FvP_Access.BIDbFvPID);
-                    //var s2 = new List<BI_DB_FvP_Access>(){storedInDb};
-                    //var except = db.BI_DB_FvP_Access.ToList().Except(s2);
-                    //var aux = except.ToList();
-                    //if (except.Any((x => x.DB_ID == bI_DB_FvP_Access.DB_ID && x.FvPID == bI_DB_FvP_Access.FvPID)))
                     if (await db.BI_DB_FvP_Access.AnyAsync(x => x.DB_ID == bI_DB_FvP_Access.DB_ID && x.FvPID == bI_DB_FvP_Access.FvPID && x.BIDbFvPID != bI_DB_FvP_Access.BIDbFvPID))
                     {
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
                         return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request, ModelState));
                     }
-                    var storedInDb = await db.BI_DB_FvP_Access.FindAsync(bI_DB_FvP_Access.BIDbFvPID);
-                    storedInDb.ManagerID = bI_DB_FvP_Access.ManagerID;
-                    storedInDb.DB_ID = bI_DB_FvP_Access.DB_ID;
-                    storedInDb.FvPID = bI_DB_FvP_Access.FvPID;
-                    storedInDb.Active = bI_DB_FvP_Access.Active;
-
+                    var storedInDb =  new BI_DB_FvP_Access
+                    {
+                        BIDbFvPID = bI_DB_FvP_Access.BIDbFvPID,
+                        ManagerID = bI_DB_FvP_Access.ManagerID,
+                        DB_ID = bI_DB_FvP_Access.DB_ID,
+                        FvPID = bI_DB_FvP_Access.FvPID,
+                        Active = bI_DB_FvP_Access.Active,
+                    };
+                    db.BI_DB_FvP_Access.Attach(storedInDb);
                     db.Entry(storedInDb).State = EntityState.Modified;
                     await db.SaveChangesAsync();
-
-                    return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request));
                 }
                 catch (Exception)
                 {
                     ModelState.AddModelError("", "Something failed. Please try again!");
                     return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request, ModelState));
                 }
-               
             }
-            ModelState.AddModelError("","Something failed. Please try again!");
             return Json(new[] {bI_DB_FvP_Access}.ToDataSourceResult(request, ModelState));
         }
 
         public async Task<ActionResult> Create_BI_DB_FvP([DataSourceRequest] DataSourceRequest request, [Bind(Include = "BIDbFvPID,ManagerID,DB_ID,FvPID,Active")] VMBI_DB_FvP bI_DB_FvP_Access, int ParentID)
         {
-            if (bI_DB_FvP_Access != null && ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -118,10 +105,16 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
                         return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request, ModelState));
                     }
-                    var newOb = new BI_DB_FvP_Access {BIDbFvPID = bI_DB_FvP_Access.BIDbFvPID, FvPID = bI_DB_FvP_Access.FvPID, DB_ID = bI_DB_FvP_Access.DB_ID, Active = bI_DB_FvP_Access.Active, ManagerID = ParentID};
+                    var newOb = new BI_DB_FvP_Access
+                    {
+                        BIDbFvPID = bI_DB_FvP_Access.BIDbFvPID,
+                        FvPID = bI_DB_FvP_Access.FvPID, DB_ID = bI_DB_FvP_Access.DB_ID, 
+                        Active = bI_DB_FvP_Access.Active, 
+                        ManagerID = ParentID
+                    };
                     db.BI_DB_FvP_Access.Add(newOb);
                     await db.SaveChangesAsync();
-                    return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request));
+                    bI_DB_FvP_Access.BIDbFvPID = newOb.BIDbFvPID;
                 }
                 catch (Exception)
                 {
@@ -129,7 +122,6 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
                     return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request, ModelState));
                 }
             }
-            ModelState.AddModelError("", "Something failed. Please try again!");
             return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request, ModelState));
         }
 
@@ -168,126 +160,7 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
 
         //-------------------------------------------------------------------- END AUTOCOMPLETE ACTIONS -----------------------------------------------------------------------------------\\
 
-        // GET: ManagerDBA/BI_DB_FvP_Access/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            BI_DB_FvP_Access bI_DB_FvP_Access = await db.BI_DB_FvP_Access.FindAsync(id);
-            if (bI_DB_FvP_Access == null)
-            {
-                return HttpNotFound();
-            }
-            return View(bI_DB_FvP_Access);
-        }
-
-        // GET: ManagerDBA/BI_DB_FvP_Access/Create
-        public ActionResult Create()
-        {
-            ViewBag.DB_ID = new SelectList(db.DBLists, "DB_ID", "DB");
-            ViewBag.FvPID = new SelectList(db.FvPLists, "FvPID", "FvPName");
-            ViewBag.ManagerID = new SelectList(db.Manager_Master, "ManagerID", "AliasName");
-            return View();
-        }
-
-        // POST: ManagerDBA/BI_DB_FvP_Access/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "BIDbFvPID,ManagerID,DB_ID,FvPID,Active")] BI_DB_FvP_Access bI_DB_FvP_Access)
-        {
-            if (ModelState.IsValid)
-            {
-                if (db.BI_DB_FvP_Access.FirstOrDefault(x => x.DB_ID == bI_DB_FvP_Access.DB_ID && x.FvPID == bI_DB_FvP_Access.FvPID) != null)
-                {
-                    ViewBag.Error = "Duplicate Data.";
-                    return View(bI_DB_FvP_Access);
-                }
-                try
-                {
-                    bI_DB_FvP_Access.Active = true;
-                    db.BI_DB_FvP_Access.Add(bI_DB_FvP_Access);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Create");
-                }
-                catch (Exception)
-                {
-                    ViewBag.Error = "Something failed. Please try again!";
-                    return View(bI_DB_FvP_Access);
-                }
-               
-            }
-            ViewBag.DB_ID = new SelectList(db.DBLists, "DB_ID", "DB", bI_DB_FvP_Access.DB_ID);
-            ViewBag.FvPID = new SelectList(db.FvPLists, "FvPID", "FvPName", bI_DB_FvP_Access.FvPID);
-            ViewBag.ManagerID = new SelectList(db.Manager_Master, "ManagerID", "AliasName", bI_DB_FvP_Access.ManagerID);
-            return View(bI_DB_FvP_Access);
-        }
-
-        // GET: ManagerDBA/BI_DB_FvP_Access/Edit/5
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            BI_DB_FvP_Access bI_DB_FvP_Access = await db.BI_DB_FvP_Access.FindAsync(id);
-            if (bI_DB_FvP_Access == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.DB_ID = new SelectList(db.DBLists, "DB_ID", "DB", bI_DB_FvP_Access.DB_ID);
-            ViewBag.FvPID = new SelectList(db.FvPLists, "FvPID", "FvPName", bI_DB_FvP_Access.FvPID);
-            ViewBag.ManagerID = new SelectList(db.Manager_Master, "ManagerID", "AliasName", bI_DB_FvP_Access.ManagerID);
-            return View(bI_DB_FvP_Access);
-        }
-
-        // POST: ManagerDBA/BI_DB_FvP_Access/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "BIDbFvPID,ManagerID,DB_ID,FvPID,Active")] BI_DB_FvP_Access bI_DB_FvP_Access)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(bI_DB_FvP_Access).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            ViewBag.DB_ID = new SelectList(db.DBLists, "DB_ID", "DB", bI_DB_FvP_Access.DB_ID);
-            ViewBag.FvPID = new SelectList(db.FvPLists, "FvPID", "FvPName", bI_DB_FvP_Access.FvPID);
-            ViewBag.ManagerID = new SelectList(db.Manager_Master, "ManagerID", "AliasName", bI_DB_FvP_Access.ManagerID);
-            return View(bI_DB_FvP_Access);
-        }
-
-        // GET: ManagerDBA/BI_DB_FvP_Access/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            BI_DB_FvP_Access bI_DB_FvP_Access = await db.BI_DB_FvP_Access.FindAsync(id);
-            if (bI_DB_FvP_Access == null)
-            {
-                return HttpNotFound();
-            }
-            return View(bI_DB_FvP_Access);
-        }
-
-        // POST: ManagerDBA/BI_DB_FvP_Access/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            BI_DB_FvP_Access bI_DB_FvP_Access = await db.BI_DB_FvP_Access.FindAsync(id);
-            db.BI_DB_FvP_Access.Remove(bI_DB_FvP_Access);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+      
 
         protected override void Dispose(bool disposing)
         {

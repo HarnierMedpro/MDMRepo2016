@@ -14,7 +14,16 @@ namespace MDM.WebPortal.Models.FromDB
     
     public partial class ACCategory
     {
-        public int id { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ACCategory()
+        {
+            this.ActionCodes = new HashSet<ActionCode>();
+        }
+    
+        public int CatogoryID { get; set; }
         public string CategoryName { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ActionCode> ActionCodes { get; set; }
     }
 }

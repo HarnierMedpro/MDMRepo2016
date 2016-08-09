@@ -17,7 +17,7 @@
 <div class="container-fluid">
 
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMActionSystem>()
-.Name("ControllerSystem")
+.Name("ActionSystem")
 .ToolBar(tools =>
 {
     tools.Create().Text("NEW ACTION");
@@ -57,6 +57,7 @@
           model.Id(e => e.ActionID);
           model.Field(e => e.ActionID).Editable(false);
       })
+      .Group(x => x.Add(y => y.ControllerID))
       .Events(events => events.Error("error_handler"))
       .Read(read => read.Action("Read_ActionSystems", "ActionSystems"))
       .Update(update => update.Action("Update_ActionSystems", "ActionSystems"))
@@ -77,7 +78,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#ActionSystem").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>

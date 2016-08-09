@@ -14,7 +14,16 @@ namespace MDM.WebPortal.Models.FromDB
     
     public partial class ACPriority
     {
-        public int id { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ACPriority()
+        {
+            this.ActionCodes = new HashSet<ActionCode>();
+        }
+    
+        public int PriorityID { get; set; }
         public string PriorityName { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ActionCode> ActionCodes { get; set; }
     }
 }

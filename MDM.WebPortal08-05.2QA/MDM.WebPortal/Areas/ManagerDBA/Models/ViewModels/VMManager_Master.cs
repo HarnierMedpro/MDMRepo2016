@@ -15,6 +15,7 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels
         [Required]
         [StringLength(50)]
         [Display(Name = "ALIAS NAME")]
+        [RegularExpression(@"^([a-zA-Z \\&\'\-]+)$", ErrorMessage = "Invalid Alias Name.")]
         public string AliasName { get; set; }
 
         [Required]

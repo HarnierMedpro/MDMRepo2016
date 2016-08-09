@@ -17,7 +17,7 @@
     </div>
 </header>
 
-<div class="container">
+<div class="container-fluid">
     @(Html.Kendo().Grid<MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels.VMManager_Master>()
           .Name("Manager")
           .ToolBar(tools =>
@@ -28,11 +28,11 @@
           .Columns(columns =>
           {
               columns.Bound(x => x.ManagerID).Hidden(true); //PK
-
+              
+              columns.Bound(x => x.AliasName).Width(110);
+              
               columns.ForeignKey(x => x.ManagerTypeID, (System.Collections.IEnumerable) ViewData["Type"], "ManagerTypeID", "Name").Title("CLASSIFICATION").Width(110);
               //columns.Bound(x => x.ManagerTypeID).Width(110).EditorTemplateName("Available_Manager_Type");
-
-              columns.Bound(x => x.AliasName).Width(110);
 
               columns.Bound(x => x.Active).Width(110);
 
@@ -49,7 +49,6 @@
               {
                   model.Id(x => x.ManagerID);
                   model.Field(x => x.ManagerID).Editable(false);
-                  model.Field(x => x.Active).Editable(false);
               })
               .Events(events => events.Error("error_handler"))
               .Read(read => read.Action("Read_Manager", "Manager_Master"))
@@ -83,7 +82,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#Manager").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>

@@ -17,7 +17,7 @@
 
 
 <script src="~/Scripts/kendo/jszip.min.js"></script>
-<div class="container">
+<div class="container-fluid">
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMDBList>()
           .Name("GridDB")
           .DataSource(dataSource => dataSource
@@ -53,8 +53,9 @@
           })
 
 
-          .ToolBar(tools => { tools.Excel();
-                                //tools.Create();
+          .ToolBar(tools => {
+              tools.Excel(); 
+             // tools.Create(); 
           })
           .Excel(excel => excel
               .AllPages(true)
@@ -85,7 +86,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#GridDB").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>

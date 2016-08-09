@@ -12,6 +12,8 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels
 
         [Required]
         [Display(Name = "CLASSIFICATION")]
+        [StringLength(20)]
+        [RegularExpression(@"[a-zA-Z0-9_]+$", ErrorMessage = "No Special character and/or white space allowed.")]
         public string Name { get; set; }
 
         [Required]

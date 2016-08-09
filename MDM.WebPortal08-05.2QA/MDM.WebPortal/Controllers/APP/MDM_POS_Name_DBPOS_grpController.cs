@@ -47,7 +47,7 @@ namespace MDM.WebPortal.Controllers.APP
         
 
          public async Task<ActionResult> Update_Entity([DataSourceRequest] DataSourceRequest request,
-                    [Bind(Include = "MDMPOS_NameID,DB_ID,FacilityID,MDMPOS_ListNameID,Active")] MDM_POS_Name_DBPOS_grp mDmPosNameDbposGrp)
+                    [Bind(Include = "MDMPOS_NameID,DB_ID,FacilityID,MDMPOS_ListNameID,Active")] VMPOS_Name_DBPOS_grp mDmPosNameDbposGrp)
             {
                 if (ModelState.IsValid)
                 {
@@ -80,7 +80,7 @@ namespace MDM.WebPortal.Controllers.APP
             }
 
          public async Task<ActionResult> Create_Entity([DataSourceRequest] DataSourceRequest request,
-                     [Bind(Include = "MDMPOS_NameID,DB_ID,FacilityID,MDMPOS_ListNameID,Active")] MDM_POS_Name_DBPOS_grp mDmPosNameDbposGrp)
+                     [Bind(Include = "MDMPOS_NameID,DB_ID,FacilityID,MDMPOS_ListNameID,Active")] VMPOS_Name_DBPOS_grp mDmPosNameDbposGrp)
          {
              if (ModelState.IsValid)
              {
@@ -93,7 +93,6 @@ namespace MDM.WebPortal.Controllers.APP
                      }
                      var toStore = new MDM_POS_Name_DBPOS_grp
                      {
-                         MDMPOS_NameID = mDmPosNameDbposGrp.MDMPOS_NameID, //PK 
                          MDMPOS_ListNameID = mDmPosNameDbposGrp.MDMPOS_ListNameID,//FK from dbo.MDM_POS_ListName
                          FacilityID = mDmPosNameDbposGrp.FacilityID, //fk from DBO.Facility_DBs
                          DB_ID = mDmPosNameDbposGrp.DB_ID, //FK
@@ -172,17 +171,6 @@ namespace MDM.WebPortal.Controllers.APP
 
                 var database = await db.DBLists.FindAsync(toInt);
 
-                /*I have all the DBs with their Facilities*/
-                //_DALvmPosTab readView = new _DALvmPosTab();
-
-                //var dbFacs = (from DataRow item in readView.Read().Rows
-                //              select new VMDB_Fac
-                //              {
-                //                  Db = item.ItemArray[0].ToString(),
-                //                  FacilityID = Convert.ToInt64(item.ItemArray[1]),
-                //                  FacName = item.ItemArray[2].ToString()
-                //              }).ToList();
-
                 //USING EF 
                 var dbFacs = db.Facitity_DBs.Select(x => new VMDB_Fac
                 {
@@ -232,14 +220,7 @@ namespace MDM.WebPortal.Controllers.APP
             var firstDb = dBs.First();//puede ser null
 
             /*I have all the DBs with their Facilities*/
-            //_DALvmPosTab readView = new _DALvmPosTab();
-
-            //var dbFacs = (from DataRow item in readView.Read().Rows
-            //    select new VMDB_Fac
-            //    {
-            //        Db = item.ItemArray[0].ToString(), FacilityID = Convert.ToInt64(item.ItemArray[1]), FacName = item.ItemArray[2].ToString()
-            //    }).ToList();
-
+           
             //USING EF 
             var dbFacs = db.Facitity_DBs.Select(x => new VMDB_Fac
             {
@@ -310,15 +291,7 @@ namespace MDM.WebPortal.Controllers.APP
                     var firstDb = db.DBLists.Find(mDM_POS_Name_DBPOS_grp.DB_ID);
 
                     /*I have all the DBs with their Facilities*/
-                    //_DALvmPosTab readView = new _DALvmPosTab();
-
-                    //var dbFacs = (from DataRow item in readView.Read().Rows
-                    //              select new VMDB_Fac
-                    //              {
-                    //                  Db = item.ItemArray[0].ToString(),
-                    //                  FacilityID = Convert.ToInt64(item.ItemArray[1]),
-                    //                  FacName = item.ItemArray[2].ToString()
-                    //              }).ToList();
+                    
                     //USING EF 
                     var dbFacs = db.Facitity_DBs.Select(x => new VMDB_Fac
                     {
@@ -370,15 +343,7 @@ namespace MDM.WebPortal.Controllers.APP
                     var firstDb = db.DBLists.Find(mDM_POS_Name_DBPOS_grp.DB_ID);
 
                     /*I have all the DBs with their Facilities*/
-                    //_DALvmPosTab readView = new _DALvmPosTab();
-
-                    //var dbFacs = (from DataRow item in readView.Read().Rows
-                    //              select new VMDB_Fac
-                    //              {
-                    //                  Db = item.ItemArray[0].ToString(),
-                    //                  FacilityID = Convert.ToInt64(item.ItemArray[1]),
-                    //                  FacName = item.ItemArray[2].ToString()
-                    //              }).ToList();
+                   
 
                     //USING EF 
                     var dbFacs = db.Facitity_DBs.Select(x => new VMDB_Fac
@@ -430,15 +395,7 @@ namespace MDM.WebPortal.Controllers.APP
             var firstDb2 = (SelectList) ViewBag.DB_ID; 
 
             /*I have all the DBs with their Facilities*/
-            //_DALvmPosTab readView2 = new _DALvmPosTab();
-
-            //var dbFacs2 = (from DataRow item in readView2.Read().Rows
-            //              select new VMDB_Fac
-            //              {
-            //                  Db = item.ItemArray[0].ToString(),
-            //                  FacilityID = Convert.ToInt64(item.ItemArray[1]),
-            //                  FacName = item.ItemArray[2].ToString()
-            //              }).ToList();
+            
             //USING EF 
             var dbFacs2 = db.Facitity_DBs.Select(x => new VMDB_Fac
             {
@@ -478,31 +435,7 @@ namespace MDM.WebPortal.Controllers.APP
         }
 
        
-        // GET: MDM_POS_Name_DBPOS_grp/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            MDM_POS_Name_DBPOS_grp mDM_POS_Name_DBPOS_grp = await db.MDM_POS_Name_DBPOS_grp.FindAsync(id);
-            if (mDM_POS_Name_DBPOS_grp == null)
-            {
-                return HttpNotFound();
-            }
-            return View(mDM_POS_Name_DBPOS_grp);
-        }
-
-        // POST: MDM_POS_Name_DBPOS_grp/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            MDM_POS_Name_DBPOS_grp mDM_POS_Name_DBPOS_grp = await db.MDM_POS_Name_DBPOS_grp.FindAsync(id);
-            db.MDM_POS_Name_DBPOS_grp.Remove(mDM_POS_Name_DBPOS_grp);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+      
 
 
         /*Get all the POS without duplicates values*/

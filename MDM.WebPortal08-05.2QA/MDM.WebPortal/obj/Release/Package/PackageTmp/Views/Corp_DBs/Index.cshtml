@@ -11,13 +11,12 @@
         <h1 class="page-title"></h1>
         <ol class="breadcrumb pull-right">
             <li><a href="@Url.Action("Index","Home")"><i class="fa fa-home"></i> Home</a></li>            
-            <li class="active">Corp_DBs</li>
+            <li class="active">Corp_DBs Relationship</li>
         </ol>
     </div>
 </header>
 
-<div class="container">
-    <h2 class="section-title"> Corp_DBs - Relationship</h2>
+<div class="container-fluid">   
     <p>
         @Html.ActionLink("Create New", "Create")
     </p>
@@ -25,7 +24,7 @@
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMCorporateMasterLists>()
       .Name("gridCorporat")
       .ToolBar(tool => tool.Excel())
-      //.Excel(e => e.AllPages(true)) //add it(new)
+      .Excel(e => e.AllPages(true)) //add it(new)
       .Columns(columns =>
       {
           columns.Bound(c => c.CorporateName).Title("CORPORATE NAME").Width(300);         
@@ -36,7 +35,7 @@
       .PreviousNext(true).PageSizes(true))      
       .Groupable()
       .ClientDetailTemplateId("template")
-      .Events(e => e.ExcelExport("employees_excelExport").DetailInit("employees_detailInit"))
+      .Events(e => e.ExcelExport("corpdb_excelExport").DetailInit("corpdb_detailInit"))
       .Reorderable(r => r.Columns(true))
       .Resizable(r => r.Columns(true))
       .Selectable(s => s.Enabled(true)
@@ -73,6 +72,7 @@
                 columns.Command(commands =>
                   {
                       commands.Edit();
+                      commands.Destroy().Text("Release");
                   }).Title("COMMANDS");
             })
             .DataSource(dataSource => dataSource
@@ -88,6 +88,7 @@
                   })
                 .Read(read => read.Action("HierarchyBinding_DBs", "Corp_DBs", new { corpID = "#=corpID#" }))
                 .Update(x => x.Action("Update", "Corp_DBs", new { corpID = "#=corpID#" }))
+                .Destroy(destroy => destroy.Action("Corp_DBs_Release", "Corp_DBs", new { corpID = "#=corpID#" }))
             )
             //.Events(e => e.ExcelExport("orders_excelExport")) //add it(new)
             .Pageable()
@@ -104,7 +105,7 @@
 
     var detailExportPromises = [];
 
-    function employees_detailInit(e) {
+    function corpdb_detailInit(e) {
         var deferred = $.Deferred();
 
         // get the index of the master row
@@ -127,7 +128,7 @@
         });
     }
 
-    function employees_excelExport(e) {
+    function corpdb_excelExport(e) {
         // prevent saving the file because we will update the workbook
         e.preventDefault();
 
@@ -193,7 +194,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#gridCorporat").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
         

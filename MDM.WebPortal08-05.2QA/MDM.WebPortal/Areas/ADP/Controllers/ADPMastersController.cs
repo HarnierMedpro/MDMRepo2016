@@ -20,12 +20,6 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
     {
         private MedProDBEntities db = new MedProDBEntities();
 
-        // GET: ADP/ADPMasters
-        //public async Task<ActionResult> Index()
-        //{
-        //    return View(await db.ADPMasters.ToListAsync());
-        //}
-
         public ActionResult Index()
         {
             return View();
@@ -45,6 +39,27 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
+        /*Get al EdgeMedLogons of specific ADP*/
+        public ActionResult EdgeMedLogonsforAdp([DataSourceRequest] DataSourceRequest request, int? ADPMaster_ID)
+        {
+            IQueryable<Edgemed_Logons> edgemed = db.Edgemed_Logons;
+
+            if (ADPMaster_ID != null)
+            {
+                edgemed = edgemed.Where(x => x.ADPMasterID == ADPMaster_ID);
+            }
+
+            return Json(edgemed.ToDataSourceResult(request, x => new VMEdgemed_Logons
+            {
+                Edgemed_LogID = x.Edgemed_LogID, //PK from Edgemed table
+                Edgemed_UserName = x.Edgemed_UserName,
+                Zno = x.Zno,
+                EdgeMed_ID = x.EdgeMed_ID,
+                Active = x.Active,
+                ADPMasterID = x.ADPMasterID //FK from dbo.ADP_Master table
+            }), JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<ActionResult> Update_Adp([DataSourceRequest] DataSourceRequest request,
             [Bind(Include = "id,ADP_ID,FName,LName,Title,Manager,Active")] VMAdpMaster aDPMaster)
         {
@@ -60,10 +75,9 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
                     storedInDb.FName = aDPMaster.FName;
                     storedInDb.LName = aDPMaster.LName;
                     storedInDb.Manager = aDPMaster.Manager;
+                    db.ADPMasters.Attach(storedInDb);
                     db.Entry(storedInDb).State = EntityState.Modified;
                     await db.SaveChangesAsync();
-
-                    return Json(new[] { aDPMaster }.ToDataSourceResult(request));
                 }
                 catch (Exception)
                 {
@@ -71,7 +85,6 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
                     return Json(new[] { aDPMaster }.ToDataSourceResult(request, ModelState));
                 }
             }
-            ModelState.AddModelError("", "Something Failed. Please try again!");
             return Json(new[] { aDPMaster }.ToDataSourceResult(request, ModelState));
         }
 

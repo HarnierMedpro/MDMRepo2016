@@ -3,11 +3,8 @@
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout1.cshtml";
-
-    
+    Layout = "~/Views/Shared/_Layout1.cshtml";    
 }
-
 
 <header class="main-header">
     <div class="container">
@@ -19,99 +16,10 @@
     </div>
 </header>
 
-<!-----------------------By default------------------------------------------->
-@*<div class="container">
-    <p>
+<div class="container-fluid">
+    @*<p>
         @Html.ActionLink("Create New", "Create")
-    </p>
-    @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMMDM_POS_ListName>()
-    .Name("POS")
-    .ToolBar(tools => tools.Excel())
-    .Excel(excel => excel
-      .AllPages(true)
-      .FileName("ExportData.xlsx")
-      .Filterable(false)
-      )
-    .Columns(columns =>
-    {        
-        columns.Bound(p => p.PosName).Title("POS NAME").Width(300);
-    })
-
-    .Filterable()
-    .Pageable(ps => ps.Refresh(true)    
-    .PreviousNext(true).PageSizes(true))
-    .Sortable()
-    .Groupable()
-    .Reorderable(r => r.Columns(true))
-    .Resizable(r => r.Columns(true))
-    .Selectable(s => s.Enabled(true)
-    .Type(GridSelectionType.Row)
-    .Mode(GridSelectionMode.Single))
-    .ClientDetailTemplateId("template")
-    
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .PageSize(10)
-        .Model(model =>
-         {
-            model.Id(x => x.MDMPOS_ListNameID); // Specify the property which is the unique identifier of the model
-            model.Field(x => x.MDMPOS_ListNameID).Editable(false); // Make the ProductID property not editable
-         })
-        .Read(read => read.Action("POS", "MDM_POS_Name_DBPOS_grp"))        
-     )
-     .Events(events => events.DataBound("dataBound"))
-    )
-</div>
-
-<script id="template" type="text/x-kendo-templat">
-    @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMPOS_Name_DBPOS_grp>()
-                   .Name("GRP_#=MDMPOS_ListNameID#")
-            .Columns(columns =>
-            {
-                //Before
-                columns.ForeignKey(o => o.DB_ID, (System.Collections.IEnumerable)ViewData["DB"], "DB_ID", "DB").Title("DB").Width(70);
-                columns.Bound(o => o.FacilityId).Title("FACILITY_ID").Width(110);
-                columns.Command(commands =>
-                {
-                    commands.Edit();
-                }).Title("COMMANDS").Width(110);
-                
-                //test
-            })
-            .DataSource(dataSource => dataSource
-                .Ajax()
-                .PageSize(10)
-                        .Model(model =>
-                          {
-                              model.Id(x => x.MDMPOS_NameID);
-                              model.Field(x => x.MDMPOS_NameID).Editable(false);                             
-                          })
-                          .Read(read => read.Action("DbPosGrp", "MDM_POS_Name_DBPOS_grp", new { MDMPOS_ListNameID = "#=MDMPOS_ListNameID#" }))
-                          .Update(x => x.Action("Update", "MDM_POS_Name_DBPOS_grp", new { MDMPOS_ListNameID = "#=MDMPOS_ListNameID#" }))
-            )
-           // .Events(e => e.ExcelExport("orders_excelExport"))
-            .Editable(editable => editable.Mode(GridEditMode.InLine))//test
-            .Pageable()
-            .Sortable()
-            .ToClientTemplate()
-    )
-</script>
-
-
-<script>
-    function dataBound() {
-        detailExportPromises = [];
-
-        this.expandRow(this.tbody.find("tr.k-master-row").first());
-    }   
-</script>*@
-
-
-
-<div class="container">
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
+    </p>*@
 
 
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMPOS_Name_DBPOS_grp>()
@@ -132,7 +40,7 @@
 
               columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new {@title = "Edit"})).Width(80);
           })
-          .ToolBar(tools => { tools.Excel();})
+          .ToolBar(tools => { tools.Excel(); tools.Create().Text("NEW RELATIONSHIP"); })
           .Excel(excel => excel
               .AllPages(true)
               .FileName("ExportData.xlsx")
@@ -161,7 +69,8 @@
               .Events(events => events.Error("error_handler")) //allows us catch the errors sent by the JSON object, especificados por ModelState
               .Group(x => x.Add(c => c.MDMPOS_ListNameID)) //Agrupa por defecto usando la columna POS
               .Read(read => read.Action("Read", "MDM_POS_Name_DBPOS_grp").Type(HttpVerbs.Post))
-              .Update(update => update.Action("Update", "MDM_POS_Name_DBPOS_grp").Type(HttpVerbs.Post))
+              .Update(update => update.Action("Update_Entity", "MDM_POS_Name_DBPOS_grp").Type(HttpVerbs.Post))
+              .Create(create => create.Action("Create_Entity", "MDM_POS_Name_DBPOS_grp"))
           )
           )
 </div>
@@ -170,9 +79,7 @@
     function onEdit(e) {
         //attach validator to the PopUp window
         $("[data-role=window]").kendoValidator();
-    }
-
-    
+    }    
 
     function error_handler(e) {
         if (e.errors) {
@@ -184,7 +91,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#popupGrid").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>

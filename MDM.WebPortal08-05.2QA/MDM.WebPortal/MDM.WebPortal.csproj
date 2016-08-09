@@ -187,12 +187,16 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\UtilClass.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\ActionCode\ActionCodeAreaRegistration.cs" />
+    <Compile Include="Areas\ActionCode\Controllers\CodeMasterListsController.cs" />
+    <Compile Include="Areas\ActionCode\Models\ViewModels\VMCodeMasterList.cs" />
     <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
     <Compile Include="Areas\Administration\Controllers\HomeAdminController.cs" />
     <Compile Include="Areas\ADP\ADPAreaRegistration.cs" />
     <Compile Include="Areas\ADP\Controllers\ADPMastersController.cs" />
     <Compile Include="Areas\ADP\Controllers\Edgemed_LogonsController.cs" />
     <Compile Include="Areas\ADP\Models\VMAdpMaster.cs" />
+    <Compile Include="Areas\ADP\Models\VMAdp_Edgemed.cs" />
     <Compile Include="Areas\ADP\Models\VMEdgemed_Logons.cs" />
     <Compile Include="Areas\Error\Controllers\ErrorController.cs" />
     <Compile Include="Areas\Error\ErrorAreaRegistration.cs" />
@@ -207,15 +211,11 @@
     <Compile Include="Areas\ManagerDBA\Models\ViewModels\VMManager_Type.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActionSystemsController.cs" />
-    <Compile Include="Controllers\APP\ActionCodeDictController.cs" />
-    <Compile Include="Controllers\APP\CollNoteTypeCatPrioritiesController.cs" />
     <Compile Include="Controllers\APP\CorporateMasterListController.cs" />
     <Compile Include="Controllers\APP\Corp_DBsController.cs" />
     <Compile Include="Controllers\APP\Corp_OwnerController.cs" />
     <Compile Include="Controllers\APP\CPTDatasController.cs" />
     <Compile Include="Controllers\APP\DBListsController.cs" />
-    <Compile Include="Controllers\APP\ManagerDBAController.cs" />
-    <Compile Include="Controllers\APP\MasterUserListsController.cs" />
     <Compile Include="Controllers\APP\MDM_POS_ListNameController.cs" />
     <Compile Include="Controllers\APP\MDM_POS_Name_DBPOS_grpController.cs" />
     <Compile Include="Controllers\APP\OwnerListsController.cs" />
@@ -247,10 +247,9 @@
     <Compile Include="Models\FromDB\ACPriority.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\ActionCodeDict.cs">
+    <Compile Include="Models\FromDB\ActionCode.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\ActionCodeDictRepository.cs" />
     <Compile Include="Models\FromDB\ACtype.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
@@ -261,7 +260,7 @@
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\BI_DB_FvP_AccessMeta.cs" />
-    <Compile Include="Models\FromDB\Category.cs">
+    <Compile Include="Models\FromDB\CodeMasterList.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\CollNoteTypeCatPrioritiesMeta.cs" />
@@ -298,9 +297,6 @@
     <Compile Include="Models\FromDB\FvPList.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\ManagerDBAccessBI.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\FromDB\Manager_Master.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
@@ -308,9 +304,6 @@
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\Manager_TypeMeta.cs" />
-    <Compile Include="Models\FromDB\MasterUserList.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\FromDB\MDM_POS_ListName.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
@@ -367,7 +360,6 @@
     <Compile Include="Models\FromDB\MDM_ADP_ListMeta.cs" />
     <Compile Include="Models\FromDB\MDM_EdgeMED_ADP_UserListMeta.cs" />
     <Compile Include="Models\Identity\Permission.cs" />
-    <Compile Include="Models\ViewModel\ActionCodeDictViewModel.cs" />
     <Compile Include="Models\ViewModel\ActionCodeViewModel.cs" />
     <Compile Include="Models\ViewModel\VMActionSystem.cs" />
     <Compile Include="Models\ViewModel\VMControllerSystem.cs" />
@@ -2273,31 +2265,16 @@
     <Content Include="Areas\ADP\Views\ADPMasters\Index.cshtml" />
     <Content Include="Areas\ADP\Views\ADPMasters\Read_Adp.cshtml" />
     <Content Include="Areas\ADP\Views\Edgemed_Logons\Create.cshtml" />
-    <Content Include="Areas\ADP\Views\Edgemed_Logons\Delete.cshtml" />
-    <Content Include="Areas\ADP\Views\Edgemed_Logons\Details.cshtml" />
-    <Content Include="Areas\ADP\Views\Edgemed_Logons\Edit.cshtml" />
-    <Content Include="Areas\ADP\Views\Edgemed_Logons\Index.cshtml" />
+    <Content Include="Areas\ADP\Views\Edgemed_Logons\Index1.cshtml" />
     <Content Include="Areas\ADP\Views\Edgemed_Logons\ADP.cshtml" />
     <Content Include="Areas\ADP\Views\Edgemed_Logons\EdgeMedLogonsforAdp.cshtml" />
     <Content Include="Areas\ADP\Views\Edgemed_Logons\GetAdps.cshtml" />
     <Content Include="Areas\ADP\Views\Shared\EditorTemplates\adp.cshtml" />
     <Content Include="Areas\ManagerDBA\Views\web.config" />
-    <Content Include="Areas\ManagerDBA\Views\Manager_Type\Create.cshtml" />
-    <Content Include="Areas\ManagerDBA\Views\Manager_Type\Delete.cshtml" />
-    <Content Include="Areas\ManagerDBA\Views\Manager_Type\Details.cshtml" />
-    <Content Include="Areas\ManagerDBA\Views\Manager_Type\Edit.cshtml" />
     <Content Include="Areas\ManagerDBA\Views\Manager_Type\Index.cshtml" />
     <Content Include="Areas\ManagerDBA\Views\Manager_Type\Read_Type.cshtml" />
-    <Content Include="Areas\ManagerDBA\Views\Manager_Master\Create.cshtml" />
-    <Content Include="Areas\ManagerDBA\Views\Manager_Master\Delete.cshtml" />
-    <Content Include="Areas\ManagerDBA\Views\Manager_Master\Details.cshtml" />
-    <Content Include="Areas\ManagerDBA\Views\Manager_Master\Edit.cshtml" />
     <Content Include="Areas\ManagerDBA\Views\Manager_Master\Index.cshtml" />
     <Content Include="Areas\ManagerDBA\Views\Manager_Master\Read_Manager.cshtml" />
-    <Content Include="Areas\ManagerDBA\Views\BI_DB_FvP_Access\Create.cshtml" />
-    <Content Include="Areas\ManagerDBA\Views\BI_DB_FvP_Access\Delete.cshtml" />
-    <Content Include="Areas\ManagerDBA\Views\BI_DB_FvP_Access\Details.cshtml" />
-    <Content Include="Areas\ManagerDBA\Views\BI_DB_FvP_Access\Edit.cshtml" />
     <Content Include="Areas\ManagerDBA\Views\BI_DB_FvP_Access\Index.cshtml" />
     <Content Include="Areas\ManagerDBA\Views\BI_DB_FvP_Access\Read_GroupByManager.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Manager.cshtml" />
@@ -2323,6 +2300,10 @@
       <LastGenOutput>MedProDBEntities.cs</LastGenOutput>
     </Content>
     <Content Include="Views\Shared\EditorTemplates\RolesEditor.cshtml" />
+    <Content Include="Areas\ADP\Views\Edgemed_Logons\Index.cshtml" />
+    <Content Include="Areas\ActionCode\Views\web.config" />
+    <Content Include="Areas\ActionCode\Views\CodeMasterLists\Index.cshtml" />
+    <Content Include="Areas\ActionCode\Views\CodeMasterLists\Read_Code.cshtml" />
     <None Include="Properties\PublishProfiles\TestQA.pubxml" />
     <None Include="Scripts\jquery-2.2.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.4.js" />
@@ -3666,8 +3647,6 @@
     <Content Include="Views\CorporateMasterList\CorporateMasterLists_Update.cshtml" />
     <Content Include="Views\CorporateMasterList\HierarchyBinding_DBs.cshtml" />
     <Content Include="Views\MDM_POS_Name_DBPOS_grp\Create.cshtml" />
-    <Content Include="Views\MDM_POS_Name_DBPOS_grp\Delete.cshtml" />
-    <Content Include="Views\MDM_POS_Name_DBPOS_grp\Details.cshtml" />
     <Content Include="Views\MDM_POS_Name_DBPOS_grp\Edit.cshtml" />
     <Content Include="Views\MDM_POS_Name_DBPOS_grp\Index.cshtml" />
     <Content Include="Views\CorporateMasterList\HierarchyBinding_Owner.cshtml" />
@@ -3724,9 +3703,11 @@
     <Content Include="Views\ActionSystems\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ActionViewModelEditor.cshtml" />
     <Content Include="Views\Permissions\Controllers.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\EdgemedViewModelEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\ActionCode\Views\Shared\" />
     <Folder Include="Areas\Administration\Models\" />
     <Folder Include="Areas\Error\Models\" />
     <Folder Include="Areas\Error\Views\Shared\" />

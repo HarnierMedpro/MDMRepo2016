@@ -12,19 +12,19 @@ namespace MDM.WebPortal.Models.FromDB
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-
+    
     public partial class MedProDBEntities : DbContext
     {
         public MedProDBEntities()
             : base("name=MedProDBEntities")
         {
         }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-
+    
         public virtual DbSet<ADPMaster> ADPMasters { get; set; }
         public virtual DbSet<BI_DB_FvP_Access> BI_DB_FvP_Access { get; set; }
         public virtual DbSet<Corp_DBs> Corp_DBs { get; set; }
@@ -40,13 +40,11 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual DbSet<MDM_POS_ListName> MDM_POS_ListName { get; set; }
         public virtual DbSet<MDM_POS_Name_DBPOS_grp> MDM_POS_Name_DBPOS_grp { get; set; }
         public virtual DbSet<OwnerList> OwnerLists { get; set; }
-        public virtual DbSet<ActionCodeDict> ActionCodeDicts { get; set; }
-        public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<ManagerDBAccessBI> ManagerDBAccessBIs { get; set; }
         public virtual DbSet<CollNoteTypeCatPriority> CollNoteTypeCatPriorities { get; set; }
-        public virtual DbSet<MasterUserList> MasterUserLists { get; set; }
         public virtual DbSet<ACCategory> ACCategories { get; set; }
         public virtual DbSet<ACPriority> ACPriorities { get; set; }
+        public virtual DbSet<ActionCode> ActionCodes { get; set; }
         public virtual DbSet<ACtype> ACtypes { get; set; }
+        public virtual DbSet<CodeMasterList> CodeMasterLists { get; set; }
     }
 }

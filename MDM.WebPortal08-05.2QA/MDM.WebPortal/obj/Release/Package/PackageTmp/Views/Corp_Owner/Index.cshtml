@@ -10,16 +10,20 @@
         <h1 class="page-title"></h1>
         <ol class="breadcrumb pull-right">
             <li><a href="@Url.Action("Index","Home")"><i class="fa fa-home"></i> Home</a></li>            
-            <li class="active">Corp_Owners</li>
+            <li class="active">Corp_Owners - Relationship</li>
         </ol>
     </div>
 </header>
 
-<div class="container">
-    <h2 class="section-title"> Corp_Owner - Relationship</h2>
+<div class="container-fluid">   
     @*<p>
         @Html.ActionLink("Create New", "Create")
     </p>*@
+    <a class="btn btn-primary btn-lg btn-ar" href="@Url.Action("Create")">
+        Create New
+    </a>
+    <br />
+    <br />
    
    @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMOwnerList>()
         .Name("Owners")
@@ -38,7 +42,7 @@
         .Events(e => e.ExcelExport("corp_excelExport").DetailInit("corp_detailInit"))
         .DataSource(dataSource => dataSource
             .Ajax()
-            .PageSize(6)
+            .PageSize(10)
             .Model(model =>
               {
                 model.Id(x => x.OwnersID); // Specify the property which is the unique identifier of the model
@@ -53,7 +57,7 @@
 <script id="template" type="text/kendo-tmp">
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMCorp_Owner>()
             .Name("Corporates_#=OwnersID#")
-            .ToolBar(tools => tools.Create())
+            .ToolBar(tools => tools.Create().Text("NEW CORPORATE"))
             .Columns(columns =>
             {
                 columns.Bound(o => o.corpOwnerID).Hidden(true);//Width(70);
@@ -182,7 +186,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#Owners").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>

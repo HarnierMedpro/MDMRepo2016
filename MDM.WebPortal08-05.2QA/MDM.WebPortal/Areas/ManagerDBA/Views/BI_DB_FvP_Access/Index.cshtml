@@ -17,10 +17,14 @@
     </div>
 </header>
 
-<div class="container">
+<div class="container-fluid">
     @(Html.Kendo().Grid<MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels.VMManager_BI>()
           .Name("Manager")
           .ToolBar(tools => { tools.Excel();})
+          .Excel(e =>
+          {
+              e.AllPages(true);
+          })
           .Columns(columns =>
           {
               //By Default
@@ -28,6 +32,8 @@
 
               columns.Bound(x => x.AliasName).Width(110);
 
+              columns.Bound(x => x.Classification).Filterable(false).Sortable(false).Groupable(false).Width(110);
+              
               columns.Bound(x => x.Active).Width(110);
 
               //columns.ForeignKey(o => o.ManagerID, (System.Collections.IEnumerable)ViewData["Manager"], "ManagerID", "AliasName").Title("MANAGER").Width(70);
@@ -115,7 +121,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#Manager").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 

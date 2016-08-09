@@ -12,18 +12,21 @@ namespace MDM.WebPortal.Models.FromDB
     using System;
     using System.Collections.Generic;
     
-    public partial class ActionCodeDict
+    public partial class ActionCode
     {
-        public int id { get; set; }
+        public int ActionCodeID { get; set; }
         public string CollNoteType { get; set; }
-        public string Code { get; set; }
+        public int CodeID { get; set; }
         public int CategoryID { get; set; }
-        public string Priority { get; set; }
-        public string NTUser { get; set; }
+        public int PriorityID { get; set; }
+        public int ACTypeID { get; set; }
         public bool Active { get; set; }
         public string ParsingYN { get; set; }
-        public string ACType { get; set; }
+        public Nullable<int> SortOrder { get; set; }
     
-        public virtual Category Category { get; set; }
+        public virtual ACCategory ACCategory { get; set; }
+        public virtual ACPriority ACPriority { get; set; }
+        public virtual ACtype ACtype { get; set; }
+        public virtual CodeMasterList CodeMasterList { get; set; }
     }
 }

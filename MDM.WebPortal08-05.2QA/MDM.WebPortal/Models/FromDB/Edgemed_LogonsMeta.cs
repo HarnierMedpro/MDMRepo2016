@@ -9,7 +9,6 @@ namespace MDM.WebPortal.Models.FromDB
 {
     public class Edgemed_LogonsMeta
     {
-        
         [Required]
         [StringLength(50)]
         [Display(Name = "EDGEMED USERNAME")]

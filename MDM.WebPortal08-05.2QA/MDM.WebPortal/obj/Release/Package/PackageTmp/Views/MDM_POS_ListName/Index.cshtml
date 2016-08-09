@@ -18,16 +18,13 @@
     </div>
 </header>
 
-<div class="container">
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
+<div class="container">   
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMMDM_POS_ListName>()
     .Name("grid")
-    .ToolBar(tools => tools.Excel())
+            .ToolBar(tools => { tools.Excel(); tools.Create().Text("NEW POS"); })
     .Excel(excel => excel
     .AllPages(true)
-    .FileName("ExportData.xlsx")
+    .FileName("ExportPOS.xlsx")
     .Filterable(false))
     .Columns(columns =>
     {
@@ -52,18 +49,19 @@
    .Selectable(s => s.Enabled(true)
    .Type(GridSelectionType.Row)
    .Mode(GridSelectionMode.Single))
-    
+
     .DataSource(dataSource => dataSource
         .Ajax()
         .PageSize(10)
           .Model(model =>
             {
-             model.Id(x => x.MDMPOS_ListNameID); // Specify the property which is the unique identifier of the model
-             model.Field(x => x.MDMPOS_ListNameID).Editable(false); // Make the ProductID property not editable
+                model.Id(x => x.MDMPOS_ListNameID); // Specify the property which is the unique identifier of the model
+                model.Field(x => x.MDMPOS_ListNameID).Editable(false); // Make the ProductID property not editable
             })
         .Events(events => events.Error("error_handler"))
         .Read(read => read.Action("Read", "MDM_POS_ListName"))
         .Update(x => x.Action("Update", "MDM_POS_ListName"))
+        .Create(create => create.Action("Create_POS", "MDM_POS_ListName"))
      )
     )
 </div>
@@ -80,7 +78,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#grid").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>

@@ -4,54 +4,6 @@
     ViewBag.Title = "Index";
 }
 
-@*Classic ASP.NET MVC View
-    <h2>CPT Data List - Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
-@using (Html.BeginForm())
-{
-    <p>
-        Find by CPT: @Html.TextBox("SearchString")
-        <input type="submit" value="Search" />
-    </p>
-}
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CPT)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CPT_Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ShortD)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CPT)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CPT_Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ShortD)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id })             
-        </td>
-    </tr>
-}
-
-</table>*@
 
 <header class="main-header">
     <div class="container">
@@ -63,17 +15,17 @@
     </div>
 </header>
 
-<div class="container">
+<div class="container-fluid">
     @*<p>
         @Html.ActionLink("Create New", "Create")
-    </p>*@
+    </p>
     <button class="btn btn-primary btn-lg btn-ar" data-toggle="modal" data-target="#myModal3">
         Create New
     </button>
 
     <br/>
     <br/>
-
+    *@
     @if (TempData["Error"] != null)
     {
         <div class="row">
@@ -88,7 +40,7 @@
 
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMCPTData>()
           .Name("CPT")
-          .ToolBar(tools => tools.Excel())
+          .ToolBar(tools => { tools.Excel(); tools.Create().Text("NEW CPTCode"); })
           .Excel(excel => excel
               .AllPages(true)
               .FileName("ExportCPT.xlsx")
@@ -112,16 +64,16 @@
               .Model(model =>
               {
                   model.Id(p => p.id);
-                  model.Field(x => x.id).Editable(false);
-                  model.Field(x => x.CPT).Editable(false);
+                  model.Field(x => x.id).Editable(false);                 
               })
               .PageSize(10)
               .Events(events => events.Error("error_handler")) //allows us catch the errors sent by the JSON object, especificados por ModelState
               .Read(read => read.Action("Read", "CPTDatas").Type(HttpVerbs.Post))
               .Update(update => update.Action("Update", "CPTDatas").Type(HttpVerbs.Post))
+              .Create(create => create.Action("Create_CPT", "CPTDatas"))
           )
           .Groupable()
-          .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("PopUpEditCpt").Window(w => w.HtmlAttributes(new {@style = "width:700px;"})))
+          .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("PopUpEditCpt"))
           .Sortable()
           .Filterable()
           .Pageable(ps => ps.Refresh(true)
@@ -134,7 +86,7 @@
           )
 </div>
 
-<div class="modal fade in" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+@*<div class="modal fade in" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -149,7 +101,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 
 
 <script src="~/Scripts/kendo/jszip.min.js"></script>
@@ -164,7 +116,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#grid").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>

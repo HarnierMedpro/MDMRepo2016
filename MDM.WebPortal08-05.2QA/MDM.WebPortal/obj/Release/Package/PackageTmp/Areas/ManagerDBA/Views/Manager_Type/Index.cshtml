@@ -6,40 +6,6 @@
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
-@*<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Active)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Active)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ManagerTypeID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ManagerTypeID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ManagerTypeID })
-        </td>
-    </tr>
-}
-
-</table>*@
-
 <header class="main-header">
     <div class="container">
         <h1 class="page-title"></h1>
@@ -50,14 +16,15 @@
     </div>
 </header>
 
-<div class="container">
+<div class="container-fluid">
     @(Html.Kendo().Grid<MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels.VMManager_Type>()
           .Name("Classification")
           .ToolBar(tools =>
           {
               tools.Excel();
-              tools.Create();
+              tools.Create().Text("NEW CLASSIFICATION");
           })
+          .Excel(e => e.AllPages(true))
           .Columns(columns =>
           {
               columns.Bound(x => x.ManagerTypeID).Hidden(true);
@@ -86,8 +53,6 @@
           .Pageable(ps => ps.Refresh(true)
               .PreviousNext(true).PageSizes(true))
           .Groupable()
-          //.ClientDetailTemplateId("template")
-          //.Events(e => e.ExcelExport("edgemed_excelExport").DetailInit("edgemed_detailInit")) //added
           .Reorderable(r => r.Columns(true))
           .Resizable(r => r.Columns(true))
           .Selectable(s => s.Enabled(true)
@@ -107,7 +72,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#Classification").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>
