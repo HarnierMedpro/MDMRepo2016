@@ -113,10 +113,10 @@
     var territoriesTemplate = kendo.template($("#territoriesTemplate").html(), { useWithBlock: false });
 </script>
 
-<div class="container">
+<div class="container-fluid">
     @(Html.Kendo().Grid<VMPermission>()
     .Name("Permissions")
-    .ToolBar(tools => tools.Create().Text("NEW PERMISSION"))
+            .ToolBar(tools => { tools.Create().Text("NEW PERMISSION"); tools.Excel(); })
     .Columns(columns =>
         {
             columns.Command(comm =>
@@ -126,12 +126,12 @@
             columns.Bound(e => e.PermissionID).Hidden(true);
             //columns.Bound(e => e.ControllerID);
             //columns.Bound(e => e.ActionID);
-            columns.ForeignKey(x => x.ControllerID, (System.Collections.IEnumerable)ViewData["Controllers"], "ControllerID", "Cont_Name");
+            columns.ForeignKey(x => x.ControllerID, (System.Collections.IEnumerable)ViewData["Controllers"], "ControllerID", "Cont_Name").Groupable(false).Filterable(false).Sortable(false);
             columns.ForeignKey(x => x.ActionID, (System.Collections.IEnumerable)ViewData["Actions"], "ActionID", "Act_Name");
             columns.Bound(e => e.Active);
-            columns.Bound(e => e.Roles).ClientTemplate("#=territoriesTemplate(Roles)#").Title("ROLES").Filterable(false).Sortable(false);
+            columns.Bound(e => e.Roles).ClientTemplate("#=territoriesTemplate(Roles)#").Title("ROLES").Filterable(false).Sortable(false).Groupable(false);
         })
-    
+    .Groupable()
     .Filterable()
     .Pageable(ps => ps.Refresh(true)
     .PreviousNext(true).PageSizes(true))
@@ -141,7 +141,7 @@
     .Selectable(s => s.Enabled(true)
     .Type(GridSelectionType.Row)
     .Mode(GridSelectionMode.Single))
-    
+
     .Editable(editable => { editable.TemplateName("PermissionViewModelEditor"); editable.Mode(GridEditMode.PopUp); })
     .DataSource(dataSource => dataSource
       .Ajax()
@@ -151,6 +151,7 @@
             model.Id(e => e.PermissionID);
             model.Field(e => e.Roles).DefaultValue(new List<VMPermissionRole>());
         })
+        //.Group(groupby => groupby.Add(property => property.ControllerID))
             .Events(events => events.Error("error_handler"))
             .Read(read => read.Action("Read_Premissions", "Permissions"))
             .Update(update => update.Action("Update_Permission", "Permissions").Data("serialize"))
@@ -159,9 +160,8 @@
     
 </div>
 
-
+<script src="~/Scripts/kendo/jszip.min.js"></script>
 <script type="text/javascript">
-
     function serialize(data) {
         debugger;
         for (var property in data) {
@@ -194,7 +194,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#grid").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>

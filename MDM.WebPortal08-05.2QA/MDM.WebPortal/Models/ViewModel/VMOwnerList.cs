@@ -12,15 +12,18 @@ namespace MDM.WebPortal.Models.ViewModel
 
         [Required]
         [StringLength(50)]
-        [Display(Name = "Last Name")]
+        [Display(Name = "LAST NAME")]
+        [RegularExpression(@"^([a-zA-Z \\&\'\-]+)$", ErrorMessage = "Invalid Last Name.")]
         public string LastName { get; set; }
 
         [Required]
         [StringLength(50)]
-        [Display(Name = "First Name")]
+        [Display(Name = "FIRST NAME")]
+        [RegularExpression(@"^([a-zA-Z \\&\'\-]+)$", ErrorMessage = "Invalid First Name.")]
         public string FirstName { get; set; }
 
         [Required]
+        [Display(Name="ACTIVE")]
         public Nullable<bool> active { get; set; }
     }
 }

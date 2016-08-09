@@ -14,6 +14,7 @@ namespace MDM.WebPortal.Models.ViewModel
         public string PosName { get; set; }
 
         [Required]
+        [Display(Name="ACTIVE")]
         public Nullable<bool> active { get; set; }
     }
 

@@ -28,6 +28,7 @@ namespace MDM.WebPortal.Models.ViewModel
         public int ActionID { get; set; }
 
         [Display(Name = "ACTIVE")]
+        [Required]
         public bool Active { get; set; }
 
         [Required]

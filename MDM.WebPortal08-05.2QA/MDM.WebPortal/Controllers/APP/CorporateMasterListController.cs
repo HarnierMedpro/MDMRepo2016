@@ -47,7 +47,7 @@ namespace MDM.WebPortal.Controllers.APP
                 active = x.active,
                 databaseName = x.databaseName,
                 DB = x.DB   
-            }));
+            }), JsonRequestBehavior.AllowGet);
             
         }
 
@@ -82,88 +82,49 @@ namespace MDM.WebPortal.Controllers.APP
                         ModelState.AddModelError("CorporateName", "Duplicate Corporate. Please try again!");
                         return Json(new[] { corpMasterList }.ToDataSourceResult(request, ModelState));
                     }
-                    var storedInDb = await db.CorporateMasterLists.FindAsync(corpMasterList.corpID);
-                    storedInDb.CorporateName = corpMasterList.CorporateName;
-                    storedInDb.active = corpMasterList.active;
+                   
+                    var storedInDb = new CorporateMasterList { corpID = corpMasterList.corpID, CorporateName = corpMasterList.CorporateName, active = corpMasterList.active };
 
+                    db.CorporateMasterLists.Attach(storedInDb);
                     db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-                    return Json(new[] { corpMasterList }.ToDataSourceResult(request));
+                    await db.SaveChangesAsync();                   
                 }
                 catch (Exception)
                 {
                     ModelState.AddModelError("", "Something failed. Please try again!");
                     return Json(new[] { corpMasterList }.ToDataSourceResult(request, ModelState));
                 }
-            }
-            ModelState.AddModelError("", "Something failed. Please try again!");
+            }           
             return Json(new[] { corpMasterList }.ToDataSourceResult(request, ModelState));
         }
 
         public async Task<ActionResult> CorporateMasterLists_Create([DataSourceRequest]DataSourceRequest request,
-            [Bind(Include="corpID,CorporateName,active")] CorporateMasterList corpMasterList)
+            [Bind(Include = "corpID,CorporateName,active")] VMCorporateMasterLists corpMasterList)
         {
-            if (corpMasterList != null && ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
-                {
-                    //if (await db.CorporateMasterLists.AnyAsync(x => x.CorporateName.ToLower() == corpMasterList.CorporateName.ToLower()))
+                {                   
                     if (await db.CorporateMasterLists.AnyAsync(x => x.CorporateName.Equals(corpMasterList.CorporateName, StringComparison.CurrentCultureIgnoreCase)))
                     {
                         ModelState.AddModelError("", "This Corporate is already in the system.");
                         return Json(new[] {corpMasterList}.ToDataSourceResult(request, ModelState));
                     }
-                    db.CorporateMasterLists.Add(corpMasterList);
+                    var toStore = new CorporateMasterList { CorporateName = corpMasterList.CorporateName, active= corpMasterList.active };
+                    db.CorporateMasterLists.Add(toStore);
                     await db.SaveChangesAsync();
-                    return Json(new[] { corpMasterList }.ToDataSourceResult(request));
+                    corpMasterList.corpID = toStore.corpID;                    
                 }
                 catch (Exception)
                 {
                    ModelState.AddModelError("","Something failed. Please try again!");
                    return Json(new[] { corpMasterList }.ToDataSourceResult(request, ModelState));
                 } 
-            }
-            ModelState.AddModelError("", "Something failed. Please try again!");
+            }           
             return Json(new[] { corpMasterList }.ToDataSourceResult(request, ModelState));
         }
 
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "corpID,CorporateName,active")] CorporateMasterList corpMasterList)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var exist = await db.CorporateMasterLists.AnyAsync(x => x.CorporateName == corpMasterList.CorporateName);
-                    if (exist)
-                    {
-                        ViewBag.Error = "This Corporate is already in the system.";
-                        return View(corpMasterList);
-                    }
-                    else
-                    {
-                        db.CorporateMasterLists.Add(corpMasterList);
-                        await db.SaveChangesAsync();
-                        return RedirectToAction("Index");
-                    }
-                }
-                catch (Exception)
-                {
-                    ViewBag.Error = "Something field. Please try again!";
-                    return View(corpMasterList);                     
-                }
-            }
-            else
-            {
-                return View(corpMasterList);
-            }
-        }
+      
 
         protected override void Dispose(bool disposing)
         {

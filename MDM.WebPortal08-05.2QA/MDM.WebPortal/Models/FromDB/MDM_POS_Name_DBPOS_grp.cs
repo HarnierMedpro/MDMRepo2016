@@ -14,10 +14,18 @@ namespace MDM.WebPortal.Models.FromDB
     
     public partial class MDM_POS_Name_DBPOS_grp
     {
+        //PK
         public int MDMPOS_NameID { get; set; }
+
+        //FK from dbo.DBList
         public int DB_ID { get; set; }
+
+        //FK from dbo.Facility_Dbs
         public long FacilityID { get; set; }
+
         public string Extra { get; set; }
+
+        //FK from dbo.MDM_POS_ListName
         public int MDMPOS_ListNameID { get; set; }
         public bool Active { get; set; }
     

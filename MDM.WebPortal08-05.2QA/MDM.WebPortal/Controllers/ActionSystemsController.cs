@@ -19,12 +19,6 @@ namespace MDM.WebPortal.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-//        //// GET: ActionSystems
-//        //public async Task<ActionResult> Index()
-//        //{
-//        //    return View(await db.Actions.ToListAsync());
-//        //}
-
         public ActionResult Index()
         {
             ViewData["Controllers"] = db.Controllers.Select(x => new VMControllerSystem { ControllerID = x.ControllerID, Cont_Name = x.Cont_Name });

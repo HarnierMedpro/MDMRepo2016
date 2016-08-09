@@ -39,10 +39,9 @@ namespace MDM.WebPortal.Controllers.APP
         {
             if (OwnersID != null)
             {
-                var myCorporates =
-                    db.Corp_Owner.Include(x => x.CorporateMasterList)
-                        .Where(x => x.OwnersID == OwnersID)
-                        .Select(x => x.CorporateMasterList);
+                var myCorporates = db.Corp_Owner.Include(x => x.CorporateMasterList)
+                                               .Where(x => x.OwnersID == OwnersID)
+                                               .Select(x => x.CorporateMasterList);
                 return Json(myCorporates.ToDataSourceResult(request, x => new VMCorporateMasterLists
                 {
                     corpID = x.corpID, 
@@ -56,42 +55,42 @@ namespace MDM.WebPortal.Controllers.APP
 
         public async Task<ActionResult> Update([DataSourceRequest] DataSourceRequest request, [Bind(Include = "OwnersID,LastName,FirstName,active")] VMOwnerList ownerList)
         {
-            if (ownerList != null && ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    db.Entry(ownerList).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-                    return Json(new[] { ownerList }.ToDataSourceResult(request));
+                    var toStore = new OwnerList { OwnersID = ownerList.OwnersID, LastName = ownerList.LastName, FirstName = ownerList.FirstName, active = ownerList.active };
+                    db.OwnerLists.Attach(toStore);
+                    db.Entry(toStore).State = EntityState.Modified;
+                    await db.SaveChangesAsync();                   
                 }
                 catch (Exception)
                 {
                     ModelState.AddModelError("","Something failed. Please try again!");
                     return Json(new[] { ownerList }.ToDataSourceResult(request, ModelState));
                 }
-            }
-            ModelState.AddModelError("", "Something failed. Please try again!");
+            }          
             return Json(new[] { ownerList }.ToDataSourceResult(request, ModelState));
         }
 
         public async Task<ActionResult> Create_Owner([DataSourceRequest] DataSourceRequest request,
-            [Bind(Include = "OwnersID,LastName,FirstName,active")] OwnerList ownerList)
+            [Bind(Include = "OwnersID,LastName,FirstName,active")] VMOwnerList ownerList)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    db.OwnerLists.Add(ownerList);
+                    var toStore = new OwnerList { LastName = ownerList.LastName, FirstName = ownerList.FirstName, active = ownerList.active };
+                    db.OwnerLists.Add(toStore);
                     await db.SaveChangesAsync();
-                    return Json(new[] { ownerList }.ToDataSourceResult(request));
+                    ownerList.OwnersID = toStore.OwnersID;                    
                 }
                 catch (Exception)
                 {
                     ModelState.AddModelError("", "Something failed. Please try again!");
                     return Json(new[] { ownerList }.ToDataSourceResult(request, ModelState));
                 }
-            }
-            ModelState.AddModelError("", "Something failed. Please try again!");
+            }          
             return Json(new[] { ownerList }.ToDataSourceResult(request, ModelState));
         }
 

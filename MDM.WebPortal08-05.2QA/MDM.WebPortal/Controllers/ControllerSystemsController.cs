@@ -21,12 +21,6 @@ namespace MDM.WebPortal.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-//        //// GET: ControllerSystems
-//        //public async Task<ActionResult> Index()
-//        //{
-//        //    return View(await db.Controllers.ToListAsync());
-//        //}
-
         public ActionResult Index()
         {
             return View();
@@ -71,7 +65,7 @@ namespace MDM.WebPortal.Controllers
         }
 
         public async Task<ActionResult> Update_ControllerSystem([DataSourceRequest] DataSourceRequest request,
-            [Bind(Include = "ControllerID,Cont_Name,Active")] VMControllerSystem controllerSystem)
+            [Bind(Include = "ControllerID,Cont_Name")] VMControllerSystem controllerSystem)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +73,7 @@ namespace MDM.WebPortal.Controllers
                 {
                     if (await db.Controllers.AnyAsync(x => x.Cont_Name == controllerSystem.Cont_Name && x.ControllerID != controllerSystem.ControllerID))
                     {
-                        ModelState.AddModelError("", "Duplicate Data.");
+                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
                         return Json(new[] { controllerSystem }.ToDataSourceResult(request, ModelState));
                     }
                     //var storedInDb = await db.Controllers.FindAsync(controllerSystem.ControllerID);

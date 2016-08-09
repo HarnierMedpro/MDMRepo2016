@@ -12,7 +12,8 @@ namespace MDM.WebPortal.Models.ViewModel
 
         [Required]
         [Display(Name = "CPT")]
-        [StringLength(10)]
+        [StringLength(5)]
+        [RegularExpression(@"[0-9]+$", ErrorMessage = "Only numbers are allowed.")]
         public string CPT { get; set; }
 
         [Required]

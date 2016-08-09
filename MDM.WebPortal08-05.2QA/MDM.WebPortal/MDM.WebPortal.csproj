@@ -3723,6 +3723,7 @@
     <Content Include="Views\ControllerSystems\Read_ControllerSystem.cshtml" />
     <Content Include="Views\ActionSystems\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ActionViewModelEditor.cshtml" />
+    <Content Include="Views\Permissions\Controllers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3731,7 +3732,6 @@
     <Folder Include="Areas\Error\Views\Shared\" />
     <Folder Include="Areas\ManagerDBA\Views\Shared\" />
     <Folder Include="Scripts\lib\JQueryUI\" />
-    <Folder Include="Views\Pepe56\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

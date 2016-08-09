@@ -70,7 +70,7 @@ namespace MDM.WebPortal.Data_Annotations
                     return true;
                 }
 
-                if (dbContext.Permissions.Include(x => x.Roles).Include(x => x.Action).Any(x => x.Action.ControllerSystem.Cont_Name == controller && x.Action.Act_Name == action && x.Active))
+                if (dbContext.Permissions.Include(x => x.Roles).Include(x => x.Action).Any(x => x.Action.ControllerSystem.Cont_Name.Equals(controller, StringComparison.CurrentCultureIgnoreCase) && x.Action.Act_Name.Equals(action, StringComparison.CurrentCultureIgnoreCase) && x.Active))
                 {
                     var roles = dbContext.Permissions.Include(x => x.Roles).Include(x => x.Action)
                                           .Where(x => x.Action.ControllerSystem.Cont_Name == controller && x.Action.Act_Name == action && x.Active)
@@ -78,7 +78,7 @@ namespace MDM.WebPortal.Data_Annotations
                     var response = roles.SelectMany(item => item).Any(rol => userManager.IsInRole(currentUserId, rol.Name));
                     return response;
                 }
-                if (dbContext.Permissions.Include(x => x.Roles).Include(x => x.Action).Any(x => x.Action.ControllerSystem.Cont_Name == areaController && x.Action.Act_Name == areaAction && x.Active))
+                if (dbContext.Permissions.Include(x => x.Roles).Include(x => x.Action).Any(x => x.Action.ControllerSystem.Cont_Name.Equals(areaController, StringComparison.CurrentCultureIgnoreCase) && x.Action.Act_Name.Equals(areaAction, StringComparison.CurrentCultureIgnoreCase) && x.Active))
                 {
                     var roles = dbContext.Permissions.Include(x => x.Roles).Include(x => x.Action)
                                           .Where(x => x.Action.ControllerSystem.Cont_Name == areaController && x.Action.Act_Name == areaAction && x.Active)

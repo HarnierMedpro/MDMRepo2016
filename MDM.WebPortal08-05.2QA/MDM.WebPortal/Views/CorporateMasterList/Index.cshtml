@@ -12,20 +12,7 @@
     </div>
 </header>
 
-<div class="container">
-
-    <h2 class="section-title">Corporate Name Lists</h2>
-
-    @*@if (TempData["Error"] != null || ViewBag.Error != null)
-    {
-        <div class="alert alert-danger">
-            <a href="#" class="close" data-dismiss="alert" aria-label="Close">&times;</a>
-            <p>@TempData["Error"]</p>
-            <p>@ViewBag.Error</p>
-        </div>
-    }
-
-    <a href="@Url.Action("Create")">Create New</a>*@
+<div class="container-fluid">   
 
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMCorporateMasterLists>()
       .Name("gridCorporate")
@@ -67,8 +54,8 @@
           .Create(create => create.Action("CorporateMasterLists_Create", "CorporateMasterList"))
       )
 
-       .ToolBar(tool => { tool.Create(); tool.Excel(); })
-    
+    .ToolBar(tool => { tool.Create().Text("NEW CORPORATE"); tool.Excel(); })
+    .Excel(e => e.AllPages(true))
     )
 </div>
 
@@ -128,7 +115,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#gridCorporate").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>

@@ -19,12 +19,7 @@ namespace MDM.WebPortal.Controllers.APP
     {
         private MedProDBEntities db = new MedProDBEntities();
 
-        // GET: DBLists
-        //public async Task<ActionResult> Index()
-        //{
-        //    return View(await db.DBLists.ToListAsync());
-        //}
-
+       
         //With Kendo UI for ASP.NET MVC
         public ActionResult Index()
         {
@@ -46,8 +41,7 @@ namespace MDM.WebPortal.Controllers.APP
             [Bind(Include = "DB_ID,DB,databaseName, active")] VMDBList dBList)
         {
             if (dBList != null && ModelState.IsValid)
-            {
-               var storedInDb = new DBList{DB_ID = dBList.DB_ID, DB = dBList.DB, databaseName = dBList.databaseName, active = dBList.active};
+            {              
                try
                {
                    if (await db.DBLists.AnyAsync(x => x.DB == dBList.DB && x.DB_ID != dBList.DB_ID))
@@ -55,26 +49,25 @@ namespace MDM.WebPortal.Controllers.APP
                        ModelState.AddModelError("", "Duplicate Database. Please try again!");
                        return Json(new[] { dBList }.ToDataSourceResult(request, ModelState));
                    }
+                   var storedInDb = new DBList { DB_ID = dBList.DB_ID, DB = dBList.DB, databaseName = dBList.databaseName, active = dBList.active };
+                   db.DBLists.Attach(storedInDb);
                    db.Entry(storedInDb).State = EntityState.Modified;
-                   await db.SaveChangesAsync();
-                   return Json(new[] { dBList }.ToDataSourceResult(request, ModelState));
+                   await db.SaveChangesAsync();                   
                }
                catch (Exception)
                {
                    ModelState.AddModelError("", "Something Failed. Please try again!");
                    return Json(new[] { dBList }.ToDataSourceResult(request, ModelState));
                }
-            }
-
-            ModelState.AddModelError("", "Something Failed. Please try again!");
+            }          
             return Json(new[] { dBList }.ToDataSourceResult(request, ModelState));
            
         }
 
         public async Task<ActionResult> Create_DBs([DataSourceRequest] DataSourceRequest request,
-            [Bind(Include = "DB_ID,DB,databaseName")] DBList dBList)
+            [Bind(Include = "DB_ID,DB,databaseName, active")] VMDBList dBList)
         {
-            if (dBList != null && ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -83,9 +76,10 @@ namespace MDM.WebPortal.Controllers.APP
                         ModelState.AddModelError("", "Duplicate Database. Please try again!");
                         return Json(new[] { dBList }.ToDataSourceResult(request, ModelState));
                     }
-                    db.DBLists.Add(dBList);
+                    var toStore = new DBList {DB = dBList.DB, databaseName = dBList.databaseName, active = dBList.active };
+                    db.DBLists.Add(toStore);
                     await db.SaveChangesAsync();
-                    return Json(new[] { dBList }.ToDataSourceResult(request));
+                    dBList.DB_ID = toStore.DB_ID;                    
                 }
                 catch (Exception)
                 {
@@ -93,8 +87,7 @@ namespace MDM.WebPortal.Controllers.APP
                     return Json(new[] { dBList }.ToDataSourceResult(request, ModelState));
                 }
                 
-            }
-            ModelState.AddModelError("", "Something failed. Please try again!");
+            }         
             return Json(new[] { dBList }.ToDataSourceResult(request, ModelState));
         }
 

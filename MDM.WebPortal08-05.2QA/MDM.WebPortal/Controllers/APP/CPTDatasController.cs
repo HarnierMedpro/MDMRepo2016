@@ -53,6 +53,38 @@ namespace MDM.WebPortal.Controllers.APP
             }), JsonRequestBehavior.AllowGet);
         }
 
+      public async Task<ActionResult> Create_CPT([DataSourceRequest] DataSourceRequest request,
+            [Bind(Include = "id,CPT,CPT_Description,ShortD, Active")] VMCPTData cPTData)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (await db.CPTDatas.AnyAsync(x => x.CPT == cPTData.CPT))
+                    {
+                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                        return Json(new[] { cPTData }.ToDataSourceResult(request, ModelState));
+                    }
+                    var toStore = new CPTData
+                    {
+                        CPT = cPTData.CPT,
+                        CPT_Description = cPTData.CPT_Description,
+                        ShortD = cPTData.ShortD,
+                        Active = cPTData.Active
+                    };
+                    db.CPTDatas.Add(toStore);
+                    await db.SaveChangesAsync();
+                    cPTData.id = toStore.id;
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Something failed. Please try again!");
+                    return Json(new[] { cPTData }.ToDataSourceResult(request, ModelState));
+                }                
+            }
+            return Json(new[] { cPTData }.ToDataSourceResult(request, ModelState));
+        }
+
         public async Task<ActionResult> Update([DataSourceRequest] DataSourceRequest request,
             [Bind(Include = "id,CPT,CPT_Description,ShortD, Active")] VMCPTData cPTData)
         {
@@ -64,14 +96,11 @@ namespace MDM.WebPortal.Controllers.APP
                     {
                         ModelState.AddModelError("", "Duplicate CPT. Please try again!");
                         return Json(new[] { cPTData }.ToDataSourceResult(request, ModelState));
-                    }
-                    //var storedInDb = db.CPTDatas.Find(cPTData.id);
-                    //storedInDb.CPT_Description = cPTData.CPT_Description;
-                    //storedInDb.ShortD = cPTData.ShortD;
-                    //storedInDb.Active = cPTData.Active;
+                    }                    
                     var storedInDb = new CPTData
                     {
                         id = cPTData.id,
+                        CPT = cPTData.CPT,
                         CPT_Description = cPTData.CPT_Description,
                         ShortD = cPTData.ShortD,
                         Active = cPTData.Active,

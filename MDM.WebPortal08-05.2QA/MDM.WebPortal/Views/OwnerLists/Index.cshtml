@@ -16,15 +16,18 @@
         </ol>
     </div>
 </header>
-<div class="container">
+<div class="container-fluid">
     @*<p>
         @Html.ActionLink("Create New", "Create")
     </p>*@
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMOwnerList>()
     .Name("GridOwner")
-    .ToolBar(tools => { tools.Excel();
-                          tools.Create();
+    .ToolBar(tools =>
+    { 
+        tools.Excel();
+        tools.Create().Text("NEW OWNER");        
     })
+    .Excel(e => e.AllPages(true))
     .Columns(columns =>
       {
         columns.Bound(x => x.LastName).Title("LAST NAME").Width(300);
@@ -172,7 +175,7 @@
             // save the workbook
             kendo.saveAs({
                 dataURI: new kendo.ooxml.Workbook(workbook).toDataURL(),
-                fileName: "Export.xlsx"
+                fileName: "Export_OwnerList.xlsx"
             });
         });
     }
@@ -187,7 +190,11 @@
                     });
                 }
             });
+            // Display the message
             alert(message);
+            // Cancel the changes
+            var grid = $("#GridOwner").data("kendoGrid");
+            grid.cancelChanges();
         }
     }
 </script>

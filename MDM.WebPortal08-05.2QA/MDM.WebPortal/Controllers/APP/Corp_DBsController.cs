@@ -27,7 +27,7 @@ namespace MDM.WebPortal.Controllers.APP
             var dbsNoTaken = db.DBLists.Except(dbsTaken).Select(x => new{x.DB_ID, x.DB}).ToList(); 
             /*If use dbsNoTaken excluyo la BD del elemento por lo que no se muestra*/
             //ViewData["DBs"] = dbsNoTaken;
-            ViewData["DBs"] = db.DBLists.Select(x => new{x.DB_ID, x.DB}).ToList();
+            ViewData["DBs"] = db.DBLists.Select(x => new { x.DB_ID, x.DB }).ToList();
             return View();
             
         }
@@ -66,20 +66,15 @@ namespace MDM.WebPortal.Controllers.APP
             {
                 try
                 {
-                    var storedInDb = await db.Corp_DBs.FindAsync(corp_DBs.ID_PK);
-                    var s2 = new List<Corp_DBs> {storedInDb};
-                    var except = db.Corp_DBs.ToList().Except(s2);
-                    if (except.Any(x => x.DB_ID == corp_DBs.DB_ID))
+                    if (await db.Corp_DBs.AnyAsync(x => x.DB_ID == corp_DBs.DB_ID && x.ID_PK != corp_DBs.ID_PK))
                     {
                         ModelState.AddModelError("","Duplicate data. Please try again!");
                         return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
                     }
-
-                    storedInDb.DB_ID = corp_DBs.DB_ID;
-                    storedInDb.corpID = corp_DBs.corpID;
+                    var storedInDb = new Corp_DBs { ID_PK = corp_DBs.ID_PK, DB_ID = corp_DBs.DB_ID, corpID = corp_DBs.corpID};
+                    db.Corp_DBs.Attach(storedInDb);
                     db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-                    return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
+                    await db.SaveChangesAsync();                    
                 }
                 catch (Exception)
                 {
@@ -87,11 +82,23 @@ namespace MDM.WebPortal.Controllers.APP
                     return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
                     
                 }
-            }
-            ModelState.AddModelError("", "Something failed. Please try again!");
+            }          
             return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
         }
 
+
+        public async Task<ActionResult> Corp_DBs_Release([DataSourceRequest] DataSourceRequest request,
+            [Bind(Include = "ID_PK,corpID,DB_ID")] VMCorp_DB corp_DBs)
+        {
+            if (ModelState.IsValid)
+            {
+                var toRelease = new Corp_DBs { ID_PK = corp_DBs.ID_PK, corpID = corp_DBs.corpID, DB_ID = corp_DBs.DB_ID };
+                db.Corp_DBs.Attach(toRelease);
+                db.Corp_DBs.Remove(toRelease);
+                await db.SaveChangesAsync();
+            }
+            return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
+        }
       
 
         // GET: Corp_DBs/Details/5

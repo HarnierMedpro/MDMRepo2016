@@ -41,7 +41,7 @@ namespace MDM.WebPortal.Controllers
         public ActionResult Read_Premissions([DataSourceRequest] DataSourceRequest request)
         {
             /*See: C:\Users\hsuarez\Desktop\Documentation\Kendo UI for ASP.NET MVC5\ui-for-aspnet-mvc-examples-master\grid\multiselect-in-grid-popup*/
-            return Json(db.Permissions.ToDataSourceResult(request, x => new VMPermission
+            return Json(db.Permissions.Include(x => x.Action).ToDataSourceResult(request, x => new VMPermission
             {
                 PermissionID = x.PermissionID,
                 ControllerID = x.Action.ControllerID,
@@ -102,18 +102,16 @@ namespace MDM.WebPortal.Controllers
                     {
                         storedInDb.Roles.Remove(item);
                     }
-
+                    db.Permissions.Attach(storedInDb);
                     db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-                    return Json(new[] { permission }.ToDataSourceResult(request));
+                    await db.SaveChangesAsync();                   
                 }
                 catch (Exception ex)
                 {
                     ModelState.AddModelError("", ex.Message);
                     return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
                 }
-            }
-            ModelState.AddModelError("", "Something failed. Please try again!");
+            }            
             return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
         }
 
@@ -127,11 +125,7 @@ namespace MDM.WebPortal.Controllers
                     if (await db.Permissions.AnyAsync(x => x.ActionID == permission.ActionID))
                     {
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
-                        //return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
-                        return Json(new DataSourceResult
-                        {
-                            Errors = "Duplicate Data.Please try again!"
-                        });
+                        return Json(new[] { permission }.ToDataSourceResult(request, ModelState));                       
                     }
 
                     var permissionObj = new Permission { PermissionID = permission.PermissionID, ActionID = permission.ActionID, Active = permission.Active};
@@ -146,11 +140,10 @@ namespace MDM.WebPortal.Controllers
                         }
                     }
                     permissionObj.Roles = Rol;
-
                     db.Permissions.Add(permissionObj);
                     await db.SaveChangesAsync();
-
-                    return Json(new[] { permission }.ToDataSourceResult(request));
+                    permission.PermissionID = permissionObj.PermissionID;
+                    permission.ControllerID = db.Actions.Find(permissionObj.ActionID).ControllerID;
                 }
                 catch (Exception)
                 {
@@ -158,8 +151,7 @@ namespace MDM.WebPortal.Controllers
                     return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
                 }
             }
-            ModelState.AddModelError("", "Something failed. Please try again!");
-            return Json(ModelState.ToDataSourceResult(request));
+            return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
         }
 
 ////        // GET: Permissions/Create
