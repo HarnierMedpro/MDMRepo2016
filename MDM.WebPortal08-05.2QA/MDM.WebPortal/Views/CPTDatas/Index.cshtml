@@ -16,27 +16,7 @@
 </header>
 
 <div class="container-fluid">
-    @*<p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <button class="btn btn-primary btn-lg btn-ar" data-toggle="modal" data-target="#myModal3">
-        Create New
-    </button>
-
-    <br/>
-    <br/>
-    *@
-    @if (TempData["Error"] != null)
-    {
-        <div class="row">
-        <div class="col-md-5">
-            <div class="alert alert-danger">
-                <a href="#" class="close" data-dismiss="alert" aria-label="Close">&times;</a>
-                <p>@TempData["Error"]</p>
-            </div>
-        </div>
-        </div>
-    }
+   
 
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMCPTData>()
           .Name("CPT")

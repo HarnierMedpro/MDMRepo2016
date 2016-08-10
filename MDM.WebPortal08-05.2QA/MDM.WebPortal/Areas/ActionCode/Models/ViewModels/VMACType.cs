@@ -6,13 +6,13 @@ using System.Web;
 
 namespace MDM.WebPortal.Areas.ActionCode.Models.ViewModels
 {
-    public class VMCodeMasterList
+    public class VMACType
     {
-        public int CodeID { get; set; }
+        public int ACTypeID { get; set; }
 
         [Required]
-        [StringLength(50)]
-        [Display(Name = "CODE")]
-        public string Code { get; set; }
+        [Display(Name = "ACTYPE NAME")]
+        [StringLength(80)]
+        public string ACTypeName { get; set; }
     }
 }

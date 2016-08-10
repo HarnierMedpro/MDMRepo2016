@@ -1,9 +1,0 @@
-﻿ @*See: C:\Users\hsuarez\Desktop\Documentation\Kendo UI for ASP.NET MVC5\ui-for-aspnet-mvc-examples-master\grid\multiselect-in-grid-popup*@
-@model IEnumerable<MDM.WebPortal.Models.ViewModel.VMPermissionRole>
-
-@(
- Html.Kendo().MultiSelectFor(m => m)
-        .DataTextField("Name")
-        .DataValueField("Id")
-        .BindTo((IEnumerable<MDM.WebPortal.Models.ViewModel.VMPermissionRole>)ViewData["Roles"])
-)

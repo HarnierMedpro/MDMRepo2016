@@ -10,10 +10,13 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MDM.WebPortal.Models.FromDB;
 using System.Threading.Tasks;
-using MDM.WebPortal.Models.ViewModel;
+﻿using MDM.WebPortal.Data_Annotations;
+﻿using MDM.WebPortal.Models.ViewModel;
 
 namespace MDM.WebPortal.Controllers.APP
 {
+    [SetPermissions]
+    //[Authorize(Roles = "EMPLOYEE")]
     public class CorporateMasterListController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();

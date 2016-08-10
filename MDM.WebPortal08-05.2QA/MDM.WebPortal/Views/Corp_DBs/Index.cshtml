@@ -16,11 +16,13 @@
     </div>
 </header>
 
-<div class="container-fluid">   
-    <p>
+<div class="container-fluid">
+    @*<p>
         @Html.ActionLink("Create New", "Create")
-    </p>
-    
+    </p>*@
+    <a class="btn btn-ar btn-default" href="@Url.Action("Create")">Create New</a>
+    <br/>
+    <br/>
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMCorporateMasterLists>()
       .Name("gridCorporat")
       .ToolBar(tool => tool.Excel())

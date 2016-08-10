@@ -1,73 +1,69 @@
 ﻿@using Kendo.Mvc.UI
-@model IEnumerable<MDM.WebPortal.Models.FromDB.Manager_Master>
+@model IEnumerable<MDM.WebPortal.Models.FromDB.ACtype>
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
-
 <header class="main-header">
     <div class="container">
         <h1 class="page-title"></h1>
         <ol class="breadcrumb pull-right">
             <li><a href="@Url.Action("Index", "Home", new {area = ""})"><i class="fa fa-home"></i> Home</a></li>
-            <li class="active">Manager_Master</li>
+            <li class="active">Categories</li>
         </ol>
     </div>
 </header>
 
 <div class="container-fluid">
-    @(Html.Kendo().Grid<MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels.VMManager_Master>()
-          .Name("Manager")
+    @(Html.Kendo().Grid<MDM.WebPortal.Areas.ActionCode.Models.ViewModels.VMACType>()
+          .Name("ACTyp")
           .ToolBar(tools =>
           {
               tools.Excel();
-              tools.Create().Text("NEW MANAGER");
+              tools.Create().Text("NEW ACTYPE");
           })
-          .Columns(columns =>
+          .Excel(e =>
           {
-              columns.Bound(x => x.ManagerID).Hidden(true); //PK
-              
-              columns.Bound(x => x.AliasName).Width(110);
-              
-              columns.ForeignKey(x => x.ManagerTypeID, (System.Collections.IEnumerable) ViewData["Type"], "ManagerTypeID", "Name").Title("CLASSIFICATION").Width(110);
-              //columns.Bound(x => x.ManagerTypeID).Width(110).EditorTemplateName("Available_Manager_Type");
+              e.AllPages(true);
+              e.FileName("ExportACType");
+          })
+          .Columns(column =>
+          {
+              column.Bound(x => x.ACTypeID).Hidden(true);
 
-              columns.Bound(x => x.Active).Width(110);
+              column.Bound(x => x.ACTypeName).Width(110);
 
-              columns.Command(command =>
+              column.Command(command =>
               {
                   command.Edit();
-              }).Title("COMMANDS").Width(110);
+              }).Title("EDIT").Width(110);
           })
-
           .DataSource(dataSource => dataSource
               .Ajax()
               .PageSize(10)
               .Model(model =>
               {
-                  model.Id(x => x.ManagerID);
-                  model.Field(x => x.ManagerID).Editable(false);
+                  model.Id(x => x.ACTypeID);
+                  model.Field(x => x.ACTypeID).Editable(false);
               })
               .Events(events => events.Error("error_handler"))
-              .Read(read => read.Action("Read_Manager", "Manager_Master"))
-              .Update(update => update.Action("Update_Manager", "Manager_Master"))
-              .Create(create => create.Action("Create_Manager", "Manager_Master"))
+              .Read(read => read.Action("Read_ACType", "ACtypes"))
+              .Update(update => update.Action("Update_ACType", "ACtypes"))
+              .Create(create => create.Action("Create_ACType", "ACtypes"))
           )
-
           .Sortable()
           .Filterable()
           .Pageable(ps => ps.Refresh(true)
               .PreviousNext(true).PageSizes(true))
           .Groupable()
-          //Cuando aprenda como pasar propiedades de un modelo para un template sere capaz de mostrar solo los elementos que estan disponibles
-          //.Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("Available_Manager_Type"))
           .Reorderable(r => r.Columns(true))
           .Resizable(r => r.Columns(true))
           .Selectable(s => s.Enabled(true)
               .Type(GridSelectionType.Row)
-              .Mode(GridSelectionMode.Single)))
+              .Mode(GridSelectionMode.Single))
+    )
 </div>
 
 <script src="~/Scripts/kendo/jszip.min.js"></script>
@@ -85,7 +81,7 @@
             // Display the message
             alert(message);
             // Cancel the changes
-            var grid = $("#Manager").data("kendoGrid");
+            var grid = $("#ACTyp").data("kendoGrid");
             grid.cancelChanges();
         }
     }

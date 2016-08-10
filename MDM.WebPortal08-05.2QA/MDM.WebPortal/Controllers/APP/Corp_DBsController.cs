@@ -16,7 +16,7 @@ using MDM.WebPortal.Models.ViewModel;
 namespace MDM.WebPortal.Controllers.APP
 {
     //[SetPermissions(Permissions = "Index,Read,HierarchyBinding_DBs")]
-    //[SetPermissions()]
+    [SetPermissions]
     public class Corp_DBsController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -101,20 +101,7 @@ namespace MDM.WebPortal.Controllers.APP
         }
       
 
-        // GET: Corp_DBs/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Corp_DBs corp_DBs = await db.Corp_DBs.FindAsync(id);
-            if (corp_DBs == null)
-            {
-                return HttpNotFound();
-            }
-            return View(corp_DBs);
-        }
+      
 
         // GET: Corp_DBs/Create
         public ActionResult Create()
@@ -187,128 +174,9 @@ namespace MDM.WebPortal.Controllers.APP
             return View(corp_DBs);
         }
 
-        // GET: Corp_DBs/Edit/5
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Corp_DBs corp_DBs = await db.Corp_DBs.FindAsync(id);
-            if (corp_DBs == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.corpID = new SelectList(db.CorporateMasterLists, "corpID", "CorporateName", corp_DBs.corpID);
-            var dbsTaken = db.Corp_DBs.Select(x => x.DBList).ToList();
-            var dbsNoTaken = db.DBLists.ToList().Except(dbsTaken).ToList();
-            var ownDB = corp_DBs.DBList;
-            dbsNoTaken.Add(corp_DBs.DBList);
-            /*Para este caso */
-            ViewBag.DB_ID = new SelectList(dbsNoTaken, "DB_ID", "DB", corp_DBs.DB_ID);
-            return View(corp_DBs);
-        }
+      
 
-        // POST: Corp_DBs/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID_PK,corpID,DB_ID")] Corp_DBs corp_DBs)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var storedInDB = await db.Corp_DBs.FindAsync(corp_DBs.ID_PK);
-                    var list = new List<Corp_DBs>() { storedInDB };
-                    var distinct = db.Corp_DBs.ToList().Except(list);
-
-                    if (distinct.Select(x => x.DBList).ToList().Exists(x => x.DB_ID == corp_DBs.DB_ID))
-                    {
-                       //return RedirectToAction("Index", "Error", new { area = "Error" });
-                        var corp = await db.Corp_DBs.Include(x => x.DBList).Include(x => x.CorporateMasterList).FirstOrDefaultAsync(x => x.DB_ID == corp_DBs.DB_ID);
-                        ViewBag.Error = "The database" + " " + corp.DBList.DB + " " + "is already asociated to" + " " + corp.CorporateMasterList.CorporateName;
-
-                        var dbsTaken = db.Corp_DBs.Select(x => x.DBList).ToList();
-                        var dbsNoTaken = db.DBLists.ToList().Except(dbsTaken);
-
-                        var t = dbsNoTaken.ToList();
-                        var c = db.Corp_DBs.Find(corp_DBs.ID_PK).DBList;
-                        t.Add(c);                   
-
-                        ViewBag.corpID = new SelectList(db.CorporateMasterLists, "corpID", "CorporateName", corp_DBs.corpID);
-                        ViewBag.DB_ID = new SelectList(t, "DB_ID", "DB", c.DB_ID);
-                        return View();
-                    }
-                    else
-                    {
-                        string[] fieldsToBind = new string[] { "corpID", "DB_ID" };
-                        if (TryUpdateModel(storedInDB, fieldsToBind))
-                        {
-                            db.Entry(storedInDB).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
-                            return RedirectToAction("Index");
-                        }
-                        else
-                        {
-                            ViewBag.Error = "Something failed. Please try again!";
-                            var dbsTaken1 = db.Corp_DBs.Select(x => x.DBList).ToList();
-                            var dbsNoTaken1 = db.DBLists.ToList().Except(dbsTaken1);
-
-                            ViewBag.corpID = new SelectList(db.CorporateMasterLists, "corpID", "CorporateName", corp_DBs.corpID);
-                            ViewBag.DB_ID = new SelectList(dbsNoTaken1, "DB_ID", "DB", corp_DBs.DB_ID);
-                            return View();
-                        }
-                    }
-                    
-                }
-                catch (Exception)
-                {
-                    ViewBag.Error = "Something failed. Please try again!";
-                    var dbsTaken1 = db.Corp_DBs.Select(x => x.DBList).ToList();
-                    var dbsNoTaken1 = db.DBLists.ToList().Except(dbsTaken1);
-
-                    ViewBag.corpID = new SelectList(db.CorporateMasterLists, "corpID", "CorporateName", corp_DBs.corpID);
-                    ViewBag.DB_ID = new SelectList(dbsNoTaken1, "DB_ID", "DB", corp_DBs.DB_ID);
-                    return View();
-                }
-                
-            }
-            var dbsTaken2 = db.Corp_DBs.Select(x => x.DBList).ToList();
-            var dbsNoTaken2 = db.DBLists.ToList().Except(dbsTaken2);
-
-            ViewBag.corpID = new SelectList(db.CorporateMasterLists, "corpID", "CorporateName", corp_DBs.corpID);
-            ViewBag.DB_ID = new SelectList(dbsNoTaken2, "DB_ID", "DB", corp_DBs.DB_ID);
-            return View(corp_DBs);           
-        }
-
-        // GET: Corp_DBs/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Corp_DBs corp_DBs = await db.Corp_DBs.FindAsync(id);
-            if (corp_DBs == null)
-            {
-                return HttpNotFound();
-            }
-            return View(corp_DBs);
-        }
-
-        // POST: Corp_DBs/Delete/5
-        /*Este metodo tiene problemas con la estructura de la BD*/
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Corp_DBs corp_DBs = await db.Corp_DBs.FindAsync(id);
-            db.Corp_DBs.Remove(corp_DBs);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+      
 
         protected override void Dispose(bool disposing)
         {

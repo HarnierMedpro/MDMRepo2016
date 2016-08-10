@@ -11,10 +11,12 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
 
 namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
 {
+    [SetPermissions]
     public class BI_DB_FvP_AccessController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -29,7 +31,8 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
 
         public ActionResult Read_GroupByManager([DataSourceRequest] DataSourceRequest request)
         {
-            var result = db.BI_DB_FvP_Access.Include(manager => manager.Manager_Master).Select(manager => manager.Manager_Master).Distinct();
+            //var result = db.BI_DB_FvP_Access.Include(manager => manager.Manager_Master).Select(manager => manager.Manager_Master).Distinct();
+            var result = db.Manager_Master;
             return Json(result.ToDataSourceResult(request, x => new VMManager_BI
             {
                 ManagerID = x.ManagerID, //PK from Manager_Master table

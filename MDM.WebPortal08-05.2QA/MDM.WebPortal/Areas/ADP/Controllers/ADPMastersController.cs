@@ -15,7 +15,7 @@ using MDM.WebPortal.Data_Annotations;
 
 namespace MDM.WebPortal.Areas.ADP.Controllers
 {
-    //[SetPermissions]
+    [SetPermissions]
     public class ADPMastersController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -61,7 +61,7 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
         }
 
         public async Task<ActionResult> Update_Adp([DataSourceRequest] DataSourceRequest request,
-            [Bind(Include = "id,ADP_ID,FName,LName,Title,Manager,Active")] VMAdpMaster aDPMaster)
+            [Bind(Include = "ADPMaster_ID,ADP,FName,LName,Title,Manager,Active")] VMAdpMaster aDPMaster)
         {
             if (aDPMaster != null && ModelState.IsValid)
             {

@@ -10,11 +10,13 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.ADP.Models;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
 using MDM.WebPortal.Models.ViewModel;
 
 namespace MDM.WebPortal.Areas.ADP.Controllers
 {
+    [SetPermissions]
     public class Edgemed_LogonsController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -75,7 +77,7 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
                 try
                 {
                     db.Edgemed_Logons.Attach(toStore);
-                    db.Entry(edgemed_Logons).State = EntityState.Modified;
+                    db.Entry(toStore).State = EntityState.Modified;
                     await db.SaveChangesAsync();
                 }
                 catch (Exception)

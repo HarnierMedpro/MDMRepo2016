@@ -32,52 +32,50 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
                 Code = x.Code
             }), JsonRequestBehavior.AllowGet);
         }
-
-        public async Task<ActionResult> Create_Code([DataSourceRequest] DataSourceRequest request,
-            [Bind(Include = "CodeID, Code")] VMCodeMasterList code)
+      
+        public async Task<ActionResult> Create_Code([DataSourceRequest] DataSourceRequest request, [Bind(Include = "CodeID, Code")] VMCodeMasterList codeMaster)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (await db.CodeMasterLists.AnyAsync(x => x.Code.Equals(code.Code, StringComparison.CurrentCultureIgnoreCase)))
+                    if (await db.CodeMasterLists.AnyAsync(x => x.Code.Equals(codeMaster.Code, StringComparison.CurrentCultureIgnoreCase)))
                     {
                         ModelState.AddModelError("","Duplicate Data. Please try again!");
-                        return Json(new[] {code}.ToDataSourceResult(request, ModelState));
+                        return Json(new[] { codeMaster }.ToDataSourceResult(request, ModelState));
                     }
                     var toStore = new CodeMasterList
                     {
-                        Code = code.Code
+                        Code = codeMaster.Code
                     };
                     db.CodeMasterLists.Add(toStore);
                     await db.SaveChangesAsync();
-                    code.CodeID = toStore.CodeID;
+                    codeMaster.CodeID = toStore.CodeID;
                 }
                 catch (Exception)
                 {
                     ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { code }.ToDataSourceResult(request, ModelState));
+                    return Json(new[] { codeMaster }.ToDataSourceResult(request, ModelState));
                 }
             }
-            return Json(new[] { code }.ToDataSourceResult(request, ModelState));
+            return Json(new[] { codeMaster }.ToDataSourceResult(request, ModelState));
         }
 
-        public async Task<ActionResult> Update_Code([DataSourceRequest] DataSourceRequest request,
-            [Bind(Include = "CodeID, Code")] VMCodeMasterList code)
+        public async Task<ActionResult> Update_Code([DataSourceRequest] DataSourceRequest request, [Bind(Include = "CodeID, Code")] VMCodeMasterList codeMaster)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (await db.CodeMasterLists.AnyAsync(x => x.Code.Equals(code.Code, StringComparison.CurrentCultureIgnoreCase) && x.CodeID != code.CodeID))
+                    if (await db.CodeMasterLists.AnyAsync(x => x.Code.Equals(codeMaster.Code, StringComparison.CurrentCultureIgnoreCase) && x.CodeID != codeMaster.CodeID))
                     {
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
-                        return Json(new[] { code }.ToDataSourceResult(request, ModelState));
+                        return Json(new[] { codeMaster }.ToDataSourceResult(request, ModelState));
                     }
                     var toStore = new CodeMasterList
                     {
-                        CodeID = code.CodeID,
-                        Code = code.Code
+                        CodeID = codeMaster.CodeID,
+                        Code = codeMaster.Code
                     };
                     db.CodeMasterLists.Attach(toStore);
                     db.Entry(toStore).State = EntityState.Modified;
@@ -86,10 +84,10 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
                 catch (Exception)
                 {
                     ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { code }.ToDataSourceResult(request, ModelState));
+                    return Json(new[] { codeMaster }.ToDataSourceResult(request, ModelState));
                 }
             }
-            return Json(new[] { code }.ToDataSourceResult(request, ModelState));
+            return Json(new[] { codeMaster }.ToDataSourceResult(request, ModelState));
         }
 
         protected override void Dispose(bool disposing)

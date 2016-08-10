@@ -9,13 +9,14 @@ using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MDM.WebPortal.Data_Annotations;
 //using MedProMDM.Models;
 using MDM.WebPortal.Models.FromDB;
 using MDM.WebPortal.Models.ViewModel;
 
 namespace MDM.WebPortal.Controllers.APP
 {
-    [Authorize]
+    [SetPermissions]
     public class CPTDatasController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -118,129 +119,7 @@ namespace MDM.WebPortal.Controllers.APP
             return Json(new[] { cPTData }.ToDataSourceResult(request, ModelState));
         }
 
-        // GET: CPTDatas/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CPTData cPTData = db.CPTDatas.Find(id);
-            if (cPTData == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cPTData);
-        }
-
-        // GET: CPTDatas/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: CPTDatas/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "id,CPT,CPT_Description,ShortD,Active")] CPTData cPTData)
-        {
-            if (ModelState.IsValid)
-            {
-                if (await db.CPTDatas.AnyAsync(x => x.CPT == cPTData.CPT))
-                {
-                    TempData["Error"] = "Duplicate CPT. Please try again!";
-                    return RedirectToAction("Index");
-                }
-                try
-                {
-                    cPTData.Active = true;
-                    db.CPTDatas.Add(cPTData);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                catch (Exception)
-                {
-                    TempData["Error"] = "Somthing fail. Please try again!";
-                    return RedirectToAction("Index");
-                }
-            }
-            TempData["Error"] = "Somthing fail. Please try again!";
-            //return RedirectToAction("Index");
-            return View("_CreateCpt", cPTData);
-        }
-
-        // GET: CPTDatas/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CPTData cPTData = db.CPTDatas.Find(id);
-            if (cPTData == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cPTData);
-        }
-
-        // POST: CPTDatas/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,CPT,CPT_Description,ShortD,NTUser")] CPTData cPTData)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(cPTData).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(cPTData);
-        }
-
-        // GET: CPTDatas/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CPTData cPTData = db.CPTDatas.Find(id);
-            if (cPTData == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cPTData);
-        }
-
-        // POST: CPTDatas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            CPTData cPTData = db.CPTDatas.Find(id);
-            db.CPTDatas.Remove(cPTData);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        [AcceptVerbs(HttpVerbs.Get)]
-        public ActionResult FindCpt(string term)
-        {
-           var result = db.CPTDatas.Where(x => x.CPT == term).Select(x => new VMCPTData
-            {
-                Active = x.Active != null && x.Active.Value,
-                CPT = x.CPT,
-                ShortD = x.ShortD,
-                CPT_Description = x.CPT_Description,
-                id = x.id
-            }).ToList();
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
+       
 
         protected override void Dispose(bool disposing)
         {

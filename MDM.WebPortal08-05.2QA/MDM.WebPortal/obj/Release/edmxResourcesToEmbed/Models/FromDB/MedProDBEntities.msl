@@ -157,42 +157,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ActionCodeDicts">
-      <EntityTypeMapping TypeName="MedProDBEntities.ActionCodeDict">
-        <MappingFragment StoreEntitySet="ActionCodeDict">
-          <ScalarProperty Name="ACType" ColumnName="ACType" />
-          <ScalarProperty Name="ParsingYN" ColumnName="ParsingYN" />
-          <ScalarProperty Name="Active" ColumnName="Active" />
-          <ScalarProperty Name="NTUser" ColumnName="NTUser" />
-          <ScalarProperty Name="Priority" ColumnName="Priority" />
-          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-          <ScalarProperty Name="Code" ColumnName="Code" />
-          <ScalarProperty Name="CollNoteType" ColumnName="CollNoteType" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Categories">
-      <EntityTypeMapping TypeName="MedProDBEntities.Category">
-        <MappingFragment StoreEntitySet="Category">
-          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="ManagerDBAccessBIs">
-      <EntityTypeMapping TypeName="MedProDBEntities.ManagerDBAccessBI">
-        <MappingFragment StoreEntitySet="ManagerDBAccessBI">
-          <ScalarProperty Name="active" ColumnName="active" />
-          <ScalarProperty Name="NTUser" ColumnName="NTUser" />
-          <ScalarProperty Name="AliasName" ColumnName="AliasName" />
-          <ScalarProperty Name="Manager" ColumnName="Manager" />
-          <ScalarProperty Name="DB" ColumnName="DB" />
-          <ScalarProperty Name="FvP" ColumnName="FvP" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="CollNoteTypeCatPriorities">
       <EntityTypeMapping TypeName="MedProDBEntities.CollNoteTypeCatPriority">
         <MappingFragment StoreEntitySet="CollNoteTypeCatPriority">
@@ -208,32 +172,11 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="MasterUserLists">
-      <EntityTypeMapping TypeName="MedProDBEntities.MasterUserList">
-        <MappingFragment StoreEntitySet="MasterUserList">
-          <ScalarProperty Name="Type" ColumnName="Type" />
-          <ScalarProperty Name="NTUser" ColumnName="NTUser" />
-          <ScalarProperty Name="LastName" ColumnName="LastName" />
-          <ScalarProperty Name="Middle_Init" ColumnName="Middle_Init" />
-          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-          <ScalarProperty Name="User_Active" ColumnName="User_Active" />
-          <ScalarProperty Name="Staff_Manager" ColumnName="Staff_Manager" />
-          <ScalarProperty Name="Job_Title" ColumnName="Job_Title" />
-          <ScalarProperty Name="EdgeMed_ID" ColumnName="EdgeMed_ID" />
-          <ScalarProperty Name="ZoomServer" ColumnName="ZoomServer" />
-          <ScalarProperty Name="Edgemed_UserName" ColumnName="Edgemed_UserName" />
-          <ScalarProperty Name="ADP_ID_" ColumnName="ADP_ID#" />
-          <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
-          <ScalarProperty Name="ADP_ID" ColumnName="ADP_ID" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="ACCategories">
       <EntityTypeMapping TypeName="MedProDBEntities.ACCategory">
         <MappingFragment StoreEntitySet="ACCategory">
           <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="CatogoryID" ColumnName="CatogoryID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -241,7 +184,22 @@
       <EntityTypeMapping TypeName="MedProDBEntities.ACPriority">
         <MappingFragment StoreEntitySet="ACPriority">
           <ScalarProperty Name="PriorityName" ColumnName="PriorityName" />
-          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ActionCodes">
+      <EntityTypeMapping TypeName="MedProDBEntities.ActionCode">
+        <MappingFragment StoreEntitySet="ActionCode">
+          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+          <ScalarProperty Name="ParsingYN" ColumnName="ParsingYN" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="ACTypeID" ColumnName="ACTypeID" />
+          <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+          <ScalarProperty Name="CodeID" ColumnName="CodeID" />
+          <ScalarProperty Name="CollNoteType" ColumnName="CollNoteType" />
+          <ScalarProperty Name="ActionCodeID" ColumnName="ActionCodeID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -249,7 +207,15 @@
       <EntityTypeMapping TypeName="MedProDBEntities.ACtype">
         <MappingFragment StoreEntitySet="ACtypes">
           <ScalarProperty Name="ACTypeName" ColumnName="ACTypeName" />
-          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="ACTypeID" ColumnName="ACTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CodeMasterLists">
+      <EntityTypeMapping TypeName="MedProDBEntities.CodeMasterList">
+        <MappingFragment StoreEntitySet="CodeMasterList">
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="CodeID" ColumnName="CodeID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

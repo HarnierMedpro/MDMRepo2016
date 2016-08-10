@@ -2,37 +2,37 @@
 <Schema Namespace="MedProDBEntities.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="ACCategory">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="CatogoryID" />
     </Key>
-    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CatogoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="CategoryName" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="ACPriority">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="PriorityID" />
     </Key>
-    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PriorityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PriorityName" Type="varchar" MaxLength="50" />
   </EntityType>
-  <EntityType Name="ActionCodeDict">
+  <EntityType Name="ActionCode">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="ActionCodeID" />
     </Key>
-    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CollNoteType" Type="varchar" MaxLength="80" />
-    <Property Name="Code" Type="varchar" MaxLength="50" />
+    <Property Name="ActionCodeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CollNoteType" Type="varchar" MaxLength="80" Nullable="false" />
+    <Property Name="CodeID" Type="int" Nullable="false" />
     <Property Name="CategoryID" Type="int" Nullable="false" />
-    <Property Name="Priority" Type="varchar" MaxLength="50" />
-    <Property Name="NTUser" Type="varchar" MaxLength="80" />
+    <Property Name="PriorityID" Type="int" Nullable="false" />
+    <Property Name="ACTypeID" Type="int" Nullable="false" />
     <Property Name="Active" Type="bit" Nullable="false" />
-    <Property Name="ParsingYN" Type="char" MaxLength="1" />
-    <Property Name="ACType" Type="varchar" MaxLength="80" />
+    <Property Name="ParsingYN" Type="char" MaxLength="1" Nullable="false" />
+    <Property Name="SortOrder" Type="int" />
   </EntityType>
   <EntityType Name="ACtypes">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="ACTypeID" />
     </Key>
-    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ACTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ACTypeName" Type="varchar" MaxLength="80" />
   </EntityType>
   <EntityType Name="ADPMaster">
@@ -58,12 +58,12 @@
     <Property Name="FvPID" Type="int" Nullable="false" />
     <Property Name="Active" Type="bit" Nullable="false" />
   </EntityType>
-  <EntityType Name="Category">
+  <EntityType Name="CodeMasterList">
     <Key>
-      <PropertyRef Name="CategoryID" />
+      <PropertyRef Name="CodeID" />
     </Key>
-    <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CategoryName" Type="varchar" MaxLength="50" />
+    <Property Name="CodeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Code" Type="varchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="CollNoteTypeCatPriority">
     <Key>
@@ -169,38 +169,6 @@
     <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="Active" Type="bit" Nullable="false" />
   </EntityType>
-  <EntityType Name="ManagerDBAccessBI">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="FvP" Type="varchar" MaxLength="3" />
-    <Property Name="DB" Type="char" MaxLength="3" />
-    <Property Name="Manager" Type="varchar" MaxLength="15" />
-    <Property Name="AliasName" Type="varchar" MaxLength="50" />
-    <Property Name="NTUser" Type="varchar" MaxLength="80" />
-    <Property Name="active" Type="bit" />
-  </EntityType>
-  <EntityType Name="MasterUserList">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ADP_ID" Type="varchar" MaxLength="15" />
-    <Property Name="EmployeeName" Type="nvarchar" MaxLength="255" />
-    <Property Name="ADP_ID#" Type="bigint" />
-    <Property Name="Edgemed_UserName" Type="nvarchar" MaxLength="255" />
-    <Property Name="ZoomServer" Type="bigint" />
-    <Property Name="EdgeMed_ID" Type="bigint" />
-    <Property Name="Job_Title" Type="nvarchar" MaxLength="255" />
-    <Property Name="Staff_Manager" Type="nvarchar" MaxLength="255" />
-    <Property Name="User_Active" Type="char" MaxLength="1" />
-    <Property Name="FirstName" Type="nvarchar" MaxLength="255" />
-    <Property Name="Middle_Init" Type="nvarchar" MaxLength="1" />
-    <Property Name="LastName" Type="nvarchar" MaxLength="255" />
-    <Property Name="NTUser" Type="varchar" MaxLength="80" />
-    <Property Name="Type" Type="varchar" MaxLength="80" />
-  </EntityType>
   <EntityType Name="MDM_POS_ListName">
     <Key>
       <PropertyRef Name="MDMPOS_ListNameID" />
@@ -229,15 +197,51 @@
     <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="active" Type="bit" />
   </EntityType>
-  <Association Name="FK_ActionCodeDict_Category">
-    <End Role="Category" Type="Self.Category" Multiplicity="1" />
-    <End Role="ActionCodeDict" Type="Self.ActionCodeDict" Multiplicity="*" />
+  <Association Name="FK_ActionCode_ACCategory">
+    <End Role="ACCategory" Type="Self.ACCategory" Multiplicity="1" />
+    <End Role="ActionCode" Type="Self.ActionCode" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Category">
-        <PropertyRef Name="CategoryID" />
+      <Principal Role="ACCategory">
+        <PropertyRef Name="CatogoryID" />
       </Principal>
-      <Dependent Role="ActionCodeDict">
+      <Dependent Role="ActionCode">
         <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ActionCode_ACPriority">
+    <End Role="ACPriority" Type="Self.ACPriority" Multiplicity="1" />
+    <End Role="ActionCode" Type="Self.ActionCode" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ACPriority">
+        <PropertyRef Name="PriorityID" />
+      </Principal>
+      <Dependent Role="ActionCode">
+        <PropertyRef Name="PriorityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ActionCode_ACtypes">
+    <End Role="ACtypes" Type="Self.ACtypes" Multiplicity="1" />
+    <End Role="ActionCode" Type="Self.ActionCode" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ACtypes">
+        <PropertyRef Name="ACTypeID" />
+      </Principal>
+      <Dependent Role="ActionCode">
+        <PropertyRef Name="ACTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ActionCode_CodeMasterList">
+    <End Role="CodeMasterList" Type="Self.CodeMasterList" Multiplicity="1" />
+    <End Role="ActionCode" Type="Self.ActionCode" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CodeMasterList">
+        <PropertyRef Name="CodeID" />
+      </Principal>
+      <Dependent Role="ActionCode">
+        <PropertyRef Name="CodeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -364,11 +368,11 @@
   <EntityContainer Name="MedProDBEntitiesStoreContainer">
     <EntitySet Name="ACCategory" EntityType="Self.ACCategory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ACPriority" EntityType="Self.ACPriority" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="ActionCodeDict" EntityType="Self.ActionCodeDict" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ActionCode" EntityType="Self.ActionCode" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ACtypes" EntityType="Self.ACtypes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ADPMaster" EntityType="Self.ADPMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BI_DB_FvP_Access" EntityType="Self.BI_DB_FvP_Access" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CodeMasterList" EntityType="Self.CodeMasterList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CollNoteTypeCatPriority" EntityType="Self.CollNoteTypeCatPriority" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Corp_DBs" EntityType="Self.Corp_DBs" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Corp_Owner" EntityType="Self.Corp_Owner" Schema="dbo" store:Type="Tables" />
@@ -380,14 +384,24 @@
     <EntitySet Name="FvPList" EntityType="Self.FvPList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Manager_Master" EntityType="Self.Manager_Master" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Manager_Type" EntityType="Self.Manager_Type" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="ManagerDBAccessBI" EntityType="Self.ManagerDBAccessBI" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="MasterUserList" EntityType="Self.MasterUserList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MDM_POS_ListName" EntityType="Self.MDM_POS_ListName" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MDM_POS_Name_DBPOS_grp" EntityType="Self.MDM_POS_Name_DBPOS_grp" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OwnerList" EntityType="Self.OwnerList" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK_ActionCodeDict_Category" Association="Self.FK_ActionCodeDict_Category">
-      <End Role="Category" EntitySet="Category" />
-      <End Role="ActionCodeDict" EntitySet="ActionCodeDict" />
+    <AssociationSet Name="FK_ActionCode_ACCategory" Association="Self.FK_ActionCode_ACCategory">
+      <End Role="ACCategory" EntitySet="ACCategory" />
+      <End Role="ActionCode" EntitySet="ActionCode" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ActionCode_ACPriority" Association="Self.FK_ActionCode_ACPriority">
+      <End Role="ACPriority" EntitySet="ACPriority" />
+      <End Role="ActionCode" EntitySet="ActionCode" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ActionCode_ACtypes" Association="Self.FK_ActionCode_ACtypes">
+      <End Role="ACtypes" EntitySet="ACtypes" />
+      <End Role="ActionCode" EntitySet="ActionCode" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ActionCode_CodeMasterList" Association="Self.FK_ActionCode_CodeMasterList">
+      <End Role="CodeMasterList" EntitySet="CodeMasterList" />
+      <End Role="ActionCode" EntitySet="ActionCode" />
     </AssociationSet>
     <AssociationSet Name="FK_BI_DB_FvP_Access_DBList" Association="Self.FK_BI_DB_FvP_Access_DBList">
       <End Role="DBList" EntitySet="DBList" />

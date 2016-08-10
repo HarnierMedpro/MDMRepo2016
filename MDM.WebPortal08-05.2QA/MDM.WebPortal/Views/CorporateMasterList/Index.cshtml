@@ -30,12 +30,12 @@
       .PreviousNext(true).PageSizes(true))
       .Sortable()
       .Groupable()
-      .ClientDetailTemplateId("template")
+      //.ClientDetailTemplateId("template")
       .Reorderable(r => r.Columns(true))
       .Resizable(r => r.Columns(true))
-      .Selectable(s => s.Enabled(true)
-      .Type(GridSelectionType.Row)
-      .Mode(GridSelectionMode.Single))
+      //.Selectable(s => s.Enabled(true)
+      //.Type(GridSelectionType.Row)
+      //.Mode(GridSelectionMode.Single))
 
       .DataSource(dataSource => dataSource
           .Ajax()         
@@ -61,7 +61,7 @@
 
 
 <script src="~/Scripts/kendo/jszip.min.js"></script>
-<script id="template" type="text/kendo-tmpl">
+@*<script id="template" type="text/kendo-tmpl">
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMDBList>()
     .Name("gridDB_#=corpID#") // template expression, to be evaluated in the master context
             .Columns(columns =>
@@ -99,7 +99,7 @@
             .Sortable()
             .ToClientTemplate()
     )
-</script>
+</script>*@
 <script>
     function dataBound() {
         this.expandRow(this.tbody.find("tr.k-master-row").first());

@@ -41,6 +41,7 @@ namespace MDM.WebPortal.Controllers
         public ActionResult Read_Premissions([DataSourceRequest] DataSourceRequest request)
         {
             /*See: C:\Users\hsuarez\Desktop\Documentation\Kendo UI for ASP.NET MVC5\ui-for-aspnet-mvc-examples-master\grid\multiselect-in-grid-popup*/
+            var temp = db.Permissions.Include(x => x.Action).ToList();
             return Json(db.Permissions.Include(x => x.Action).ToDataSourceResult(request, x => new VMPermission
             {
                 PermissionID = x.PermissionID,

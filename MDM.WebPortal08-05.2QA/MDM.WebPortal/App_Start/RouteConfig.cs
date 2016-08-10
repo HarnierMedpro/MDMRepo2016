@@ -22,7 +22,7 @@ namespace IdentitySample
                 );
 
             routes.MapRoute("CheckUserName",
-              "UserAdmin/CheckUserName",
+              "UsersAdmin/CheckUserName",
               new { controller = "UsersAdmin", action = "CheckUserName" },
               new[] { "MDM.WebPortal.Controllers" }
               );
