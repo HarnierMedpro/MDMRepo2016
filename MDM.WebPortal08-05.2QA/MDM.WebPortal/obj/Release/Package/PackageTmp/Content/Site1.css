@@ -1,0 +1,115 @@
+﻿.big-text{
+    text-align:center;
+    margin-top:90px;
+    margin-bottom:60px;
+}
+
+.font-size{
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 300;
+}
+
+#why li{
+    margin: 0 0 10px 0;
+}
+
+#stwitter, #sgoogle, #sface, #slink, #sgit{
+  display: inline-block;
+  border-radius: 3px !important;
+  width: 70%;
+  height: 30px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+#stwitter:focus{
+  border-color: #0099da;
+  box-shadow: none;
+}
+
+.sombra{
+    box-shadow: 0 1px 0 #fff, inset 0 3px 3px #e9e9eb !important; 
+}
+
+.box-panel-admin {
+    box-shadow: 6px 7px 4px #d3d4d4 !important;
+}
+
+.admin-container {
+    width: 100% !important;
+    padding-right: 10px !important;
+    padding-left: 10px !important;
+    margin-right: auto !important;
+    margin-left: auto !important;
+   
+}
+
+.BotonHyperlink {
+    border-radius: 25px !important;    
+}
+
+.img-user-edit {
+    width: 200px;
+    height: 200px;
+}
+
+.p_margins{
+    margin-right:15px; 
+    margin-left:32px;
+}
+
+.text-muted {
+    color: #777;
+}
+
+.required{
+    color:red;
+}
+
+.lbMargin{
+    margin-left:14px;
+}
+
+/*-------------------------------------------------------------------*/
+/* fielset */
+/*-------------------------------------------------------------------*/
+fieldset.scheduler-border {
+    /*border: 1px solid #eee !important;*/
+    border:1px solid #c5dbec !important;
+    padding: 0 1.4em 0.7em 1.4em !important;
+    margin: 0 0 7px -12px !important;   
+    -webkit-box-shadow: 0px 0px 0px 0px #777;
+    box-shadow: 0px 0px 0px 0px #777;
+    margin-left:8px !important;
+}
+
+legend.scheduler-border{
+    font-size:1.2em !important;
+    color:#31708F;
+    font-weight:inherit !important;
+    text-align:left !important;
+    width:auto;
+    border-bottom:none;
+}
+/*---------Home/Contact.cshtml--------*/
+
+
+.form-control1{
+    max-width:100% !important;
+    box-shadow: 0 1px 0 #fff, inset 0 3px 3px #e9e9eb !important;
+    height:48px !important;
+}
+
+.text-a-control{
+    max-width:100% !important;
+    box-shadow: 0 1px 0 #fff, inset 0 3px 3px #e9e9eb !important;
+}

@@ -1,0 +1,16 @@
+﻿@model int
+@(Html.Kendo().DropDownListFor(m => m)
+                  .AutoBind(false)
+                  .ValuePrimitive(true)
+                      .OptionLabel("Select Facility...")
+                          .DataTextField("FacilityId")
+                          .DataValueField("FacilityId")
+                  .DataSource(dataSource =>
+                  {
+                      dataSource.Read(read => read.Action("GetFacByVendors", "MDM_POS_Name_DBPOS_grp").Data("filterFacilities"))//filterFacilities is a function defined in Index.cshtml
+                      .ServerFiltering(true);
+                  })
+                  .CascadeFrom("DBs")
+                  .CascadeFromField("DB_ID")
+)
+@Html.ValidationMessageFor(m => m)

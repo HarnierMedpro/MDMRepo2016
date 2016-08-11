@@ -56,7 +56,6 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
                     return Json(new[] { manager_Type }.ToDataSourceResult(request, ModelState));
                 }
             }
-            ModelState.AddModelError("", "Something failed. Please try again!");
             return Json(new[] { manager_Type }.ToDataSourceResult(request, ModelState));
         }
 

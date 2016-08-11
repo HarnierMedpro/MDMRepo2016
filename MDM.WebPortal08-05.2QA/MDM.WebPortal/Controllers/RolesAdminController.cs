@@ -85,8 +85,7 @@ namespace IdentitySample.Controllers
                 Priority = x.Priority
             }), JsonRequestBehavior.AllowGet);
         }
-
-        ///*Get al DB_Facilities of specific POS*/
+       
         public ActionResult Read_UserOfrole([DataSourceRequest] DataSourceRequest request, string roleID)
         {
             List<ApplicationUser> usuarios = new List<ApplicationUser>();
@@ -102,7 +101,7 @@ namespace IdentitySample.Controllers
                 Id = x.Id,
                 Email = x.Email,
                 Active = x.Active
-            }));
+            }), JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> Update([DataSourceRequest] DataSourceRequest request,
@@ -185,7 +184,7 @@ namespace IdentitySample.Controllers
             {
                 var role = new ApplicationRole(roleViewModel.Name, true, roleViewModel.Priority);
 
-                if (! await RoleManager.RoleExistsAsync(role.Name))
+                if (!await RoleManager.RoleExistsAsync(role.Name))
                 {
                     var roleresult = await RoleManager.CreateAsync(role);
                     if (!roleresult.Succeeded)

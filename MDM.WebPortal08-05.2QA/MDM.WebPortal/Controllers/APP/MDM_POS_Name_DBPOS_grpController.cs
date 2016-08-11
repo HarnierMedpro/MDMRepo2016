@@ -43,9 +43,6 @@ namespace MDM.WebPortal.Controllers.APP
             }), JsonRequestBehavior.AllowGet);
         }
 
-      
-        
-
          public async Task<ActionResult> Update_Entity([DataSourceRequest] DataSourceRequest request,
                     [Bind(Include = "MDMPOS_NameID,DB_ID,FacilityID,MDMPOS_ListNameID,Active")] VMPOS_Name_DBPOS_grp mDmPosNameDbposGrp)
             {

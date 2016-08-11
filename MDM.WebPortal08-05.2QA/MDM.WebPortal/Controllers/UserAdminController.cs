@@ -17,6 +17,7 @@ using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using MDM.WebPortal.Tools;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using MDM.WebPortal.Models.Identity;
 
 namespace IdentitySample.Controllers
@@ -358,17 +359,19 @@ namespace IdentitySample.Controllers
         [AcceptVerbs(HttpVerbs.Get)]
         public ActionResult CheckUserName(string term)
         {
+            /*To access to this function term needs to came first in this format username@medprobill.com. This is validated in the client side using regular expressions*/
+            var pattern = new Regex("@@medprobill.com");
+            bool isMatch = pattern.IsMatch(term);
             if (!String.IsNullOrEmpty(term))
             {
-                _DALUsers users = new _DALUsers();
-                var resultSet = users.BuscarUser(term.ToLower());
-                List<VMUser> result = new List<VMUser>();
-                foreach (DataRow fila in resultSet.Rows)
+              List<VMUser> result = new List<VMUser>();
+              var user =  UserManager.FindByEmail(term);
+                if (user != null)
                 {
                     result.Add(new VMUser
                     {
-                        Email = fila.ItemArray[0].ToString(),
-                        Id = fila.ItemArray[1].ToString()
+                        Email = user.Email,
+                        Id = user.Id
                     });
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="MDMPermissionsIdentitiesv1-Web.config Connection String" description="MDMPermissionsIdentitiesv1 Connection String used in web.config by the application to access the database." defaultValue="Data Source=medpro-devbox;Initial Catalog=MDMPermissionIdentityv1; User id = mdmsql; Password = 1;Integrated Security=True; MultipleActiveResultSets=true" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\hsuarez\\Documents\\GitHub\\MDMRepo2016\\MDM\.WebPortal08-05\.2QA\\MDM\.WebPortal\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='MDMPermissionsIdentitiesv1']/@connectionString" />
+  </parameter>
+  <parameter name="MedProDBEntities-Web.config Connection String" description="MedProDBEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/Models.FromDB.MedProDBEntities.csdl|res://*/Models.FromDB.MedProDBEntities.ssdl|res://*/Models.FromDB.MedProDBEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=medpro-devbox;initial catalog=MedProDB;user id=mdmsql;password=1;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\hsuarez\\Documents\\GitHub\\MDMRepo2016\\MDM\.WebPortal08-05\.2QA\\MDM\.WebPortal\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='MedProDBEntities']/@connectionString" />
+  </parameter>
+  <parameter name="MDM.WebPortal.Models.FromZoomDB.ZoomDBEntities-Web.config Connection String" description="MDM.WebPortal.Models.FromZoomDB.ZoomDBEntities Connection String used in web.config by the application to access the database." defaultValue="MDM.WebPortal.Models.FromZoomDB.ZoomDBEntities_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\hsuarez\\Documents\\GitHub\\MDMRepo2016\\MDM\.WebPortal08-05\.2QA\\MDM\.WebPortal\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='MDM.WebPortal.Models.FromZoomDB.ZoomDBEntities']/@connectionString" />
+  </parameter>
+</parameters>

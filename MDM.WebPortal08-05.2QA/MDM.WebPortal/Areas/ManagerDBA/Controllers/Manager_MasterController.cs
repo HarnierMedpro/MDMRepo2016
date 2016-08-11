@@ -94,7 +94,7 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
                 
                 try
                 {
-                    if (await db.Manager_Master.AnyAsync(x => x.ManagerTypeID != manager_Master.ManagerTypeID && x.AliasName.Equals(manager_Master.AliasName, StringComparison.CurrentCultureIgnoreCase) && x.ManagerID != manager_Master.ManagerID))
+                    if (await db.Manager_Master.AnyAsync(x => x.ManagerTypeID == manager_Master.ManagerTypeID || x.AliasName.Equals(manager_Master.AliasName, StringComparison.CurrentCultureIgnoreCase) && x.ManagerID != manager_Master.ManagerID))
                     {
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
                         return Json(new[]{new Manager_Master()}.ToDataSourceResult(request, ModelState));

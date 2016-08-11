@@ -38,11 +38,10 @@ namespace MDM.WebPortal.Controllers
             return View();
         }
 
-        public ActionResult Read_Premissions([DataSourceRequest] DataSourceRequest request)
+        public ActionResult Read_Permissions([DataSourceRequest] DataSourceRequest request)
         {
             /*See: C:\Users\hsuarez\Desktop\Documentation\Kendo UI for ASP.NET MVC5\ui-for-aspnet-mvc-examples-master\grid\multiselect-in-grid-popup*/
-            var temp = db.Permissions.Include(x => x.Action).ToList();
-            return Json(db.Permissions.Include(x => x.Action).ToDataSourceResult(request, x => new VMPermission
+            return Json(db.Permissions.Include(x => x.Action).Include(x => x.Roles).ToDataSourceResult(request, x => new VMPermission
             {
                 PermissionID = x.PermissionID,
                 ControllerID = x.Action.ControllerID,

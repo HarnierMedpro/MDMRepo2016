@@ -10,6 +10,7 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels
     {
         public int ManagerID { get; set; }
 
+        [Display(Name = "MANAGER TYPE")]
         public int ManagerTypeID { get; set; }
 
         [Required]

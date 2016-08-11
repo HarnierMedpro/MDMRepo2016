@@ -92,10 +92,19 @@ namespace MDM.WebPortal.Controllers.APP
         {
             if (ModelState.IsValid)
             {
-                var toRelease = new Corp_DBs { ID_PK = corp_DBs.ID_PK, corpID = corp_DBs.corpID, DB_ID = corp_DBs.DB_ID };
-                db.Corp_DBs.Attach(toRelease);
-                db.Corp_DBs.Remove(toRelease);
-                await db.SaveChangesAsync();
+                try
+                {
+                    var toRelease = new Corp_DBs { ID_PK = corp_DBs.ID_PK, corpID = corp_DBs.corpID, DB_ID = corp_DBs.DB_ID };
+                    db.Corp_DBs.Attach(toRelease);
+                    db.Corp_DBs.Remove(toRelease);
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                  ModelState.AddModelError("","Something failed. Please try again!");
+                  return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
+                }
+               
             }
             return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
         }

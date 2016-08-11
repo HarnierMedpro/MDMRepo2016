@@ -1,0 +1,86 @@
+﻿
+
+@*@model MDM.WebPortal.Models.ViewModel.VMPermission
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border">Update Permission:</legend>
+                <dl>
+                    <dt>
+                        <label class="control-label"><strong>CONTROLLER</strong> <sup class="text-danger">*</sup></label>
+                        <label>@Model.ControllerName</label>
+                    </dt>
+                    <dd>
+                        @(Html.Kendo().TextBoxFor(m => m.ControllerName)
+                              .HtmlAttributes(new {style = "height:28.55px; border-radius: 3px !important; width:100%;"})
+                              )
+                        @Html.ValidationMessageFor(model => model.ControllerName, "", new {@class = "text-danger"})
+                    </dd>
+                </dl>
+
+                <dl>
+                    <dt>
+                        <label class="control-label"><strong>ACTION</strong> <sup class="text-danger">*</sup></label>
+                    </dt>
+                    <dd>
+                        @(Html.Kendo().TextBoxFor(m => m.ActionName)
+                              .HtmlAttributes(new {style = "height:28.55px; border-radius: 3px !important; width:100%;"})
+                              )
+                        @Html.ValidationMessageFor(model => model.ActionName, "", new {@class = "text-danger"})
+                    </dd>
+                </dl>
+
+                <dl>
+                    <dt>
+                        <label class="control-label"><strong>ROLES</strong> <sup class="text-danger">*</sup></label>
+                    </dt>
+                    <dd>
+                        @(Html.Kendo().MultiSelect()
+                              .Name("SelectedRoles")
+                              .DataTextField("Name")
+                              .DataValueField("Id")
+                              .Placeholder("Select Roles...")
+                              .AutoBind(false)
+                              .ItemTemplate("#= Name #")
+                              .Value(Model.Roles)
+                              .DataSource(source =>
+                              {
+                                  source.Custom()
+                                      .ServerFiltering(true)
+                                      .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                                      .Transport(transport =>
+                                      {
+                                          transport.Read("GetAllRoles", "Permissions");
+                                      })
+                                      .Schema(schema =>
+                                      {
+                                          schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                                              .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                                      });
+                              })
+                              )
+
+                    </dd>
+                </dl>
+            </fieldset>
+        </div>
+    </div>
+</div>*@
+
+
+            
+
+
+            
+
+
+
+
+
+
+
+
+

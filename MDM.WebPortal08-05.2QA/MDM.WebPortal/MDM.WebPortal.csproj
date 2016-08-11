@@ -1239,6 +1239,7 @@
     <Content Include="Areas\ActionCode\Views\ACCategoryC\Index.cshtml" />
     <Content Include="Areas\ActionCode\Views\ActionCodes\Index.cshtml" />
     <Content Include="Areas\ActionCode\Views\ACtypes\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\QASite.pubxml" />
     <None Include="Properties\PublishProfiles\TestQA.pubxml" />
     <None Include="Scripts\jquery-2.2.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.4.js" />
@@ -2604,6 +2605,7 @@
     <Content Include="Views\Shared\EditorTemplates\ActionViewModelEditor.cshtml" />
     <Content Include="Views\Permissions\Controllers.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\EdgemedViewModelEditor.cshtml" />
+    <Content Include="Views\Shared\_Layout1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

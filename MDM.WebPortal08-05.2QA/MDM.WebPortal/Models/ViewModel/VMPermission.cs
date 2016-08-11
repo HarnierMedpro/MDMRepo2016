@@ -11,16 +11,7 @@ namespace MDM.WebPortal.Models.ViewModel
     public class VMPermission
     {
         public int PermissionID { get; set; }
-
-        //[Required]
-        //[Display(Name = "CONTROLLER")]
-        //[StringLength(50)]
-        //public string ControllerName { get; set; }
-
-        //[Required]
-        //[Display(Name = "ACTION")]
-        //[StringLength(50)]
-        //public string ActionName { get; set; }
+        
         [Display(Name = "CONTROLLER")]
         public int ControllerID { get; set; }
 

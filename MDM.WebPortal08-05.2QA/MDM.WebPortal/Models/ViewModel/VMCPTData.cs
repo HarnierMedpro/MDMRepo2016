@@ -12,7 +12,7 @@ namespace MDM.WebPortal.Models.ViewModel
 
         [Required]
         [Display(Name = "CPT")]
-        [StringLength(5)]
+        [StringLength(5, ErrorMessage = "The field CPT must be a number with a maximum length of 5.")]
         [RegularExpression(@"[0-9]+$", ErrorMessage = "Only numbers are allowed.")]
         public string CPT { get; set; }
 

@@ -40,7 +40,12 @@ namespace MDM.WebPortal.Controllers.APP
                         ModelState.AddModelError("", "Duplicate POS. Please try again!");
                         return Json(new[] { mDM_POS_ListName }.ToDataSourceResult(request, ModelState));
                     }
-                    var StoredInDB = new MDM_POS_ListName { MDMPOS_ListNameID = mDM_POS_ListName.MDMPOS_ListNameID, PosName = mDM_POS_ListName.PosName, active = mDM_POS_ListName.active };
+                    var StoredInDB = new MDM_POS_ListName
+                    {
+                        MDMPOS_ListNameID = mDM_POS_ListName.MDMPOS_ListNameID, 
+                        PosName = mDM_POS_ListName.PosName, 
+                        active = mDM_POS_ListName.active
+                    };
                     db.MDM_POS_ListName.Attach(StoredInDB);
                     db.Entry(StoredInDB).State = EntityState.Modified;
                     await db.SaveChangesAsync();                  

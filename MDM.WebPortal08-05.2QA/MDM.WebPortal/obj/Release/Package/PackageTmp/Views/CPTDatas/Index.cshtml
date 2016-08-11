@@ -1,0 +1,106 @@
+﻿@*@model IEnumerable<MDM.WebPortal.Models.FromDB.CPTData>*@
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<header class="main-header">
+    <div class="container">
+        <h1 class="page-title"></h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active">CPTCodes</li>
+        </ol>
+    </div>
+</header>
+
+<div class="container-fluid">
+   
+
+    @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMCPTData>()
+          .Name("CPT")
+          .ToolBar(tools => { tools.Excel(); tools.Create().Text("NEW CPTCode"); })
+          .Excel(excel => excel
+              .AllPages(true)
+              .FileName("ExportCPT.xlsx")
+              .Filterable(false)
+          )
+          .Columns(column =>
+          {
+              column.Bound(c => c.id).Hidden(true);
+              column.Bound(c => c.CPT).Width(70);
+              column.Bound(c => c.CPT_Description).Width(110);
+              column.Bound(c => c.ShortD).Width(110);
+              column.Bound(c => c.Active).Width(70);
+
+              column.Command(commands =>
+              {
+                  commands.Edit();
+              }).Title("COMMANDS").Width(110);
+          })
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Model(model =>
+              {
+                  model.Id(p => p.id);
+                  model.Field(x => x.id).Editable(false);                 
+              })
+              .PageSize(10)
+              .Events(events => events.Error("error_handler")) //allows us catch the errors sent by the JSON object, especificados por ModelState
+              .Read(read => read.Action("Read", "CPTDatas").Type(HttpVerbs.Post))
+              .Update(update => update.Action("Update", "CPTDatas").Type(HttpVerbs.Post))
+              .Create(create => create.Action("Create_CPT", "CPTDatas"))
+          )
+          .Groupable()
+          .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("PopUpEditCpt"))
+          .Sortable()
+          .Filterable()
+          .Pageable(ps => ps.Refresh(true)
+              .PreviousNext(true).PageSizes(true))
+          .Reorderable(r => r.Columns(true))
+          .Resizable(r => r.Columns(true))
+          .Selectable(s => s.Enabled(true)
+              .Type(GridSelectionType.Row)
+              .Mode(GridSelectionMode.Single))
+          )
+</div>
+
+@*<div class="modal fade in" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-uppercase text-bold" id="myModalLabel">new cptcode</h4>
+            </div>
+            <div class="modal-body">
+               @Html.Partial("_CreateCpt", new MDM.WebPortal.Models.FromDB.CPTData())
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+
+<script src="~/Scripts/kendo/jszip.min.js"></script>
+<script>
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            // Display the message
+            alert(message);
+            // Cancel the changes
+            var grid = $("#grid").data("kendoGrid");
+            grid.cancelChanges();
+        }
+    }
+</script>

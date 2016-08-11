@@ -32,7 +32,7 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
         public ActionResult Read_GroupByManager([DataSourceRequest] DataSourceRequest request)
         {
             //var result = db.BI_DB_FvP_Access.Include(manager => manager.Manager_Master).Select(manager => manager.Manager_Master).Distinct();
-            var result = db.Manager_Master;
+            var result = db.Manager_Master.Include(x => x.Manager_Type);
             return Json(result.ToDataSourceResult(request, x => new VMManager_BI
             {
                 ManagerID = x.ManagerID, //PK from Manager_Master table

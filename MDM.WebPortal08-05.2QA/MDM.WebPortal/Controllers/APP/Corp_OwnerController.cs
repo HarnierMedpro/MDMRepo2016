@@ -26,8 +26,8 @@ namespace MDM.WebPortal.Controllers.APP
 
         public ActionResult Owners([DataSourceRequest] DataSourceRequest request)
         {
-            var Owners = db.Corp_Owner.Include(x => x.OwnerList).Select(x => x.OwnerList).Distinct();
-            return Json(Owners.ToDataSourceResult(request, x => new VMOwnerList
+            //var Owners = db.Corp_Owner.Include(x => x.OwnerList).Select(x => x.OwnerList).Distinct();
+            return Json(db.OwnerLists.ToDataSourceResult(request, x => new VMOwnerList
             {
                 active = x.active,
                 FirstName = x.FirstName,
@@ -90,6 +90,8 @@ namespace MDM.WebPortal.Controllers.APP
                     await db.SaveChangesAsync();
                     corp_Owner.corpOwnerID = toStore.corpOwnerID;
                     corp_Owner.OwnersID = ParentID;
+                    if (db.CorporateMasterLists.Find(corp_Owner.corpID).active != null)
+                        corp_Owner.active = db.CorporateMasterLists.Find(corp_Owner.corpID).active.Value;
                 }
                 catch (Exception)
                 {
