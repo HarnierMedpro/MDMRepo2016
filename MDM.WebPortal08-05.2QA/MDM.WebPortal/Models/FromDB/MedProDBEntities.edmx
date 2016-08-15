@@ -53,6 +53,20 @@
           <Property Name="NTUser" Type="varchar" MaxLength="80" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="AuditLog">
+          <Key>
+            <PropertyRef Name="AuditLogID" />
+          </Key>
+          <Property Name="AuditLogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TableName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserLogons" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AuditDateTime" Type="datetime" Nullable="false" />
+          <Property Name="Field_ColumName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OldValue" Type="varchar" MaxLength="256" />
+          <Property Name="NewValue" Type="varchar" MaxLength="256" />
+          <Property Name="AuditAction" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="ModelPKey" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="BI_DB_FvP_Access">
           <Key>
             <PropertyRef Name="BIDbFvPID" />
@@ -376,6 +390,7 @@
           <EntitySet Name="ActionCode" EntityType="Self.ActionCode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ACtypes" EntityType="Self.ACtypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ADPMaster" EntityType="Self.ADPMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AuditLog" EntityType="Self.AuditLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BI_DB_FvP_Access" EntityType="Self.BI_DB_FvP_Access" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CodeMasterList" EntityType="Self.CodeMasterList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CollNoteTypeCatPriority" EntityType="Self.CollNoteTypeCatPriority" Schema="dbo" store:Type="Tables" />
@@ -812,6 +827,7 @@
             <End Role="CodeMasterList" EntitySet="CodeMasterLists" />
             <End Role="ActionCode" EntitySet="ActionCodes" />
           </AssociationSet>
+          <EntitySet Name="AuditLogs" EntityType="MedProDBEntities.AuditLog" />
         </EntityContainer>
         <EntityType Name="CollNoteTypeCatPriority">
           <Key>
@@ -925,6 +941,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AuditLog">
+          <Key>
+            <PropertyRef Name="AuditLogID" />
+          </Key>
+          <Property Name="AuditLogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TableName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserLogons" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Field_ColumName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OldValue" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="NewValue" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="AuditAction" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="ModelPKey" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1146,6 +1176,21 @@
               <MappingFragment StoreEntitySet="CodeMasterList">
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="CodeID" ColumnName="CodeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuditLogs">
+            <EntityTypeMapping TypeName="MedProDBEntities.AuditLog">
+              <MappingFragment StoreEntitySet="AuditLog">
+                <ScalarProperty Name="ModelPKey" ColumnName="ModelPKey" />
+                <ScalarProperty Name="AuditAction" ColumnName="AuditAction" />
+                <ScalarProperty Name="NewValue" ColumnName="NewValue" />
+                <ScalarProperty Name="OldValue" ColumnName="OldValue" />
+                <ScalarProperty Name="Field_ColumName" ColumnName="Field_ColumName" />
+                <ScalarProperty Name="AuditDateTime" ColumnName="AuditDateTime" />
+                <ScalarProperty Name="UserLogons" ColumnName="UserLogons" />
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="AuditLogID" ColumnName="AuditLogID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

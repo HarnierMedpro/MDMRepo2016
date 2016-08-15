@@ -12,6 +12,9 @@ using MDM.WebPortal.DAL;
 using MDM.WebPortal.Models.ViewModel;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Controllers.APP
 {
@@ -49,10 +52,43 @@ namespace MDM.WebPortal.Controllers.APP
                        ModelState.AddModelError("", "Duplicate Database. Please try again!");
                        return Json(new[] { dBList }.ToDataSourceResult(request, ModelState));
                    }
-                   var storedInDb = new DBList { DB_ID = dBList.DB_ID, DB = dBList.DB, databaseName = dBList.databaseName, active = dBList.active };
+                   //var storedInDb = new DBList { DB_ID = dBList.DB_ID, DB = dBList.DB, databaseName = dBList.databaseName, active = dBList.active };
+                   var storedInDb = await db.DBLists.FindAsync(dBList.DB_ID);
+
+                   List<TableInfo> tableColumnInfos = new List<TableInfo>();
+                   if (storedInDb.DB != dBList.DB)
+                   {
+                       tableColumnInfos.Add(new TableInfo { Field_ColumName = "DB", OldValue = storedInDb.DB, NewValue = dBList.DB});
+                       storedInDb.DB = dBList.DB;
+                   }
+
+                   if (!storedInDb.databaseName.Equals(dBList.databaseName,StringComparison.InvariantCultureIgnoreCase))
+                   {
+                       tableColumnInfos.Add(new TableInfo { Field_ColumName = "databaseName", OldValue = storedInDb.databaseName, NewValue = dBList.databaseName });
+                       storedInDb.databaseName = dBList.databaseName;
+                   }
+
+                   if (storedInDb.active != dBList.active)
+                   {
+                       tableColumnInfos.Add(new TableInfo { Field_ColumName = "active", OldValue = storedInDb.active.ToString(), NewValue = dBList.active.ToString() });
+                       storedInDb.active = dBList.active;
+                   }
+
                    db.DBLists.Attach(storedInDb);
                    db.Entry(storedInDb).State = EntityState.Modified;
-                   await db.SaveChangesAsync();                   
+                   await db.SaveChangesAsync();   
+                
+                   AuditToStore auditLog = new AuditToStore
+                   {
+                       tableInfos = tableColumnInfos,
+                       AuditAction = "U",
+                       AuditDateTime = DateTime.Now,
+                       UserLogons = User.Identity.GetUserName(),
+                       ModelPKey = storedInDb.DB_ID,
+                       TableName = "DBList"
+                   };
+
+                   new AuditLogRepository().AddAuditLogs(auditLog);
                }
                catch (Exception)
                {

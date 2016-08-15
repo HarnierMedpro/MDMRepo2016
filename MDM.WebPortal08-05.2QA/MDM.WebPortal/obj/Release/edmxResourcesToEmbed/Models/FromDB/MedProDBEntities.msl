@@ -219,5 +219,20 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="AuditLogs">
+      <EntityTypeMapping TypeName="MedProDBEntities.AuditLog">
+        <MappingFragment StoreEntitySet="AuditLog">
+          <ScalarProperty Name="ModelPKey" ColumnName="ModelPKey" />
+          <ScalarProperty Name="AuditAction" ColumnName="AuditAction" />
+          <ScalarProperty Name="NewValue" ColumnName="NewValue" />
+          <ScalarProperty Name="OldValue" ColumnName="OldValue" />
+          <ScalarProperty Name="Field_ColumName" ColumnName="Field_ColumName" />
+          <ScalarProperty Name="AuditDateTime" ColumnName="AuditDateTime" />
+          <ScalarProperty Name="UserLogons" ColumnName="UserLogons" />
+          <ScalarProperty Name="TableName" ColumnName="TableName" />
+          <ScalarProperty Name="AuditLogID" ColumnName="AuditLogID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

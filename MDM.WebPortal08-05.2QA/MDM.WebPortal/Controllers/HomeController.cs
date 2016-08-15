@@ -1,7 +1,10 @@
 ﻿using MDM.WebPortal.Models.FromDB;
 using System.Web.Mvc;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Data.Entity.Infrastructure;
+
 namespace IdentitySample.Controllers
 {
     [AllowAnonymous]

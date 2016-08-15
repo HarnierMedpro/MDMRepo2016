@@ -46,5 +46,6 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual DbSet<ActionCode> ActionCodes { get; set; }
         public virtual DbSet<ACtype> ACtypes { get; set; }
         public virtual DbSet<CodeMasterList> CodeMasterLists { get; set; }
+        public virtual DbSet<AuditLog> AuditLogs { get; set; }
     }
 }

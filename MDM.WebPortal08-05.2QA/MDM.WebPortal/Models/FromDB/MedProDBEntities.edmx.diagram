@@ -40,6 +40,7 @@
         <AssociationConnector Association="MedProDBEntities.FK_ActionCode_ACPriority" />
         <AssociationConnector Association="MedProDBEntities.FK_ActionCode_ACtypes" />
         <AssociationConnector Association="MedProDBEntities.FK_ActionCode_CodeMasterList" />
+        <EntityTypeShape EntityType="MedProDBEntities.AuditLog" Width="1.5" PointX="5.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

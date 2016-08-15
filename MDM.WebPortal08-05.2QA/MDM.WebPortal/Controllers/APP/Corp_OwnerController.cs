@@ -10,7 +10,10 @@ using System.Web.Mvc;
 using MDM.WebPortal.Models.FromDB;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Models.ViewModel;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Controllers.APP
 {
@@ -59,10 +62,48 @@ namespace MDM.WebPortal.Controllers.APP
                         ModelState.AddModelError("", "Duplicate data. Please try again!");
                         return Json(new[] { corp_Owner }.ToDataSourceResult(request, ModelState));
                     }
-                    var toStore = new Corp_Owner { corpOwnerID = corp_Owner.corpOwnerID, corpID = corp_Owner.corpID, OwnersID = corp_Owner.OwnersID };
+                    //var toStore = new Corp_Owner { corpOwnerID = corp_Owner.corpOwnerID, corpID = corp_Owner.corpID, OwnersID = corp_Owner.OwnersID };
+                    var toStore = await db.Corp_Owner.FindAsync(corp_Owner.OwnersID);
+
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                    if (toStore.corpID != corp_Owner.corpID)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            OldValue = toStore.corpID.ToString(),
+                            NewValue = corp_Owner.corpID.ToString(),
+                            Field_ColumName = "corpID"
+                        });
+                        toStore.corpID = corp_Owner.corpID;
+                    }
+
+                    if (toStore.OwnersID != corp_Owner.OwnersID)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            OldValue = toStore.OwnersID.ToString(),
+                            NewValue = corp_Owner.OwnersID.ToString(),
+                            Field_ColumName = "OwnersID"
+                        });
+                        toStore.corpID = corp_Owner.corpID;
+                    }
+
                     db.Corp_Owner.Attach(toStore);
                     db.Entry(toStore).State = EntityState.Modified;
-                    await db.SaveChangesAsync();                    
+                    await db.SaveChangesAsync(); 
+                   
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        tableInfos = tableColumnInfos,
+                        AuditAction = "U",
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = toStore.corpOwnerID,
+                        TableName = "Corp_Owner"
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {
@@ -92,6 +133,22 @@ namespace MDM.WebPortal.Controllers.APP
                     corp_Owner.OwnersID = ParentID;
                     if (db.CorporateMasterLists.Find(corp_Owner.corpID).active != null)
                         corp_Owner.active = db.CorporateMasterLists.Find(corp_Owner.corpID).active.Value;
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo { NewValue = toStore.OwnersID.ToString(), Field_ColumName = "OwnersID" },
+                            new TableInfo { NewValue = toStore.corpID.ToString(), Field_ColumName = "corpID" },
+                        },
+                        AuditAction = "I",
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = toStore.corpOwnerID,
+                        TableName = "Corp_Owner"
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {

@@ -10,8 +10,11 @@ using System.Web.Mvc;
 using MDM.WebPortal.Models.FromDB;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.ViewModel;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Controllers.APP
 {
@@ -71,10 +74,45 @@ namespace MDM.WebPortal.Controllers.APP
                         ModelState.AddModelError("","Duplicate data. Please try again!");
                         return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
                     }
-                    var storedInDb = new Corp_DBs { ID_PK = corp_DBs.ID_PK, DB_ID = corp_DBs.DB_ID, corpID = corp_DBs.corpID};
+                    //var storedInDb = new Corp_DBs { ID_PK = corp_DBs.ID_PK, DB_ID = corp_DBs.DB_ID, corpID = corp_DBs.corpID};
+                    var storedInDb = await db.Corp_DBs.FindAsync(corp_DBs.ID_PK);
+
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+                    if (storedInDb.DB_ID != corp_DBs.DB_ID)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            NewValue = corp_DBs.DB_ID.ToString(),
+                            OldValue = storedInDb.DB_ID.ToString(),
+                            Field_ColumName = "DB_ID"
+                        });
+                        storedInDb.DB_ID = corp_DBs.DB_ID;
+                    }
+                    if (storedInDb.corpID != corp_DBs.corpID)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            NewValue = corp_DBs.corpID.ToString(),
+                            OldValue = storedInDb.corpID.ToString(),
+                            Field_ColumName = "corpID"
+                        });
+                        storedInDb.DB_ID = corp_DBs.DB_ID;
+                    }
+
                     db.Corp_DBs.Attach(storedInDb);
                     db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();                    
+                    await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        ModelPKey = corp_DBs.ID_PK,
+                        TableName = "Corp_DBs",
+                        AuditAction = "U",
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        tableInfos = tableColumnInfos
+                    };
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {
@@ -98,6 +136,25 @@ namespace MDM.WebPortal.Controllers.APP
                     db.Corp_DBs.Attach(toRelease);
                     db.Corp_DBs.Remove(toRelease);
                     await db.SaveChangesAsync();
+
+                    /*------------------ AUDIT LOG SCENARIO ----------------------*/
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "D",
+                        AuditDateTime = DateTime.Now,
+                        ModelPKey = toRelease.ID_PK,
+                        TableName = "Corp_DBs",
+                        UserLogons = User.Identity.GetUserName(),
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo{OldValue = toRelease.DB_ID.ToString(), Field_ColumName = "DB_ID"},
+                            new TableInfo{OldValue = toRelease.corpID.ToString(), Field_ColumName = "corpID"},
+                        }
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
+
+                    /*------------------ AUDIT LOG SCENARIO ----------------------*/
                 }
                 catch (Exception)
                 {
@@ -161,6 +218,26 @@ namespace MDM.WebPortal.Controllers.APP
                     }
                     db.Corp_DBs.Add(corp_DBs);
                     await db.SaveChangesAsync();
+
+                    /*--------------- AUDIT LOG SCENARIO ----------------*/
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        ModelPKey = corp_DBs.ID_PK,
+                        TableName = "Corp_DBs",
+                        AuditAction = "I",
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo { NewValue = corp_DBs.DB_ID.ToString(), Field_ColumName = "DB_ID" }, 
+                            new TableInfo { NewValue = corp_DBs.corpID.ToString(), Field_ColumName = "corpID" }
+                        }
+                    };
+                    new AuditLogRepository().AddAuditLogs(auditLog);
+
+                    /*--------------- AUDIT LOG SCENARIO ----------------*/
+
                     return RedirectToAction("Index");
                 }
                 catch (Exception)

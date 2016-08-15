@@ -359,6 +359,7 @@
       <End Role="CodeMasterList" EntitySet="CodeMasterLists" />
       <End Role="ActionCode" EntitySet="ActionCodes" />
     </AssociationSet>
+    <EntitySet Name="AuditLogs" EntityType="MedProDBEntities.AuditLog" />
   </EntityContainer>
   <EntityType Name="CollNoteTypeCatPriority">
     <Key>
@@ -472,4 +473,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="AuditLog">
+    <Key>
+      <PropertyRef Name="AuditLogID" />
+    </Key>
+    <Property Name="AuditLogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TableName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserLogons" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AuditDateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Field_ColumName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OldValue" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+    <Property Name="NewValue" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+    <Property Name="AuditAction" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="ModelPKey" Type="Int32" Nullable="false" />
+  </EntityType>
 </Schema>

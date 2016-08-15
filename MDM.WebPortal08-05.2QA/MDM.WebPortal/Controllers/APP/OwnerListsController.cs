@@ -10,7 +10,10 @@ using System.Web.Mvc;
 using MDM.WebPortal.Models.FromDB;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Models.ViewModel;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Controllers.APP
 {
@@ -59,10 +62,56 @@ namespace MDM.WebPortal.Controllers.APP
             {
                 try
                 {
-                    var toStore = new OwnerList { OwnersID = ownerList.OwnersID, LastName = ownerList.LastName, FirstName = ownerList.FirstName, active = ownerList.active };
+                    //var toStore = new OwnerList { OwnersID = ownerList.OwnersID, LastName = ownerList.LastName, FirstName = ownerList.FirstName, active = ownerList.active };
+                    var toStore = await db.OwnerLists.FindAsync(ownerList.OwnersID);
+
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+                    if (!toStore.FirstName.Equals(ownerList.FirstName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            OldValue = toStore.FirstName,
+                            NewValue = ownerList.FirstName,
+                            Field_ColumName = "FirstName"
+                        });
+                        toStore.FirstName = ownerList.FirstName;
+                    }
+                    if (!toStore.LastName.Equals(ownerList.LastName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            OldValue = toStore.LastName,
+                            NewValue = ownerList.LastName,
+                            Field_ColumName = "LastName"
+                        });
+                        toStore.LastName = ownerList.LastName;
+                    }
+                    if (toStore.active != ownerList.active)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            OldValue = toStore.active.ToString(),
+                            NewValue = ownerList.active.ToString(),
+                            Field_ColumName = "active"
+                        });
+                        toStore.LastName = ownerList.LastName;
+                    }
+
                     db.OwnerLists.Attach(toStore);
                     db.Entry(toStore).State = EntityState.Modified;
-                    await db.SaveChangesAsync();                   
+                    await db.SaveChangesAsync();  
+                 
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        tableInfos = tableColumnInfos,
+                        AuditAction = "U",
+                        AuditDateTime = DateTime.Now,
+                        UserLogons =  User.Identity.GetUserName(),
+                        ModelPKey = toStore.OwnersID,
+                        TableName = "OwnerList"
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {
@@ -83,7 +132,24 @@ namespace MDM.WebPortal.Controllers.APP
                     var toStore = new OwnerList { LastName = ownerList.LastName, FirstName = ownerList.FirstName, active = ownerList.active };
                     db.OwnerLists.Add(toStore);
                     await db.SaveChangesAsync();
-                    ownerList.OwnersID = toStore.OwnersID;                    
+                    ownerList.OwnersID = toStore.OwnersID;
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo { NewValue = ownerList.FirstName, Field_ColumName = "FirstName" },
+                            new TableInfo { NewValue = ownerList.LastName, Field_ColumName = "LastName" },
+                            new TableInfo { NewValue = ownerList.active.ToString(), Field_ColumName = "active" }
+                        },
+                        AuditAction = "I",
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = toStore.OwnersID,
+                        TableName = "OwnerList"
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {

@@ -9,10 +9,13 @@ using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Data_Annotations;
 //using MedProMDM.Models;
 using MDM.WebPortal.Models.FromDB;
 using MDM.WebPortal.Models.ViewModel;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Controllers.APP
 {
@@ -20,22 +23,6 @@ namespace MDM.WebPortal.Controllers.APP
     public class CPTDatasController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
-
-        //// GET: CPTDatas
-        //public ActionResult Index(string searchString)
-        //{
-
-        //    var varList = from s in db.CPTDatas
-        //                  select s;
-
-        //    if (!String.IsNullOrEmpty(searchString))
-        //    {
-        //        varList = varList.Where(s => s.CPT.Contains(searchString));
-        //    }
-
-        //    varList = varList.OrderBy(s => s.CPT);
-        //    return View(varList.ToList());
-        //}
 
         public ActionResult Index()
         {
@@ -76,6 +63,26 @@ namespace MDM.WebPortal.Controllers.APP
                     db.CPTDatas.Add(toStore);
                     await db.SaveChangesAsync();
                     cPTData.id = toStore.id;
+
+                    /*------------- AUDIT LOG SCENARIO -----------------*/
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "I",
+                        AuditDateTime = DateTime.Now,
+                        ModelPKey = toStore.id,
+                        TableName = "CPTData",
+                        UserLogons = User.Identity.GetUserName(),
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo { Field_ColumName = "CPT", NewValue = cPTData.CPT }, 
+                            new TableInfo { Field_ColumName = "CPT_Description", NewValue = cPTData.CPT_Description },
+                            new TableInfo { Field_ColumName = "ShortD", NewValue = cPTData.ShortD},
+                            new TableInfo { Field_ColumName = "Active", NewValue = cPTData.Active.ToString() }
+                        }
+                    };
+                    var respository = new AuditLogRepository();
+                    respository.AddAuditLogs(auditLog);
+                    /*------------- AUDIT LOG SCENARIO -----------------*/
                 }
                 catch (Exception)
                 {
@@ -98,17 +105,53 @@ namespace MDM.WebPortal.Controllers.APP
                         ModelState.AddModelError("", "Duplicate CPT. Please try again!");
                         return Json(new[] { cPTData }.ToDataSourceResult(request, ModelState));
                     }                    
-                    var storedInDb = new CPTData
+                    //var storedInDb = new CPTData
+                    //{
+                    //    id = cPTData.id,
+                    //    CPT = cPTData.CPT,
+                    //    CPT_Description = cPTData.CPT_Description,
+                    //    ShortD = cPTData.ShortD,
+                    //    Active = cPTData.Active,
+                    //};
+                    var storedInDb = await db.CPTDatas.FindAsync(cPTData.id);
+
+                    var tableColumnInfo = new List<TableInfo>();
+                    if (storedInDb.CPT != cPTData.CPT)
                     {
-                        id = cPTData.id,
-                        CPT = cPTData.CPT,
-                        CPT_Description = cPTData.CPT_Description,
-                        ShortD = cPTData.ShortD,
-                        Active = cPTData.Active,
-                    };
+                        tableColumnInfo.Add(new TableInfo { Field_ColumName = "CPT", OldValue = storedInDb.CPT, NewValue = cPTData.CPT});
+                        storedInDb.CPT = cPTData.CPT;
+                    }
+                    if (storedInDb.CPT_Description != cPTData.CPT_Description)
+                    {
+                        tableColumnInfo.Add(new TableInfo { Field_ColumName = "CPT_Description", OldValue = storedInDb.CPT_Description, NewValue = cPTData.CPT_Description });
+                        storedInDb.CPT_Description = cPTData.CPT_Description;
+                    }
+                    if (storedInDb.ShortD != cPTData.ShortD)
+                    {
+                        tableColumnInfo.Add(new TableInfo { Field_ColumName = "ShortD", OldValue = storedInDb.ShortD, NewValue = cPTData.ShortD });
+                        storedInDb.ShortD = cPTData.ShortD;
+                    }
+                    if (storedInDb.Active != cPTData.Active)
+                    {
+                        tableColumnInfo.Add(new TableInfo { Field_ColumName = "Active", OldValue = storedInDb.Active.ToString(), NewValue = cPTData.Active.ToString() });
+                        storedInDb.Active = cPTData.Active;
+                    }
+
                     db.CPTDatas.Attach(storedInDb);
                     db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();                    
+                    await db.SaveChangesAsync(); 
+                   
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "U",
+                        tableInfos = tableColumnInfo,
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = storedInDb.id,
+                        TableName = "CPTData"
+                    };
+
+                   new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {

@@ -202,6 +202,12 @@
     <Compile Include="Areas\ADP\Models\VMAdpMaster.cs" />
     <Compile Include="Areas\ADP\Models\VMAdp_Edgemed.cs" />
     <Compile Include="Areas\ADP\Models\VMEdgemed_Logons.cs" />
+    <Compile Include="Areas\AudiTrails\AudiTrailsAreaRegistration.cs" />
+    <Compile Include="Areas\AudiTrails\Controllers\AuditLogRepository.cs" />
+    <Compile Include="Areas\AudiTrails\Controllers\AuditLogsController.cs" />
+    <Compile Include="Areas\AudiTrails\Models\AuditToStore.cs" />
+    <Compile Include="Areas\AudiTrails\Models\TableInfo.cs" />
+    <Compile Include="Areas\AudiTrails\Models\VMAuditLog.cs" />
     <Compile Include="Areas\Error\Controllers\ErrorController.cs" />
     <Compile Include="Areas\Error\ErrorAreaRegistration.cs" />
     <Compile Include="Areas\ManagerDBA\Controllers\BI_DB_FvP_AccessController.cs" />
@@ -258,6 +264,9 @@
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\ADPMaster.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\AuditLog.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\BI_DB_FvP_Access.cs">
@@ -1239,6 +1248,8 @@
     <Content Include="Areas\ActionCode\Views\ACCategoryC\Index.cshtml" />
     <Content Include="Areas\ActionCode\Views\ActionCodes\Index.cshtml" />
     <Content Include="Areas\ActionCode\Views\ACtypes\Index.cshtml" />
+    <Content Include="Areas\AudiTrails\Views\web.config" />
+    <Content Include="Areas\AudiTrails\Views\AuditLogs\Index.cshtml" />
     <None Include="Properties\PublishProfiles\QASite.pubxml" />
     <None Include="Properties\PublishProfiles\TestQA.pubxml" />
     <None Include="Scripts\jquery-2.2.4.intellisense.js" />
@@ -2610,6 +2621,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\ActionCode\Views\Shared\" />
+    <Folder Include="Areas\AudiTrails\Views\Shared\" />
     <Folder Include="Areas\Error\Models\" />
     <Folder Include="Areas\Error\Views\Shared\" />
     <Folder Include="Areas\ManagerDBA\Views\Shared\" />

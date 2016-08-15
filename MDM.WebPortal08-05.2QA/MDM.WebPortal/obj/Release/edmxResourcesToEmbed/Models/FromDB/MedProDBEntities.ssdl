@@ -48,6 +48,20 @@
     <Property Name="NTUser" Type="varchar" MaxLength="80" />
     <Property Name="Active" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="AuditLog">
+    <Key>
+      <PropertyRef Name="AuditLogID" />
+    </Key>
+    <Property Name="AuditLogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TableName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="UserLogons" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="AuditDateTime" Type="datetime" Nullable="false" />
+    <Property Name="Field_ColumName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="OldValue" Type="varchar" MaxLength="256" />
+    <Property Name="NewValue" Type="varchar" MaxLength="256" />
+    <Property Name="AuditAction" Type="char" MaxLength="1" Nullable="false" />
+    <Property Name="ModelPKey" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="BI_DB_FvP_Access">
     <Key>
       <PropertyRef Name="BIDbFvPID" />
@@ -371,6 +385,7 @@
     <EntitySet Name="ActionCode" EntityType="Self.ActionCode" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ACtypes" EntityType="Self.ACtypes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ADPMaster" EntityType="Self.ADPMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AuditLog" EntityType="Self.AuditLog" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BI_DB_FvP_Access" EntityType="Self.BI_DB_FvP_Access" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CodeMasterList" EntityType="Self.CodeMasterList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CollNoteTypeCatPriority" EntityType="Self.CollNoteTypeCatPriority" Schema="dbo" store:Type="Tables" />
