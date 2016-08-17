@@ -10,8 +10,11 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.ActionCode.Models.ViewModels;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.ActionCode.Controllers
 {
@@ -73,6 +76,26 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
                     db.ActionCodes.Add(toStore);
                     await db.SaveChangesAsync();
                     actionCode.ActionCodeID = toStore.ActionCodeID;
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = toStore.ActionCodeID,
+                        TableName = "ActionCode",
+                        AuditAction = "I",
+                        AuditDateTime = DateTime.Now,
+                        tableInfos = new List<TableInfo>
+                        {
+                           new TableInfo{Field_ColumName = "CollNoteType", NewValue = toStore.CollNoteType}, 
+                           new TableInfo{Field_ColumName = "CodeID", NewValue = toStore.CodeID.ToString()}, 
+                           new TableInfo{Field_ColumName = "CategoryID", NewValue = toStore.CategoryID.ToString()}, 
+                           new TableInfo{Field_ColumName = "PriorityID", NewValue = toStore.PriorityID.ToString()}, 
+                           new TableInfo{Field_ColumName = "ACTypeID", NewValue = toStore.ACTypeID.ToString()}, 
+                           new TableInfo{Field_ColumName = "Active", NewValue = toStore.Active.ToString()}, 
+                           new TableInfo{Field_ColumName = "ParsingYN", NewValue = toStore.ParsingYN}, 
+                        }
+                    };
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {
@@ -88,22 +111,88 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
         {
             if (ModelState.IsValid)
             {
-                var toStore = new WebPortal.Models.FromDB.ActionCode
-                {
-                    ActionCodeID = actionCode.ActionCodeID,
-                    CollNoteType = actionCode.CollNoteType,
-                    CodeID = actionCode.CodeID,
-                    CategoryID = actionCode.CategoryID,
-                    PriorityID = actionCode.PriorityID,
-                    ACTypeID = actionCode.ACTypeID,
-                    Active = actionCode.Active,
-                    ParsingYN = actionCode.ParsingYN
-                };
+                //var toStore = new WebPortal.Models.FromDB.ActionCode
+                //{
+                //    ActionCodeID = actionCode.ActionCodeID,
+                //    CollNoteType = actionCode.CollNoteType,
+                //    CodeID = actionCode.CodeID,
+                //    CategoryID = actionCode.CategoryID,
+                //    PriorityID = actionCode.PriorityID,
+                //    ACTypeID = actionCode.ACTypeID,
+                //    Active = actionCode.Active,
+                //    ParsingYN = actionCode.ParsingYN
+                //};
                 try
                 {
+                    var toStore = await db.ActionCodes.FindAsync(actionCode.ActionCodeID);
+
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                    if (toStore.CollNoteType != actionCode.CollNoteType)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            Field_ColumName = "CollNoteType", 
+                            NewValue = actionCode.CollNoteType, 
+                            OldValue = toStore.CollNoteType
+                        });
+                        toStore.CollNoteType = actionCode.CollNoteType;
+                    }
+                    if (toStore.CodeID != actionCode.CodeID)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            Field_ColumName = "CodeID", 
+                            NewValue = actionCode.CodeID.ToString(), 
+                            OldValue = toStore.CodeID.ToString()
+                        });
+                        toStore.CodeID = actionCode.CodeID;
+                    }
+                    if (toStore.CategoryID != actionCode.CategoryID)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            Field_ColumName = "CategoryID", 
+                            NewValue = actionCode.CategoryID.ToString(), 
+                            OldValue = toStore.CategoryID.ToString()
+                        });
+                        toStore.CategoryID = actionCode.CategoryID;
+                    }
+                    if (toStore.PriorityID != actionCode.PriorityID)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "PriorityID", NewValue = actionCode.PriorityID.ToString(), OldValue = toStore.PriorityID.ToString() });
+                        toStore.PriorityID = actionCode.PriorityID;
+                    }
+                    if (toStore.ACTypeID != actionCode.ACTypeID)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "ACTypeID", NewValue = actionCode.ACTypeID.ToString(), OldValue = toStore.ACTypeID.ToString() });
+                        toStore.ACTypeID = actionCode.ACTypeID;
+                    }
+                    if (toStore.Active != actionCode.Active)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Active", NewValue = actionCode.Active.ToString(), OldValue = toStore.Active.ToString() });
+                        toStore.Active = actionCode.Active;
+                    }
+                    if (toStore.ParsingYN != actionCode.ParsingYN)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "ParsingYN", NewValue = actionCode.ParsingYN, OldValue = toStore.ParsingYN });
+                        toStore.ParsingYN = actionCode.ParsingYN;
+                    }
+
                     db.ActionCodes.Attach(toStore);
                     db.Entry(toStore).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = toStore.ActionCodeID,
+                        TableName = "ActionCode",
+                        AuditAction = "U",
+                        AuditDateTime = DateTime.Now,
+                        tableInfos = tableColumnInfos
+                    };
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {

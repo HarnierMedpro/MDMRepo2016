@@ -13,11 +13,15 @@ using MDM.WebPortal.Models.ViewModel;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using System.Data.SqlClient;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.DAL;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Controllers.APP
 {
-    [AllowAnonymous]
+    [SetPermissions]
     public class MDM_POS_Name_DBPOS_grpController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -55,17 +59,74 @@ namespace MDM.WebPortal.Controllers.APP
                             ModelState.AddModelError("", "This entity is already in database. Please try again!");
                             return Json(new[] { mDmPosNameDbposGrp }.ToDataSourceResult(request, ModelState));
                         }
-                        var toStore = new MDM_POS_Name_DBPOS_grp
+                        //var toStore = new MDM_POS_Name_DBPOS_grp
+                        //{
+                        //    MDMPOS_NameID = mDmPosNameDbposGrp.MDMPOS_NameID, //PK 
+                        //    MDMPOS_ListNameID = mDmPosNameDbposGrp.MDMPOS_ListNameID,//FK from dbo.MDM_POS_ListName
+                        //    FacilityID = mDmPosNameDbposGrp.FacilityID, //fk from DBO.Facility_DBs
+                        //    DB_ID = mDmPosNameDbposGrp.DB_ID, //FK from dbo.DBList
+                        //    Active = mDmPosNameDbposGrp.Active
+                        //};
+                        var toStore = await db.MDM_POS_Name_DBPOS_grp.FindAsync(mDmPosNameDbposGrp.MDMPOS_NameID);
+
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                        if (toStore.MDMPOS_ListNameID != mDmPosNameDbposGrp.MDMPOS_ListNameID)
                         {
-                            MDMPOS_NameID = mDmPosNameDbposGrp.MDMPOS_NameID, //PK 
-                            MDMPOS_ListNameID = mDmPosNameDbposGrp.MDMPOS_ListNameID,//FK from dbo.MDM_POS_ListName
-                            FacilityID = mDmPosNameDbposGrp.FacilityID, //fk from DBO.Facility_DBs
-                            DB_ID = mDmPosNameDbposGrp.DB_ID, //FK
-                            Active = mDmPosNameDbposGrp.Active
-                        };
+                            tableColumnInfos.Add(new TableInfo
+                            {
+                                Field_ColumName = "MDMPOS_ListNameID",
+                                NewValue = mDmPosNameDbposGrp.MDMPOS_ListNameID.ToString(),
+                                OldValue = toStore.MDMPOS_ListNameID.ToString()
+                            });
+                            toStore.MDMPOS_ListNameID = mDmPosNameDbposGrp.MDMPOS_ListNameID;
+                        }
+                        if (toStore.FacilityID != mDmPosNameDbposGrp.FacilityID)
+                        {
+                            tableColumnInfos.Add(new TableInfo
+                            {
+                                Field_ColumName = "FacilityID",
+                                NewValue = mDmPosNameDbposGrp.FacilityID.ToString(),
+                                OldValue = toStore.FacilityID.ToString()
+                            });
+                            toStore.FacilityID = mDmPosNameDbposGrp.FacilityID;
+                        }
+                        if (toStore.DB_ID != mDmPosNameDbposGrp.DB_ID)
+                        {
+                            tableColumnInfos.Add(new TableInfo
+                            {
+                                Field_ColumName = "DB_ID",
+                                NewValue = mDmPosNameDbposGrp.DB_ID.ToString(),
+                                OldValue = toStore.DB_ID.ToString()
+                            });
+                            toStore.DB_ID = mDmPosNameDbposGrp.DB_ID;
+                        }
+                        if (toStore.Active != mDmPosNameDbposGrp.Active)
+                        {
+                            tableColumnInfos.Add(new TableInfo
+                            {
+                                Field_ColumName = "Active",
+                                NewValue = mDmPosNameDbposGrp.Active.ToString(),
+                                OldValue = toStore.Active.ToString()
+                            });
+                            toStore.Active = mDmPosNameDbposGrp.Active;
+                        }
+
                         db.MDM_POS_Name_DBPOS_grp.Attach(toStore);
                         db.Entry(toStore).State = EntityState.Modified;
                         await db.SaveChangesAsync();
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            tableInfos = tableColumnInfos,
+                            AuditAction = "U",
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            ModelPKey = toStore.MDMPOS_NameID,
+                            TableName = "MDM_POS_DBPOS_grp"
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
                     }
                     catch (Exception)
                     {
@@ -98,6 +159,24 @@ namespace MDM.WebPortal.Controllers.APP
                      db.MDM_POS_Name_DBPOS_grp.Add(toStore);
                      await db.SaveChangesAsync();
                      mDmPosNameDbposGrp.MDMPOS_NameID = toStore.MDMPOS_NameID;
+
+                     AuditToStore auditLog = new AuditToStore
+                     {
+                         tableInfos = new List<TableInfo>
+                         {
+                             new TableInfo{Field_ColumName = "MDMPOS_ListNameID", NewValue = toStore.MDMPOS_ListNameID.ToString()},
+                             new TableInfo{Field_ColumName = "FacilityID", NewValue = toStore.FacilityID.ToString()},
+                             new TableInfo{Field_ColumName = "DB_ID", NewValue = toStore.DB_ID.ToString()},
+                             new TableInfo{Field_ColumName = "Active", NewValue = toStore.Active.ToString()},
+                         },
+                         AuditAction = "I",
+                         AuditDateTime = DateTime.Now,
+                         UserLogons = User.Identity.GetUserName(),
+                         ModelPKey = toStore.MDMPOS_NameID,
+                         TableName = "MDM_POS_DBPOS_grp"
+                     };
+
+                     new AuditLogRepository().AddAuditLogs(auditLog);
                  }
                  catch (Exception)
                  {

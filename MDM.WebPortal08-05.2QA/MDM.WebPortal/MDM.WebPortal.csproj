@@ -229,9 +229,11 @@
     <Compile Include="Controllers\APP\MDM_POS_ListNameController.cs" />
     <Compile Include="Controllers\APP\MDM_POS_Name_DBPOS_grpController.cs" />
     <Compile Include="Controllers\APP\OwnerListsController.cs" />
+    <Compile Include="Controllers\AreaSystemsController.cs" />
     <Compile Include="Controllers\ControllerSystemsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MenusController.cs" />
     <Compile Include="Controllers\PermissionsController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
@@ -246,11 +248,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201608051624209_init.cs" />
-    <Compile Include="Migrations\201608051624209_init.Designer.cs">
-      <DependentUpon>201608051624209_init.cs</DependentUpon>
+    <Compile Include="Migrations\201608152038421_init.cs" />
+    <Compile Include="Migrations\201608152038421_init.Designer.cs">
+      <DependentUpon>201608152038421_init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608161213321_addedMenus.cs" />
+    <Compile Include="Migrations\201608161213321_addedMenus.Designer.cs">
+      <DependentUpon>201608161213321_addedMenus.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Identity\AreaSystem.cs" />
     <Compile Include="Models\FromDB\ACCategory.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
@@ -372,9 +379,12 @@
     <Compile Include="Models\FromDB\MasterUserListMeta.cs" />
     <Compile Include="Models\FromDB\MDM_ADP_ListMeta.cs" />
     <Compile Include="Models\FromDB\MDM_EdgeMED_ADP_UserListMeta.cs" />
+    <Compile Include="Models\Identity\Menu.cs" />
     <Compile Include="Models\Identity\Permission.cs" />
     <Compile Include="Models\ViewModel\ActionCodeViewModel.cs" />
+    <Compile Include="Models\ViewModel\VMActionEditor.cs" />
     <Compile Include="Models\ViewModel\VMActionSystem.cs" />
+    <Compile Include="Models\ViewModel\VMAreaSystems.cs" />
     <Compile Include="Models\ViewModel\VMControllerSystem.cs" />
     <Compile Include="Models\ViewModel\VMCorporateNameList.cs" />
     <Compile Include="Models\ViewModel\VMCorp_DB.cs" />
@@ -390,6 +400,7 @@
     <Compile Include="Models\ViewModel\VMDB_Name.cs" />
     <Compile Include="Models\ViewModel\VMFacility.cs" />
     <Compile Include="Models\ViewModel\VMMDM_POS_ListName.cs" />
+    <Compile Include="Models\ViewModel\VMMenu.cs" />
     <Compile Include="Models\ViewModel\VMOwnerList.cs" />
     <Compile Include="Models\ViewModel\VMPermission.cs" />
     <Compile Include="Models\ViewModel\VMPermissionRole.cs" />
@@ -2617,6 +2628,10 @@
     <Content Include="Views\Permissions\Controllers.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\EdgemedViewModelEditor.cshtml" />
     <Content Include="Views\Shared\_Layout1.cshtml" />
+    <Content Include="Views\Shared\_ChangeUserPass.cshtml" />
+    <Content Include="Views\AreaSystems\Index.cshtml" />
+    <Content Include="Views\Menus\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ActionsInSystem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2635,8 +2650,11 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201608051624209_init.resx">
-      <DependentUpon>201608051624209_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201608152038421_init.resx">
+      <DependentUpon>201608152038421_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608161213321_addedMenus.resx">
+      <DependentUpon>201608161213321_addedMenus.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

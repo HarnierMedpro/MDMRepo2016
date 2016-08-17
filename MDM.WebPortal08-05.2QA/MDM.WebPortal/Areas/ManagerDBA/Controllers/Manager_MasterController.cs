@@ -9,9 +9,12 @@ using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels;
 using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
 {
@@ -76,6 +79,24 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
                     db.Manager_Master.Add(toStore);
                     await db.SaveChangesAsync();
                     manager_Master.ManagerID = toStore.ManagerID;
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo { Field_ColumName = "ManagerTypeID", NewValue = toStore.ManagerTypeID.ToString() },
+                            new TableInfo { Field_ColumName = "AliasName", NewValue = toStore.AliasName },
+                            new TableInfo { Field_ColumName = "Active", NewValue = toStore.Active.ToString() },
+                        },
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(), 
+                        AuditAction = "I",
+                        ModelPKey = toStore.ManagerID,
+                        TableName = "Manager_Master"
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
+
                 }
                 catch (Exception)
                 {
@@ -99,10 +120,44 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
                         return Json(new[]{new Manager_Master()}.ToDataSourceResult(request, ModelState));
                     }
-                    var storedInDB = new Manager_Master { ManagerID = manager_Master.ManagerID, AliasName = manager_Master.AliasName, Active = manager_Master.Active, ManagerTypeID = manager_Master.ManagerTypeID };
+                    //var storedInDB = new Manager_Master { ManagerID = manager_Master.ManagerID, AliasName = manager_Master.AliasName, Active = manager_Master.Active, ManagerTypeID = manager_Master.ManagerTypeID };
+                    var storedInDB = await db.Manager_Master.FindAsync(manager_Master.ManagerID);
+
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                    if (storedInDB.AliasName != manager_Master.AliasName)
+                    {
+                       
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "AliasName", NewValue= manager_Master.AliasName, OldValue = storedInDB.AliasName });
+                        storedInDB.AliasName = manager_Master.AliasName;
+                    }
+                    if (storedInDB.Active != manager_Master.Active)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Active", NewValue = manager_Master.Active.ToString(), OldValue = storedInDB.Active.ToString() });
+                        storedInDB.Active = manager_Master.Active;
+                    }
+                    if (storedInDB.ManagerTypeID != manager_Master.ManagerTypeID)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "ManagerTypeID", NewValue = manager_Master.ManagerTypeID.ToString(), OldValue = storedInDB.ManagerTypeID.ToString() });
+                        storedInDB.AliasName = manager_Master.AliasName;
+                    }
+
                     db.Manager_Master.Attach(storedInDB);
                     db.Entry(storedInDB).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        AuditAction = "U",
+                        tableInfos = tableColumnInfos, 
+                        ModelPKey = storedInDB.ManagerID,
+                        TableName = "Manager_Master"
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
+
                 }
                 catch (Exception)
                 {

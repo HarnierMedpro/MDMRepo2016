@@ -11,7 +11,10 @@ using MDM.WebPortal.Models.FromDB;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using MDM.WebPortal.Areas.ADP.Models;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Data_Annotations;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.ADP.Controllers
 {
@@ -67,17 +70,94 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
             {
                 try
                 {
-                    //var storedInDb = await db.ADPMasters.FindAsync(aDPMaster.id);
-                    var storedInDb = new ADPMaster {ADPMasterID = aDPMaster.ADPMaster_ID};//Avoid call to DB to get the object stored.
-                    storedInDb.ADP_ID = aDPMaster.ADP;
-                    storedInDb.Title = aDPMaster.Title;
-                    storedInDb.Active = aDPMaster.Active;
-                    storedInDb.FName = aDPMaster.FName;
-                    storedInDb.LName = aDPMaster.LName;
-                    storedInDb.Manager = aDPMaster.Manager;
+                    var storedInDb = await db.ADPMasters.FindAsync(aDPMaster.ADPMaster_ID);
+                    //var storedInDb = new ADPMaster {ADPMasterID = aDPMaster.ADPMaster_ID};//Avoid call to DB to get the object stored.
+                    //storedInDb.ADP_ID = aDPMaster.ADP;
+                    //storedInDb.Title = aDPMaster.Title;
+                    //storedInDb.Active = aDPMaster.Active;
+                    //storedInDb.FName = aDPMaster.FName;
+                    //storedInDb.LName = aDPMaster.LName;
+                    //storedInDb.Manager = aDPMaster.Manager;
+
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                    if (storedInDb.ADP_ID != aDPMaster.ADP)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            Field_ColumName = "ADP_ID", 
+                            NewValue = aDPMaster.ADP, 
+                            OldValue = storedInDb.ADP_ID
+                        });
+                        storedInDb.ADP_ID = aDPMaster.ADP;
+                    }
+                    if (storedInDb.Title != aDPMaster.Title)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            Field_ColumName = "Title",
+                            NewValue = aDPMaster.Title, 
+                            OldValue = storedInDb.Title
+                        });
+                        storedInDb.Title = aDPMaster.Title;
+                    }
+                    if (storedInDb.Active != aDPMaster.Active)
+                    {
+                        
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            Field_ColumName = "Active", 
+                            NewValue = aDPMaster.Active.ToString(), 
+                            OldValue = storedInDb.Active.ToString()
+                        });
+                        storedInDb.Active = aDPMaster.Active;
+                    }
+                    if (storedInDb.FName != aDPMaster.FName)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            Field_ColumName = "FName", 
+                            NewValue = aDPMaster.FName, 
+                            OldValue = storedInDb.FName
+                        });
+                        storedInDb.FName = aDPMaster.FName;
+                    }
+                    if (storedInDb.LName != aDPMaster.LName)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            Field_ColumName = "LName", 
+                            NewValue = aDPMaster.LName, 
+                            OldValue = storedInDb.LName
+                        });
+                        storedInDb.LName = aDPMaster.LName;
+                    }
+                    if (storedInDb.Manager != aDPMaster.Manager)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            Field_ColumName = "Manager", 
+                            NewValue = aDPMaster.Manager, 
+                            OldValue = storedInDb.Manager
+                        });
+                        storedInDb.Manager = aDPMaster.Manager;
+                    }
+
                     db.ADPMasters.Attach(storedInDb);
                     db.Entry(storedInDb).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "U",
+                        tableInfos = tableColumnInfos,
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = storedInDb.ADPMasterID,
+                        TableName = "ADPMaster"
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {

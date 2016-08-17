@@ -31,9 +31,9 @@ namespace MDM.WebPortal.Controllers
             /*See: C:\Users\hsuarez\Desktop\Documentation\Kendo UI for ASP.NET MVC5\ui-for-aspnet-mvc-examples-master\grid\multiselect-in-grid-popup*/
             ViewData["Roles"] = db.Roles.Select(x => new VMPermissionRole { Id = x.Id, Name = x.Name });
 
-            ViewData["Controllers"] = db.Controllers.Select(x => new VMControllerSystem { ControllerID = x.ControllerID, Cont_Name = x.Cont_Name });
+            ViewData["Controllers"] = db.Controllers.OrderBy(x => x.Cont_Name).Select(x => new VMControllerSystem { ControllerID = x.ControllerID, Cont_Name = x.Cont_Name });
 
-            ViewData["Actions"] = db.Actions.Select(x => new VMActionSystem { ActionID = x.ActionID, Act_Name = x.Act_Name });
+            ViewData["Actions"] = db.Actions.OrderBy(x => x.Act_Name).Select(x => new VMActionSystem { ActionID = x.ActionID, Act_Name = x.Act_Name });
 
             return View();
         }
@@ -53,12 +53,22 @@ namespace MDM.WebPortal.Controllers
 
         public JsonResult GetCascadeActions(int ControllerID)
         {
-            return Json(db.Actions.Where(x => x.ControllerID == ControllerID).Select(x => new VMActionSystem { ActionID = x.ActionID, Act_Name = x.Act_Name }), JsonRequestBehavior.AllowGet);
+            return Json(db.Actions.Where(x => x.ControllerID == ControllerID)
+                                  .OrderBy(x => x.Act_Name)
+                                  .Select(x => new VMActionSystem
+            {
+                ActionID = x.ActionID, 
+                Act_Name = x.Act_Name
+            }), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Controllers()
+        public JsonResult Controllers()
         {
-            return Json(db.Controllers.Select(x => new VMControllerSystem { ControllerID = x.ControllerID, Cont_Name = x.Cont_Name }), JsonRequestBehavior.AllowGet);
+            return Json(db.Controllers.OrderBy(x => x.Cont_Name).Select(x => new VMControllerSystem
+            {
+                ControllerID = x.ControllerID, 
+                Cont_Name = x.Cont_Name
+            }), JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> Update_Permission([DataSourceRequest] DataSourceRequest request,

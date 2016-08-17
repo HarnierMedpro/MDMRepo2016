@@ -52,7 +52,9 @@ namespace MDM.WebPortal.Models.Identity
 
         public DbSet<ActionSystem> Actions { get; set; }
 
-        
+        public DbSet<AreaSystem> Areas { get; set; }
+
+        public DbSet<Menu> Menus { get; set; }
 
         public ApplicationDbContext()
             : base("MDMPermissionsIdentitiesv1", throwIfV1Schema: false)

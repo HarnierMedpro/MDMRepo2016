@@ -10,7 +10,10 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.ActionCode.Models.ViewModels;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Models.FromDB;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.ActionCode.Controllers
 {
@@ -51,6 +54,21 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
                     db.CodeMasterLists.Add(toStore);
                     await db.SaveChangesAsync();
                     codeMaster.CodeID = toStore.CodeID;
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "I",
+                        TableName = "CodeMasterList",
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = toStore.CodeID,
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo { Field_ColumName = "Code", NewValue = toStore.Code }
+                        }
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {
@@ -72,14 +90,33 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
                         return Json(new[] { codeMaster }.ToDataSourceResult(request, ModelState));
                     }
-                    var toStore = new CodeMasterList
+                    //var toStore = new CodeMasterList
+                    //{
+                    //    CodeID = codeMaster.CodeID,
+                    //    Code = codeMaster.Code
+                    //};
+                    var toStore = await db.CodeMasterLists.FindAsync(codeMaster.CodeID);
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>
                     {
-                        CodeID = codeMaster.CodeID,
-                        Code = codeMaster.Code
+                        new TableInfo {Field_ColumName = "Code", NewValue = codeMaster.Code, OldValue = toStore.Code}
                     };
+                    toStore.Code = codeMaster.Code;
+
                     db.CodeMasterLists.Attach(toStore);
                     db.Entry(toStore).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = toStore.CodeID,
+                        TableName = "CodeMasterList",
+                        tableInfos = tableColumnInfos,
+                        AuditAction = "U"
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {

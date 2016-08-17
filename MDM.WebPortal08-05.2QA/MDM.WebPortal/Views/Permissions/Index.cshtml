@@ -12,93 +12,13 @@
     <div class="container">
         <h1 class="page-title"></h1>
         <ol class="breadcrumb pull-right">
-            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="@Url.Action("Index", "Home", new {area = ""})"><i class="fa fa-home"></i> Home</a></li>
             <li class="active">Permissions</li>
         </ol>
     </div>
 </header>
 
-@*ORIGINAL CODE
-        <div class="container">
 
-        <a href="@Url.Action("Create")" class="btn btn-primary btn-lg btn-ar" >
-            Create New
-        </a>
-        <br/>
-        <br/>
-
-        @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMPermission>()
-              .Name("Permissions")
-              .Columns(columns =>
-              {
-                  columns.Bound(x => x.PermissionID).Hidden(true);
-
-                  columns.Bound(x => x.Roles).Hidden(true);
-
-                  columns.Bound(x => x.ControllerName).Width("110");
-
-                  columns.Bound(x => x.ActionName).Width("100");
-
-                  columns.Command(commands =>
-                  {
-                      commands.Edit();
-                  }).Title("COMMANDS").Width(210);
-              })
-
-              .DataSource(dataSource => dataSource
-                  .Ajax()
-                  .ServerOperation(true)
-                  .PageSize(10)
-                  .Model(model =>
-                  {
-                      model.Id(x => x.PermissionID);
-                      model.Field(x => x.PermissionID).Editable(false);
-                  })
-                  .Read(read => read.Action("Read_Premissions", "Permissions"))
-                  .Update(update => update.Action("Update_Permission","Permissions"))
-              )
-
-              .Sortable()
-              .Filterable()
-              .Pageable(ps => ps.Refresh(true)
-                  .PreviousNext(true).PageSizes(true))
-              .Groupable()
-              .ClientDetailTemplateId("template")
-              .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("UpdatePermission").Window(w => w.HtmlAttributes(new { @style = "width:700px;" })))
-              //.Events(e => e.ExcelExport("employees_excelExport").DetailInit("employees_detailInit"))
-              .Reorderable(r => r.Columns(true))
-              .Resizable(r => r.Columns(true))
-              .Selectable(s => s.Enabled(true)
-                  .Type(GridSelectionType.Row)
-                  .Mode(GridSelectionMode.Single))
-              )
-    </div>
-
-    <script id="template" type="text/x-kendo-template">
-        @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMRole>()
-                .Name("Roles#=PermissionID#")
-                .Columns(columns =>
-                {
-                    columns.Bound(o => o.Id).Hidden(true);//Title("ID").Width(110);
-                    columns.Bound(o => o.Name).Title("ROLE NAME");
-                    columns.Bound(o => o.Priotity).Title("ROLE PRIORITY");
-                    columns.Bound(o => o.Active).Width(300).Title("ROLE ACTIVE");
-
-
-                })
-                .DataSource(dataSource => dataSource
-                    .Ajax()
-                    .PageSize(10)
-                    //.Events(events => events.Error("error_handler"))//allows us catch the errors sent by the JSON object, especificados por ModelState
-
-                    .Read(read => read.Action("Read_RolesByPermissions", "Permissions", new { PermissionID = "#=PermissionID#" }))
-                )
-
-                .Pageable()
-                .Sortable()
-                .ToClientTemplate()
-        )
-    </script>*@
 
 @*/*See: C:\Users\hsuarez\Desktop\Documentation\Kendo UI for ASP.NET MVC5\ui-for-aspnet-mvc-examples-master\grid\multiselect-in-grid-popup*/*@
 <script type="text/kendo" id="territoriesTemplate">

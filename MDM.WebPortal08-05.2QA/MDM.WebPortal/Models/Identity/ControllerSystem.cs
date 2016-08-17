@@ -19,6 +19,11 @@ namespace MDM.WebPortal.Models.Identity
         [StringLength(50)]
         public string Cont_Name { get; set; }
 
+        [Display(Name = "AREA")]
+        public int? AreaID { get; set; }
+
+        public virtual AreaSystem AreaSystem { get; set; }
+
         public virtual ICollection<ActionSystem> ActionSystems { get; set; } 
     }
 }

@@ -21,7 +21,7 @@ namespace MDM.WebPortal.Controllers
 
         public ActionResult Index()
         {
-            ViewData["Controllers"] = db.Controllers.Select(x => new VMControllerSystem { ControllerID = x.ControllerID, Cont_Name = x.Cont_Name });
+            ViewData["Controllers"] = db.Controllers.OrderBy(x => x.Cont_Name).Select(x => new VMControllerSystem { ControllerID = x.ControllerID, Cont_Name = x.Cont_Name });
             return View();
         }
 

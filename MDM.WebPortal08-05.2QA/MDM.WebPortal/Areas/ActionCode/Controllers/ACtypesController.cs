@@ -10,7 +10,10 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.ActionCode.Models.ViewModels;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Models.FromDB;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.ActionCode.Controllers
 {
@@ -57,6 +60,21 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
                     db.ACtypes.Add(toStore);
                     await db.SaveChangesAsync();
                     aCtype.ACTypeID = toStore.ACTypeID;
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "I",
+                        TableName = "ACType",
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = toStore.ACTypeID,
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo { Field_ColumName = "ACTypeName", NewValue = toStore.ACTypeName }
+                        }
+                    };
+                    new AuditLogRepository().AddAuditLogs(auditLog);
+
                 }
                 catch (Exception)
                 {
@@ -79,14 +97,37 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
                         return Json(new[] { aCtype }.ToDataSourceResult(request, ModelState));
                     }
-                    var toStore = new ACtype
+                    //var toStore = new ACtype
+                    //{
+                    //    ACTypeID = aCtype.ACTypeID,
+                    //    ACTypeName = aCtype.ACTypeName
+                    //};
+                    var toStore = await db.ACtypes.FindAsync(aCtype.ACTypeID);
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>
                     {
-                        ACTypeID = aCtype.ACTypeID,
-                        ACTypeName = aCtype.ACTypeName
+                        new TableInfo
+                        {
+                            Field_ColumName = "ACTypeName",
+                            NewValue = aCtype.ACTypeName,
+                            OldValue = toStore.ACTypeName
+                        }
                     };
+                    toStore.ACTypeName = aCtype.ACTypeName;
+                    
                     db.ACtypes.Attach(toStore);
                     db.Entry(toStore).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "U",
+                        TableName = "ACType",
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = toStore.ACTypeID,
+                        tableInfos = tableColumnInfos
+                    };
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {

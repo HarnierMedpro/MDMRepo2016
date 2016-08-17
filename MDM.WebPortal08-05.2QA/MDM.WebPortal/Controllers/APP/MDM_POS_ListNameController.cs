@@ -10,10 +10,15 @@ using System.Web.Mvc;
 using MDM.WebPortal.Models.FromDB;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.ViewModel;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Controllers.APP
 {
+    [SetPermissions]
     public class MDM_POS_ListNameController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -40,15 +45,52 @@ namespace MDM.WebPortal.Controllers.APP
                         ModelState.AddModelError("", "Duplicate POS. Please try again!");
                         return Json(new[] { mDM_POS_ListName }.ToDataSourceResult(request, ModelState));
                     }
-                    var StoredInDB = new MDM_POS_ListName
+                    //var StoredInDB = new MDM_POS_ListName
+                    //{
+                    //    MDMPOS_ListNameID = mDM_POS_ListName.MDMPOS_ListNameID, 
+                    //    PosName = mDM_POS_ListName.PosName, 
+                    //    active = mDM_POS_ListName.active
+                    //};
+                    var StoredInDB = await db.MDM_POS_ListName.FindAsync(mDM_POS_ListName.MDMPOS_ListNameID);
+
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                    if (StoredInDB.PosName != mDM_POS_ListName.PosName)
                     {
-                        MDMPOS_ListNameID = mDM_POS_ListName.MDMPOS_ListNameID, 
-                        PosName = mDM_POS_ListName.PosName, 
-                        active = mDM_POS_ListName.active
-                    };
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            Field_ColumName = "PosName",
+                            NewValue = mDM_POS_ListName.PosName,
+                            OldValue = StoredInDB.PosName
+                        });
+                        StoredInDB.PosName = mDM_POS_ListName.PosName;
+                    }
+                    if (StoredInDB.active != mDM_POS_ListName.active)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            Field_ColumName = "active",
+                            NewValue = mDM_POS_ListName.active.ToString(),
+                            OldValue = StoredInDB.active.ToString()
+                        });
+                        StoredInDB.active = mDM_POS_ListName.active;
+                    }
+
                     db.MDM_POS_ListName.Attach(StoredInDB);
                     db.Entry(StoredInDB).State = EntityState.Modified;
-                    await db.SaveChangesAsync();                  
+                    await db.SaveChangesAsync();
+                  
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "U",
+                        tableInfos = tableColumnInfos,
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = StoredInDB.MDMPOS_ListNameID,
+                        TableName = "MDM_POS_ListName"
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {
@@ -74,6 +116,23 @@ namespace MDM.WebPortal.Controllers.APP
                     db.MDM_POS_ListName.Add(StoredInDB);
                     await db.SaveChangesAsync();
                     mDM_POS_ListName.MDMPOS_ListNameID = StoredInDB.MDMPOS_ListNameID;
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "I",
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo{Field_ColumName = "MDMPOS_ListNameID", NewValue = StoredInDB.MDMPOS_ListNameID.ToString()},
+                            new TableInfo{Field_ColumName = "PosName", NewValue = StoredInDB.PosName},
+                            new TableInfo{Field_ColumName = "active", NewValue = StoredInDB.active.ToString()}
+                        },
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = StoredInDB.MDMPOS_ListNameID,
+                        TableName = "MDM_POS_ListName"
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {

@@ -23,6 +23,7 @@ namespace MDM.WebPortal.Controllers
 
         public ActionResult Index()
         {
+            ViewData["Area"] = db.Areas.OrderBy(x => x.AreaName).Select(x => new VMAreaSystems {AreaID = x.AreaID, AreaName = x.AreaName});
             return View();
         }
 
@@ -31,12 +32,13 @@ namespace MDM.WebPortal.Controllers
             return Json(db.Controllers.ToDataSourceResult(request, x => new VMControllerSystem
             {
                 ControllerID = x.ControllerID,
-                Cont_Name = x.Cont_Name
+                Cont_Name = x.Cont_Name,
+                AreaID = x.AreaID
             }), JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> Create_ControllerSystem([DataSourceRequest] DataSourceRequest request,
-            [Bind(Include = "ControllerID,Cont_Name")] VMControllerSystem controllerSystem)
+            [Bind(Include = "ControllerID,Cont_Name,AreaID")] VMControllerSystem controllerSystem)
         {
             if (ModelState.IsValid)
             {
@@ -49,7 +51,8 @@ namespace MDM.WebPortal.Controllers
                     }
                     var toStore = new ControllerSystem 
                     {                       
-                        Cont_Name = controllerSystem.Cont_Name
+                        Cont_Name = controllerSystem.Cont_Name,
+                        AreaID = controllerSystem.AreaID 
                     };
                     db.Controllers.Add(toStore);
                     await db.SaveChangesAsync();

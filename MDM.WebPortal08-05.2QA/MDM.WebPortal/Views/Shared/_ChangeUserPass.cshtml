@@ -1,0 +1,119 @@
+﻿@model MDM.WebPortal.Models.Identity.UserNamePass
+
+<div class="col-md-12">
+    @using (Html.BeginForm("ChangeUserNamePass", "UsersAdmin", FormMethod.Post, new { role = "form"}))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary("", new { @class = "text-error" })
+        @Html.HiddenFor(model => model.Id)
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="InputOldPass" class="lbMargin">CURRENT PASSWORD <sup class="required">*</sup></label>
+                    <div class="col-md-12">
+                        @Html.PasswordFor(model => model.OldPassword, new { id = "InputOldPass", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.OldPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div> 
+                <br />
+                <div class="form-group">
+                    <label for="InputNewPass" class="lbMargin">NEW PASSWORD <sup class="required">*</sup></label>
+                    <div class="col-md-12">
+                        @Html.PasswordFor(model => model.Password, new { id = "InputNewPass", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>  
+                <div class="form-group">
+                    <label for="InputConfirmPass" class="lbMargin">CONFIRM PASSWORD <sup class="required">*</sup></label>
+                    <div class="col-md-12">
+                        @Html.PasswordFor(model => model.ConfirmPassword, new { id = "InputConfirmPass", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div> 
+            </div>
+            <div class="col-md-4">
+                <div class="pull-right">
+                    <a href="javascript:void(0);" id="btn-CancelUser" type="submit" class="btn-social twitter">Cancel</a>
+                    <input id="btn-Register" type="submit" class="btn-social solid twitter" value="Save" onclick="return checkInfo();" />
+                </div>
+            </div>
+        </div>
+    }
+    <hr class="color" />
+</div>
+
+<link rel="stylesheet" href="~/Content/Popover/Popover.css" />
+<link rel="stylesheet" href="~/Content/PwdMeter/zxcvbn.css" />
+
+<script src="~/Scripts/Popover/Popover.js"></script>
+<script src="~/Scripts/PwdMeter/zxcvbn.js"></script>
+
+
+
+<script>
+    /*------Password popover configuration-------*/
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    });
+    $(document).ready(function () {
+        $("#InputNewPass").popover({
+            html: true,
+            content: '<ul><li>At least 6 characters</li><li>Include all of these elements:<ol><li>One UPPER CASE letter</li><li>One lower case letter</li><li>One special character</li><li>One number</li></ol></li></ul>',
+            toggle: "popover",
+            title: '<strong>Secure Password</strong>',
+            container: "body",
+            trigger: "focus",
+            tabindex: "0",
+            role: "password-input",
+            placement: "top"
+        });
+
+    });
+
+    /*----------Check Password Strenght--------*/
+    var strength = {
+        0: "Worst",
+        1: "Bad",
+        2: "Weak",
+        3: "Good",
+        4: "Strong"
+    }
+
+    var password = document.getElementById('InputNewPass');
+    var meter = document.getElementById('password-strength-meter');
+
+    password.addEventListener('input', function () {
+        var val = password.value;
+        var result = zxcvbn(val);
+        meter.value = result.score;       
+    });
+
+
+    /*-------- Validate relationship among oldPass, new and confirmation ------------*/
+    function checkInfo() {
+        if ($.trim($('#InputOldPass').val().length) > 0 && $.trim($('#InputNewPass').val().length) == 0 && $.trim($('#InputConfirmPass').val().length) == 0) {           
+            $('#InputNewPass').notify("You must provide a new password", { position: "bottom center" });            
+            $('#InputNewPass').focus();
+            return false;
+        }
+        if ($.trim($('#InputOldPass').val().length) > 0 && ($.trim($('#InputNewPass').val().length) == 0 || $.trim($('#InputConfirmPass').val().length) == 0)) {
+            $('#InputConfirmPass').notify("Password and confirmation do not match.", { position: "bottom center" });            
+            $('#InputConfirmPass').focus();
+            return false;
+        }
+        if ($.trim($('#InputOldPass').val().length) == 0 && ($.trim($('#InputNewPass').val().length) > 0 || $.trim($('#InputConfirmPass').val().length) > 0)) {
+            $('#InputOldPass').notify("You must provide your old password.", { position: "bottom center" });            
+            $('#InputOldPass').focus();
+            return false;
+        }
+        if ($.trim($('#InputOldPass').val().length) > 0 && $.trim($('#InputNewPass').val().length) > 0 && $.trim($('#InputConfirmPass').val().length) > 0 && ($.trim($('#InputNewPass').val().length) != $.trim($('#InputConfirmPass').val().length) || $.trim($('#InputNewPass').val()) != $.trim($('#InputConfirmPass').val())))           
+        {
+            $('#InputConfirmPass').notify("Password and confirmation do not match.", { position: "bottom center" });            
+            $('#InputConfirmPass').focus();
+            return false;
+        }
+        else {
+            return true;
+        }
+    }   
+</script>

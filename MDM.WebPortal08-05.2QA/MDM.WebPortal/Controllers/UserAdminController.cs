@@ -379,5 +379,21 @@ namespace IdentitySample.Controllers
             else
                 return RedirectToAction("Index", "Error", new {area = "Error" });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public async Task<ActionResult> ChangeUserNamePass([Bind(Include = "Id, OldPassword, Password, ConfirmPassword")] UserNamePass editUser)
+        {
+            if (ModelState.IsValid)
+            {
+              var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), editUser.OldPassword, editUser.Password);
+              if (result.Succeeded)
+               {
+                 return RedirectToAction("Index", "Manage", new { message = ManageController.ManageMessageId.SetPasswordSuccess });
+               }
+            }
+            return RedirectToAction("Index", "Manage", new { message = ManageController.ManageMessageId.Error });
+        }
     }
 }

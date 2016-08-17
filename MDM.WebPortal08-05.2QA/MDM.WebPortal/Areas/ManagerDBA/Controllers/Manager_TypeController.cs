@@ -9,8 +9,11 @@ using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels;
 using MDM.WebPortal.Models.FromDB;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
 {
@@ -45,10 +48,42 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
                         ModelState.AddModelError("","Duplicate Data. Please try again!");
                         return Json(new[] {manager_Type}.ToDataSourceResult(request, ModelState));
                     }
-                    var storedInDb = new Manager_Type{ ManagerTypeID = manager_Type.ManagerTypeID, Name = manager_Type.Name, Active = manager_Type.Active};
+                    //var storedInDb = new Manager_Type{ ManagerTypeID = manager_Type.ManagerTypeID, Name = manager_Type.Name, Active = manager_Type.Active };
+                    var storedInDb = await db.Manager_Type.FindAsync(manager_Type.ManagerTypeID);
+
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                    if (storedInDb.Name != manager_Type.Name)
+                    {
+                        tableColumnInfos.Add(new TableInfo
+                        {
+                            Field_ColumName = "Name",
+                            NewValue = manager_Type.Name,
+                            OldValue = storedInDb.Name
+                        });
+                        storedInDb.Name = manager_Type.Name;
+                    }
+                    if (storedInDb.Active != manager_Type.Active)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Active", NewValue = manager_Type.Active.ToString(), OldValue = storedInDb.Active.ToString()});
+                        storedInDb.Active = manager_Type.Active;
+                    }
+
                     db.Manager_Type.Attach(storedInDb);
                     db.Entry(storedInDb).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "U",
+                        tableInfos = tableColumnInfos,
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = storedInDb.ManagerTypeID,
+                        TableName = "Manager_Type"
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {
@@ -75,6 +110,22 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
                     db.Manager_Type.Add(storedInDb);
                     await db.SaveChangesAsync();
                     manager_Type.ManagerTypeID = storedInDb.ManagerTypeID;
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "I",
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo{Field_ColumName = "Name", NewValue = storedInDb.Name },
+                            new TableInfo{Field_ColumName = "Active", NewValue = storedInDb.Active.ToString() }
+                        },
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = storedInDb.ManagerTypeID,
+                        TableName = "Manager_Type"
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {

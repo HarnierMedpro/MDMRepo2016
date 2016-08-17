@@ -33,12 +33,13 @@
     <div id="status">&nbsp;</div>
 </div>
 <body>
-   @using Microsoft.AspNet.Identity
+   @using MDM.WebPortal.Controllers   @using Microsoft.AspNet.Identity
+@using Menu = MDM.WebPortal.Models.Identity.Menu
 
     <header id="header-full-top" class="hidden-xs header-full">
         <div class="container">
             <div class="header-full-title">
-                <h1 class="animated fadeInRight"><a href="@Url.Action("Index", "Home")">MDM <span>WebPortal</span></a></h1>
+                <h1 class="animated fadeInRight"><a href="@Url.Action("Index", "Home", new { Area= ""})">MDM <span>WebPortal</span></a></h1>
                 <p class="animated fadeInRight">Improving Performance</p>
             </div>
             <nav class="top-nav">
@@ -281,27 +282,32 @@
 
                     @if (User.Identity.IsAuthenticated && User.IsInRole("ADMIN") || User.IsInRole("MANAGER"))
                     {
-                        @* BI-Dictionaries *@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="False">BI-Dictionaries</a>
                             <ul class="dropdown-menu dropdown-menu-left animated-2x animated fadeIn">
                                
                                 <li class="dropdown-submenu">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">Corporation</a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">BI-Corporation</a>
                                     <ul class="dropdown-menu dropdown-menu-left">
-                                        <li><a href="@Url.Action("Index","CorporateMasterList")">BI-CorporateMasterList</a></li>
-                                        <li><a href="@Url.Action("Index","Corp_DBs")">BI-Corp_DBs</a></li>
+                                        <li>@Html.ActionLink("BI-CorporateMasterList", "Index", "CorporateMasterList", new {Area = ""}, new {})</li>
+                                        <li>@Html.ActionLink("BI-Corp_DBs", "Index", "Corp_DBs", new { Area = "" }, new { })</li>
                                     </ul>
                                 </li>
-                                <li>@Html.ActionLink("BI-CPTDatas", "Index", "CPTDatas")</li>
+                                <li>@Html.ActionLink("BI-CPTDatas", "Index", "CPTDatas", new { Area = "" }, new { })</li>
                                 <li>@Html.ActionLink("BI-ADPMasters", "Index", "ADPMasters", new { Area = "ADP" }, new { })</li>
                                 <li>@Html.ActionLink("BI-ActionCode", "Index", "ActionCodes", new { Area = "ActionCode" }, new { })</li>
-                                <li>@Html.ActionLink("BI-ManagerDBA", "Index", "BI_DB_FvP_Access", new { Area = "ManagerDBA" }, new { })</li>
+                                <li>@Html.ActionLink("BI-ManagerDBA", "Index", "BI_DB_FvP_Access", new {Area = "ManagerDBA"}, new {})</li>
 
+                                <li class="dropdown-submenu">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">BI-POSNAME</a>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li>@Html.ActionLink("BI-POS", "Index", "MDM_POS_ListName", new { Area = "" }, new { })</li>
+                                        <li>@Html.ActionLink("BI-POS_Name_DBPOS_grp", "Index", "MDM_POS_Name_DBPOS_grp", new { Area = "" }, new { })</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>                   
                     }
-                   
                 </ul>
                 @Html.Partial("_LoginPartial")           
             </div><!-- navbar-collapse -->

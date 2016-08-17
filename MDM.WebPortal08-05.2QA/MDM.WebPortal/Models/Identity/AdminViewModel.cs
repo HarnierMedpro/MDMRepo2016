@@ -43,4 +43,28 @@ namespace MDM.WebPortal.Models.Identity
 
         public string roleId { get; set; }
     }
+
+    public class UserNamePass
+    {
+
+        public string Id { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Current password")]
+        public string OldPassword { get; set; }
+
+        [Required(ErrorMessage = "This field is required.")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "This field is required.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
+    }
 }

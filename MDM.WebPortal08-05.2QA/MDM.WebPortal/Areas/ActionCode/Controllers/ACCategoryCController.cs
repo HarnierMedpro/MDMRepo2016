@@ -10,7 +10,10 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.ActionCode.Models.ViewModels;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Models.FromDB;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.ActionCode.Controllers
 {
@@ -52,6 +55,20 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
                     db.ACCategories.Add(toStore);
                     await db.SaveChangesAsync();
                     aCCategory.CatogoryID = toStore.CatogoryID;
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "I",
+                        TableName = "ACCategory",
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = toStore.CatogoryID,
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo { Field_ColumName = "CategoryName", NewValue = toStore.CategoryName }
+                        }
+                    };
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {
@@ -74,14 +91,37 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
                         return Json(new[] { aCCategory }.ToDataSourceResult(request, ModelState));
                     }
-                    var toStore = new ACCategory
+                    //var toStore = new ACCategory
+                    //{
+                    //    CatogoryID = aCCategory.CatogoryID,
+                    //    CategoryName = aCCategory.CategoryName
+                    //};
+                    var toStore = await db.ACCategories.FindAsync(aCCategory.CatogoryID);
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>
                     {
-                        CatogoryID = aCCategory.CatogoryID,
-                        CategoryName = aCCategory.CategoryName
+                        new TableInfo
+                        {
+                            Field_ColumName = "CategoryName",
+                            NewValue = aCCategory.CategoryName,
+                            OldValue = toStore.CategoryName
+                        }
                     };
+                    toStore.CategoryName = aCCategory.CategoryName;
+
                     db.ACCategories.Attach(toStore);
                     db.Entry(toStore).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        AuditAction = "U",
+                        TableName = "ACCategory",
+                        AuditDateTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName(),
+                        ModelPKey = toStore.CatogoryID,
+                        tableInfos = tableColumnInfos
+                    };
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {

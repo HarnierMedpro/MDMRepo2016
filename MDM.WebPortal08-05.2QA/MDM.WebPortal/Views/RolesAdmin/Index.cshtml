@@ -9,7 +9,7 @@
     <div class="container">
         <h1 class="page-title"></h1>
         <ol class="breadcrumb pull-right">
-            <li><a href="@Url.Action("Index","Home")"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="@Url.Action("Index","Home", new{area=""})"><i class="fa fa-home"></i> Home</a></li>
             <li class="active">Roles</li>
         </ol>
     </div>
@@ -338,41 +338,45 @@
 <script src="http://kendo.cdn.telerik.com/2016.2.714/js/jszip.min.js"></script>
 
 <div class="container-fluid">
+    <a href="@Url.Action("Create")" class="btn btn-ar btn-default">NEW ROLE</a>
+    <br/>
+    <br/>
+
     @(Html.Kendo().Grid<MDM.WebPortal.Models.Identity.RoleViewModel>()
-        .Name("Roles")
-        .ToolBar(tools => tools.Excel())
-        .Columns(columns =>
-        {
-            columns.Bound(e => e.Name).Width(110);
-            
-            columns.Bound(e => e.Active).Width(110);
-            
-            columns.Command(commands =>
-            {
-                commands.Edit();
-            }).Title("COMMANDS").Width(200);
-        })
-        .Sortable()
-        .Pageable()
-        .Filterable()
-        .Scrollable(s => s.Enabled(false))
-        .ClientDetailTemplateId("template")
-        .Events(e => e.ExcelExport("employees_excelExport").DetailInit("employees_detailInit"))
-        .DataSource(dataSource => dataSource
-            .Ajax()
-            .PageSize(10)
-            .Model(model =>
+          .Name("Roles")
+          .ToolBar(tools => tools.Excel())
+          .Columns(columns =>
+          {
+              columns.Bound(e => e.Name).Width(110);
+
+              columns.Bound(e => e.Active).Width(110);
+
+              columns.Command(commands =>
               {
-                model.Id(x => x.Id);
-                model.Field(x => x.Id).Editable(false);
-                model.Field(x => x.Name).Editable(false);
+                  commands.Edit();
+              }).Title("COMMANDS").Width(200);
+          })
+          .Sortable()
+          .Pageable()
+          .Filterable()
+          .Scrollable(s => s.Enabled(false))
+          .ClientDetailTemplateId("template")
+          .Events(e => e.ExcelExport("employees_excelExport").DetailInit("employees_detailInit"))
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .PageSize(10)
+              .Model(model =>
+              {
+                  model.Id(x => x.Id);
+                  model.Field(x => x.Id).Editable(false);
+                  model.Field(x => x.Name).Editable(false);
               })
-            .Events(events => events.Error("error_handler")) 
-            .Read(read => read.Action("Read_Roles", "RolesAdmin"))
-            .Update(x => x.Action("Update", "RolesAdmin"))
-        )
-        .Events(events => events.DataBound("dataBound"))
-    )
+              .Events(events => events.Error("error_handler"))
+              .Read(read => read.Action("Read_Roles", "RolesAdmin"))
+              .Update(x => x.Action("Update", "RolesAdmin"))
+          )
+          .Events(events => events.DataBound("dataBound"))
+          )
 </div>
 
 
