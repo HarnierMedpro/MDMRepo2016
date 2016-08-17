@@ -47,5 +47,8 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual DbSet<ACtype> ACtypes { get; set; }
         public virtual DbSet<CodeMasterList> CodeMasterLists { get; set; }
         public virtual DbSet<AuditLog> AuditLogs { get; set; }
+        public virtual DbSet<MasterUserList> MasterUserLists { get; set; }
+        public virtual DbSet<CorporateNameList> CorporateNameLists { get; set; }
+        public virtual DbSet<ManagerDBAccessBI> ManagerDBAccessBIs { get; set; }
     }
 }

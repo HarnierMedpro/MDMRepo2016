@@ -23,5 +23,6 @@ namespace MDM.WebPortal.Models.FromDB
         public bool Active { get; set; }
         public string ParsingYN { get; set; }
         public string ACType { get; set; }
+        public Nullable<int> sortorder { get; set; }
     }
 }

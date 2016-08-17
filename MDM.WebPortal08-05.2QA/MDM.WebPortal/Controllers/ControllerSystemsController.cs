@@ -15,8 +15,8 @@ using MDM.WebPortal.Models.ViewModel;
 
 namespace MDM.WebPortal.Controllers
 {
-//    [SetPermissions]
-    [AllowAnonymous]
+    [SetPermissions]
+    //[AllowAnonymous]
     public class ControllerSystemsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

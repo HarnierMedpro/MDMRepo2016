@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ZoomDBModelStoreContainer" CdmEntityContainer="ZoomDBEntities">
+    <EntitySetMapping Name="Pos_Tab">
+      <EntityTypeMapping TypeName="ZoomDBModel.Pos_Tab">
+        <MappingFragment StoreEntitySet="Pos_Tab">
+          <ScalarProperty Name="DB_" ColumnName="DB#" />
+          <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+          <ScalarProperty Name="Facility_ID" ColumnName="Facility ID" />
+          <ScalarProperty Name="Fac_NAME" ColumnName="Fac NAME" />
+          <ScalarProperty Name="Fac_Address_1" ColumnName="Fac Address 1" />
+          <ScalarProperty Name="Fac_Address_2" ColumnName="Fac Address 2" />
+          <ScalarProperty Name="Fac_City" ColumnName="Fac City" />
+          <ScalarProperty Name="Fac_State" ColumnName="Fac State" />
+          <ScalarProperty Name="Fac_Zip" ColumnName="Fac Zip" />
+          <ScalarProperty Name="Fac_PHONE" ColumnName="Fac PHONE" />
+          <ScalarProperty Name="Fac_FAX" ColumnName="Fac FAX" />
+          <ScalarProperty Name="Fac_Email" ColumnName="Fac Email" />
+          <ScalarProperty Name="Billing_Address1" ColumnName="Billing Address1" />
+          <ScalarProperty Name="Billing_Address2" ColumnName="Billing Address2" />
+          <ScalarProperty Name="Billing_City" ColumnName="Billing City" />
+          <ScalarProperty Name="Billing_State" ColumnName="Billing State" />
+          <ScalarProperty Name="Billing_Zip" ColumnName="Billing Zip" />
+          <ScalarProperty Name="Billing_Phone" ColumnName="Billing Phone" />
+          <ScalarProperty Name="Billing_Fax" ColumnName="Billing Fax" />
+          <ScalarProperty Name="Billing_Email" ColumnName="Billing Email" />
+          <ScalarProperty Name="Federal_Tax_ID" ColumnName="Federal Tax ID" />
+          <ScalarProperty Name="CLIA_ID" ColumnName="CLIA'ID" />
+          <ScalarProperty Name="POS" ColumnName="POS" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="CheckPayableTo" ColumnName="CheckPayableTo" />
+          <ScalarProperty Name="MamographyCertificationNo" ColumnName="MamographyCertificationNo" />
+          <ScalarProperty Name="FacilityCode" ColumnName="FacilityCode" />
+          <ScalarProperty Name="Facility_Type" ColumnName="Facility Type" />
+          <ScalarProperty Name="I_Pos_Tab" ColumnName="I_Pos_Tab" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

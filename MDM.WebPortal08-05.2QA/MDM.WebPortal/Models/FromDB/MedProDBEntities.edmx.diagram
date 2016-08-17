@@ -30,7 +30,7 @@
         <AssociationConnector Association="MedProDBEntities.FK_Corp_Owner_OwnerList" ManuallyRouted="false" />
         <AssociationConnector Association="MedProDBEntities.FK_Manager_Master_Manager_Type" ManuallyRouted="false" />
         <AssociationConnector Association="MedProDBEntities.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="MedProDBEntities.CollNoteTypeCatPriority" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.CollNoteTypeCatPriority" Width="1.5" PointX="10.875" PointY="0.875" />
         <EntityTypeShape EntityType="MedProDBEntities.ACCategory" Width="1.5" PointX="3.375" PointY="15" />
         <EntityTypeShape EntityType="MedProDBEntities.ACPriority" Width="1.5" PointX="8.625" PointY="18" />
         <EntityTypeShape EntityType="MedProDBEntities.ActionCode" Width="1.5" PointX="5.625" PointY="14" />
@@ -41,6 +41,9 @@
         <AssociationConnector Association="MedProDBEntities.FK_ActionCode_ACtypes" />
         <AssociationConnector Association="MedProDBEntities.FK_ActionCode_CodeMasterList" />
         <EntityTypeShape EntityType="MedProDBEntities.AuditLog" Width="1.5" PointX="5.375" PointY="6.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.MasterUserList" Width="1.5" PointX="7.375" PointY="8.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.CorporateNameList" Width="1.5" PointX="0.625" PointY="22.625" />
+        <EntityTypeShape EntityType="MedProDBEntities.ManagerDBAccessBI" Width="1.5" PointX="0.75" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,0 +1,307 @@
+﻿@model MDM.WebPortal.Models.FromDB.ManagerDBAccessBI
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>ManagerDBAccessBI</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FvP, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.FvP, (IEnumerable<SelectListItem>)(new[] {
+                                new SelectListItem() { Value = "FAC", Text = "FAC" },
+                                new SelectListItem() { Value = "PHY", Text = "PHY" }
+                             }))
+                @Html.ValidationMessageFor(model => model.FvP, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DB, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.DB, (IEnumerable<SelectListItem>)(new[] {
+new SelectListItem() { Value = "001", Text = "001" },
+new SelectListItem() { Value = "002", Text = "002" },
+new SelectListItem() { Value = "003", Text = "003" },
+new SelectListItem() { Value = "004", Text = "004" },
+new SelectListItem() { Value = "005", Text = "005" },
+new SelectListItem() { Value = "006", Text = "006" },
+new SelectListItem() { Value = "007", Text = "007" },
+new SelectListItem() { Value = "008", Text = "008" },
+new SelectListItem() { Value = "009", Text = "009" },
+new SelectListItem() { Value = "010", Text = "010" },
+new SelectListItem() { Value = "011", Text = "011" },
+new SelectListItem() { Value = "012", Text = "012" },
+new SelectListItem() { Value = "013", Text = "013" },
+new SelectListItem() { Value = "014", Text = "014" },
+new SelectListItem() { Value = "015", Text = "015" },
+new SelectListItem() { Value = "016", Text = "016" },
+new SelectListItem() { Value = "017", Text = "017" },
+new SelectListItem() { Value = "018", Text = "018" },
+new SelectListItem() { Value = "019", Text = "019" },
+new SelectListItem() { Value = "020", Text = "020" },
+new SelectListItem() { Value = "021", Text = "021" },
+new SelectListItem() { Value = "022", Text = "022" },
+new SelectListItem() { Value = "023", Text = "023" },
+new SelectListItem() { Value = "024", Text = "024" },
+new SelectListItem() { Value = "025", Text = "025" },
+new SelectListItem() { Value = "026", Text = "026" },
+new SelectListItem() { Value = "027", Text = "027" },
+new SelectListItem() { Value = "028", Text = "028" },
+new SelectListItem() { Value = "029", Text = "029" },
+new SelectListItem() { Value = "030", Text = "030" },
+new SelectListItem() { Value = "031", Text = "031" },
+new SelectListItem() { Value = "032", Text = "032" },
+new SelectListItem() { Value = "033", Text = "033" },
+new SelectListItem() { Value = "034", Text = "034" },
+new SelectListItem() { Value = "035", Text = "035" },
+new SelectListItem() { Value = "036", Text = "036" },
+new SelectListItem() { Value = "037", Text = "037" },
+new SelectListItem() { Value = "038", Text = "038" },
+new SelectListItem() { Value = "039", Text = "039" },
+new SelectListItem() { Value = "040", Text = "040" },
+new SelectListItem() { Value = "041", Text = "041" },
+new SelectListItem() { Value = "042", Text = "042" },
+new SelectListItem() { Value = "043", Text = "043" },
+new SelectListItem() { Value = "044", Text = "044" },
+new SelectListItem() { Value = "045", Text = "045" },
+new SelectListItem() { Value = "046", Text = "046" },
+new SelectListItem() { Value = "047", Text = "047" },
+new SelectListItem() { Value = "048", Text = "048" },
+new SelectListItem() { Value = "049", Text = "049" },
+new SelectListItem() { Value = "050", Text = "050" },
+new SelectListItem() { Value = "051", Text = "051" },
+new SelectListItem() { Value = "052", Text = "052" },
+new SelectListItem() { Value = "053", Text = "053" },
+new SelectListItem() { Value = "054", Text = "054" },
+new SelectListItem() { Value = "055", Text = "055" },
+new SelectListItem() { Value = "056", Text = "056" },
+new SelectListItem() { Value = "057", Text = "057" },
+new SelectListItem() { Value = "058", Text = "058" },
+new SelectListItem() { Value = "059", Text = "059" },
+new SelectListItem() { Value = "060", Text = "060" },
+new SelectListItem() { Value = "061", Text = "061" },
+new SelectListItem() { Value = "062", Text = "062" },
+new SelectListItem() { Value = "063", Text = "063" },
+new SelectListItem() { Value = "064", Text = "064" },
+new SelectListItem() { Value = "065", Text = "065" },
+new SelectListItem() { Value = "066", Text = "066" },
+new SelectListItem() { Value = "067", Text = "067" },
+new SelectListItem() { Value = "068", Text = "068" },
+new SelectListItem() { Value = "069", Text = "069" },
+new SelectListItem() { Value = "070", Text = "070" },
+new SelectListItem() { Value = "071", Text = "071" },
+new SelectListItem() { Value = "072", Text = "072" },
+new SelectListItem() { Value = "073", Text = "073" },
+new SelectListItem() { Value = "074", Text = "074" },
+new SelectListItem() { Value = "075", Text = "075" },
+new SelectListItem() { Value = "076", Text = "076" },
+new SelectListItem() { Value = "077", Text = "077" },
+new SelectListItem() { Value = "078", Text = "078" },
+new SelectListItem() { Value = "079", Text = "079" },
+new SelectListItem() { Value = "080", Text = "080" },
+new SelectListItem() { Value = "081", Text = "081" },
+new SelectListItem() { Value = "082", Text = "082" },
+new SelectListItem() { Value = "083", Text = "083" },
+new SelectListItem() { Value = "084", Text = "084" },
+new SelectListItem() { Value = "085", Text = "085" },
+new SelectListItem() { Value = "086", Text = "086" },
+new SelectListItem() { Value = "087", Text = "087" },
+new SelectListItem() { Value = "088", Text = "088" },
+new SelectListItem() { Value = "089", Text = "089" },
+new SelectListItem() { Value = "090", Text = "090" },
+new SelectListItem() { Value = "091", Text = "091" },
+new SelectListItem() { Value = "092", Text = "092" },
+new SelectListItem() { Value = "093", Text = "093" },
+new SelectListItem() { Value = "094", Text = "094" },
+new SelectListItem() { Value = "095", Text = "095" },
+new SelectListItem() { Value = "096", Text = "096" },
+new SelectListItem() { Value = "097", Text = "097" },
+new SelectListItem() { Value = "098", Text = "098" },
+new SelectListItem() { Value = "099", Text = "099" },
+new SelectListItem() { Value = "201", Text = "201" },
+new SelectListItem() { Value = "202", Text = "202" },
+new SelectListItem() { Value = "203", Text = "203" },
+new SelectListItem() { Value = "204", Text = "204" },
+new SelectListItem() { Value = "205", Text = "205" },
+new SelectListItem() { Value = "206", Text = "206" },
+new SelectListItem() { Value = "207", Text = "207" },
+new SelectListItem() { Value = "208", Text = "208" },
+new SelectListItem() { Value = "209", Text = "209" },
+new SelectListItem() { Value = "210", Text = "210" },
+new SelectListItem() { Value = "211", Text = "211" },
+new SelectListItem() { Value = "212", Text = "212" },
+new SelectListItem() { Value = "213", Text = "213" },
+new SelectListItem() { Value = "214", Text = "214" },
+new SelectListItem() { Value = "215", Text = "215" },
+new SelectListItem() { Value = "216", Text = "216" },
+new SelectListItem() { Value = "217", Text = "217" },
+new SelectListItem() { Value = "218", Text = "218" },
+new SelectListItem() { Value = "219", Text = "219" },
+new SelectListItem() { Value = "220", Text = "220" },
+new SelectListItem() { Value = "221", Text = "221" },
+new SelectListItem() { Value = "222", Text = "222" },
+new SelectListItem() { Value = "223", Text = "223" },
+new SelectListItem() { Value = "224", Text = "224" },
+new SelectListItem() { Value = "225", Text = "225" },
+new SelectListItem() { Value = "226", Text = "226" },
+new SelectListItem() { Value = "227", Text = "227" },
+new SelectListItem() { Value = "228", Text = "228" },
+new SelectListItem() { Value = "229", Text = "229" },
+new SelectListItem() { Value = "230", Text = "230" },
+new SelectListItem() { Value = "231", Text = "231" },
+new SelectListItem() { Value = "232", Text = "232" },
+new SelectListItem() { Value = "233", Text = "233" },
+new SelectListItem() { Value = "234", Text = "234" },
+new SelectListItem() { Value = "235", Text = "235" },
+new SelectListItem() { Value = "236", Text = "236" },
+new SelectListItem() { Value = "237", Text = "237" },
+new SelectListItem() { Value = "238", Text = "238" },
+new SelectListItem() { Value = "239", Text = "239" },
+new SelectListItem() { Value = "240", Text = "240" },
+new SelectListItem() { Value = "241", Text = "241" },
+new SelectListItem() { Value = "242", Text = "242" },
+new SelectListItem() { Value = "243", Text = "243" },
+new SelectListItem() { Value = "244", Text = "244" },
+new SelectListItem() { Value = "245", Text = "245" },
+new SelectListItem() { Value = "246", Text = "246" },
+new SelectListItem() { Value = "247", Text = "247" },
+new SelectListItem() { Value = "248", Text = "248" },
+new SelectListItem() { Value = "249", Text = "249" },
+new SelectListItem() { Value = "250", Text = "250" },
+new SelectListItem() { Value = "251", Text = "251" },
+new SelectListItem() { Value = "252", Text = "252" },
+new SelectListItem() { Value = "253", Text = "253" },
+new SelectListItem() { Value = "254", Text = "254" },
+new SelectListItem() { Value = "255", Text = "255" },
+new SelectListItem() { Value = "256", Text = "256" },
+new SelectListItem() { Value = "257", Text = "257" },
+new SelectListItem() { Value = "258", Text = "258" },
+new SelectListItem() { Value = "259", Text = "259" },
+new SelectListItem() { Value = "260", Text = "260" },
+new SelectListItem() { Value = "261", Text = "261" },
+new SelectListItem() { Value = "262", Text = "262" },
+new SelectListItem() { Value = "263", Text = "263" },
+new SelectListItem() { Value = "264", Text = "264" },
+new SelectListItem() { Value = "265", Text = "265" },
+new SelectListItem() { Value = "266", Text = "266" },
+new SelectListItem() { Value = "267", Text = "267" },
+new SelectListItem() { Value = "268", Text = "268" },
+new SelectListItem() { Value = "269", Text = "269" },
+new SelectListItem() { Value = "270", Text = "270" },
+new SelectListItem() { Value = "271", Text = "271" },
+new SelectListItem() { Value = "272", Text = "272" },
+new SelectListItem() { Value = "273", Text = "273" },
+new SelectListItem() { Value = "274", Text = "274" },
+new SelectListItem() { Value = "275", Text = "275" },
+new SelectListItem() { Value = "276", Text = "276" },
+new SelectListItem() { Value = "277", Text = "277" },
+new SelectListItem() { Value = "278", Text = "278" },
+new SelectListItem() { Value = "279", Text = "279" },
+new SelectListItem() { Value = "280", Text = "280" },
+new SelectListItem() { Value = "281", Text = "281" },
+new SelectListItem() { Value = "282", Text = "282" },
+new SelectListItem() { Value = "283", Text = "283" },
+new SelectListItem() { Value = "284", Text = "284" },
+new SelectListItem() { Value = "285", Text = "285" },
+new SelectListItem() { Value = "286", Text = "286" },
+new SelectListItem() { Value = "287", Text = "287" },
+new SelectListItem() { Value = "288", Text = "288" },
+new SelectListItem() { Value = "289", Text = "289" },
+new SelectListItem() { Value = "290", Text = "290" },
+new SelectListItem() { Value = "291", Text = "291" },
+new SelectListItem() { Value = "292", Text = "292" },
+new SelectListItem() { Value = "293", Text = "293" },
+new SelectListItem() { Value = "294", Text = "294" },
+new SelectListItem() { Value = "295", Text = "295" },
+new SelectListItem() { Value = "296", Text = "296" },
+new SelectListItem() { Value = "297", Text = "297" },
+new SelectListItem() { Value = "298", Text = "298" },
+new SelectListItem() { Value = "299", Text = "299" }
+}))
+                @*@Html.EditorFor(model => model.DB, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.ValidationMessageFor(model => model.DB, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Manager, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+
+                @Html.DropDownListFor(model => model.Manager, (IEnumerable<SelectListItem>)(new[] {
+                                new SelectListItem() { Value = "Manager01", Text = "Manager01" },
+                                new SelectListItem() { Value = "Manager02", Text = "Manager02" },
+                                new SelectListItem() { Value = "Manager03", Text = "Manager03" },
+                                new SelectListItem() { Value = "Manager04", Text = "Manager04" },
+                                new SelectListItem() { Value = "Manager05", Text = "Manager05" },
+                                new SelectListItem() { Value = "Manager06", Text = "Manager06" },
+                                new SelectListItem() { Value = "Manager07", Text = "Manager07" },
+                                new SelectListItem() { Value = "Manager08", Text = "Manager08" },
+                                new SelectListItem() { Value = "Manager09", Text = "Manager09" },
+                                new SelectListItem() { Value = "Manager10", Text = "Manager10" },
+                                new SelectListItem() { Value = "Manager11", Text = "Manager11" },                                
+                                new SelectListItem() { Value = "Manager12", Text = "Manager12" },
+                                new SelectListItem() { Value = "Manager13", Text = "Manager13" }
+                             }))
+
+
+
+                @*@Html.EditorFor(model => model.Manager, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.ValidationMessageFor(model => model.Manager, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AliasName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AliasName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AliasName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">            
+            <div class="col-md-10">
+                <input class="form-control text-box single-line" id="NTUser" name="NTUser" type="hidden" value=@User.Identity.Name />
+                <span class="field-validation-valid text-danger" data-valmsg-for="NTUser" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

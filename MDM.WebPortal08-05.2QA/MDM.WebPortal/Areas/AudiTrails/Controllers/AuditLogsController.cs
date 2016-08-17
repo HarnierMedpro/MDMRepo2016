@@ -10,10 +10,12 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.AudiTrails.Models;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
 
 namespace MDM.WebPortal.Areas.AudiTrails.Controllers
 {
+    [SetPermissions]
     public class AuditLogsController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -29,7 +31,7 @@ namespace MDM.WebPortal.Areas.AudiTrails.Controllers
             return View();
         }
 
-        public async Task<ActionResult> Read_Audit([DataSourceRequest] DataSourceRequest request)
+        public ActionResult Read_Audit([DataSourceRequest] DataSourceRequest request)
         {
             return Json(db.AuditLogs.OrderBy(x => x.AuditDateTime).ToDataSourceResult(request, x => new VMAuditLog
             {

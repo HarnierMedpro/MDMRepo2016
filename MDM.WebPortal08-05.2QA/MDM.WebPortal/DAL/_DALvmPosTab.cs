@@ -32,7 +32,7 @@ namespace MDM.WebPortal.DAL
                     sqlData.Fill(dtResultado);
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 dtResultado = null;
             }

@@ -1,4 +1,3 @@
-using MDM.WebPortal.Models;
 using MDM.WebPortal.Models.Identity;
 
 namespace MDM.WebPortal.Migrations
@@ -29,11 +28,12 @@ namespace MDM.WebPortal.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
             context.Areas.AddOrUpdate(a => a.AreaName,
-                new AreaSystem { AreaID = 1, AreaName = "ActionCode"},
-                new AreaSystem { AreaID = 2, AreaName = "ADP"},
-                new AreaSystem { AreaID = 3, AreaName = "ManagerDBA"}
-                );
+               new AreaSystem { AreaID = 1, AreaName = "ActionCode" },
+               new AreaSystem { AreaID = 2, AreaName = "ADP" },
+               new AreaSystem { AreaID = 3, AreaName = "ManagerDBA" }
+               );
 
             context.Controllers.AddOrUpdate(c => c.Cont_Name,
                 new ControllerSystem { ControllerID = 1, Cont_Name = "Account", AreaID = null },
@@ -65,59 +65,53 @@ namespace MDM.WebPortal.Migrations
            );
 
             context.Actions.AddOrUpdate(ac => ac.Act_Name,
-                new ActionSystem { ActionID = 1, Act_Name = "Index", ControllerID = 10},
-                new ActionSystem { ActionID = 2, Act_Name = "Read", ControllerID = 10},
-                new ActionSystem { ActionID = 3, Act_Name = "Update", ControllerID = 10},
-                new ActionSystem { ActionID = 4, Act_Name = "Corp_DBs_Release", ControllerID = 10},
-                new ActionSystem { ActionID = 5, Act_Name = "Create", ControllerID = 10},
+                new ActionSystem { ActionID = 1, Act_Name = "Index", ControllerID = 10 },
+                new ActionSystem { ActionID = 2, Act_Name = "Read", ControllerID = 10 },
+                new ActionSystem { ActionID = 3, Act_Name = "Update", ControllerID = 10 },
+                new ActionSystem { ActionID = 4, Act_Name = "Corp_DBs_Release", ControllerID = 10 },
+                new ActionSystem { ActionID = 5, Act_Name = "Create", ControllerID = 10 },
 
-                new ActionSystem { ActionID = 6, Act_Name = "Index", ControllerID = 12},
-                new ActionSystem { ActionID = 7, Act_Name = "CorporateMasterLists_Read", ControllerID = 12},
-                new ActionSystem { ActionID = 8, Act_Name = "CorporateMasterLists_Update", ControllerID = 12},
-                new ActionSystem { ActionID = 9, Act_Name = "CorporateMasterLists_Create", ControllerID = 12},
+                new ActionSystem { ActionID = 6, Act_Name = "Index", ControllerID = 12 },
+                new ActionSystem { ActionID = 7, Act_Name = "CorporateMasterLists_Read", ControllerID = 12 },
+                new ActionSystem { ActionID = 8, Act_Name = "CorporateMasterLists_Update", ControllerID = 12 },
+                new ActionSystem { ActionID = 9, Act_Name = "CorporateMasterLists_Create", ControllerID = 12 },
 
-                new ActionSystem { ActionID = 10, Act_Name = "Index", ControllerID = 13},
-                new ActionSystem { ActionID = 11, Act_Name = "Read", ControllerID = 13},
-                new ActionSystem { ActionID = 12, Act_Name = "Create_CPT", ControllerID = 13},
-                new ActionSystem { ActionID = 13, Act_Name = "Update", ControllerID = 13},
+                new ActionSystem { ActionID = 10, Act_Name = "Index", ControllerID = 13 },
+                new ActionSystem { ActionID = 11, Act_Name = "Read", ControllerID = 13 },
+                new ActionSystem { ActionID = 12, Act_Name = "Create_CPT", ControllerID = 13 },
+                new ActionSystem { ActionID = 13, Act_Name = "Update", ControllerID = 13 },
 
-                new ActionSystem { ActionID = 14, Act_Name = "Index", ControllerID = 15},
-                new ActionSystem { ActionID = 15, Act_Name = "Read", ControllerID = 15},
-                new ActionSystem { ActionID = 16, Act_Name = "Update", ControllerID = 15},
-                new ActionSystem { ActionID = 17, Act_Name = "Create_POS", ControllerID = 15},
+                new ActionSystem { ActionID = 14, Act_Name = "Index", ControllerID = 15 },
+                new ActionSystem { ActionID = 15, Act_Name = "Read", ControllerID = 15 },
+                new ActionSystem { ActionID = 16, Act_Name = "Update", ControllerID = 15 },
+                new ActionSystem { ActionID = 17, Act_Name = "Create_POS", ControllerID = 15 },
 
-                new ActionSystem { ActionID = 18, Act_Name = "Index", ControllerID = 16},
-                new ActionSystem { ActionID = 19, Act_Name = "Read", ControllerID = 16},
-                new ActionSystem { ActionID = 20, Act_Name = "Update_Entity", ControllerID = 16},
-                new ActionSystem { ActionID = 21, Act_Name = "Create_Entity", ControllerID = 16},
+                new ActionSystem { ActionID = 18, Act_Name = "Index", ControllerID = 16 },
+                new ActionSystem { ActionID = 19, Act_Name = "Read", ControllerID = 16 },
+                new ActionSystem { ActionID = 20, Act_Name = "Update_Entity", ControllerID = 16 },
+                new ActionSystem { ActionID = 21, Act_Name = "Create_Entity", ControllerID = 16 },
 
-                new ActionSystem { ActionID = 22, Act_Name = "Index", ControllerID = 18},
-                new ActionSystem { ActionID = 23, Act_Name = "Read_Category", ControllerID = 18},
-                new ActionSystem { ActionID = 24, Act_Name = "Create_Category", ControllerID = 18},
-                new ActionSystem { ActionID = 25, Act_Name = "Update_Category", ControllerID = 18},
+                new ActionSystem { ActionID = 22, Act_Name = "Index", ControllerID = 18 },
+                new ActionSystem { ActionID = 23, Act_Name = "Read_Category", ControllerID = 18 },
+                new ActionSystem { ActionID = 24, Act_Name = "Create_Category", ControllerID = 18 },
+                new ActionSystem { ActionID = 25, Act_Name = "Update_Category", ControllerID = 18 },
 
-                new ActionSystem { ActionID = 26, Act_Name = "Index", ControllerID = 19},
-                new ActionSystem { ActionID = 27, Act_Name = "Read_ActionCode", ControllerID = 19},
-                new ActionSystem { ActionID = 28, Act_Name = "Create_ActionCode", ControllerID = 19},
-                new ActionSystem { ActionID = 29, Act_Name = "Update_ActionCode", ControllerID = 19},
+                new ActionSystem { ActionID = 26, Act_Name = "Index", ControllerID = 19 },
+                new ActionSystem { ActionID = 27, Act_Name = "Read_ActionCode", ControllerID = 19 },
+                new ActionSystem { ActionID = 28, Act_Name = "Create_ActionCode", ControllerID = 19 },
+                new ActionSystem { ActionID = 29, Act_Name = "Update_ActionCode", ControllerID = 19 },
 
-                new ActionSystem { ActionID = 30, Act_Name = "Index", ControllerID = 22},
-                new ActionSystem { ActionID = 31, Act_Name = "Read_Adp", ControllerID = 22},
-                new ActionSystem { ActionID = 32, Act_Name = "EdgeMedLogonsforAdp", ControllerID = 22},
-                new ActionSystem { ActionID = 33, Act_Name = "Update_Adp", ControllerID = 22},
+                new ActionSystem { ActionID = 30, Act_Name = "Index", ControllerID = 22 },
+                new ActionSystem { ActionID = 31, Act_Name = "Read_Adp", ControllerID = 22 },
+                new ActionSystem { ActionID = 32, Act_Name = "EdgeMedLogonsforAdp", ControllerID = 22 },
+                new ActionSystem { ActionID = 33, Act_Name = "Update_Adp", ControllerID = 22 },
 
-                new ActionSystem { ActionID = 34, Act_Name = "Index", ControllerID = 24},
-                new ActionSystem { ActionID = 35, Act_Name = "Read_GroupByManager", ControllerID = 24},
-                new ActionSystem { ActionID = 36, Act_Name = "Read_BI_DB_FvPByManager", ControllerID = 24},
-                new ActionSystem { ActionID = 37, Act_Name = "Update_BI_DB_FvP", ControllerID = 24},
+                new ActionSystem { ActionID = 34, Act_Name = "Index", ControllerID = 24 },
+                new ActionSystem { ActionID = 35, Act_Name = "Read_GroupByManager", ControllerID = 24 },
+                new ActionSystem { ActionID = 36, Act_Name = "Read_BI_DB_FvPByManager", ControllerID = 24 },
+                new ActionSystem { ActionID = 37, Act_Name = "Update_BI_DB_FvP", ControllerID = 24 },
                 new ActionSystem { ActionID = 38, Act_Name = "Create_BI_DB_FvP", ControllerID = 24 }
            );
-
-            context.Menus.AddOrUpdate(m => m.Title,
-                new Menu { MenuID = 5, Title = "CORPORATIONS"},
-                new Menu { MenuID = 6, ActionID = 6, ParentId = 5, Title = "CorporateMasterList"},
-                new Menu { MenuID = 7, ActionID = 1, ParentId = 5, Title = "Corp_DBs" }
-            );
         }
     }
 }

@@ -34,7 +34,7 @@ namespace MDM.WebPortal.DAL
                 SqlDataAdapter SqlData = new SqlDataAdapter(SqlCmd); /*Objeto que permite ejecutar el comando y llenar el datatable*/
                 SqlData.Fill(DtResultado);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 DtResultado = null;
             }

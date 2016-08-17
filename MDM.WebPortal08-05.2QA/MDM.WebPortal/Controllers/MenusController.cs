@@ -41,7 +41,7 @@ namespace MDM.WebPortal.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<ActionResult> Read_Menu([DataSourceRequest] DataSourceRequest request)
+        public ActionResult Read_Menu([DataSourceRequest] DataSourceRequest request)
         {
             return Json(db.Menus.ToDataSourceResult(request, x => new VMMenu
             {

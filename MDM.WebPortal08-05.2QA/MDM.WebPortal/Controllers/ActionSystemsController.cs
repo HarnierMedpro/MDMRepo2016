@@ -9,12 +9,13 @@ using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.Identity;
 using MDM.WebPortal.Models.ViewModel;
 
 namespace MDM.WebPortal.Controllers
 {
-    [AllowAnonymous]
+    [SetPermissions]
     public class ActionSystemsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

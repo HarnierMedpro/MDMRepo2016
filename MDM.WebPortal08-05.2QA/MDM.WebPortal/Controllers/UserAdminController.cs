@@ -18,12 +18,14 @@ using Kendo.Mvc.Extensions;
 using MDM.WebPortal.Tools;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.Identity;
 
 namespace IdentitySample.Controllers
 {
     //[Authorize(Roles = "ADMIN")]
-    [AllowAnonymous]
+    [SetPermissions]
+    //[AllowAnonymous]
     public class UsersAdminController : Controller
     {
         public UsersAdminController()

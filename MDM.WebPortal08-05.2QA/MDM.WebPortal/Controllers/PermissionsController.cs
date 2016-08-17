@@ -20,8 +20,8 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace MDM.WebPortal.Controllers
 {
-    //[SetPermissions]
-    [AllowAnonymous]
+    [SetPermissions]
+    //[AllowAnonymous]
     public class PermissionsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

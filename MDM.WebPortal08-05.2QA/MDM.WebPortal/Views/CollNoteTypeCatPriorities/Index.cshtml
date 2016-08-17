@@ -1,0 +1,97 @@
+﻿@using MDM.WebPortal.Models.ViewModel
+@model IEnumerable<MDM.WebPortal.Models.FromDB.CollNoteTypeCatPriority>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2> ActionCode - Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jszip/2.4.0/jszip.js"></script>
+<script src="http://kendo.cdn.telerik.com/2016.1.406/js/kendo.all.min.js"></script>
+
+
+@(Html.Kendo().Grid<ActionCodeViewModel>()
+    .Name("Grid")
+    .DataSource(dataSource => dataSource
+          .Ajax()
+          .ServerOperation(true)
+          .PageSize(10)
+          .Model(model =>
+          {
+              model.Id(x => x.id); // Specify the property which is the unique identifier of the model
+              model.Field(x => x.id).Editable(false); // Make the ProductID property not editable
+          })
+              .Update(update => update.Action("Products_Update", "CollNoteTypeCatPriorities"))  // Action invoked when the user saves an updated data item
+              .Read(read => read.Action("Products_Read", "CollNoteTypeCatPriorities")) // Set the action method which will return the data in JSON format
+              //.Destroy(destroy => destroy.Action("Products_Destroy", "CollNoteTypeCatPriorities")) // Action invoked when the user removes a data item
+       )
+
+    //.Editable(editable => editable.Mode(GridEditMode.InLine)) // Use inline editing mode
+
+        .Columns(columns =>
+    {
+        columns.Bound(p => p.CollNoteType).Title("Status").Width(300);
+        columns.Bound(p => p.Code).Title("ActionCodes").Width(300);
+
+        columns.ForeignKey(p => p.CollNoteCat, (System.Collections.IEnumerable)ViewData["ACCategory"], "CategoryName", "CategoryName").Title("Category").Width(300);
+        //columns.Bound(p => p.CollNoteCat).Title("Category").Width(300);
+
+        columns.ForeignKey(p => p.Priority, (System.Collections.IEnumerable)ViewData["ACPriority"], "PriorityName", "PriorityName").Title("Priority").Width(300);
+        //columns.Bound(p => p.Priority).Title("Priority").Width(300);
+        columns.Bound(p => p.Active).Title("Active").Width(300);
+
+        columns.ForeignKey(p => p.ACType, (System.Collections.IEnumerable)ViewData["ACType"], "ACTypeName", "ACTypeName").Title("ACType").Width(300); //.EditorTemplateName("GridForeignKey").Title("Category").Width(300);
+        
+        columns.Bound(p => p.NTUser).Visible(false);
+        columns.Bound(p => p.ParsingYN).Visible(false);
+
+        columns.Command(commands =>
+        {   
+            commands.Edit(); // The "edit" command will edit and update data items
+            //commands.Destroy(); // The "destroy" command removes data items
+        }).Title("Commands").Width(200);
+    })
+
+            //.ToolBar(toolBar => toolBar.Custom()
+            //    .Text("Export To CSV")
+            //    .HtmlAttributes(new { id = "export" })
+            //    .Url(Url.Action("Export", "CollNoteTypeCatPriorities"))
+            //)
+
+            //.Url(Url.Action("Export", "CollNoteTypeCatPriorities", new { page = 1, pageSize = "~", filter = "~", sort = "~" }))
+
+        .ToolBar(tools => tools.Excel())
+        .Excel(excel => excel
+            .AllPages(true)
+            .FileName("ExportData.xlsx")
+            .Filterable(false)
+                .ProxyURL(Url.Action("Excel_Export_Save", "CollNoteTypeCatPriorities")) )
+    
+    .Filterable()
+    .Pageable(ps => ps.Refresh(true)
+    .PreviousNext(true).PageSizes(true))
+    .Sortable()
+    .Groupable()
+    .Reorderable(r => r.Columns(true))
+    .Resizable(r => r.Columns(true))
+    .Selectable(s => s.Enabled(true)
+                                .Type(GridSelectionType.Row)
+                                .Mode(GridSelectionMode.Single))
+
+    //.ColumnMenu()
+
+
+)
+
+
+
+
+

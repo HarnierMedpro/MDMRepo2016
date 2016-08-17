@@ -11,13 +11,13 @@ namespace IdentitySample
 
             routes.MapRoute(
                 name: "AlternateManagerBIAccess",
-                url: "ManagerBIAccess/{action}/{id}",
+                url: "ManagerBIAccessold/{action}/{id}",
                 defaults: new { controller = "ManagerDBAccessBIs", action = "Index", id = UrlParameter.Optional }
                 );
 
             routes.MapRoute(
                 name: "AlternateActionCode",
-                url: "ActionCode/{action}/{id}",
+                url: "ActionCodeold/{action}/{id}",
                 defaults: new { controller = "CollNoteTypeCatPriorities", action = "Index", id = UrlParameter.Optional }
                 );
 

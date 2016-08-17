@@ -35,7 +35,7 @@ namespace MDM.WebPortal.DAL
                     /*Objeto que permite ejecutar el comando y llenar el datatable*/
                 SqlData.Fill(DtResultado);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 DtResultado = null;
             }

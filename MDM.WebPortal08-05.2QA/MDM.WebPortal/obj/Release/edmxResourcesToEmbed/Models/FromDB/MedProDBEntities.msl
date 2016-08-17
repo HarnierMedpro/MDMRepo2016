@@ -1,0 +1,283 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MedProDBEntitiesStoreContainer" CdmEntityContainer="Entities">
+    <EntitySetMapping Name="ADPMasters">
+      <EntityTypeMapping TypeName="MedProDBEntities.ADPMaster">
+        <MappingFragment StoreEntitySet="ADPMaster">
+          <ScalarProperty Name="ADPMasterID" ColumnName="ADPMasterID" />
+          <ScalarProperty Name="ADP_ID" ColumnName="ADP_ID" />
+          <ScalarProperty Name="FName" ColumnName="FName" />
+          <ScalarProperty Name="LName" ColumnName="LName" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Manager" ColumnName="Manager" />
+          <ScalarProperty Name="NTUser" ColumnName="NTUser" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BI_DB_FvP_Access">
+      <EntityTypeMapping TypeName="MedProDBEntities.BI_DB_FvP_Access">
+        <MappingFragment StoreEntitySet="BI_DB_FvP_Access">
+          <ScalarProperty Name="BIDbFvPID" ColumnName="BIDbFvPID" />
+          <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+          <ScalarProperty Name="DB_ID" ColumnName="DB_ID" />
+          <ScalarProperty Name="FvPID" ColumnName="FvPID" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Corp_DBs">
+      <EntityTypeMapping TypeName="MedProDBEntities.Corp_DBs">
+        <MappingFragment StoreEntitySet="Corp_DBs">
+          <ScalarProperty Name="ID_PK" ColumnName="ID_PK" />
+          <ScalarProperty Name="corpID" ColumnName="corpID" />
+          <ScalarProperty Name="DB_ID" ColumnName="DB_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Corp_Owner">
+      <EntityTypeMapping TypeName="MedProDBEntities.Corp_Owner">
+        <MappingFragment StoreEntitySet="Corp_Owner">
+          <ScalarProperty Name="corpOwnerID" ColumnName="corpOwnerID" />
+          <ScalarProperty Name="corpID" ColumnName="corpID" />
+          <ScalarProperty Name="OwnersID" ColumnName="OwnersID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CorporateMasterLists">
+      <EntityTypeMapping TypeName="MedProDBEntities.CorporateMasterList">
+        <MappingFragment StoreEntitySet="CorporateMasterList">
+          <ScalarProperty Name="corpID" ColumnName="corpID" />
+          <ScalarProperty Name="CorporateName" ColumnName="CorporateName" />
+          <ScalarProperty Name="active" ColumnName="active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CPTDatas">
+      <EntityTypeMapping TypeName="MedProDBEntities.CPTData">
+        <MappingFragment StoreEntitySet="CPTData">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="CPT" ColumnName="CPT" />
+          <ScalarProperty Name="CPT_Description" ColumnName="CPT_Description" />
+          <ScalarProperty Name="ShortD" ColumnName="ShortD" />
+          <ScalarProperty Name="NTUser" ColumnName="NTUser" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DBLists">
+      <EntityTypeMapping TypeName="MedProDBEntities.DBList">
+        <MappingFragment StoreEntitySet="DBList">
+          <ScalarProperty Name="DB_ID" ColumnName="DB_ID" />
+          <ScalarProperty Name="DB" ColumnName="DB" />
+          <ScalarProperty Name="databaseName" ColumnName="databaseName" />
+          <ScalarProperty Name="active" ColumnName="active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Edgemed_Logons">
+      <EntityTypeMapping TypeName="MedProDBEntities.Edgemed_Logons">
+        <MappingFragment StoreEntitySet="Edgemed_Logons">
+          <ScalarProperty Name="Edgemed_LogID" ColumnName="Edgemed_LogID" />
+          <ScalarProperty Name="ADPMasterID" ColumnName="ADPMasterID" />
+          <ScalarProperty Name="Edgemed_UserName" ColumnName="Edgemed_UserName" />
+          <ScalarProperty Name="Zno" ColumnName="Zno" />
+          <ScalarProperty Name="EdgeMed_ID" ColumnName="EdgeMed_ID" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Facitity_DBs">
+      <EntityTypeMapping TypeName="MedProDBEntities.Facitity_DBs">
+        <MappingFragment StoreEntitySet="Facitity_DBs">
+          <ScalarProperty Name="IDPK" ColumnName="IDPK" />
+          <ScalarProperty Name="DB" ColumnName="DB" />
+          <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+          <ScalarProperty Name="Facility_ID" ColumnName="Facility ID" />
+          <ScalarProperty Name="Fac_NAME" ColumnName="Fac NAME" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FvPLists">
+      <EntityTypeMapping TypeName="MedProDBEntities.FvPList">
+        <MappingFragment StoreEntitySet="FvPList">
+          <ScalarProperty Name="FvPID" ColumnName="FvPID" />
+          <ScalarProperty Name="FvPName" ColumnName="FvPName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Manager_Master">
+      <EntityTypeMapping TypeName="MedProDBEntities.Manager_Master">
+        <MappingFragment StoreEntitySet="Manager_Master">
+          <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+          <ScalarProperty Name="ManagerTypeID" ColumnName="ManagerTypeID" />
+          <ScalarProperty Name="AliasName" ColumnName="AliasName" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Manager_Type">
+      <EntityTypeMapping TypeName="MedProDBEntities.Manager_Type">
+        <MappingFragment StoreEntitySet="Manager_Type">
+          <ScalarProperty Name="ManagerTypeID" ColumnName="ManagerTypeID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MDM_POS_ListName">
+      <EntityTypeMapping TypeName="MedProDBEntities.MDM_POS_ListName">
+        <MappingFragment StoreEntitySet="MDM_POS_ListName">
+          <ScalarProperty Name="MDMPOS_ListNameID" ColumnName="MDMPOS_ListNameID" />
+          <ScalarProperty Name="PosName" ColumnName="PosName" />
+          <ScalarProperty Name="active" ColumnName="active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MDM_POS_Name_DBPOS_grp">
+      <EntityTypeMapping TypeName="MedProDBEntities.MDM_POS_Name_DBPOS_grp">
+        <MappingFragment StoreEntitySet="MDM_POS_Name_DBPOS_grp">
+          <ScalarProperty Name="MDMPOS_NameID" ColumnName="MDMPOS_NameID" />
+          <ScalarProperty Name="DB_ID" ColumnName="DB_ID" />
+          <ScalarProperty Name="FacilityID" ColumnName="FacilityID" />
+          <ScalarProperty Name="Extra" ColumnName="Extra" />
+          <ScalarProperty Name="MDMPOS_ListNameID" ColumnName="MDMPOS_ListNameID" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OwnerLists">
+      <EntityTypeMapping TypeName="MedProDBEntities.OwnerList">
+        <MappingFragment StoreEntitySet="OwnerList">
+          <ScalarProperty Name="OwnersID" ColumnName="OwnersID" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="active" ColumnName="active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CollNoteTypeCatPriorities">
+      <EntityTypeMapping TypeName="MedProDBEntities.CollNoteTypeCatPriority">
+        <MappingFragment StoreEntitySet="CollNoteTypeCatPriority">
+          <ScalarProperty Name="sortorder" ColumnName="sortorder" />
+          <ScalarProperty Name="ACType" ColumnName="ACType" />
+          <ScalarProperty Name="ParsingYN" ColumnName="ParsingYN" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="NTUser" ColumnName="NTUser" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="CollNoteCat" ColumnName="CollNoteCat" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="CollNoteType" ColumnName="CollNoteType" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ACCategories">
+      <EntityTypeMapping TypeName="MedProDBEntities.ACCategory">
+        <MappingFragment StoreEntitySet="ACCategory">
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+          <ScalarProperty Name="CatogoryID" ColumnName="CatogoryID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ACPriorities">
+      <EntityTypeMapping TypeName="MedProDBEntities.ACPriority">
+        <MappingFragment StoreEntitySet="ACPriority">
+          <ScalarProperty Name="PriorityName" ColumnName="PriorityName" />
+          <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ActionCodes">
+      <EntityTypeMapping TypeName="MedProDBEntities.ActionCode">
+        <MappingFragment StoreEntitySet="ActionCode">
+          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+          <ScalarProperty Name="ParsingYN" ColumnName="ParsingYN" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="ACTypeID" ColumnName="ACTypeID" />
+          <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+          <ScalarProperty Name="CodeID" ColumnName="CodeID" />
+          <ScalarProperty Name="CollNoteType" ColumnName="CollNoteType" />
+          <ScalarProperty Name="ActionCodeID" ColumnName="ActionCodeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ACtypes">
+      <EntityTypeMapping TypeName="MedProDBEntities.ACtype">
+        <MappingFragment StoreEntitySet="ACtypes">
+          <ScalarProperty Name="ACTypeName" ColumnName="ACTypeName" />
+          <ScalarProperty Name="ACTypeID" ColumnName="ACTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CodeMasterLists">
+      <EntityTypeMapping TypeName="MedProDBEntities.CodeMasterList">
+        <MappingFragment StoreEntitySet="CodeMasterList">
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="CodeID" ColumnName="CodeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AuditLogs">
+      <EntityTypeMapping TypeName="MedProDBEntities.AuditLog">
+        <MappingFragment StoreEntitySet="AuditLog">
+          <ScalarProperty Name="ModelPKey" ColumnName="ModelPKey" />
+          <ScalarProperty Name="AuditAction" ColumnName="AuditAction" />
+          <ScalarProperty Name="NewValue" ColumnName="NewValue" />
+          <ScalarProperty Name="OldValue" ColumnName="OldValue" />
+          <ScalarProperty Name="Field_ColumName" ColumnName="Field_ColumName" />
+          <ScalarProperty Name="AuditDateTime" ColumnName="AuditDateTime" />
+          <ScalarProperty Name="UserLogons" ColumnName="UserLogons" />
+          <ScalarProperty Name="TableName" ColumnName="TableName" />
+          <ScalarProperty Name="AuditLogID" ColumnName="AuditLogID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MasterUserLists">
+      <EntityTypeMapping TypeName="MedProDBEntities.MasterUserList">
+        <MappingFragment StoreEntitySet="MasterUserList">
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="NTUser" ColumnName="NTUser" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Middle_Init" ColumnName="Middle_Init" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="User_Active" ColumnName="User_Active" />
+          <ScalarProperty Name="Staff_Manager" ColumnName="Staff_Manager" />
+          <ScalarProperty Name="Job_Title" ColumnName="Job_Title" />
+          <ScalarProperty Name="EdgeMed_ID" ColumnName="EdgeMed_ID" />
+          <ScalarProperty Name="ZoomServer" ColumnName="ZoomServer" />
+          <ScalarProperty Name="Edgemed_UserName" ColumnName="Edgemed_UserName" />
+          <ScalarProperty Name="ADP_ID_" ColumnName="ADP_ID#" />
+          <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+          <ScalarProperty Name="ADP_ID" ColumnName="ADP_ID" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CorporateNameLists">
+      <EntityTypeMapping TypeName="MedProDBEntities.CorporateNameList">
+        <MappingFragment StoreEntitySet="CorporateNameList">
+          <ScalarProperty Name="NTUser" ColumnName="NTUser" />
+          <ScalarProperty Name="CorporateName" ColumnName="CorporateName" />
+          <ScalarProperty Name="DBno" ColumnName="DBno" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ManagerDBAccessBIs">
+      <EntityTypeMapping TypeName="MedProDBEntities.ManagerDBAccessBI">
+        <MappingFragment StoreEntitySet="ManagerDBAccessBI">
+          <ScalarProperty Name="active" ColumnName="active" />
+          <ScalarProperty Name="NTUser" ColumnName="NTUser" />
+          <ScalarProperty Name="AliasName" ColumnName="AliasName" />
+          <ScalarProperty Name="Manager" ColumnName="Manager" />
+          <ScalarProperty Name="DB" ColumnName="DB" />
+          <ScalarProperty Name="FvP" ColumnName="FvP" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

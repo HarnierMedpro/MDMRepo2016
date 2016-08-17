@@ -235,6 +235,10 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
     <Compile Include="Controllers\PermissionsController.cs" />
+    <Compile Include="Controllers\Remove\CollNoteTypeCatPrioritiesController.cs" />
+    <Compile Include="Controllers\Remove\CorporateNameListsController.cs" />
+    <Compile Include="Controllers\Remove\ManagerDBAccessBIsController.cs" />
+    <Compile Include="Controllers\Remove\MasterUserListsController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
     <Compile Include="Controllers\WebAPI\WSCorp_DBsController.cs" />
@@ -248,15 +252,20 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201608152038421_init.cs" />
-    <Compile Include="Migrations\201608152038421_init.Designer.cs">
-      <DependentUpon>201608152038421_init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201608161213321_addedMenus.cs" />
-    <Compile Include="Migrations\201608161213321_addedMenus.Designer.cs">
-      <DependentUpon>201608161213321_addedMenus.cs</DependentUpon>
+    <Compile Include="Migrations\201608171550059_init.cs" />
+    <Compile Include="Migrations\201608171550059_init.Designer.cs">
+      <DependentUpon>201608171550059_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\FromDB\CorporateNameList.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\ManagerDBAccessBI.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\MasterUserList.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Identity\AreaSystem.cs" />
     <Compile Include="Models\FromDB\ACCategory.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
@@ -382,6 +391,8 @@
     <Compile Include="Models\Identity\Menu.cs" />
     <Compile Include="Models\Identity\Permission.cs" />
     <Compile Include="Models\ViewModel\ActionCodeViewModel.cs" />
+    <Compile Include="Models\ViewModel\Delete\ActionCodeViewModel.cs" />
+    <Compile Include="Models\ViewModel\Delete\ManagerDBAccessBIViewModel.cs" />
     <Compile Include="Models\ViewModel\VMActionEditor.cs" />
     <Compile Include="Models\ViewModel\VMActionSystem.cs" />
     <Compile Include="Models\ViewModel\VMAreaSystems.cs" />
@@ -1262,6 +1273,7 @@
     <Content Include="Areas\AudiTrails\Views\web.config" />
     <Content Include="Areas\AudiTrails\Views\AuditLogs\Index.cshtml" />
     <None Include="Properties\PublishProfiles\QASite.pubxml" />
+    <None Include="Properties\PublishProfiles\Site02.pubxml" />
     <None Include="Properties\PublishProfiles\TestQA.pubxml" />
     <None Include="Scripts\jquery-2.2.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.4.js" />
@@ -2632,6 +2644,24 @@
     <Content Include="Views\AreaSystems\Index.cshtml" />
     <Content Include="Views\Menus\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ActionsInSystem.cshtml" />
+    <Content Include="Views\MasterUserLists\Create.cshtml" />
+    <Content Include="Views\MasterUserLists\Details.cshtml" />
+    <Content Include="Views\MasterUserLists\Edit.cshtml" />
+    <Content Include="Views\MasterUserLists\Index.cshtml" />
+    <Content Include="Views\CorporateNameLists\Create.cshtml" />
+    <Content Include="Views\CorporateNameLists\Details.cshtml" />
+    <Content Include="Views\CorporateNameLists\Edit.cshtml" />
+    <Content Include="Views\CorporateNameLists\Index.cshtml" />
+    <Content Include="Views\CorporateNameLists\z__Delete.cshtml" />
+    <Content Include="Views\CollNoteTypeCatPriorities\Create.cshtml" />
+    <Content Include="Views\CollNoteTypeCatPriorities\Details.cshtml" />
+    <Content Include="Views\CollNoteTypeCatPriorities\Edit.cshtml" />
+    <Content Include="Views\CollNoteTypeCatPriorities\Index.cshtml" />
+    <Content Include="Views\ManagerDBAccessBIs\Create.cshtml" />
+    <Content Include="Views\ManagerDBAccessBIs\Delete.cshtml" />
+    <Content Include="Views\ManagerDBAccessBIs\Details.cshtml" />
+    <Content Include="Views\ManagerDBAccessBIs\Edit.cshtml" />
+    <Content Include="Views\ManagerDBAccessBIs\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2650,11 +2680,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201608152038421_init.resx">
-      <DependentUpon>201608152038421_init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201608161213321_addedMenus.resx">
-      <DependentUpon>201608161213321_addedMenus.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201608171550059_init.resx">
+      <DependentUpon>201608171550059_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

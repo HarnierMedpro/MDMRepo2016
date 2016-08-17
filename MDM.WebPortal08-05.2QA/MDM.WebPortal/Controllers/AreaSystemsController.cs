@@ -12,6 +12,7 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models;
 using MDM.WebPortal.Models.Identity;
 using MDM.WebPortal.Models.ViewModel;
@@ -19,6 +20,7 @@ using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Controllers
 {
+    [SetPermissions]
     public class AreaSystemsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -33,7 +35,7 @@ namespace MDM.WebPortal.Controllers
         //    return View(await db.Areas.ToListAsync());
         //}
 
-        public async Task<ActionResult> Read_Area([DataSourceRequest] DataSourceRequest request)
+        public ActionResult Read_Area([DataSourceRequest] DataSourceRequest request)
         {
             return Json(db.Areas.OrderBy(x => x.AreaName).ToDataSourceResult(request, x => new VMAreaSystems
             {

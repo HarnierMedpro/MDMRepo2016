@@ -57,7 +57,7 @@
 <script id="template" type="text/kendo-tmp">
     @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMCorp_Owner>()
             .Name("Corporates_#=OwnersID#")
-            .ToolBar(tools => tools.Create().Text("NEW CORPORATE"))
+            .ToolBar(tools => tools.Create().Text("NEW CORPORATE ASSOCIATION"))
             .Columns(columns =>
             {
                 columns.Bound(o => o.corpOwnerID).Hidden(true);//Width(70);

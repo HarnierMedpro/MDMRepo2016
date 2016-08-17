@@ -12,13 +12,14 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.Identity;
 using MDM.WebPortal.Models.ViewModel;
 
 namespace IdentitySample.Controllers
 {
     //[Authorize(Roles = "ADMIN")]
-    [AllowAnonymous]
+    [SetPermissions]
     public class RolesAdminController : Controller
     {
         public RolesAdminController()
