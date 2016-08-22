@@ -44,7 +44,7 @@
                 comm.Edit();
             });
             columns.Bound(e => e.PermissionID).Hidden(true);
-            columns.ForeignKey(x => x.ControllerID, (System.Collections.IEnumerable)ViewData["Controllers"], "ControllerID", "Cont_Name").Groupable(false).Filterable(false).Sortable(false);
+            columns.ForeignKey(x => x.ControllerID, (System.Collections.IEnumerable)ViewData["Controllers"], "ControllerID", "Cont_Name");
             columns.ForeignKey(x => x.ActionID, (System.Collections.IEnumerable)ViewData["Actions"], "ActionID", "Act_Name");
             columns.Bound(e => e.Active);
             columns.Bound(e => e.Roles).ClientTemplate("#=territoriesTemplate(Roles)#").Title("ROLES").Filterable(false).Sortable(false).Groupable(false);

@@ -13,7 +13,7 @@ namespace MDM.WebPortal.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201608171550059_init"; }
+            get { return "201608181847456_init"; }
         }
         
         string IMigrationMetadata.Source

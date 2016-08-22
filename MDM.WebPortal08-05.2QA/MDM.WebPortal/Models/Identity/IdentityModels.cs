@@ -59,6 +59,7 @@ namespace MDM.WebPortal.Models.Identity
         public ApplicationDbContext()
             : base("MDMPermissionsIdentitiesv1", throwIfV1Schema: false)
         {
+            
         }
 
         static ApplicationDbContext()

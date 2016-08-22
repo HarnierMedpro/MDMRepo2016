@@ -2,16 +2,16 @@
 
 @{
     ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>ManagerDBAccessBI</h4>
         <hr />
@@ -263,7 +263,7 @@ new SelectListItem() { Value = "299", Text = "299" }
                                 new SelectListItem() { Value = "Manager08", Text = "Manager08" },
                                 new SelectListItem() { Value = "Manager09", Text = "Manager09" },
                                 new SelectListItem() { Value = "Manager10", Text = "Manager10" },
-                                new SelectListItem() { Value = "Manager11", Text = "Manager11" },                                
+                                new SelectListItem() { Value = "Manager11", Text = "Manager11" },
                                 new SelectListItem() { Value = "Manager12", Text = "Manager12" },
                                 new SelectListItem() { Value = "Manager13", Text = "Manager13" }
                              }))
@@ -283,7 +283,7 @@ new SelectListItem() { Value = "299", Text = "299" }
             </div>
         </div>
 
-        <div class="form-group">            
+        <div class="form-group">
             <div class="col-md-10">
                 <input class="form-control text-box single-line" id="NTUser" name="NTUser" type="hidden" value=@User.Identity.Name />
                 <span class="field-validation-valid text-danger" data-valmsg-for="NTUser" data-valmsg-replace="true"></span>

@@ -75,20 +75,22 @@ namespace IdentitySample.Controllers
         public ActionResult Index()
         {
            // var roles = RoleManager.Roles.ToList().Select(x => new { roleId = x.Id, roleName = x.Name }).ToList();
-            ViewData["Roles"] = RoleManager.Roles.ToList().Select(x => new {roleId = x.Id, roleName = x.Name});
+            ViewData["Roles"] = RoleManager.Roles.Select(x => new {roleId = x.Id, roleName = x.Name});
             //var x = await RoleManager.Roles.ToListAsync();
             return View();
         }
         
         public ActionResult Read([DataSourceRequest]DataSourceRequest request)
         {
-            return Json(UserManager.Users.ToList().ToDataSourceResult(request, x => new VMUser
+
+            return Json(UserManager.Users.Include(x => x.Roles).ToDataSourceResult(request, x => new VMUser
             {
                 Active = x.Active,
                 Id = x.Id,
                 Email = x.Email,
-                roleId = x.Roles.ElementAt(0).RoleId,//Here we are assuming that the user just have assigned one role.
+                roleId = x.Roles.FirstOrDefault().RoleId,//Here we are assuming that the user just have assigned one role.
             }), JsonRequestBehavior.AllowGet);
+           
         }
 
         public async Task<ActionResult> Update([DataSourceRequest] DataSourceRequest request, [Bind(Include = "Email,Id, Active, roleId")] VMUser editUser)

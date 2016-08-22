@@ -96,6 +96,8 @@ C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPort
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\Microsoft.AspNet.Identity.Core.dll
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\Microsoft.AspNet.Identity.EntityFramework.dll
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\Microsoft.Owin.dll
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\Microsoft.Owin.Host.SystemWeb.dll
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\Microsoft.Owin.Security.Cookies.dll
@@ -123,6 +125,8 @@ C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPort
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\FluentValidation.pdb
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\FluentValidation.xml
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\log4net.xml
+C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\Microsoft.AspNet.SignalR.Core.xml
+C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\PagedList.xml
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\System.Web.Helpers.xml
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\System.Web.Mvc.xml
@@ -171,3 +175,4 @@ C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPort
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.csproj.GenerateResource.Cache
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.dll
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.pdb
+C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.csprojResolveAssemblyReference.cache

@@ -17,6 +17,10 @@
 </header>
 
 <div class="container-fluid">
+ 
+    @Html.ActionLink("NEW CODE", "Index", "CodeMasterLists", new { Area = "ActionCode" }, new { })
+    <br/>
+    <br/>
     @(Html.Kendo().Grid<MDM.WebPortal.Areas.ActionCode.Models.ViewModels.VMActionCode>()
           .Name("ActionsC")
           .ToolBar(tools =>
@@ -35,17 +39,17 @@
 
               column.Bound(x => x.CollNoteType).Width(110);
 
-              column.ForeignKey(x => x.CodeID, (IEnumerable)ViewData["Codigos"], "CodeID", "Code").Width(110);
+              column.ForeignKey(x => x.CodeID, (IEnumerable) ViewData["Codigos"], "CodeID", "Code").Width(110);
 
-              column.ForeignKey(x => x.CategoryID, (IEnumerable)ViewData["Category"], "CatogoryID", "CategoryName").Width(110);
+              column.ForeignKey(x => x.CategoryID, (IEnumerable) ViewData["Category"], "CatogoryID", "CategoryName").Width(110);
 
-              column.ForeignKey(x => x.PriorityID, (IEnumerable)ViewData["Priority"], "PriorityID", "PriorityName").Width(110);
+              column.ForeignKey(x => x.PriorityID, (IEnumerable) ViewData["Priority"], "PriorityID", "PriorityName").Width(110);
 
               column.Bound(x => x.Active).Width(110);
 
-              column.ForeignKey(x => x.ParsingYN, (IEnumerable)ViewData["Parsing"], "Value", "Text").Width(110);
+              column.ForeignKey(x => x.ParsingYN, (IEnumerable) ViewData["Parsing"], "Value", "Text").Width(110);
 
-              column.ForeignKey(x => x.ACTypeID, (IEnumerable)ViewData["ACType"], "ACTypeID", "ACTypeName").Width(110);
+              column.ForeignKey(x => x.ACTypeID, (IEnumerable) ViewData["ACType"], "ACTypeID", "ACTypeName").Width(110);
 
               column.Command(command =>
               {

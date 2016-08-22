@@ -83,13 +83,15 @@ namespace MDM.WebPortal.Migrations
                 c => new
                     {
                         MenuID = c.Int(nullable: false, identity: true),
-                        ParentId = c.Int(),
                         ActionID = c.Int(),
                         Title = c.String(nullable: false, maxLength: 50),
+                        Parent_MenuID = c.Int(),
                     })
                 .PrimaryKey(t => t.MenuID)
                 .ForeignKey("dbo.ActionSystems", t => t.ActionID)
-                .Index(t => t.ActionID);
+                .ForeignKey("dbo.Menus", t => t.Parent_MenuID)
+                .Index(t => t.ActionID)
+                .Index(t => t.Parent_MenuID);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -158,6 +160,7 @@ namespace MDM.WebPortal.Migrations
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+            DropForeignKey("dbo.Menus", "Parent_MenuID", "dbo.Menus");
             DropForeignKey("dbo.Menus", "ActionID", "dbo.ActionSystems");
             DropForeignKey("dbo.ApplicationRolePermissions", "Permission_PermissionID", "dbo.Permissions");
             DropForeignKey("dbo.ApplicationRolePermissions", "ApplicationRole_Id", "dbo.AspNetRoles");
@@ -169,6 +172,7 @@ namespace MDM.WebPortal.Migrations
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
+            DropIndex("dbo.Menus", new[] { "Parent_MenuID" });
             DropIndex("dbo.Menus", new[] { "ActionID" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });

@@ -1,0 +1,139 @@
+﻿@*@model IEnumerable<MedProMDM.Models.ManagerDBAccessBI>*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2> Manager's DB Access For BI</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jszip/2.4.0/jszip.js"></script>
+<script src="http://kendo.cdn.telerik.com/2016.1.406/js/kendo.all.min.js"></script>
+
+
+@(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.Delete.ManagerDBAccessBIViewModel>()
+    .Name("GridManager")
+    .DataSource(dataSource => dataSource
+          .Ajax()
+          .ServerOperation(true)
+          .PageSize(10)
+          .Model(model =>
+          {
+              model.Id(x => x.id); // Specify the property which is the unique identifier of the model
+              model.Field(x => x.id).Editable(false); // Make the ProductID property not editable
+          })
+                .Update(update => update.Action("Products_Update", "DBA"))  // Action invoked when the user saves an updated data item
+                .Read(read => read.Action("Products_Read", "DBA")) // Set the action method which will return the data in JSON format
+        //.Destroy(destroy => destroy.Action("Products_Destroy", "CollNoteTypeCatPriorities")) // Action invoked when the user removes a data item
+       )
+
+    //.Editable(editable => editable.Mode(GridEditMode.InLine)) // Use inline editing mode
+
+        .Columns(columns =>
+    {
+        //FvPList
+        columns.ForeignKey(p => p.FvP, (System.Collections.IEnumerable)ViewData["FvPList"], "FvPName", "FvPName").Title("FvP").Width(300);
+        //columns.Bound(p => p.FvP).Title("FvP").Width(300);
+
+
+        //ViewData["DBList"] = DBlist.ToList();
+        columns.ForeignKey(p => p.DB, (System.Collections.IEnumerable)ViewData["DBList"], "DBNum", "DBNum").Title("DBNum").Width(300);
+        //columns.Bound(p => p.DB).Title("DB").Width(300);
+
+
+        // ViewData["ManagerList"]
+        columns.ForeignKey(p => p.Manager, (System.Collections.IEnumerable)ViewData["ManagerList"], "ManagerName", "ManagerName").Title("Manager").Width(300);
+        //columns.Bound(p => p.Manager).Title("Manager").Width(300);
+
+        
+                
+        columns.Bound(p => p.AliasName).Title("AliasName").Width(300);
+        columns.Bound(p => p.NTUser).Visible(false);
+        
+        columns.Bound(p => p.active).Title("Active").Width(300);
+        
+        columns.Command(commands =>
+        {
+            commands.Edit(); // The "edit" command will edit and update data items
+            //commands.Destroy(); // The "destroy" command removes data items
+        }).Title("Commands").Width(200);
+    })
+
+
+             .ToolBar(tools => tools.Excel())
+                .Excel(excel => excel
+                    .AllPages(true)
+                    .FileName("ExportData.xlsx")
+                    .Filterable(false)
+                        )
+
+            .Filterable()
+            .Pageable(ps => ps.Refresh(true)
+            .PreviousNext(true).PageSizes(true))
+            .Sortable()
+            .Groupable()
+            .Reorderable(r => r.Columns(true))
+            .Resizable(r => r.Columns(true))
+            .Selectable(s => s.Enabled(true)
+                                        .Type(GridSelectionType.Row)
+                                        .Mode(GridSelectionMode.Single))
+)
+
+
+@*@using (Html.BeginForm())
+    {
+        <p>
+            Find by Manager: @Html.TextBox("SearchString")
+            <input type="submit" value="Search" />
+        </p>
+    }
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FvP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DB)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Manager)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AliasName)
+            </th>
+
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FvP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DB)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Manager)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AliasName)
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+
+            </td>
+        </tr>
+    }
+
+    </table>*@

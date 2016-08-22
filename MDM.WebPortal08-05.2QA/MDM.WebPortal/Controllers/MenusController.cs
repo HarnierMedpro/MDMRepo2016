@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
+using IdentitySample.Models;
 using MDM.WebPortal.Models.Identity;
 using MDM.WebPortal.Models.ViewModel;
-using Menu = MDM.WebPortal.Models.Identity.Menu;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace MDM.WebPortal.Controllers
 {
@@ -20,141 +20,183 @@ namespace MDM.WebPortal.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Menus
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            ViewData["Actions"] = db.Actions.Include(controller => controller.ControllerSystem)
-                                            .Where(action => action.Act_Name.Equals("Index",StringComparison.InvariantCultureIgnoreCase))
-                                            .Select(action => new VMActionEditor { ActionID = action.ActionID, Info = action.Act_Name + " " + "FROM" + " " + action.ControllerSystem.Cont_Name });
-
-            ViewData["Parent"] = db.Menus.Where(x => x.ActionID == null).Select(x => new { ParentId = x.MenuID, Title = x.Title });
-            //return Json(ViewData["Actions"], JsonRequestBehavior.AllowGet);
-            return View();
-        }
-
-        public JsonResult GetActions([DataSourceRequest] DataSourceRequest request)
-        {
-            return Json(db.Actions.Include(controller => controller.ControllerSystem).
-                Where(action => action.Act_Name.Equals("Index", StringComparison.InvariantCultureIgnoreCase)).ToDataSourceResult(request, x => new VMActionEditor
+            if (User.Identity.IsAuthenticated && !User.IsInRole("ADMIN"))
             {
-                ActionID = x.ActionID,
-                Info = x.Act_Name + " " + "FROM" + " " + x.ControllerSystem.Cont_Name
-            }), JsonRequestBehavior.AllowGet);
-        }
+                var userID = User.Identity.GetUserId();
 
-        public ActionResult Read_Menu([DataSourceRequest] DataSourceRequest request)
-        {
-            return Json(db.Menus.ToDataSourceResult(request, x => new VMMenu
-            {
-                MenuID = x.MenuID,
-                ActionID = x.ActionID,
-                ParentId = x.ParentId,
-                Title = x.Title
-            }), JsonRequestBehavior.AllowGet);
-        }
+                var user = db.Users.Find(userID);
 
-        public async Task<ActionResult> Create_Menu([DataSourceRequest] DataSourceRequest request,
-            [Bind(Include = "MenuID,ParentId,ActionID,Title")] VMMenu Menu)
-        {
-            if (ModelState.IsValid)
-            {
-                try
+                var roleId = user.Roles.First().RoleId;
+
+                ApplicationRole Role = new ApplicationRole();
+
+                using (var appRoleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(db)))
                 {
-                    if ((Menu.ActionID != null && await db.Menus.AnyAsync(menu => menu.ActionID == Menu.ActionID)) || await db.Menus.AnyAsync(x => x.Title.Equals(Menu.Title, StringComparison.InvariantCultureIgnoreCase)) )
-                    {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
-                        return Json(new[] { Menu }.ToDataSourceResult(request, ModelState));
-                    }
-                    var toStore = new Menu
-                    {
-                        ActionID = Menu.ActionID,
-                        ParentId = Menu.ParentId,
-                        Title = Menu.Title
-                    };
+                    Role = appRoleManager.FindById(roleId);
+                }
 
-                    db.Menus.Add(toStore);
-                    await db.SaveChangesAsync();
-                    Menu.MenuID = toStore.MenuID;
-                }
-                catch (Exception)
+                var Permissions = Role.Permissions.ToList();
+                List<ActionSystem> actionSystems = Permissions.Select(permission => permission.Action).ToList();
+                List<Menu> menuSystem = actionSystems.Select(action => db.Menus.FirstOrDefault(x => x.ActionID == action.ActionID)).Where(menu => menu != null).ToList();
+
+                List<Menu> toReturn = new List<Menu>();
+
+                List<Menu> allRoots = menuSystem.Select(menu => FindingTheRoot(menu)).ToList();
+                /*foreach (var menu in menuSystem)
                 {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { Menu }.ToDataSourceResult(request, ModelState));
-                }
+                    var findItsRoot = FindingTheRoot(menu);
+                    allRoots.Add(findItsRoot);
+                }*/
+                toReturn = allRoots.Distinct().ToList();
+
+                return View(toReturn);
             }
-            return Json(new[] { Menu }.ToDataSourceResult(request, ModelState));
+            var menus = await db.Menus.Include(m => m.actionSystem).Include(p => p.Parent).Include(c => c.ChildMenus).Where(x => x.Parent == null).ToListAsync();
+            return View(menus);
         }
 
-        public async Task<ActionResult> Insert_Menu([DataSourceRequest] DataSourceRequest request, [Bind(Include = "MenuID,ParentId,ActionID,Title")] VMMenu Menues)
+
+        public async Task<ActionResult> Testing()
         {
-            if (ModelState.IsValid)
+            if (User.Identity.IsAuthenticated && !User.IsInRole("ADMIN"))
             {
-                try
-                {
-                    if ((Menues.ActionID != null && await db.Menus.AnyAsync(menu => menu.ActionID == Menues.ActionID)) || await db.Menus.AnyAsync(x => x.Title.Equals(Menues.Title, StringComparison.InvariantCultureIgnoreCase)))
-                    {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
-                        return Json(new[] { Menues }.ToDataSourceResult(request, ModelState));
-                    }
-                    var toStore = new Menu
-                    {
-                        ActionID = Menues.ActionID,
-                        ParentId = Menues.ParentId,
-                        Title = Menues.Title
-                    };
+                var userID = User.Identity.GetUserId();
 
-                    db.Menus.Add(toStore);
-                    await db.SaveChangesAsync();
-                }
-                catch (Exception)
+                var user = db.Users.Find(userID);
+
+                var roleId = user.Roles.First().RoleId;
+
+                ApplicationRole Role = new ApplicationRole();
+
+                using (var appRoleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(db)))
                 {
-                    ModelState.AddModelError("", "Something Failed. Please try again!");
-                    return Json(new[] { Menues }.ToDataSourceResult(request, ModelState));
+                    Role = appRoleManager.FindById(roleId);
                 }
+
+                var Permissions = Role.Permissions.ToList();
+                List<ActionSystem> actionSystems = Permissions.Select(permission => permission.Action).ToList();
+                List<Menu> menuSystem = actionSystems.Select(action => db.Menus.FirstOrDefault(x => x.ActionID == action.ActionID)).Where(menu => menu != null).ToList();
+
+                List<Menu> toReturn = new List<Menu>();
+
+                List<Menu> allRoots = menuSystem.Select(menu => FindingTheRoot(menu)).ToList();
+                /*foreach (var menu in menuSystem)
+                {
+                    var findItsRoot = FindingTheRoot(menu);
+                    allRoots.Add(findItsRoot);
+                }*/
+                toReturn = allRoots.Distinct().ToList();
+
+                return PartialView("Testing",toReturn);
             }
-            return Json(new[] { Menues }.ToDataSourceResult(request, ModelState));
+            var menus = await db.Menus.Include(m => m.actionSystem).Include(p => p.Parent).Include(c => c.ChildMenus).Where(x => x.Parent == null).ToListAsync();
+            return PartialView("Testing",menus);
         }
 
-        public async Task<ActionResult> Update_Menu([DataSourceRequest] DataSourceRequest request,
-            [Bind(Include = "MenuID,ParentId,ActionID,Title")] VMMenu Menu)
+
+
+        public Menu FindingTheRoot(Menu men)
         {
-            if (ModelState.IsValid)
+            if (men != null && men.ActionID == null && men.Parent == null)
             {
-                try
-                {
-                    if ((Menu.ActionID != null && await db.Menus.AnyAsync(menu => menu.ActionID == Menu.ActionID && menu.MenuID != Menu.MenuID)) || await db.Menus.AnyAsync(x => x.Title.Equals(Menu.Title, StringComparison.InvariantCultureIgnoreCase) && x.MenuID != Menu.MenuID))
-                    {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
-                        return Json(new[] { Menu }.ToDataSourceResult(request, ModelState));
-                    }
-                    var toStore = new Menu
-                    {
-                        MenuID = Menu.MenuID,
-                        ActionID = Menu.ActionID,
-                        ParentId = Menu.ParentId,
-                        Title = Menu.Title
-                    };
-
-                    db.Menus.Attach(toStore);
-                    db.Entry(toStore).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something Failed. Please try again!");
-                    return Json(new[] { Menu }.ToDataSourceResult(request, ModelState));
-                }
+                return men;
             }
-            return Json(new[] { Menu }.ToDataSourceResult(request, ModelState));
+            else
+            {
+                return FindingTheRoot(men.Parent);
+            }
         }
 
-        public static List<Menu> GetMyMenus()
+        public static Menu FindingTheRaiz(Menu men)
+        {
+            if (men != null && men.ActionID == null && men.Parent == null)
+            {
+                return men;
+            }
+            else
+            {
+                return FindingTheRaiz(men.Parent);
+            }
+        }
+
+        public static List<Menu> GetMenus(bool isAuthenticated, bool isAdmin, string userI)
         {
             using (var context = new ApplicationDbContext())
             {
-                return context.Menus.Include(x => x.actionSystem).ToList();
-               
+                if (isAuthenticated && !isAdmin)
+                {
+                    var userID = userI;
+
+                    var user = context.Users.Find(userID);
+
+                    var roleId = user.Roles.First().RoleId;
+
+                    ApplicationRole Role = new ApplicationRole();
+
+                    using (var appRoleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(context)))
+                    {
+                        Role = appRoleManager.FindById(roleId);
+                    }
+
+                    var Permissions = Role.Permissions.ToList();
+                    List<ActionSystem> actionSystems = Permissions.Select(permission => permission.Action).ToList();
+                    List<Menu> menuSystem = actionSystems.Select(action => context.Menus.FirstOrDefault(x => x.ActionID == action.ActionID)).Where(menu => menu != null).ToList();
+
+                    List<Menu> toReturn = new List<Menu>();
+
+                    List<Menu> allRoots = menuSystem.Select(menu => FindingTheRaiz(menu)).ToList();
+                    /*foreach (var menu in menuSystem)
+                    {
+                        var findItsRoot = FindingTheRoot(menu);
+                        allRoots.Add(findItsRoot);
+                    }*/
+                    toReturn = allRoots.Distinct().ToList();
+
+                    return toReturn;
+                }
+                return context.Menus.Include(m => m.actionSystem).Include(p => p.Parent).Include(c => c.ChildMenus).Where(x => x.Parent == null).ToList();
             }
+            
         }
+
+     
+
+        // GET: Menus/Create
+        public ActionResult Create()
+        {
+            ViewBag.ActionID = new SelectList(db.Actions, "ActionID", "Act_Name");
+            ViewBag.Parents = new SelectList(db.Menus, "MenuID", "Title");
+            return View();
+            //return Json(ViewBag.Parents, JsonRequestBehavior.AllowGet);
+        }
+
+        // POST: Menus/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create([Bind(Include = "MenuID,ActionID, ParentId ,Title")] VMMenu menu)
+        {
+            if (ModelState.IsValid)
+            {
+                var toStore = new Menu
+                {
+                    ActionID = menu.ActionID,
+                    Title = menu.Title,
+                    Parent = db.Menus.Find(1)
+                };
+                db.Menus.Add(toStore);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.ActionID = new SelectList(db.Actions, "ActionID", "Act_Name", menu.ActionID);
+            return View(menu);
+        }
+
+       
 
         protected override void Dispose(bool disposing)
         {
