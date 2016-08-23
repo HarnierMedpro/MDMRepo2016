@@ -227,6 +227,16 @@
     <Compile Include="Areas\ManagerDBA\Models\ViewModels\VMManager_BI.cs" />
     <Compile Include="Areas\ManagerDBA\Models\ViewModels\VMManager_Master.cs" />
     <Compile Include="Areas\ManagerDBA\Models\ViewModels\VMManager_Type.cs" />
+    <Compile Include="Areas\PlaceOfServices\Controllers\LevelOfCareController.cs" />
+    <Compile Include="Areas\PlaceOfServices\Controllers\LocationsPOSController.cs" />
+    <Compile Include="Areas\PlaceOfServices\Controllers\MPServicesController.cs" />
+    <Compile Include="Areas\PlaceOfServices\Controllers\ProvidersController.cs" />
+    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMFormsDict.cs" />
+    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLevelOfCare.cs" />
+    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocationsPOS.cs" />
+    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMMPService.cs" />
+    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMProvider.cs" />
+    <Compile Include="Areas\PlaceOfServices\PlaceOfServicesAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActionSystemsController.cs" />
     <Compile Include="Controllers\APP\CorporateMasterListController.cs" />
@@ -266,16 +276,6 @@
       <DependentUpon>201608181847456_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\FromDB\CorporateNameList.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FromDB\ManagerDBAccessBI.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FromDB\MasterUserList.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Identity\AreaSystem.cs" />
     <Compile Include="Models\FromDB\ACCategory.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
@@ -297,42 +297,61 @@
     <Compile Include="Models\FromDB\BI_DB_FvP_Access.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\BI_DB_FvP_AccessMeta.cs" />
     <Compile Include="Models\FromDB\CodeMasterList.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\CollNoteTypeCatPrioritiesMeta.cs" />
     <Compile Include="Models\FromDB\CollNoteTypeCatPriority.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\CorporateMasterList.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\CorporateMasterListMeta.cs" />
-    <Compile Include="Models\FromDB\CorporateNameListsMeta.cs" />
+    <Compile Include="Models\FromDB\CorporateNameList.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FromDB\Corp_DBs.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\Corp_Owner.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\Corp_OwnerMeta.cs" />
     <Compile Include="Models\FromDB\CPTData.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\CPTDataMeta.cs" />
     <Compile Include="Models\FromDB\DBList.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\DBListMeta.cs" />
     <Compile Include="Models\FromDB\Edgemed_Logons.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\Edgemed_LogonsMeta.cs" />
+    <Compile Include="Models\FromDB\FACInfoData.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FromDB\Facitity_DBs.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FromDB\FormsDict.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\Forms_sent.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FromDB\FvPList.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\Lev_of_Care.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\LocationsPOS.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\LocPOS_LevOfCare.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\LocPOS_MPServ.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\ManagerDBAccessBI.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\Manager_Master.cs">
@@ -341,14 +360,44 @@
     <Compile Include="Models\FromDB\Manager_Type.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\Manager_TypeMeta.cs" />
+    <Compile Include="Models\FromDB\MasterUserList.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FromDB\MDM_POS_ListName.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\MDM_POS_ListNameMeta.cs" />
     <Compile Include="Models\FromDB\MDM_POS_Name_DBPOS_grp.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FromDB\MPService.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\OwnerList.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\PHYGroup.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\POSLOCExtraData.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\Provider.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\ProvidersInGrp.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Identity\AreaSystem.cs" />
+    <Compile Include="Models\FromDB\BI_DB_FvP_AccessMeta.cs" />
+    <Compile Include="Models\FromDB\CollNoteTypeCatPrioritiesMeta.cs" />
+    <Compile Include="Models\FromDB\CorporateMasterListMeta.cs" />
+    <Compile Include="Models\FromDB\CorporateNameListsMeta.cs" />
+    <Compile Include="Models\FromDB\Corp_OwnerMeta.cs" />
+    <Compile Include="Models\FromDB\CPTDataMeta.cs" />
+    <Compile Include="Models\FromDB\DBListMeta.cs" />
+    <Compile Include="Models\FromDB\Edgemed_LogonsMeta.cs" />
+    <Compile Include="Models\FromDB\Manager_TypeMeta.cs" />
+    <Compile Include="Models\FromDB\MDM_POS_ListNameMeta.cs" />
     <Compile Include="Models\FromDB\MedProDBEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -363,9 +412,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MedProDBEntities.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FromDB\OwnerList.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\OwnerListMeta.cs" />
     <Compile Include="Models\FromZoomDB\Pos_Tab.cs">
@@ -1285,6 +1331,15 @@
     <Content Include="Areas\ActionCode\Views\ACtypes\Index.cshtml" />
     <Content Include="Areas\AudiTrails\Views\web.config" />
     <Content Include="Areas\AudiTrails\Views\AuditLogs\Index.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\web.config" />
+    <Content Include="Areas\PlaceOfServices\Views\MPServices\Index.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\LevelOfCare\Index.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\Providers\Index.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\LocationsPOS\Create.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\LocationsPOS\Delete.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\LocationsPOS\Details.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\LocationsPOS\Edit.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\LocationsPOS\Index.cshtml" />
     <None Include="Properties\PublishProfiles\QASite.pubxml" />
     <None Include="Properties\PublishProfiles\Site02.pubxml" />
     <None Include="Properties\PublishProfiles\TestQA.pubxml" />
@@ -2685,6 +2740,7 @@
     <Folder Include="Areas\Error\Models\" />
     <Folder Include="Areas\Error\Views\Shared\" />
     <Folder Include="Areas\ManagerDBA\Views\Shared\" />
+    <Folder Include="Areas\PlaceOfServices\Views\Shared\" />
     <Folder Include="Scripts\lib\JQueryUI\" />
     <Folder Include="Views\NewFolder1\" />
   </ItemGroup>

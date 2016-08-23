@@ -12,21 +12,22 @@ namespace MDM.WebPortal.Models.FromDB
     using System;
     using System.Collections.Generic;
     
-    public partial class FvPList
+    public partial class PHYGroup
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public FvPList()
+        public PHYGroup()
         {
-            this.BI_DB_FvP_Access = new HashSet<BI_DB_FvP_Access>();
             this.LocationsPOS = new HashSet<LocationsPOS>();
+            this.ProvidersInGrps = new HashSet<ProvidersInGrp>();
         }
     
-        public int FvPID { get; set; }
-        public string FvPName { get; set; }
+        public int PHYGrpID { get; set; }
+        public string PHYGroupName { get; set; }
+        public string PHYGrpNPI_Num { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BI_DB_FvP_Access> BI_DB_FvP_Access { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LocationsPOS> LocationsPOS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProvidersInGrp> ProvidersInGrps { get; set; }
     }
 }

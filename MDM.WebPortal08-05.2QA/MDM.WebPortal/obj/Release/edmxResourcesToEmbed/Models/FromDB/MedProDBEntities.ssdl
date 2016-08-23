@@ -158,6 +158,20 @@
     <Property Name="EdgeMed_ID" Type="int" Nullable="false" />
     <Property Name="Active" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="FACInfoData">
+    <Key>
+      <PropertyRef Name="FACInfoDataID" />
+    </Key>
+    <Property Name="FACInfoDataID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DocProviderName" Type="varchar" MaxLength="80" />
+    <Property Name="LicType" Type="text" />
+    <Property Name="StateLic" Type="varchar" MaxLength="2" />
+    <Property Name="LicNumCLIA_waiver" Type="varchar" MaxLength="100" />
+    <Property Name="LicEffectiveDate" Type="date" Nullable="false" />
+    <Property Name="LicExpireDate" Type="nchar" MaxLength="20" Nullable="false" />
+    <Property Name="Taxonomy" Type="varchar" MaxLength="80" />
+    <Property Name="FAC_NPI_Num" Type="varchar" MaxLength="80" />
+  </EntityType>
   <EntityType Name="Facitity_DBs">
     <Key>
       <PropertyRef Name="IDPK" />
@@ -169,12 +183,75 @@
     <Property Name="Fac NAME" Type="varchar" MaxLength="75" />
     <Property Name="Active" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="Forms_sent">
+    <Key>
+      <PropertyRef Name="FormSentID" />
+    </Key>
+    <Property Name="FormSentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FormsID" Type="int" Nullable="false" />
+    <Property Name="FACInfoData_FACInfoDataID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FormsDict">
+    <Key>
+      <PropertyRef Name="FormsID" />
+    </Key>
+    <Property Name="FormsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FormName" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
   <EntityType Name="FvPList">
     <Key>
       <PropertyRef Name="FvPID" />
     </Key>
     <Property Name="FvPID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="FvPName" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Lev_of_Care">
+    <Key>
+      <PropertyRef Name="LevOfCareID" />
+    </Key>
+    <Property Name="LevOfCareID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LevOfCareName" Type="varchar" MaxLength="80" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LocationsPOS">
+    <Key>
+      <PropertyRef Name="Facitity_DBs_IDPK" />
+    </Key>
+    <Property Name="Facitity_DBs_IDPK" Type="int" Nullable="false" />
+    <Property Name="PosName" Type="varchar" MaxLength="80" Nullable="false" />
+    <Property Name="FvPList_FvPID" Type="int" Nullable="false" />
+    <Property Name="FACInfoData_FACInfoDataID" Type="int" Nullable="false" />
+    <Property Name="TaxID" Type="varchar" MaxLength="80" Nullable="false" />
+    <Property Name="DBA_Name" Type="varchar" MaxLength="80" />
+    <Property Name="Payment_Addr1" Type="varchar" MaxLength="80" />
+    <Property Name="Payment_Addr2" Type="varchar" MaxLength="80" />
+    <Property Name="Payment_City" Type="varchar" MaxLength="80" />
+    <Property Name="Payment_state" Type="varchar" MaxLength="80" />
+    <Property Name="Payment_Zip" Type="varchar" MaxLength="80" />
+    <Property Name="Physical_Addr1" Type="varchar" MaxLength="80" />
+    <Property Name="Physical_Addr2" Type="varchar" MaxLength="80" />
+    <Property Name="Physical_City" Type="varchar" MaxLength="80" />
+    <Property Name="Physical_state" Type="varchar" MaxLength="80" />
+    <Property Name="Physical_Zip" Type="varchar" MaxLength="80" />
+    <Property Name="POSFAC_Manager" Type="varchar" MaxLength="80" />
+    <Property Name="Notes" Type="text" />
+    <Property Name="PHYGroups_PHYGrpID" Type="int" />
+    <Property Name="Time_Zone" Type="varchar" MaxLength="3" />
+  </EntityType>
+  <EntityType Name="LocPOS_LevOfCare">
+    <Key>
+      <PropertyRef Name="LocPosLocID" />
+    </Key>
+    <Property Name="LocPosLocID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Lev_of_Care_LevOfCareID" Type="int" Nullable="false" />
+    <Property Name="LocationsPOS_Facitity_DBs_IDPK" Type="int" />
+  </EntityType>
+  <EntityType Name="LocPOS_MPServ">
+    <Key>
+      <PropertyRef Name="LocPosMPServID" />
+    </Key>
+    <Property Name="LocPosMPServID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MPServices_MPServID" Type="int" Nullable="false" />
+    <Property Name="LocationsPOS_Facitity_DBs_IDPK" Type="int" />
   </EntityType>
   <EntityType Name="Manager_Master">
     <Key>
@@ -244,6 +321,13 @@
     <Property Name="MDMPOS_ListNameID" Type="int" Nullable="false" />
     <Property Name="Active" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="MPServices">
+    <Key>
+      <PropertyRef Name="MPServID" />
+    </Key>
+    <Property Name="MPServID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ServName" Type="varchar" MaxLength="80" Nullable="false" />
+  </EntityType>
   <EntityType Name="OwnerList">
     <Key>
       <PropertyRef Name="OwnersID" />
@@ -253,6 +337,199 @@
     <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="active" Type="bit" />
   </EntityType>
+  <EntityType Name="PHYGroups">
+    <Key>
+      <PropertyRef Name="PHYGrpID" />
+    </Key>
+    <Property Name="PHYGrpID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PHYGroupName" Type="varchar" MaxLength="80" Nullable="false" />
+    <Property Name="PHYGrpNPI_Num" Type="varchar" MaxLength="80" Nullable="false" />
+  </EntityType>
+  <EntityType Name="POSLOCExtraData">
+    <Key>
+      <PropertyRef Name="FACInfoData_FACInfoDataID" />
+    </Key>
+    <Property Name="FACInfoData_FACInfoDataID" Type="int" Nullable="false" />
+    <Property Name="Phone_Number" Type="varchar" MaxLength="20" />
+    <Property Name="Fax_Number" Type="varchar" MaxLength="20" />
+    <Property Name="Website" Type="varchar" MaxLength="50" />
+    <Property Name="W_9_on_File" Type="bit" />
+    <Property Name="Number_of_beds" Type="varchar" MaxLength="20" />
+    <Property Name="Have_24hrs_nursing" Type="bit" />
+    <Property Name="how_many_days_week_open" Type="varchar" MaxLength="20" />
+    <Property Name="Ancillary_outpatient_services" Type="varchar" MaxLength="50" />
+    <Property Name="Lab_Name" Type="varchar" MaxLength="50" />
+    <Property Name="Out_of_Network_In_Network" Type="varchar" MaxLength="80" />
+    <Property Name="Licensure_on_File" Type="bit" />
+    <Property Name="Mental_License" Type="bit" />
+    <Property Name="BCBS_ID_Number" Type="varchar" MaxLength="20" />
+    <Property Name="UPIN_Number" Type="varchar" MaxLength="20" />
+    <Property Name="Medicaid_Number" Type="varchar" MaxLength="20" />
+    <Property Name="State_of_MD_or_PhyGrp" Type="varchar" MaxLength="20" />
+    <Property Name="Regulations_on_File" Type="bit" />
+    <Property Name="JACHO_CARF" Type="varchar" MaxLength="20" />
+    <Property Name="Has_facility_billed_ins_before" Type="bit" />
+    <Property Name="Manage_care_contracts" Type="varchar" MaxLength="100" />
+    <Property Name="Copies_of_all_managed_care_contracts_on_file" Type="bit" />
+    <Property Name="Forms_created" Type="bit" />
+    <Property Name="In_Service_scheduled" Type="bit" />
+    <Property Name="In_Service_date_time" Type="datetime" />
+    <Property Name="Portal_training_setup" Type="bit" />
+    <Property Name="email_regarding_conference_set_up" Type="bit" />
+    <Property Name="Database_set_up" Type="bit" />
+    <Property Name="Availavility_request_sent_out" Type="bit" />
+    <Property Name="Availavility_completed" Type="bit" />
+    <Property Name="Navinet_request_completed" Type="bit" />
+    <Property Name="Fee_schedule_in_binder" Type="bit" />
+  </EntityType>
+  <EntityType Name="Providers">
+    <Key>
+      <PropertyRef Name="ProvID" />
+    </Key>
+    <Property Name="ProvID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProviderName" Type="varchar" MaxLength="80" Nullable="false" />
+    <Property Name="NPI_Num" Type="varchar" MaxLength="80" />
+  </EntityType>
+  <EntityType Name="ProvidersInGrp">
+    <Key>
+      <PropertyRef Name="ProvInGrpID" />
+    </Key>
+    <Property Name="ProvInGrpID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Providers_ProvID" Type="int" Nullable="false" />
+    <Property Name="PHYGroups_PHYGrpID" Type="int" />
+  </EntityType>
+  <Association Name="FK__Locations__FACIn__3E082B48">
+    <End Role="FACInfoData" Type="Self.FACInfoData" Multiplicity="1" />
+    <End Role="LocationsPOS" Type="Self.LocationsPOS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FACInfoData">
+        <PropertyRef Name="FACInfoDataID" />
+      </Principal>
+      <Dependent Role="LocationsPOS">
+        <PropertyRef Name="FACInfoData_FACInfoDataID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Locations__Facit__3EFC4F81">
+    <End Role="Facitity_DBs" Type="Self.Facitity_DBs" Multiplicity="1" />
+    <End Role="LocationsPOS" Type="Self.LocationsPOS" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Facitity_DBs">
+        <PropertyRef Name="IDPK" />
+      </Principal>
+      <Dependent Role="LocationsPOS">
+        <PropertyRef Name="Facitity_DBs_IDPK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Locations__FvPLi__3D14070F">
+    <End Role="FvPList" Type="Self.FvPList" Multiplicity="1" />
+    <End Role="LocationsPOS" Type="Self.LocationsPOS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FvPList">
+        <PropertyRef Name="FvPID" />
+      </Principal>
+      <Dependent Role="LocationsPOS">
+        <PropertyRef Name="FvPList_FvPID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Locations__PHYGr__3FF073BA">
+    <End Role="PHYGroups" Type="Self.PHYGroups" Multiplicity="0..1" />
+    <End Role="LocationsPOS" Type="Self.LocationsPOS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PHYGroups">
+        <PropertyRef Name="PHYGrpID" />
+      </Principal>
+      <Dependent Role="LocationsPOS">
+        <PropertyRef Name="PHYGroups_PHYGrpID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LocPOS_Le__Lev_o__5026DB83">
+    <End Role="Lev_of_Care" Type="Self.Lev_of_Care" Multiplicity="1" />
+    <End Role="LocPOS_LevOfCare" Type="Self.LocPOS_LevOfCare" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Lev_of_Care">
+        <PropertyRef Name="LevOfCareID" />
+      </Principal>
+      <Dependent Role="LocPOS_LevOfCare">
+        <PropertyRef Name="Lev_of_Care_LevOfCareID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LocPOS_Le__Locat__4F32B74A">
+    <End Role="LocationsPOS" Type="Self.LocationsPOS" Multiplicity="0..1" />
+    <End Role="LocPOS_LevOfCare" Type="Self.LocPOS_LevOfCare" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LocationsPOS">
+        <PropertyRef Name="Facitity_DBs_IDPK" />
+      </Principal>
+      <Dependent Role="LocPOS_LevOfCare">
+        <PropertyRef Name="LocationsPOS_Facitity_DBs_IDPK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LocPOS_MP__Locat__5303482E">
+    <End Role="LocationsPOS" Type="Self.LocationsPOS" Multiplicity="0..1" />
+    <End Role="LocPOS_MPServ" Type="Self.LocPOS_MPServ" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LocationsPOS">
+        <PropertyRef Name="Facitity_DBs_IDPK" />
+      </Principal>
+      <Dependent Role="LocPOS_MPServ">
+        <PropertyRef Name="LocationsPOS_Facitity_DBs_IDPK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LocPOS_MP__MPSer__53F76C67">
+    <End Role="MPServices" Type="Self.MPServices" Multiplicity="1" />
+    <End Role="LocPOS_MPServ" Type="Self.LocPOS_MPServ" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MPServices">
+        <PropertyRef Name="MPServID" />
+      </Principal>
+      <Dependent Role="LocPOS_MPServ">
+        <PropertyRef Name="MPServices_MPServID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__POSLOCExt__FACIn__44B528D7">
+    <End Role="FACInfoData" Type="Self.FACInfoData" Multiplicity="1" />
+    <End Role="POSLOCExtraData" Type="Self.POSLOCExtraData" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="FACInfoData">
+        <PropertyRef Name="FACInfoDataID" />
+      </Principal>
+      <Dependent Role="POSLOCExtraData">
+        <PropertyRef Name="FACInfoData_FACInfoDataID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Providers__PHYGr__59B045BD">
+    <End Role="PHYGroups" Type="Self.PHYGroups" Multiplicity="0..1" />
+    <End Role="ProvidersInGrp" Type="Self.ProvidersInGrp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PHYGroups">
+        <PropertyRef Name="PHYGrpID" />
+      </Principal>
+      <Dependent Role="ProvidersInGrp">
+        <PropertyRef Name="PHYGroups_PHYGrpID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Providers__Provi__58BC2184">
+    <End Role="Providers" Type="Self.Providers" Multiplicity="1" />
+    <End Role="ProvidersInGrp" Type="Self.ProvidersInGrp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Providers">
+        <PropertyRef Name="ProvID" />
+      </Principal>
+      <Dependent Role="ProvidersInGrp">
+        <PropertyRef Name="Providers_ProvID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_ActionCode_ACCategory">
     <End Role="ACCategory" Type="Self.ACCategory" Multiplicity="1" />
     <End Role="ActionCode" Type="Self.ActionCode" Multiplicity="*" />
@@ -397,6 +674,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Forms_sent_FormsDict">
+    <End Role="FormsDict" Type="Self.FormsDict" Multiplicity="1" />
+    <End Role="Forms_sent" Type="Self.Forms_sent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FormsDict">
+        <PropertyRef Name="FormsID" />
+      </Principal>
+      <Dependent Role="Forms_sent">
+        <PropertyRef Name="FormsID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Forms_sent_POSLOCExtraData">
+    <End Role="POSLOCExtraData" Type="Self.POSLOCExtraData" Multiplicity="1" />
+    <End Role="Forms_sent" Type="Self.Forms_sent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="POSLOCExtraData">
+        <PropertyRef Name="FACInfoData_FACInfoDataID" />
+      </Principal>
+      <Dependent Role="Forms_sent">
+        <PropertyRef Name="FACInfoData_FACInfoDataID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Manager_Master_Manager_Type">
     <End Role="Manager_Type" Type="Self.Manager_Type" Multiplicity="1" />
     <End Role="Manager_Master" Type="Self.Manager_Master" Multiplicity="*" />
@@ -438,15 +739,71 @@
     <EntitySet Name="CPTData" EntityType="Self.CPTData" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DBList" EntityType="Self.DBList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Edgemed_Logons" EntityType="Self.Edgemed_Logons" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FACInfoData" EntityType="Self.FACInfoData" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Facitity_DBs" EntityType="Self.Facitity_DBs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Forms_sent" EntityType="Self.Forms_sent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FormsDict" EntityType="Self.FormsDict" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FvPList" EntityType="Self.FvPList" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Lev_of_Care" EntityType="Self.Lev_of_Care" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LocationsPOS" EntityType="Self.LocationsPOS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LocPOS_LevOfCare" EntityType="Self.LocPOS_LevOfCare" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LocPOS_MPServ" EntityType="Self.LocPOS_MPServ" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Manager_Master" EntityType="Self.Manager_Master" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Manager_Type" EntityType="Self.Manager_Type" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ManagerDBAccessBI" EntityType="Self.ManagerDBAccessBI" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MasterUserList" EntityType="Self.MasterUserList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MDM_POS_ListName" EntityType="Self.MDM_POS_ListName" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MDM_POS_Name_DBPOS_grp" EntityType="Self.MDM_POS_Name_DBPOS_grp" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MPServices" EntityType="Self.MPServices" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OwnerList" EntityType="Self.OwnerList" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PHYGroups" EntityType="Self.PHYGroups" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="POSLOCExtraData" EntityType="Self.POSLOCExtraData" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Providers" EntityType="Self.Providers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProvidersInGrp" EntityType="Self.ProvidersInGrp" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__Locations__FACIn__3E082B48" Association="Self.FK__Locations__FACIn__3E082B48">
+      <End Role="FACInfoData" EntitySet="FACInfoData" />
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Locations__Facit__3EFC4F81" Association="Self.FK__Locations__Facit__3EFC4F81">
+      <End Role="Facitity_DBs" EntitySet="Facitity_DBs" />
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Locations__FvPLi__3D14070F" Association="Self.FK__Locations__FvPLi__3D14070F">
+      <End Role="FvPList" EntitySet="FvPList" />
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Locations__PHYGr__3FF073BA" Association="Self.FK__Locations__PHYGr__3FF073BA">
+      <End Role="PHYGroups" EntitySet="PHYGroups" />
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LocPOS_Le__Lev_o__5026DB83" Association="Self.FK__LocPOS_Le__Lev_o__5026DB83">
+      <End Role="Lev_of_Care" EntitySet="Lev_of_Care" />
+      <End Role="LocPOS_LevOfCare" EntitySet="LocPOS_LevOfCare" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LocPOS_Le__Locat__4F32B74A" Association="Self.FK__LocPOS_Le__Locat__4F32B74A">
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+      <End Role="LocPOS_LevOfCare" EntitySet="LocPOS_LevOfCare" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LocPOS_MP__Locat__5303482E" Association="Self.FK__LocPOS_MP__Locat__5303482E">
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+      <End Role="LocPOS_MPServ" EntitySet="LocPOS_MPServ" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LocPOS_MP__MPSer__53F76C67" Association="Self.FK__LocPOS_MP__MPSer__53F76C67">
+      <End Role="MPServices" EntitySet="MPServices" />
+      <End Role="LocPOS_MPServ" EntitySet="LocPOS_MPServ" />
+    </AssociationSet>
+    <AssociationSet Name="FK__POSLOCExt__FACIn__44B528D7" Association="Self.FK__POSLOCExt__FACIn__44B528D7">
+      <End Role="FACInfoData" EntitySet="FACInfoData" />
+      <End Role="POSLOCExtraData" EntitySet="POSLOCExtraData" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Providers__PHYGr__59B045BD" Association="Self.FK__Providers__PHYGr__59B045BD">
+      <End Role="PHYGroups" EntitySet="PHYGroups" />
+      <End Role="ProvidersInGrp" EntitySet="ProvidersInGrp" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Providers__Provi__58BC2184" Association="Self.FK__Providers__Provi__58BC2184">
+      <End Role="Providers" EntitySet="Providers" />
+      <End Role="ProvidersInGrp" EntitySet="ProvidersInGrp" />
+    </AssociationSet>
     <AssociationSet Name="FK_ActionCode_ACCategory" Association="Self.FK_ActionCode_ACCategory">
       <End Role="ACCategory" EntitySet="ACCategory" />
       <End Role="ActionCode" EntitySet="ActionCode" />
@@ -494,6 +851,14 @@
     <AssociationSet Name="FK_Edgemed_Logons_ADPMaster" Association="Self.FK_Edgemed_Logons_ADPMaster">
       <End Role="ADPMaster" EntitySet="ADPMaster" />
       <End Role="Edgemed_Logons" EntitySet="Edgemed_Logons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Forms_sent_FormsDict" Association="Self.FK_Forms_sent_FormsDict">
+      <End Role="FormsDict" EntitySet="FormsDict" />
+      <End Role="Forms_sent" EntitySet="Forms_sent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Forms_sent_POSLOCExtraData" Association="Self.FK_Forms_sent_POSLOCExtraData">
+      <End Role="POSLOCExtraData" EntitySet="POSLOCExtraData" />
+      <End Role="Forms_sent" EntitySet="Forms_sent" />
     </AssociationSet>
     <AssociationSet Name="FK_Manager_Master_Manager_Type" Association="Self.FK_Manager_Master_Manager_Type">
       <End Role="Manager_Type" EntitySet="Manager_Type" />

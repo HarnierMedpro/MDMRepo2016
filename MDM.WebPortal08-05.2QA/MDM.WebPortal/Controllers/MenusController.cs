@@ -121,28 +121,28 @@ namespace MDM.WebPortal.Controllers
             }
         }
 
-        public static List<Menu> GetMenus(bool isAuthenticated, bool isAdmin, string userI)
+        public List<Menu> GetMenus(bool isAuthenticated, bool isAdmin, string userI)
         {
-            using (var context = new ApplicationDbContext())
-            {
+           // using (var context = new ApplicationDbContext())
+           // {
                 if (isAuthenticated && !isAdmin)
                 {
                     var userID = userI;
 
-                    var user = context.Users.Find(userID);
+                    var user = db.Users.Find(userID);
 
                     var roleId = user.Roles.First().RoleId;
 
                     ApplicationRole Role = new ApplicationRole();
 
-                    using (var appRoleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(context)))
+                    using (var appRoleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(db)))
                     {
                         Role = appRoleManager.FindById(roleId);
                     }
 
                     var Permissions = Role.Permissions.ToList();
                     List<ActionSystem> actionSystems = Permissions.Select(permission => permission.Action).ToList();
-                    List<Menu> menuSystem = actionSystems.Select(action => context.Menus.FirstOrDefault(x => x.ActionID == action.ActionID)).Where(menu => menu != null).ToList();
+                    List<Menu> menuSystem = actionSystems.Select(action => db.Menus.FirstOrDefault(x => x.ActionID == action.ActionID)).Where(menu => menu != null).ToList();
 
                     List<Menu> toReturn = new List<Menu>();
 
@@ -156,8 +156,8 @@ namespace MDM.WebPortal.Controllers
 
                     return toReturn;
                 }
-                return context.Menus.Include(m => m.actionSystem).Include(p => p.Parent).Include(c => c.ChildMenus).Where(x => x.Parent == null).ToList();
-            }
+                return db.Menus.Include(m => m.actionSystem).Include(p => p.Parent).Include(c => c.ChildMenus).Where(x => x.Parent == null).ToList();
+           // }
             
         }
 

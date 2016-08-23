@@ -1,0 +1,142 @@
+﻿@model IEnumerable<MDM.WebPortal.Models.FromDB.LocationsPOS>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PosName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaxID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DBA_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Payment_Addr1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Payment_Addr2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Payment_City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Payment_state)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Payment_Zip)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Physical_Addr1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Physical_Addr2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Physical_City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Physical_state)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Physical_Zip)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.POSFAC_Manager)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Notes)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FACInfoData.DocProviderName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Facitity_DBs.DB)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FvPList.FvPName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PHYGroup.PHYGroupName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PosName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaxID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DBA_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Payment_Addr1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Payment_Addr2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Payment_City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Payment_state)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Payment_Zip)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Physical_Addr1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Physical_Addr2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Physical_City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Physical_state)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Physical_Zip)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.POSFAC_Manager)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Notes)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FACInfoData.DocProviderName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Facitity_DBs.DB)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FvPList.FvPName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PHYGroup.PHYGroupName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Facitity_DBs_IDPK }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Facitity_DBs_IDPK }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Facitity_DBs_IDPK })
+        </td>
+    </tr>
+}
+
+</table>

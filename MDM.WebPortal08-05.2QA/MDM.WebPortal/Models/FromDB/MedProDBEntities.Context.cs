@@ -50,5 +50,17 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual DbSet<MasterUserList> MasterUserLists { get; set; }
         public virtual DbSet<CorporateNameList> CorporateNameLists { get; set; }
         public virtual DbSet<ManagerDBAccessBI> ManagerDBAccessBIs { get; set; }
+        public virtual DbSet<MPService> MPServices { get; set; }
+        public virtual DbSet<Lev_of_Care> Lev_of_Care { get; set; }
+        public virtual DbSet<FACInfoData> FACInfoDatas { get; set; }
+        public virtual DbSet<LocPOS_LevOfCare> LocPOS_LevOfCare { get; set; }
+        public virtual DbSet<LocPOS_MPServ> LocPOS_MPServ { get; set; }
+        public virtual DbSet<LocationsPOS> LocationsPOS { get; set; }
+        public virtual DbSet<PHYGroup> PHYGroups { get; set; }
+        public virtual DbSet<Provider> Providers { get; set; }
+        public virtual DbSet<ProvidersInGrp> ProvidersInGrps { get; set; }
+        public virtual DbSet<POSLOCExtraData> POSLOCExtraDatas { get; set; }
+        public virtual DbSet<Forms_sent> Forms_sent { get; set; }
+        public virtual DbSet<FormsDict> FormsDicts { get; set; }
     }
 }

@@ -12,21 +12,18 @@ namespace MDM.WebPortal.Models.FromDB
     using System;
     using System.Collections.Generic;
     
-    public partial class FvPList
+    public partial class Lev_of_Care
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public FvPList()
+        public Lev_of_Care()
         {
-            this.BI_DB_FvP_Access = new HashSet<BI_DB_FvP_Access>();
-            this.LocationsPOS = new HashSet<LocationsPOS>();
+            this.LocPOS_LevOfCare = new HashSet<LocPOS_LevOfCare>();
         }
     
-        public int FvPID { get; set; }
-        public string FvPName { get; set; }
+        public int LevOfCareID { get; set; }
+        public string LevOfCareName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BI_DB_FvP_Access> BI_DB_FvP_Access { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LocationsPOS> LocationsPOS { get; set; }
+        public virtual ICollection<LocPOS_LevOfCare> LocPOS_LevOfCare { get; set; }
     }
 }

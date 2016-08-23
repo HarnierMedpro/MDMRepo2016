@@ -12,21 +12,26 @@ namespace MDM.WebPortal.Models.FromDB
     using System;
     using System.Collections.Generic;
     
-    public partial class FvPList
+    public partial class FACInfoData
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public FvPList()
+        public FACInfoData()
         {
-            this.BI_DB_FvP_Access = new HashSet<BI_DB_FvP_Access>();
             this.LocationsPOS = new HashSet<LocationsPOS>();
         }
     
-        public int FvPID { get; set; }
-        public string FvPName { get; set; }
+        public int FACInfoDataID { get; set; }
+        public string DocProviderName { get; set; }
+        public string LicType { get; set; }
+        public string StateLic { get; set; }
+        public string LicNumCLIA_waiver { get; set; }
+        public System.DateTime LicEffectiveDate { get; set; }
+        public string LicExpireDate { get; set; }
+        public string Taxonomy { get; set; }
+        public string FAC_NPI_Num { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BI_DB_FvP_Access> BI_DB_FvP_Access { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LocationsPOS> LocationsPOS { get; set; }
+        public virtual POSLOCExtraData POSLOCExtraData { get; set; }
     }
 }

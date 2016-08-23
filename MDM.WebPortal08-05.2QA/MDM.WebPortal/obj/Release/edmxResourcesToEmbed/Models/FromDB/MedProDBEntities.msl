@@ -279,5 +279,162 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="MPServices">
+      <EntityTypeMapping TypeName="MedProDBEntities.MPService">
+        <MappingFragment StoreEntitySet="MPServices">
+          <ScalarProperty Name="ServName" ColumnName="ServName" />
+          <ScalarProperty Name="MPServID" ColumnName="MPServID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Lev_of_Care">
+      <EntityTypeMapping TypeName="MedProDBEntities.Lev_of_Care">
+        <MappingFragment StoreEntitySet="Lev_of_Care">
+          <ScalarProperty Name="LevOfCareName" ColumnName="LevOfCareName" />
+          <ScalarProperty Name="LevOfCareID" ColumnName="LevOfCareID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FACInfoDatas">
+      <EntityTypeMapping TypeName="MedProDBEntities.FACInfoData">
+        <MappingFragment StoreEntitySet="FACInfoData">
+          <ScalarProperty Name="FAC_NPI_Num" ColumnName="FAC_NPI_Num" />
+          <ScalarProperty Name="Taxonomy" ColumnName="Taxonomy" />
+          <ScalarProperty Name="LicExpireDate" ColumnName="LicExpireDate" />
+          <ScalarProperty Name="LicEffectiveDate" ColumnName="LicEffectiveDate" />
+          <ScalarProperty Name="LicNumCLIA_waiver" ColumnName="LicNumCLIA_waiver" />
+          <ScalarProperty Name="StateLic" ColumnName="StateLic" />
+          <ScalarProperty Name="LicType" ColumnName="LicType" />
+          <ScalarProperty Name="DocProviderName" ColumnName="DocProviderName" />
+          <ScalarProperty Name="FACInfoDataID" ColumnName="FACInfoDataID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LocPOS_LevOfCare">
+      <EntityTypeMapping TypeName="MedProDBEntities.LocPOS_LevOfCare">
+        <MappingFragment StoreEntitySet="LocPOS_LevOfCare">
+          <ScalarProperty Name="LocationsPOS_Facitity_DBs_IDPK" ColumnName="LocationsPOS_Facitity_DBs_IDPK" />
+          <ScalarProperty Name="Lev_of_Care_LevOfCareID" ColumnName="Lev_of_Care_LevOfCareID" />
+          <ScalarProperty Name="LocPosLocID" ColumnName="LocPosLocID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LocPOS_MPServ">
+      <EntityTypeMapping TypeName="MedProDBEntities.LocPOS_MPServ">
+        <MappingFragment StoreEntitySet="LocPOS_MPServ">
+          <ScalarProperty Name="LocationsPOS_Facitity_DBs_IDPK" ColumnName="LocationsPOS_Facitity_DBs_IDPK" />
+          <ScalarProperty Name="MPServices_MPServID" ColumnName="MPServices_MPServID" />
+          <ScalarProperty Name="LocPosMPServID" ColumnName="LocPosMPServID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LocationsPOS">
+      <EntityTypeMapping TypeName="MedProDBEntities.LocationsPOS">
+        <MappingFragment StoreEntitySet="LocationsPOS">
+          <ScalarProperty Name="Time_Zone" ColumnName="Time_Zone" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="POSFAC_Manager" ColumnName="POSFAC_Manager" />
+          <ScalarProperty Name="Physical_Zip" ColumnName="Physical_Zip" />
+          <ScalarProperty Name="Physical_state" ColumnName="Physical_state" />
+          <ScalarProperty Name="Physical_City" ColumnName="Physical_City" />
+          <ScalarProperty Name="Physical_Addr2" ColumnName="Physical_Addr2" />
+          <ScalarProperty Name="Physical_Addr1" ColumnName="Physical_Addr1" />
+          <ScalarProperty Name="Payment_Zip" ColumnName="Payment_Zip" />
+          <ScalarProperty Name="Payment_state" ColumnName="Payment_state" />
+          <ScalarProperty Name="Payment_City" ColumnName="Payment_City" />
+          <ScalarProperty Name="Payment_Addr2" ColumnName="Payment_Addr2" />
+          <ScalarProperty Name="Payment_Addr1" ColumnName="Payment_Addr1" />
+          <ScalarProperty Name="DBA_Name" ColumnName="DBA_Name" />
+          <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+          <ScalarProperty Name="PHYGroups_PHYGrpID" ColumnName="PHYGroups_PHYGrpID" />
+          <ScalarProperty Name="FACInfoData_FACInfoDataID" ColumnName="FACInfoData_FACInfoDataID" />
+          <ScalarProperty Name="FvPList_FvPID" ColumnName="FvPList_FvPID" />
+          <ScalarProperty Name="PosName" ColumnName="PosName" />
+          <ScalarProperty Name="Facitity_DBs_IDPK" ColumnName="Facitity_DBs_IDPK" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PHYGroups">
+      <EntityTypeMapping TypeName="MedProDBEntities.PHYGroup">
+        <MappingFragment StoreEntitySet="PHYGroups">
+          <ScalarProperty Name="PHYGrpNPI_Num" ColumnName="PHYGrpNPI_Num" />
+          <ScalarProperty Name="PHYGroupName" ColumnName="PHYGroupName" />
+          <ScalarProperty Name="PHYGrpID" ColumnName="PHYGrpID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Providers">
+      <EntityTypeMapping TypeName="MedProDBEntities.Provider">
+        <MappingFragment StoreEntitySet="Providers">
+          <ScalarProperty Name="NPI_Num" ColumnName="NPI_Num" />
+          <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+          <ScalarProperty Name="ProvID" ColumnName="ProvID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProvidersInGrps">
+      <EntityTypeMapping TypeName="MedProDBEntities.ProvidersInGrp">
+        <MappingFragment StoreEntitySet="ProvidersInGrp">
+          <ScalarProperty Name="PHYGroups_PHYGrpID" ColumnName="PHYGroups_PHYGrpID" />
+          <ScalarProperty Name="Providers_ProvID" ColumnName="Providers_ProvID" />
+          <ScalarProperty Name="ProvInGrpID" ColumnName="ProvInGrpID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="POSLOCExtraDatas">
+      <EntityTypeMapping TypeName="MedProDBEntities.POSLOCExtraData">
+        <MappingFragment StoreEntitySet="POSLOCExtraData">
+          <ScalarProperty Name="Fee_schedule_in_binder" ColumnName="Fee_schedule_in_binder" />
+          <ScalarProperty Name="Navinet_request_completed" ColumnName="Navinet_request_completed" />
+          <ScalarProperty Name="Availavility_completed" ColumnName="Availavility_completed" />
+          <ScalarProperty Name="Availavility_request_sent_out" ColumnName="Availavility_request_sent_out" />
+          <ScalarProperty Name="Database_set_up" ColumnName="Database_set_up" />
+          <ScalarProperty Name="email_regarding_conference_set_up" ColumnName="email_regarding_conference_set_up" />
+          <ScalarProperty Name="Portal_training_setup" ColumnName="Portal_training_setup" />
+          <ScalarProperty Name="In_Service_date_time" ColumnName="In_Service_date_time" />
+          <ScalarProperty Name="In_Service_scheduled" ColumnName="In_Service_scheduled" />
+          <ScalarProperty Name="Forms_created" ColumnName="Forms_created" />
+          <ScalarProperty Name="Copies_of_all_managed_care_contracts_on_file" ColumnName="Copies_of_all_managed_care_contracts_on_file" />
+          <ScalarProperty Name="Manage_care_contracts" ColumnName="Manage_care_contracts" />
+          <ScalarProperty Name="Has_facility_billed_ins_before" ColumnName="Has_facility_billed_ins_before" />
+          <ScalarProperty Name="JACHO_CARF" ColumnName="JACHO_CARF" />
+          <ScalarProperty Name="Regulations_on_File" ColumnName="Regulations_on_File" />
+          <ScalarProperty Name="State_of_MD_or_PhyGrp" ColumnName="State_of_MD_or_PhyGrp" />
+          <ScalarProperty Name="Medicaid_Number" ColumnName="Medicaid_Number" />
+          <ScalarProperty Name="UPIN_Number" ColumnName="UPIN_Number" />
+          <ScalarProperty Name="BCBS_ID_Number" ColumnName="BCBS_ID_Number" />
+          <ScalarProperty Name="Mental_License" ColumnName="Mental_License" />
+          <ScalarProperty Name="Licensure_on_File" ColumnName="Licensure_on_File" />
+          <ScalarProperty Name="Out_of_Network_In_Network" ColumnName="Out_of_Network_In_Network" />
+          <ScalarProperty Name="Lab_Name" ColumnName="Lab_Name" />
+          <ScalarProperty Name="Ancillary_outpatient_services" ColumnName="Ancillary_outpatient_services" />
+          <ScalarProperty Name="how_many_days_week_open" ColumnName="how_many_days_week_open" />
+          <ScalarProperty Name="Have_24hrs_nursing" ColumnName="Have_24hrs_nursing" />
+          <ScalarProperty Name="Number_of_beds" ColumnName="Number_of_beds" />
+          <ScalarProperty Name="W_9_on_File" ColumnName="W_9_on_File" />
+          <ScalarProperty Name="Website" ColumnName="Website" />
+          <ScalarProperty Name="Fax_Number" ColumnName="Fax_Number" />
+          <ScalarProperty Name="Phone_Number" ColumnName="Phone_Number" />
+          <ScalarProperty Name="FACInfoData_FACInfoDataID" ColumnName="FACInfoData_FACInfoDataID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Forms_sent">
+      <EntityTypeMapping TypeName="MedProDBEntities.Forms_sent">
+        <MappingFragment StoreEntitySet="Forms_sent">
+          <ScalarProperty Name="FACInfoData_FACInfoDataID" ColumnName="FACInfoData_FACInfoDataID" />
+          <ScalarProperty Name="FormsID" ColumnName="FormsID" />
+          <ScalarProperty Name="FormSentID" ColumnName="FormSentID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FormsDicts">
+      <EntityTypeMapping TypeName="MedProDBEntities.FormsDict">
+        <MappingFragment StoreEntitySet="FormsDict">
+          <ScalarProperty Name="FormName" ColumnName="FormName" />
+          <ScalarProperty Name="FormsID" ColumnName="FormsID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

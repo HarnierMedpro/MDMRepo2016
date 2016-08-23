@@ -12,15 +12,13 @@ namespace MDM.WebPortal.Models.FromDB
     using System;
     using System.Collections.Generic;
     
-    public partial class Facitity_DBs
+    public partial class LocPOS_MPServ
     {
-        public int IDPK { get; set; }
-        public string DB { get; set; }
-        public string DatabaseName { get; set; }
-        public Nullable<long> Facility_ID { get; set; }
-        public string Fac_NAME { get; set; }
-        public bool Active { get; set; }
+        public int LocPosMPServID { get; set; }
+        public int MPServices_MPServID { get; set; }
+        public Nullable<int> LocationsPOS_Facitity_DBs_IDPK { get; set; }
     
+        public virtual MPService MPService { get; set; }
         public virtual LocationsPOS LocationsPOS { get; set; }
     }
 }

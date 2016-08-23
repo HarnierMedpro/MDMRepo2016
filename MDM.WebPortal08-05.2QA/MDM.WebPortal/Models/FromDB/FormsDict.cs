@@ -12,21 +12,18 @@ namespace MDM.WebPortal.Models.FromDB
     using System;
     using System.Collections.Generic;
     
-    public partial class FvPList
+    public partial class FormsDict
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public FvPList()
+        public FormsDict()
         {
-            this.BI_DB_FvP_Access = new HashSet<BI_DB_FvP_Access>();
-            this.LocationsPOS = new HashSet<LocationsPOS>();
+            this.Forms_sent = new HashSet<Forms_sent>();
         }
     
-        public int FvPID { get; set; }
-        public string FvPName { get; set; }
+        public int FormsID { get; set; }
+        public string FormName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BI_DB_FvP_Access> BI_DB_FvP_Access { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LocationsPOS> LocationsPOS { get; set; }
+        public virtual ICollection<Forms_sent> Forms_sent { get; set; }
     }
 }
