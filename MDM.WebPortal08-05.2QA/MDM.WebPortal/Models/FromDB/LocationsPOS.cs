@@ -24,8 +24,7 @@ namespace MDM.WebPortal.Models.FromDB
         public int Facitity_DBs_IDPK { get; set; }
         public string PosName { get; set; }
         public int FvPList_FvPID { get; set; }
-        public int FACInfoData_FACInfoDataID { get; set; }
-        public Nullable<int> PHYGroups_PHYGrpID { get; set; }
+        public Nullable<int> FACInfoData_FACInfoDataID { get; set; }
         public string TaxID { get; set; }
         public string DBA_Name { get; set; }
         public string Payment_Addr1 { get; set; }
@@ -40,15 +39,16 @@ namespace MDM.WebPortal.Models.FromDB
         public string Physical_Zip { get; set; }
         public string POSFAC_Manager { get; set; }
         public string Notes { get; set; }
+        public Nullable<int> PHYGroups_PHYGrpID { get; set; }
         public string Time_Zone { get; set; }
     
-        public virtual FACInfoData FACInfoData { get; set; }
         public virtual Facitity_DBs Facitity_DBs { get; set; }
         public virtual FvPList FvPList { get; set; }
+        public virtual PHYGroup PHYGroup { get; set; }
+        public virtual FACInfoData FACInfoData { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LocPOS_LevOfCare> LocPOS_LevOfCare { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LocPOS_MPServ> LocPOS_MPServ { get; set; }
-        public virtual PHYGroup PHYGroup { get; set; }
     }
 }

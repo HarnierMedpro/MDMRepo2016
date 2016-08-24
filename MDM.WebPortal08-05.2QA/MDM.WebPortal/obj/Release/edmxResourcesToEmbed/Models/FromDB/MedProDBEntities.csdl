@@ -101,7 +101,7 @@
     <Property Name="Facility_ID" Type="Int64" />
     <Property Name="Fac_NAME" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
     <Property Name="Active" Type="Boolean" Nullable="false" />
-    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK__Locations__Facit__5F141958" FromRole="Facitity_DBs" ToRole="LocationsPOS" />
+    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK__Locations__Facit__764C846B" FromRole="Facitity_DBs" ToRole="LocationsPOS" />
   </EntityType>
   <EntityType Name="FvPList">
     <Key>
@@ -110,7 +110,7 @@
     <Property Name="FvPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="FvPName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="BI_DB_FvP_Access" Relationship="Self.FK_BI_DB_FvP_Access_FvPList" FromRole="FvPList" ToRole="BI_DB_FvP_Access" />
-    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK__Locations__FvPLi__5C37ACAD" FromRole="FvPList" ToRole="LocationsPOS" />
+    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK__Locations__FvPLi__74643BF9" FromRole="FvPList" ToRole="LocationsPOS" />
   </EntityType>
   <EntityType Name="Manager_Master">
     <Key>
@@ -367,45 +367,9 @@
     <EntitySet Name="ManagerDBAccessBIs" EntityType="MedProDBEntities.ManagerDBAccessBI" />
     <EntitySet Name="MPServices" EntityType="MedProDBEntities.MPService" />
     <EntitySet Name="Lev_of_Care" EntityType="MedProDBEntities.Lev_of_Care" />
-    <EntitySet Name="FACInfoDatas" EntityType="MedProDBEntities.FACInfoData" />
-    <EntitySet Name="LocPOS_LevOfCare" EntityType="MedProDBEntities.LocPOS_LevOfCare" />
-    <EntitySet Name="LocPOS_MPServ" EntityType="MedProDBEntities.LocPOS_MPServ" />
-    <AssociationSet Name="FK__LocPOS_Le__Lev_o__689D8392" Association="MedProDBEntities.FK__LocPOS_Le__Lev_o__689D8392">
-      <End Role="Lev_of_Care" EntitySet="Lev_of_Care" />
-      <End Role="LocPOS_LevOfCare" EntitySet="LocPOS_LevOfCare" />
-    </AssociationSet>
-    <AssociationSet Name="FK__LocPOS_MP__MPSer__6C6E1476" Association="MedProDBEntities.FK__LocPOS_MP__MPSer__6C6E1476">
-      <End Role="MPService" EntitySet="MPServices" />
-      <End Role="LocPOS_MPServ" EntitySet="LocPOS_MPServ" />
-    </AssociationSet>
-    <EntitySet Name="LocationsPOS" EntityType="MedProDBEntities.LocationsPOS" />
-    <AssociationSet Name="FK__Locations__FACIn__5D2BD0E6" Association="MedProDBEntities.FK__Locations__FACIn__5D2BD0E6">
-      <End Role="FACInfoData" EntitySet="FACInfoDatas" />
-      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Locations__Facit__5F141958" Association="MedProDBEntities.FK__Locations__Facit__5F141958">
-      <End Role="Facitity_DBs" EntitySet="Facitity_DBs" />
-      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Locations__FvPLi__5C37ACAD" Association="MedProDBEntities.FK__Locations__FvPLi__5C37ACAD">
-      <End Role="FvPList" EntitySet="FvPLists" />
-      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
-    </AssociationSet>
-    <AssociationSet Name="FK__LocPOS_Le__Locat__67A95F59" Association="MedProDBEntities.FK__LocPOS_Le__Locat__67A95F59">
-      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
-      <End Role="LocPOS_LevOfCare" EntitySet="LocPOS_LevOfCare" />
-    </AssociationSet>
-    <AssociationSet Name="FK__LocPOS_MP__Locat__6B79F03D" Association="MedProDBEntities.FK__LocPOS_MP__Locat__6B79F03D">
-      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
-      <End Role="LocPOS_MPServ" EntitySet="LocPOS_MPServ" />
-    </AssociationSet>
     <EntitySet Name="PHYGroups" EntityType="MedProDBEntities.PHYGroup" />
     <EntitySet Name="Providers" EntityType="MedProDBEntities.Provider" />
     <EntitySet Name="ProvidersInGrps" EntityType="MedProDBEntities.ProvidersInGrp" />
-    <AssociationSet Name="FK__Locations__PHYGr__30E33A54" Association="MedProDBEntities.FK__Locations__PHYGr__30E33A54">
-      <End Role="PHYGroup" EntitySet="PHYGroups" />
-      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
-    </AssociationSet>
     <AssociationSet Name="FK__Providers__PHYGr__46D27B73" Association="MedProDBEntities.FK__Providers__PHYGr__46D27B73">
       <End Role="PHYGroup" EntitySet="PHYGroups" />
       <End Role="ProvidersInGrp" EntitySet="ProvidersInGrps" />
@@ -415,19 +379,55 @@
       <End Role="ProvidersInGrp" EntitySet="ProvidersInGrps" />
     </AssociationSet>
     <EntitySet Name="POSLOCExtraDatas" EntityType="MedProDBEntities.POSLOCExtraData" />
-    <AssociationSet Name="FK__POSLOCExt__FACIn__44B528D7" Association="MedProDBEntities.FK__POSLOCExt__FACIn__44B528D7">
-      <End Role="FACInfoData" EntitySet="FACInfoDatas" />
-      <End Role="POSLOCExtraData" EntitySet="POSLOCExtraDatas" />
+    <EntitySet Name="LocationsPOS" EntityType="MedProDBEntities.LocationsPOS" />
+    <AssociationSet Name="FK__Locations__Facit__764C846B" Association="MedProDBEntities.FK__Locations__Facit__764C846B">
+      <End Role="Facitity_DBs" EntitySet="Facitity_DBs" />
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Locations__FvPLi__74643BF9" Association="MedProDBEntities.FK__Locations__FvPLi__74643BF9">
+      <End Role="FvPList" EntitySet="FvPLists" />
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Locations__PHYGr__7740A8A4" Association="MedProDBEntities.FK__Locations__PHYGr__7740A8A4">
+      <End Role="PHYGroup" EntitySet="PHYGroups" />
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
     </AssociationSet>
     <EntitySet Name="Forms_sent" EntityType="MedProDBEntities.Forms_sent" />
     <EntitySet Name="FormsDicts" EntityType="MedProDBEntities.FormsDict" />
-    <AssociationSet Name="FK_Forms_sent_FormsDict" Association="MedProDBEntities.FK_Forms_sent_FormsDict">
+    <AssociationSet Name="FK__Forms_sen__Forms__2F8501C7" Association="MedProDBEntities.FK__Forms_sen__Forms__2F8501C7">
       <End Role="FormsDict" EntitySet="FormsDicts" />
       <End Role="Forms_sent" EntitySet="Forms_sent" />
     </AssociationSet>
-    <AssociationSet Name="FK_Forms_sent_POSLOCExtraData" Association="MedProDBEntities.FK_Forms_sent_POSLOCExtraData">
+    <AssociationSet Name="FK__Forms_sen__POSLO__2E90DD8E" Association="MedProDBEntities.FK__Forms_sen__POSLO__2E90DD8E">
       <End Role="POSLOCExtraData" EntitySet="POSLOCExtraDatas" />
       <End Role="Forms_sent" EntitySet="Forms_sent" />
+    </AssociationSet>
+    <EntitySet Name="FACInfoDatas" EntityType="MedProDBEntities.FACInfoData" />
+    <AssociationSet Name="FK__Locations__FACIn__75235608" Association="MedProDBEntities.FK__Locations__FACIn__75235608">
+      <End Role="FACInfoData" EntitySet="FACInfoDatas" />
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__POSLOCExt__FACIn__7BD05397" Association="MedProDBEntities.FK__POSLOCExt__FACIn__7BD05397">
+      <End Role="FACInfoData" EntitySet="FACInfoDatas" />
+      <End Role="POSLOCExtraData" EntitySet="POSLOCExtraDatas" />
+    </AssociationSet>
+    <EntitySet Name="LocPOS_LevOfCare" EntityType="MedProDBEntities.LocPOS_LevOfCare" />
+    <EntitySet Name="LocPOS_MPServ" EntityType="MedProDBEntities.LocPOS_MPServ" />
+    <AssociationSet Name="FK__LocPOS_Le__Lev_o__07420643" Association="MedProDBEntities.FK__LocPOS_Le__Lev_o__07420643">
+      <End Role="Lev_of_Care" EntitySet="Lev_of_Care" />
+      <End Role="LocPOS_LevOfCare" EntitySet="LocPOS_LevOfCare" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LocPOS_Le__Locat__064DE20A" Association="MedProDBEntities.FK__LocPOS_Le__Locat__064DE20A">
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+      <End Role="LocPOS_LevOfCare" EntitySet="LocPOS_LevOfCare" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LocPOS_MP__Locat__0A1E72EE" Association="MedProDBEntities.FK__LocPOS_MP__Locat__0A1E72EE">
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+      <End Role="LocPOS_MPServ" EntitySet="LocPOS_MPServ" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LocPOS_MP__MPSer__0B129727" Association="MedProDBEntities.FK__LocPOS_MP__MPSer__0B129727">
+      <End Role="MPService" EntitySet="MPServices" />
+      <End Role="LocPOS_MPServ" EntitySet="LocPOS_MPServ" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="CollNoteTypeCatPriority">
@@ -604,7 +604,7 @@
     </Key>
     <Property Name="MPServID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="ServName" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="LocPOS_MPServ" Relationship="MedProDBEntities.FK__LocPOS_MP__MPSer__6C6E1476" FromRole="MPService" ToRole="LocPOS_MPServ" />
+    <NavigationProperty Name="LocPOS_MPServ" Relationship="MedProDBEntities.FK__LocPOS_MP__MPSer__0B129727" FromRole="MPService" ToRole="LocPOS_MPServ" />
   </EntityType>
   <EntityType Name="Lev_of_Care">
     <Key>
@@ -612,159 +612,8 @@
     </Key>
     <Property Name="LevOfCareID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="LevOfCareName" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="LocPOS_LevOfCare" Relationship="MedProDBEntities.FK__LocPOS_Le__Lev_o__689D8392" FromRole="Lev_of_Care" ToRole="LocPOS_LevOfCare" />
+    <NavigationProperty Name="LocPOS_LevOfCare" Relationship="MedProDBEntities.FK__LocPOS_Le__Lev_o__07420643" FromRole="Lev_of_Care" ToRole="LocPOS_LevOfCare" />
   </EntityType>
-  <EntityType Name="FACInfoData">
-    <Key>
-      <PropertyRef Name="FACInfoDataID" />
-    </Key>
-    <Property Name="FACInfoDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="DocProviderName" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="LicType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="StateLic" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-    <Property Name="LicNumCLIA_waiver" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="LicEffectiveDate" Type="DateTime" Nullable="false" Precision="0" />
-    <Property Name="LicExpireDate" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
-    <Property Name="Taxonomy" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="FAC_NPI_Num" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK__Locations__FACIn__5D2BD0E6" FromRole="FACInfoData" ToRole="LocationsPOS" />
-    <NavigationProperty Name="POSLOCExtraData" Relationship="MedProDBEntities.FK__POSLOCExt__FACIn__44B528D7" FromRole="FACInfoData" ToRole="POSLOCExtraData" />
-  </EntityType>
-  <EntityType Name="LocPOS_LevOfCare">
-    <Key>
-      <PropertyRef Name="LocPosLocID" />
-    </Key>
-    <Property Name="LocPosLocID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Lev_of_Care_LevOfCareID" Type="Int32" Nullable="false" />
-    <Property Name="LocationsPOS_Facitity_DBs_IDPK" Type="Int32" />
-    <NavigationProperty Name="Lev_of_Care" Relationship="MedProDBEntities.FK__LocPOS_Le__Lev_o__689D8392" FromRole="LocPOS_LevOfCare" ToRole="Lev_of_Care" />
-    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK__LocPOS_Le__Locat__67A95F59" FromRole="LocPOS_LevOfCare" ToRole="LocationsPOS" />
-  </EntityType>
-  <EntityType Name="LocPOS_MPServ">
-    <Key>
-      <PropertyRef Name="LocPosMPServID" />
-    </Key>
-    <Property Name="LocPosMPServID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="MPServices_MPServID" Type="Int32" Nullable="false" />
-    <Property Name="LocationsPOS_Facitity_DBs_IDPK" Type="Int32" />
-    <NavigationProperty Name="MPService" Relationship="MedProDBEntities.FK__LocPOS_MP__MPSer__6C6E1476" FromRole="LocPOS_MPServ" ToRole="MPService" />
-    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK__LocPOS_MP__Locat__6B79F03D" FromRole="LocPOS_MPServ" ToRole="LocationsPOS" />
-  </EntityType>
-  <Association Name="FK__LocPOS_Le__Lev_o__689D8392">
-    <End Type="MedProDBEntities.Lev_of_Care" Role="Lev_of_Care" Multiplicity="1" />
-    <End Type="MedProDBEntities.LocPOS_LevOfCare" Role="LocPOS_LevOfCare" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Lev_of_Care">
-        <PropertyRef Name="LevOfCareID" />
-      </Principal>
-      <Dependent Role="LocPOS_LevOfCare">
-        <PropertyRef Name="Lev_of_Care_LevOfCareID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__LocPOS_MP__MPSer__6C6E1476">
-    <End Type="MedProDBEntities.MPService" Role="MPService" Multiplicity="1" />
-    <End Type="MedProDBEntities.LocPOS_MPServ" Role="LocPOS_MPServ" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="MPService">
-        <PropertyRef Name="MPServID" />
-      </Principal>
-      <Dependent Role="LocPOS_MPServ">
-        <PropertyRef Name="MPServices_MPServID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="LocationsPOS">
-    <Key>
-      <PropertyRef Name="Facitity_DBs_IDPK" />
-    </Key>
-    <Property Name="Facitity_DBs_IDPK" Type="Int32" Nullable="false" />
-    <Property Name="PosName" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="FvPList_FvPID" Type="Int32" Nullable="false" />
-    <Property Name="FACInfoData_FACInfoDataID" Type="Int32" Nullable="false" />
-    <Property Name="PHYGroups_PHYGrpID" Type="Int32" />
-    <Property Name="TaxID" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="DBA_Name" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Payment_Addr1" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Payment_Addr2" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Payment_City" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Payment_state" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Payment_Zip" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Physical_Addr1" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Physical_Addr2" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Physical_City" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Physical_state" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Physical_Zip" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="POSFAC_Manager" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="FACInfoData" Relationship="MedProDBEntities.FK__Locations__FACIn__5D2BD0E6" FromRole="LocationsPOS" ToRole="FACInfoData" />
-    <NavigationProperty Name="Facitity_DBs" Relationship="MedProDBEntities.FK__Locations__Facit__5F141958" FromRole="LocationsPOS" ToRole="Facitity_DBs" />
-    <NavigationProperty Name="FvPList" Relationship="MedProDBEntities.FK__Locations__FvPLi__5C37ACAD" FromRole="LocationsPOS" ToRole="FvPList" />
-    <NavigationProperty Name="LocPOS_LevOfCare" Relationship="MedProDBEntities.FK__LocPOS_Le__Locat__67A95F59" FromRole="LocationsPOS" ToRole="LocPOS_LevOfCare" />
-    <NavigationProperty Name="LocPOS_MPServ" Relationship="MedProDBEntities.FK__LocPOS_MP__Locat__6B79F03D" FromRole="LocationsPOS" ToRole="LocPOS_MPServ" />
-    <NavigationProperty Name="PHYGroup" Relationship="MedProDBEntities.FK__Locations__PHYGr__30E33A54" FromRole="LocationsPOS" ToRole="PHYGroup" />
-    <Property Name="Time_Zone" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <Association Name="FK__Locations__FACIn__5D2BD0E6">
-    <End Type="MedProDBEntities.FACInfoData" Role="FACInfoData" Multiplicity="1" />
-    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="FACInfoData">
-        <PropertyRef Name="FACInfoDataID" />
-      </Principal>
-      <Dependent Role="LocationsPOS">
-        <PropertyRef Name="FACInfoData_FACInfoDataID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Locations__Facit__5F141958">
-    <End Type="MedProDBEntities.Facitity_DBs" Role="Facitity_DBs" Multiplicity="1" />
-    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="0..1" />
-    <ReferentialConstraint>
-      <Principal Role="Facitity_DBs">
-        <PropertyRef Name="IDPK" />
-      </Principal>
-      <Dependent Role="LocationsPOS">
-        <PropertyRef Name="Facitity_DBs_IDPK" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Locations__FvPLi__5C37ACAD">
-    <End Type="MedProDBEntities.FvPList" Role="FvPList" Multiplicity="1" />
-    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="FvPList">
-        <PropertyRef Name="FvPID" />
-      </Principal>
-      <Dependent Role="LocationsPOS">
-        <PropertyRef Name="FvPList_FvPID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__LocPOS_Le__Locat__67A95F59">
-    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="0..1" />
-    <End Type="MedProDBEntities.LocPOS_LevOfCare" Role="LocPOS_LevOfCare" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="LocationsPOS">
-        <PropertyRef Name="Facitity_DBs_IDPK" />
-      </Principal>
-      <Dependent Role="LocPOS_LevOfCare">
-        <PropertyRef Name="LocationsPOS_Facitity_DBs_IDPK" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__LocPOS_MP__Locat__6B79F03D">
-    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="0..1" />
-    <End Type="MedProDBEntities.LocPOS_MPServ" Role="LocPOS_MPServ" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="LocationsPOS">
-        <PropertyRef Name="Facitity_DBs_IDPK" />
-      </Principal>
-      <Dependent Role="LocPOS_MPServ">
-        <PropertyRef Name="LocationsPOS_Facitity_DBs_IDPK" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="PHYGroup">
     <Key>
       <PropertyRef Name="PHYGrpID" />
@@ -772,8 +621,8 @@
     <Property Name="PHYGrpID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="PHYGroupName" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
     <Property Name="PHYGrpNPI_Num" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK__Locations__PHYGr__30E33A54" FromRole="PHYGroup" ToRole="LocationsPOS" />
     <NavigationProperty Name="ProvidersInGrps" Relationship="MedProDBEntities.FK__Providers__PHYGr__46D27B73" FromRole="PHYGroup" ToRole="ProvidersInGrp" />
+    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK__Locations__PHYGr__7740A8A4" FromRole="PHYGroup" ToRole="LocationsPOS" />
   </EntityType>
   <EntityType Name="Provider">
     <Key>
@@ -794,18 +643,6 @@
     <NavigationProperty Name="PHYGroup" Relationship="MedProDBEntities.FK__Providers__PHYGr__46D27B73" FromRole="ProvidersInGrp" ToRole="PHYGroup" />
     <NavigationProperty Name="Provider" Relationship="MedProDBEntities.FK__Providers__Provi__45DE573A" FromRole="ProvidersInGrp" ToRole="Provider" />
   </EntityType>
-  <Association Name="FK__Locations__PHYGr__30E33A54">
-    <End Type="MedProDBEntities.PHYGroup" Role="PHYGroup" Multiplicity="0..1" />
-    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PHYGroup">
-        <PropertyRef Name="PHYGrpID" />
-      </Principal>
-      <Dependent Role="LocationsPOS">
-        <PropertyRef Name="PHYGroups_PHYGrpID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK__Providers__PHYGr__46D27B73">
     <End Type="MedProDBEntities.PHYGroup" Role="PHYGroup" Multiplicity="0..1" />
     <End Type="MedProDBEntities.ProvidersInGrp" Role="ProvidersInGrp" Multiplicity="*" />
@@ -866,10 +703,147 @@
     <Property Name="Availavility_completed" Type="Boolean" />
     <Property Name="Navinet_request_completed" Type="Boolean" />
     <Property Name="Fee_schedule_in_binder" Type="Boolean" />
-    <NavigationProperty Name="FACInfoData" Relationship="MedProDBEntities.FK__POSLOCExt__FACIn__44B528D7" FromRole="POSLOCExtraData" ToRole="FACInfoData" />
-    <NavigationProperty Name="Forms_sent" Relationship="MedProDBEntities.FK_Forms_sent_POSLOCExtraData" FromRole="POSLOCExtraData" ToRole="Forms_sent" />
+    <NavigationProperty Name="Forms_sent" Relationship="MedProDBEntities.FK__Forms_sen__POSLO__2E90DD8E" FromRole="POSLOCExtraData" ToRole="Forms_sent" />
+    <NavigationProperty Name="FACInfoData" Relationship="MedProDBEntities.FK__POSLOCExt__FACIn__7BD05397" FromRole="POSLOCExtraData" ToRole="FACInfoData" />
   </EntityType>
-  <Association Name="FK__POSLOCExt__FACIn__44B528D7">
+  <EntityType Name="LocationsPOS">
+    <Key>
+      <PropertyRef Name="Facitity_DBs_IDPK" />
+    </Key>
+    <Property Name="Facitity_DBs_IDPK" Type="Int32" Nullable="false" />
+    <Property Name="PosName" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="FvPList_FvPID" Type="Int32" Nullable="false" />
+    <Property Name="FACInfoData_FACInfoDataID" Type="Int32" />
+    <Property Name="TaxID" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="DBA_Name" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Payment_Addr1" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Payment_Addr2" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Payment_City" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Payment_state" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Payment_Zip" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Physical_Addr1" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Physical_Addr2" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Physical_City" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Physical_state" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Physical_Zip" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="POSFAC_Manager" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="PHYGroups_PHYGrpID" Type="Int32" />
+    <Property Name="Time_Zone" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Facitity_DBs" Relationship="MedProDBEntities.FK__Locations__Facit__764C846B" FromRole="LocationsPOS" ToRole="Facitity_DBs" />
+    <NavigationProperty Name="FvPList" Relationship="MedProDBEntities.FK__Locations__FvPLi__74643BF9" FromRole="LocationsPOS" ToRole="FvPList" />
+    <NavigationProperty Name="PHYGroup" Relationship="MedProDBEntities.FK__Locations__PHYGr__7740A8A4" FromRole="LocationsPOS" ToRole="PHYGroup" />
+    <NavigationProperty Name="FACInfoData" Relationship="MedProDBEntities.FK__Locations__FACIn__75235608" FromRole="LocationsPOS" ToRole="FACInfoData" />
+    <NavigationProperty Name="LocPOS_LevOfCare" Relationship="MedProDBEntities.FK__LocPOS_Le__Locat__064DE20A" FromRole="LocationsPOS" ToRole="LocPOS_LevOfCare" />
+    <NavigationProperty Name="LocPOS_MPServ" Relationship="MedProDBEntities.FK__LocPOS_MP__Locat__0A1E72EE" FromRole="LocationsPOS" ToRole="LocPOS_MPServ" />
+  </EntityType>
+  <Association Name="FK__Locations__Facit__764C846B">
+    <End Type="MedProDBEntities.Facitity_DBs" Role="Facitity_DBs" Multiplicity="1" />
+    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Facitity_DBs">
+        <PropertyRef Name="IDPK" />
+      </Principal>
+      <Dependent Role="LocationsPOS">
+        <PropertyRef Name="Facitity_DBs_IDPK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Locations__FvPLi__74643BF9">
+    <End Type="MedProDBEntities.FvPList" Role="FvPList" Multiplicity="1" />
+    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FvPList">
+        <PropertyRef Name="FvPID" />
+      </Principal>
+      <Dependent Role="LocationsPOS">
+        <PropertyRef Name="FvPList_FvPID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Locations__PHYGr__7740A8A4">
+    <End Type="MedProDBEntities.PHYGroup" Role="PHYGroup" Multiplicity="0..1" />
+    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PHYGroup">
+        <PropertyRef Name="PHYGrpID" />
+      </Principal>
+      <Dependent Role="LocationsPOS">
+        <PropertyRef Name="PHYGroups_PHYGrpID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Forms_sent">
+    <Key>
+      <PropertyRef Name="FormSentID" />
+    </Key>
+    <Property Name="FormSentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="POSLOCExtraData_FACInfoData_FACInfoDataID" Type="Int32" />
+    <Property Name="FormsDict_FormsID" Type="Int32" />
+    <NavigationProperty Name="FormsDict" Relationship="MedProDBEntities.FK__Forms_sen__Forms__2F8501C7" FromRole="Forms_sent" ToRole="FormsDict" />
+    <NavigationProperty Name="POSLOCExtraData" Relationship="MedProDBEntities.FK__Forms_sen__POSLO__2E90DD8E" FromRole="Forms_sent" ToRole="POSLOCExtraData" />
+  </EntityType>
+  <EntityType Name="FormsDict">
+    <Key>
+      <PropertyRef Name="FormsID" />
+    </Key>
+    <Property Name="FormsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FormName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Forms_sent" Relationship="MedProDBEntities.FK__Forms_sen__Forms__2F8501C7" FromRole="FormsDict" ToRole="Forms_sent" />
+  </EntityType>
+  <Association Name="FK__Forms_sen__Forms__2F8501C7">
+    <End Type="MedProDBEntities.FormsDict" Role="FormsDict" Multiplicity="0..1" />
+    <End Type="MedProDBEntities.Forms_sent" Role="Forms_sent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FormsDict">
+        <PropertyRef Name="FormsID" />
+      </Principal>
+      <Dependent Role="Forms_sent">
+        <PropertyRef Name="FormsDict_FormsID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Forms_sen__POSLO__2E90DD8E">
+    <End Type="MedProDBEntities.POSLOCExtraData" Role="POSLOCExtraData" Multiplicity="0..1" />
+    <End Type="MedProDBEntities.Forms_sent" Role="Forms_sent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="POSLOCExtraData">
+        <PropertyRef Name="FACInfoData_FACInfoDataID" />
+      </Principal>
+      <Dependent Role="Forms_sent">
+        <PropertyRef Name="POSLOCExtraData_FACInfoData_FACInfoDataID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="FACInfoData">
+    <Key>
+      <PropertyRef Name="FACInfoDataID" />
+    </Key>
+    <Property Name="FACInfoDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DocProviderName" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="LicType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="StateLic" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="LicNumCLIA_waiver" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="LicEffectiveDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="LicExpireDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Taxonomy" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="FAC_NPI_Num" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK__Locations__FACIn__75235608" FromRole="FACInfoData" ToRole="LocationsPOS" />
+    <NavigationProperty Name="POSLOCExtraData" Relationship="MedProDBEntities.FK__POSLOCExt__FACIn__7BD05397" FromRole="FACInfoData" ToRole="POSLOCExtraData" />
+  </EntityType>
+  <Association Name="FK__Locations__FACIn__75235608">
+    <End Type="MedProDBEntities.FACInfoData" Role="FACInfoData" Multiplicity="0..1" />
+    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FACInfoData">
+        <PropertyRef Name="FACInfoDataID" />
+      </Principal>
+      <Dependent Role="LocationsPOS">
+        <PropertyRef Name="FACInfoData_FACInfoDataID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__POSLOCExt__FACIn__7BD05397">
     <End Type="MedProDBEntities.FACInfoData" Role="FACInfoData" Multiplicity="1" />
     <End Type="MedProDBEntities.POSLOCExtraData" Role="POSLOCExtraData" Multiplicity="0..1" />
     <ReferentialConstraint>
@@ -881,45 +855,71 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="Forms_sent">
+  <EntityType Name="LocPOS_LevOfCare">
     <Key>
-      <PropertyRef Name="FormSentID" />
+      <PropertyRef Name="LocPosLocID" />
     </Key>
-    <Property Name="FormSentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="FormsID" Type="Int32" Nullable="false" />
-    <Property Name="FACInfoData_FACInfoDataID" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="FormsDict" Relationship="MedProDBEntities.FK_Forms_sent_FormsDict" FromRole="Forms_sent" ToRole="FormsDict" />
-    <NavigationProperty Name="POSLOCExtraData" Relationship="MedProDBEntities.FK_Forms_sent_POSLOCExtraData" FromRole="Forms_sent" ToRole="POSLOCExtraData" />
+    <Property Name="LocPosLocID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Lev_of_Care_LevOfCareID" Type="Int32" Nullable="false" />
+    <Property Name="LocationsPOS_Facitity_DBs_IDPK" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Lev_of_Care" Relationship="MedProDBEntities.FK__LocPOS_Le__Lev_o__07420643" FromRole="LocPOS_LevOfCare" ToRole="Lev_of_Care" />
+    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK__LocPOS_Le__Locat__064DE20A" FromRole="LocPOS_LevOfCare" ToRole="LocationsPOS" />
   </EntityType>
-  <EntityType Name="FormsDict">
+  <EntityType Name="LocPOS_MPServ">
     <Key>
-      <PropertyRef Name="FormsID" />
+      <PropertyRef Name="LocPosMPServID" />
     </Key>
-    <Property Name="FormsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="FormName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Forms_sent" Relationship="MedProDBEntities.FK_Forms_sent_FormsDict" FromRole="FormsDict" ToRole="Forms_sent" />
+    <Property Name="LocPosMPServID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MPServices_MPServID" Type="Int32" Nullable="false" />
+    <Property Name="LocationsPOS_Facitity_DBs_IDPK" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK__LocPOS_MP__Locat__0A1E72EE" FromRole="LocPOS_MPServ" ToRole="LocationsPOS" />
+    <NavigationProperty Name="MPService" Relationship="MedProDBEntities.FK__LocPOS_MP__MPSer__0B129727" FromRole="LocPOS_MPServ" ToRole="MPService" />
   </EntityType>
-  <Association Name="FK_Forms_sent_FormsDict">
-    <End Type="MedProDBEntities.FormsDict" Role="FormsDict" Multiplicity="1" />
-    <End Type="MedProDBEntities.Forms_sent" Role="Forms_sent" Multiplicity="*" />
+  <Association Name="FK__LocPOS_Le__Lev_o__07420643">
+    <End Type="MedProDBEntities.Lev_of_Care" Role="Lev_of_Care" Multiplicity="1" />
+    <End Type="MedProDBEntities.LocPOS_LevOfCare" Role="LocPOS_LevOfCare" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="FormsDict">
-        <PropertyRef Name="FormsID" />
+      <Principal Role="Lev_of_Care">
+        <PropertyRef Name="LevOfCareID" />
       </Principal>
-      <Dependent Role="Forms_sent">
-        <PropertyRef Name="FormsID" />
+      <Dependent Role="LocPOS_LevOfCare">
+        <PropertyRef Name="Lev_of_Care_LevOfCareID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Forms_sent_POSLOCExtraData">
-    <End Type="MedProDBEntities.POSLOCExtraData" Role="POSLOCExtraData" Multiplicity="1" />
-    <End Type="MedProDBEntities.Forms_sent" Role="Forms_sent" Multiplicity="*" />
+  <Association Name="FK__LocPOS_Le__Locat__064DE20A">
+    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="1" />
+    <End Type="MedProDBEntities.LocPOS_LevOfCare" Role="LocPOS_LevOfCare" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="POSLOCExtraData">
-        <PropertyRef Name="FACInfoData_FACInfoDataID" />
+      <Principal Role="LocationsPOS">
+        <PropertyRef Name="Facitity_DBs_IDPK" />
       </Principal>
-      <Dependent Role="Forms_sent">
-        <PropertyRef Name="FACInfoData_FACInfoDataID" />
+      <Dependent Role="LocPOS_LevOfCare">
+        <PropertyRef Name="LocationsPOS_Facitity_DBs_IDPK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LocPOS_MP__Locat__0A1E72EE">
+    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="1" />
+    <End Type="MedProDBEntities.LocPOS_MPServ" Role="LocPOS_MPServ" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LocationsPOS">
+        <PropertyRef Name="Facitity_DBs_IDPK" />
+      </Principal>
+      <Dependent Role="LocPOS_MPServ">
+        <PropertyRef Name="LocationsPOS_Facitity_DBs_IDPK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LocPOS_MP__MPSer__0B129727">
+    <End Type="MedProDBEntities.MPService" Role="MPService" Multiplicity="1" />
+    <End Type="MedProDBEntities.LocPOS_MPServ" Role="LocPOS_MPServ" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MPService">
+        <PropertyRef Name="MPServID" />
+      </Principal>
+      <Dependent Role="LocPOS_MPServ">
+        <PropertyRef Name="MPServices_MPServID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

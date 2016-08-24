@@ -11,7 +11,7 @@ namespace MDM.WebPortal.Models.ViewModel
         public int DB_ID { get; set; }
 
         [Required]
-        [StringLength(3, ErrorMessage = "This field must have a maximum length of 3.")]
+        [StringLength(3, MinimumLength = 3, ErrorMessage = "This field must have a maximum length of 3.")]
         public string DB { get; set; }
 
 

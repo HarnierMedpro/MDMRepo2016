@@ -159,7 +159,7 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
 
         public async Task<ActionResult> Create_BI_DB_FvP([DataSourceRequest] DataSourceRequest request, [Bind(Include = "BIDbFvPID,ManagerID,DB_ID,FvPID,Active")] VMBI_DB_FvP bI_DB_FvP_Access, int ParentID)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && ParentID > 0)
             {
                 try
                 {

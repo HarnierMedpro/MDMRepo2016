@@ -26,7 +26,7 @@ namespace MDM.WebPortal.Models.FromDB
         public string StateLic { get; set; }
         public string LicNumCLIA_waiver { get; set; }
         public System.DateTime LicEffectiveDate { get; set; }
-        public string LicExpireDate { get; set; }
+        public System.DateTime LicExpireDate { get; set; }
         public string Taxonomy { get; set; }
         public string FAC_NPI_Num { get; set; }
     

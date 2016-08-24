@@ -1,0 +1,182 @@
+﻿@model MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMLocationPOS_AddressInfo
+
+@{
+    Layout = null;
+}
+
+<div class="container-fluid">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.Facitity_DBs_IDPK)
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="col-md-11">
+                <fieldset class="scheduler-border col-md-12">
+                    <legend class="scheduler-border text-uppercase text-bold">Payment Info:</legend>
+                    <div class="col-md-offset-1 col-md-10">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-9">
+                                    @Html.LabelFor(model => model.Payment_Addr1, htmlAttributes: new {@class = "control-label"})
+                                    @Html.EditorFor(model => model.Payment_Addr1, new {htmlAttributes = new {@class = "form-control", @style = "height:22.35px !important;"}})
+                                    @Html.ValidationMessageFor(model => model.Payment_Addr1, "", new {@class = "text-danger"})
+                                </div>
+                            </div>
+
+                            @*<div class="form-group">
+                                <label class="control-label col-md-2"><strong>Address 1</strong><sup class="text-danger">*</sup></label>
+                                <div class="col-md-12">
+                                    @Html.TextBoxFor(m => m.Physical_Addr1, new { @class = "form-control", @style = "height:22.35px !important;" })
+                                    @Html.ValidationMessageFor(m => m.Physical_Addr1)
+                                </div>
+                            </div>*@
+
+                            <div class="form-group">
+                                <div class="col-md-9">
+                                    @Html.LabelFor(model => model.Payment_Addr2, htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.Payment_Addr2, new { htmlAttributes = new { @class = "form-control", @style = "height:22.35px !important;" } })
+                                    @Html.ValidationMessageFor(model => model.Payment_Addr2, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            @*<div class="form-group">
+                                @Html.LabelFor(model => model.Payment_City, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => model.Payment_City, new { htmlAttributes = new { @class = "form-control", @style = "height:22.35px !important;" } })
+                                    @Html.ValidationMessageFor(model => model.Payment_City, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="col-md-9">
+                                            @Html.LabelFor(model => model.Payment_City, htmlAttributes: new { @class = "control-label" })
+                                            @Html.EditorFor(model => model.Payment_City, new { htmlAttributes = new { @class = "form-control", @style = "height:22.35px !important;" } })
+                                            @Html.ValidationMessageFor(model => model.Payment_City, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="col-md-9">
+                                            @Html.LabelFor(model => model.Payment_state, htmlAttributes: new { @class = "control-label" })
+                                            @Html.EditorFor(model => model.Payment_state, new { htmlAttributes = new { @class = "form-control", @style = "height:22.35px !important;" } })
+                                            @Html.ValidationMessageFor(model => model.Payment_state, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="col-md-9">
+                                            @Html.LabelFor(model => model.Payment_Zip, htmlAttributes: new { @class = "control-label" })
+                                            @Html.EditorFor(model => model.Payment_Zip, new { htmlAttributes = new { @class = "form-control", @style = "height:22.35px !important;" } })
+                                            @Html.ValidationMessageFor(model => model.Payment_Zip, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="col-md-11">
+                <fieldset class="scheduler-border col-md-12">
+                    <legend class="scheduler-border text-uppercase text-bold">Physical Info:</legend>
+                    <div class="col-md-offset-1 col-md-10">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-9">
+                                    @Html.LabelFor(model => model.Physical_Addr1, htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.Physical_Addr1, new { htmlAttributes = new { @class = "form-control", @style = "height:22.35px !important;" } })
+                                    @Html.ValidationMessageFor(model => model.Physical_Addr1, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-9">
+                                    @Html.LabelFor(model => model.Physical_Addr2, htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.Physical_Addr2, new { htmlAttributes = new { @class = "form-control", @style = "height:22.35px !important;" } })
+                                    @Html.ValidationMessageFor(model => model.Physical_Addr2, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            @*<div class="form-group">
+                                @Html.LabelFor(model => model.Physical_City, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => model.Physical_City, new { htmlAttributes = new { @class = "form-control", @style = "height:22.35px !important;" } })
+                                    @Html.ValidationMessageFor(model => model.Physical_City, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="col-md-9">
+                                            @Html.LabelFor(model => model.Physical_City, htmlAttributes: new { @class = "control-label" })
+                                            @Html.EditorFor(model => model.Physical_City, new { htmlAttributes = new { @class = "form-control", @style = "height:22.35px !important;" } })
+                                            @Html.ValidationMessageFor(model => model.Physical_City, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="col-md-9">
+                                            @Html.LabelFor(model => model.Physical_state, htmlAttributes: new { @class = "control-label" })
+                                            @Html.EditorFor(model => model.Physical_state, new { htmlAttributes = new { @class = "form-control", @style = "height:22.35px !important;" } })
+                                            @Html.ValidationMessageFor(model => model.Physical_state, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="col-md-9">
+                                            @Html.LabelFor(model => model.Physical_Zip, htmlAttributes: new { @class = "control-label" })
+                                            @Html.EditorFor(model => model.Physical_Zip, new { htmlAttributes = new { @class = "form-control", @style = "height:22.35px !important;" } })
+                                            @Html.ValidationMessageFor(model => model.Physical_Zip, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  
+                </fieldset>
+            </div>
+        </div>
+
+      
+
+        
+
+        
+    }
+   
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+@*<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+    <div> 
+    </div>
+</body>
+</html>*@

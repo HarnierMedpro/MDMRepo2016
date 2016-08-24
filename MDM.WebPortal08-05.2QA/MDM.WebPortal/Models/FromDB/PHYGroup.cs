@@ -17,8 +17,8 @@ namespace MDM.WebPortal.Models.FromDB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PHYGroup()
         {
-            this.LocationsPOS = new HashSet<LocationsPOS>();
             this.ProvidersInGrps = new HashSet<ProvidersInGrp>();
+            this.LocationsPOS = new HashSet<LocationsPOS>();
         }
     
         public int PHYGrpID { get; set; }
@@ -26,8 +26,8 @@ namespace MDM.WebPortal.Models.FromDB
         public string PHYGrpNPI_Num { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LocationsPOS> LocationsPOS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProvidersInGrp> ProvidersInGrps { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LocationsPOS> LocationsPOS { get; set; }
     }
 }

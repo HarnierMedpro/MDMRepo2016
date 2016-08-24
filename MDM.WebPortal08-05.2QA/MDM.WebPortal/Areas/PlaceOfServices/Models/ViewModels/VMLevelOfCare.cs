@@ -13,7 +13,7 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels
         [Required]
         [Display(Name = "LEVEL OF CARE")]
         [StringLength(80)]
-        [RegularExpression(@"[a-zA-Z0-9_]+$", ErrorMessage = "No Special character and/or white space allowed.")]
+        //[RegularExpression(@"[a-zA-Z0-9_]+$", ErrorMessage = "No Special character and/or white space allowed.")]
         public string LevOfCareName { get; set; }
     }
 }

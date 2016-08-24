@@ -53,8 +53,8 @@ namespace MDM.WebPortal.Models.FromDB
         public Nullable<bool> Navinet_request_completed { get; set; }
         public Nullable<bool> Fee_schedule_in_binder { get; set; }
     
-        public virtual FACInfoData FACInfoData { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Forms_sent> Forms_sent { get; set; }
+        public virtual FACInfoData FACInfoData { get; set; }
     }
 }

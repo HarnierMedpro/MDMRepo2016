@@ -148,6 +148,17 @@ namespace MDM.WebPortal.Controllers.APP
             return RedirectToAction("Index", "Error", new { area = "Error" });
         }
 
+        public JsonResult GetDbName(string DB)
+        {
+           var result = db.DBLists.Where(x => x.DB == DB).Select(x => new {x.databaseName});
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllDBs()
+        {
+            return Json(db.DBLists.OrderBy(x => x.DB).Select(x => new VMDBList{DB = x.DB, DB_ID = x.DB_ID, active = x.active, databaseName = x.databaseName}), JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

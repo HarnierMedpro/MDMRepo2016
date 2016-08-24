@@ -16,9 +16,9 @@ namespace MDM.WebPortal.Models.FromDB
     {
         public int LocPosMPServID { get; set; }
         public int MPServices_MPServID { get; set; }
-        public Nullable<int> LocationsPOS_Facitity_DBs_IDPK { get; set; }
+        public int LocationsPOS_Facitity_DBs_IDPK { get; set; }
     
-        public virtual MPService MPService { get; set; }
         public virtual LocationsPOS LocationsPOS { get; set; }
+        public virtual MPService MPService { get; set; }
     }
 }
