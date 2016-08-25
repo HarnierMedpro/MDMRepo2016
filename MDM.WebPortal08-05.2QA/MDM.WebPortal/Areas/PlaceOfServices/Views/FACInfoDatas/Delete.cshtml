@@ -1,0 +1,97 @@
+﻿@model MDM.WebPortal.Models.FromDB.FACInfoData
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>FACInfoData</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DocProviderName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocProviderName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StateLic)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StateLic)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicNumCLIA_waiver)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicNumCLIA_waiver)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicEffectiveDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicEffectiveDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LicExpireDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LicExpireDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Taxonomy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Taxonomy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FAC_NPI_Num)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FAC_NPI_Num)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.POSLOCExtraData.Phone_Number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.POSLOCExtraData.Phone_Number)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

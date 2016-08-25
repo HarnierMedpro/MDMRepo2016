@@ -18,6 +18,17 @@
 </header>
 
 <div class="container-fluid">
+    @if (TempData["Error"] != null)
+    {
+        <div class="row">
+            <div class="col-md-5">
+                <div class="alert alert-danger">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="Close">&times;</a>
+                    <p>@TempData["Error"]</p>
+                </div>
+            </div>
+        </div>
+    }
     @(Html.Kendo().Grid<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMLocationsPOS>()
           .Name("POSLOC")
           .ToolBar(tool => tool.Excel())
@@ -26,8 +37,6 @@
               column.Bound(pos => pos.Facitity_DBs_IDPK).Hidden(true);
 
               column.Bound(pos => pos.PosName).Width(110);
-
-              //column.Bound(pos => pos.FvPList_FvPID).Width(110);
 
               column.ForeignKey(pos => pos.FvPList_FvPID, (IEnumerable<MDM.WebPortal.Models.ViewModel.Delete.VMFvpList>) ViewData["FvPLists"], "id", "FvpName").Width(110);
 
@@ -68,7 +77,11 @@
           .Items(items =>
           {
               items.Add().Text("Address Info")
-                 .LoadContentFrom("Edit", "POSAddressInfo", new { id = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });
+                  .LoadContentFrom("Details", "POSAddressInfo", new { id = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });
+                  //.Action("Edit", "POSAddressInfo", new {id = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices"});
+              
+              items.Add().Text("Additional Info")
+                  .LoadContentFrom("Details", "FACInfoDatas", new { id = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });   
               
               items.Add().Text("Level Of Care").Content(@<text>
                     @(Html.Kendo().Grid<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMLocPOS_LevOfCare>()
@@ -79,11 +92,10 @@
                           })
                           .Columns(columns =>
                           {
-                              //columns.Bound(o => o.LocPosLocID).Title("PK ID").Width(56);
                               columns.Bound(o => o.LocPosLocID).Hidden(true);
                               columns.Bound(o => o.LocationsPOS_Facitity_DBs_IDPK).Hidden(true);
                               columns.ForeignKey(o => o.Lev_of_Care_LevOfCareID, (IEnumerable<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMLevelOfCare>) ViewData["LevOfCare"], "LevOfCareID", "LevOfCareName").Width(110);
-                              //columns.Bound(o => o.LocationsPOS_Facitity_DBs_IDPK).Width(110);
+                              
                               columns.Command(command =>
                               {
                                   command.Edit();
@@ -120,11 +132,10 @@
                           })
                           .Columns(columns =>
                           {
-                              //columns.Bound(o => o.LocPosLocID).Title("PK ID").Width(56);
                               columns.Bound(o => o.LocPosMPServID).Hidden(true);
                               columns.Bound(o => o.LocationsPOS_Facitity_DBs_IDPK).Hidden(true);
                               columns.ForeignKey(o => o.MPServices_MPServID, (IEnumerable<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMMPService>)ViewData["Service"], "MPServID", "ServName").Width(110);
-                              //columns.Bound(o => o.LocationsPOS_Facitity_DBs_IDPK).Width(110);
+                             
                               columns.Command(command =>
                               {
                                   command.Edit();

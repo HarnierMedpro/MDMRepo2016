@@ -1,0 +1,108 @@
+﻿@model MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMFACInfoData
+
+@{
+    ViewBag.Title = "Details";
+    //Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+<br/>
+<div class="container-fluid">
+    <div class="panel panel-primary">
+        <div class="panel-heading"> <i class="fa fa-info-circle"></i> GENERAL INFORMATION</div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <tbody>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DocProviderName)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.DocProviderName)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LicType)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.LicType)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StateLic)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.StateLic)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LicNumCLIA_waiver)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.LicNumCLIA_waiver)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LicEffectiveDate)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.LicEffectiveDate)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LicExpireDate)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.LicExpireDate)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Taxonomy)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.Taxonomy)
+                    </td>
+                </tr>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FAC_NPI_Num)
+                        </th>
+                        <td>
+                            @Html.DisplayFor(model => model.FAC_NPI_Num)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if (Model.FACInfoDataID == 0)
+{
+    <div class="pull-right">
+        <a href="@Url.Action("Create", new {locPOS = Model.Facitity_DBs_IDPK})" class="btn btn-ar btn-primary">
+            <i class="fa fa-cloud-upload"></i> FILL OUT
+        </a>
+        <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
+            <i class="fa fa-ban"></i> CANCEL
+        </a>
+    </div>
+}
+else
+{
+    <div class="pull-right">
+        <a href="@Url.Action("Edit", new { id = Model.FACInfoDataID })" class="btn btn-ar btn-primary">
+            <i class="fa fa-cloud-upload"></i> UPDATE
+        </a>
+        <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
+            <i class="fa fa-ban"></i> CANCEL
+        </a>
+        <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-default">
+            <i class="fa fa-arrow-circle-o-right"></i> NEXT PAGE
+        </a>
+    </div>
+}

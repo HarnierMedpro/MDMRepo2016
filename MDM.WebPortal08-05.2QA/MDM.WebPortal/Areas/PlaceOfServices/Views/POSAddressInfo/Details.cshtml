@@ -1,0 +1,90 @@
+﻿@model MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMLocationPOS_AddressInfo
+@{
+    Layout = null;
+    string paymentAdd;
+    string physicalAdd;
+    if (Model.Payment_Addr2 != null)
+    {
+        paymentAdd = Model.Payment_Addr1 + " " + Model.Payment_Addr2 + " " + Model.Payment_City + " " + Model.Payment_state + " " + Model.Payment_Zip;
+    }
+    paymentAdd = Model.Payment_Addr1 + " " + Model.Payment_City + " " + Model.Payment_state + " " + Model.Payment_Zip;
+
+    if (Model.Physical_Addr2 != null)
+    {
+        physicalAdd = Model.Physical_Addr1 + " " + Model.Physical_Addr2 + " " + Model.Physical_City + " " + Model.Physical_state + " " + Model.Physical_Zip;
+    }
+    physicalAdd = Model.Physical_Addr1 + " " + Model.Physical_City + " " + Model.Physical_state + " " + Model.Physical_Zip;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-11">
+            <section class="margin-bottom">
+                <p class="lead lead-lg text-center primary-color margin-bottom">
+                    <strong>Aditional Address Info</strong> of this POS
+                </p>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            <div class="panel panel-default">
+                                <div class="panel-heading panel-heading-link">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" class="collapsed">
+                                        <i class="fa fa-globe"></i> Time Zone
+                                    </a>
+                                </div>
+                                <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                    <div class="panel-body">
+                                        <p class="text-justify">@Model.Time_Zone</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading panel-heading-link">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed" aria-expanded="false">
+                                        <i class="fa fa-envelope"></i> Payment Address
+                                    </a>
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                    <div class="panel-body">
+                                        <p class="text-justify">@paymentAdd</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading panel-heading-link">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="collapsed" aria-expanded="false">
+                                        <i class="fa fa-map-marker"></i> Physical Address
+                                    </a>
+                                </div>
+                                <div id="collapseThree" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                    <div class="panel-body">
+                                        <p class="text-justify">@physicalAdd</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <h2 class="no-margin-top">Notes</h2>
+                        <p class="text-justify">
+                            @Html.Raw(Html.Encode(Model.Notes).Replace("\r\n", "<br/>"))
+                            @*@Model.Notes*@
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="pull-right">
+            <a href="@Url.Action("Edit", new { id = Model.Facitity_DBs_IDPK })" class="btn btn-ar btn-primary">
+                <i class="fa fa-edit"></i>
+                Edit
+            </a>
+            <a href="@Url.Action("Index", "LocationsPOS", new {area ="PlaceOfServices"})" class="btn btn-ar btn-danger">
+                <i class="fa fa-hand-o-left"></i>
+                Cancel
+            </a>
+        </div>
+    </div>
+   
+</div>
