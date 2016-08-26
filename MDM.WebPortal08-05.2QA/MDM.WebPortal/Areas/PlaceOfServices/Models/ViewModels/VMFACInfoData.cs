@@ -22,6 +22,7 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels
         public string LicType { get; set; }
 
         [Display(Name = "LICENSE STATE")]
+        [StringLength(2, MinimumLength = 2)]
         public string StateLic { get; set; }
 
         [Display(Name = "CLIA NUMBER")]
@@ -29,12 +30,12 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels
 
         [Display(Name = "LICENSE EFFECTIVE DATE")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:D}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public System.DateTime LicEffectiveDate { get; set; }
 
         [Display(Name = "LICENSE EXPIRE DATE")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:D}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public System.DateTime LicExpireDate { get; set; }
 
         [Display(Name = "TAXONOMY")]

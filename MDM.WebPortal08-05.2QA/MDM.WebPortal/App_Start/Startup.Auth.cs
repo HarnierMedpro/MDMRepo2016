@@ -25,7 +25,7 @@ namespace IdentitySample
             // Configure the sign in cookie
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                ExpireTimeSpan = TimeSpan.FromMinutes(15),
+                ExpireTimeSpan = TimeSpan.FromMinutes(60),
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
                 Provider = new CookieAuthenticationProvider

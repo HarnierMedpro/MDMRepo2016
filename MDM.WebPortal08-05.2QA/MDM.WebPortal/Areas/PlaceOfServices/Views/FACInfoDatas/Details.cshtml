@@ -101,7 +101,8 @@ else
         <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
             <i class="fa fa-ban"></i> CANCEL
         </a>
-        <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-default">
+
+        <a href="@Url.Action("Details", "POSLOCExtraDatas", new { parentFacInfoDataID = Model.FACInfoDataID, area = "PlaceOfServices" })" class="btn btn-ar btn-default">
             <i class="fa fa-arrow-circle-o-right"></i> NEXT PAGE
         </a>
     </div>
