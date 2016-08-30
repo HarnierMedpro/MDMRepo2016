@@ -64,9 +64,9 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
         // GET: PlaceOfServices/FACInfoDatas/Create
         /*Se va a crear un objeto FACInfoData si y solo si se esta modificando un objeto LocationsPOS; por ende se necesita conocer el ID de dicho LocationsPOS
          y ese es el valor que va a tomar la variable locPOS*/
-        public ActionResult Create(int? locPOS)
+        public async Task<ActionResult> Create(int? locPOS)
         {
-            if (locPOS != null)
+            if (locPOS != null && await db.LocationsPOS.FindAsync(locPOS) != null)
             {
                 var allStates = new AllUSStates().states;
                 ViewBag.StateLic = allStates;

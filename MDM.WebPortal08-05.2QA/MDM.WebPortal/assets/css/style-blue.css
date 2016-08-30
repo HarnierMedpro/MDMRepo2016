@@ -2172,12 +2172,22 @@ a > .icon-ar.icon-ar-inverse:hover {
 }
 .nav-tabs.nav-tabs-ar + .tab-content {
   padding: 15px;
-  border-left: solid 1px #e5e5e5;
-  border-right: solid 1px #e5e5e5;
-  border-bottom: solid 1px #e5e5e5;
+  border-left: solid 1px #e5e5e5 !important;
+  border-right: solid 1px #e5e5e5 !important;
+  border-bottom: solid 1px #e5e5e5 !important;
   overflow: hidden;
   background-color: #f9f9f9;
 }
+
+.tab-content {
+  padding: 15px;
+  border-left: solid 1px #e5e5e5 !important;
+  border-right: solid 1px #e5e5e5 !important;
+  border-bottom: solid 1px #e5e5e5 !important;
+  overflow: hidden;
+  background-color: #f9f9f9;
+}
+
 .nav-tabs.nav-tabs-ar.nav-tabs-ar-white,
 .nav-tabs.nav-tabs-ar.nav-tabs-ar-white li a,
 .nav-tabs.nav-tabs-ar.nav-tabs-ar-white li a:hover,

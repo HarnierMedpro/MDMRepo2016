@@ -247,6 +247,7 @@
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocPOS_LevOfCare.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocPOS_MPServ.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMMPService.cs" />
+    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMPOSLOCExtraData.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMProvider.cs" />
     <Compile Include="Areas\PlaceOfServices\PlaceOfServicesAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -393,6 +394,7 @@
     <Compile Include="Models\FromDB\POSLOCExtraData.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FromDB\POSLOCExtraDataMeta.cs" />
     <Compile Include="Models\FromDB\Provider.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>

@@ -31,7 +31,7 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
         //}
         public ActionResult Index()
         {
-            ViewData["Codigos"] = db.CodeMasterLists.Select(x => new { x.CodeID, x.Code });
+            ViewData["Codigos"] = db.CodeMasterLists.OrderBy(x => x.Code).Select(x => new { x.CodeID, x.Code });
             ViewData["Category"] = db.ACCategories.OrderBy(x => x.CategoryName).Select(cat => new {cat.CatogoryID, cat.CategoryName});
             ViewData["Priority"] = db.ACPriorities.Select(x => new {x.PriorityID, x.PriorityName });
             ViewData["ACType"] = db.ACtypes.OrderBy(x => x.ACTypeName).Select(x => new {x.ACTypeID, x.ACTypeName});
