@@ -130,36 +130,41 @@ namespace MDM.WebPortal.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                if (permission.Roles.Any())
                 {
-                    if (await db.Permissions.AnyAsync(x => x.ActionID == permission.ActionID))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
-                        return Json(new[] { permission }.ToDataSourceResult(request, ModelState));                       
-                    }
-
-                    var permissionObj = new Permission { PermissionID = permission.PermissionID, ActionID = permission.ActionID, Active = permission.Active};
-                    permissionObj.Roles = new List<ApplicationRole>();
-                    var Rol = new List<ApplicationRole>();
-
-                    foreach (var item in permission.Roles)
-                    {
-                        using (var appRoleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(db)))
+                        if (await db.Permissions.AnyAsync(x => x.ActionID == permission.ActionID))
                         {
-                            Rol.Add(await appRoleManager.FindByIdAsync(item.Id));
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
                         }
+
+                        var permissionObj = new Permission { PermissionID = permission.PermissionID, ActionID = permission.ActionID, Active = permission.Active };
+                        permissionObj.Roles = new List<ApplicationRole>();
+                        var Rol = new List<ApplicationRole>();
+
+                        foreach (var item in permission.Roles)
+                        {
+                            using (var appRoleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(db)))
+                            {
+                                Rol.Add(await appRoleManager.FindByIdAsync(item.Id));
+                            }
+                        }
+                        permissionObj.Roles = Rol;
+                        db.Permissions.Add(permissionObj);
+                        await db.SaveChangesAsync();
+                        permission.PermissionID = permissionObj.PermissionID;
+                        permission.ControllerID = db.Actions.Find(permissionObj.ActionID).ControllerID;
                     }
-                    permissionObj.Roles = Rol;
-                    db.Permissions.Add(permissionObj);
-                    await db.SaveChangesAsync();
-                    permission.PermissionID = permissionObj.PermissionID;
-                    permission.ControllerID = db.Actions.Find(permissionObj.ActionID).ControllerID;
+                    catch (Exception)
+                    {
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
+                    }
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
-                }
+                ModelState.AddModelError("","You have to select at least one Role. Please try again!");
+                return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
             }
             return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
         }

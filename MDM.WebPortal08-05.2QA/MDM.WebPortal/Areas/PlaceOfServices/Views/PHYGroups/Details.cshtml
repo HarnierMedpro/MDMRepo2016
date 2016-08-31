@@ -1,0 +1,77 @@
+﻿@*@model MDM.WebPortal.Models.FromDB.PHYGroup*@
+
+@model MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMPHYGrp
+
+@{
+    ViewBag.Title = "Details";
+}
+
+
+<br/>
+<br/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-5 col-sm-6">
+            <div class="pricign-box pricign-box-pro">
+                <div class="pricing-box-header">
+                </div>
+                <div class="pricing-box-price">
+                    <h3> </h3>
+                </div>
+                <div class="pricing-box-content">
+                    <ul>
+                        <li><i class="fa fa-group" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.PHYGroupName):</strong> @Html.DisplayFor(model => model.PHYGroupName).</li>
+                        <li><i class="fa fa-hashtag" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.PHYGrpNPI_Num):</strong> @Html.DisplayFor(model => model.PHYGrpNPI_Num).</li>
+                    </ul>
+                </div>
+                <div class="pricing-box-footer">
+                  
+                </div>
+            </div>
+        </div>
+      @if (Model.Physicians.Any())
+      {
+          <div class="col-md-5 col-sm-6">
+              <fieldset class="scheduler-border">
+                  <legend class="scheduler-border">PHYSICIANS:</legend>
+                  <ul>
+                      @foreach (var item in Model.Physicians)
+                      {
+                          <li>@item.ProviderName</li>
+                      }
+                  </ul>
+              </fieldset>
+          </div>
+      }
+    </div>
+
+    
+</div>
+
+
+@if (Model.PHYGrpID == 0)
+{
+    <div class="pull-right">
+        <a href="@Url.Action("Create", new {locationPOSID = ViewBag.Facitity_DBs_IDPK})" class="btn btn-ar btn-primary">
+            <i class="fa fa-cloud-upload"></i> FILL OUT
+        </a>
+        <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
+            <i class="fa fa-ban"></i> CANCEL
+        </a>
+    </div>
+}
+else
+{
+    <div class="pull-right">
+        <a href="@Url.Action("Edit", new { id = Model.PHYGrpID })" class="btn btn-ar btn-primary">
+            <i class="fa fa-cloud-upload"></i> UPDATE
+        </a>
+        <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
+            <i class="fa fa-ban"></i> CANCEL
+        </a>
+
+        @*<a href="@Url.Action("Details", "POSLOCExtraDatas", new { parentFacInfoDataID = Model.FACInfoDataID, area = "PlaceOfServices" })" class="btn btn-ar btn-default">
+            <i class="fa fa-arrow-circle-o-right"></i> NEXT PAGE
+        </a>*@
+    </div>
+}

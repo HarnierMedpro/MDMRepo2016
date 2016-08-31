@@ -81,7 +81,10 @@
                   //.Action("Edit", "POSAddressInfo", new {id = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices"});
               
               items.Add().Text("Additional Info")
-                  .LoadContentFrom("Details", "FACInfoDatas", new { id = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });   
+                  .LoadContentFrom("Details", "FACInfoDatas", new { id = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });
+
+              items.Add().Text("Physician Group")
+                 .LoadContentFrom("Details", "PHYGroups", new { locationPOSID = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });  
               
               items.Add().Text("Level Of Care").Content(@<text>
                     @(Html.Kendo().Grid<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMLocPOS_LevOfCare>()
