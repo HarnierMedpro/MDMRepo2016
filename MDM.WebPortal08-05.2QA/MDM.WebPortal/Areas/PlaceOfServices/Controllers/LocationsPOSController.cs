@@ -177,6 +177,11 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
                     {
                         tableColumInfos.Add(new TableInfo { Field_ColumName = "FvPList_FvPID", OldValue = storedInDb.FvPList_FvPID.ToString(), NewValue = locToStore.FvPList_FvPID.ToString()});
                         storedInDb.FvPList_FvPID = locToStore.FvPList_FvPID;
+                       
+                        if (db.FvPLists.Find(locToStore.FvPList_FvPID).FvPName == "FAC")
+                        {
+                            storedInDb.PHYGroups_PHYGrpID = null;
+                        }
                     }
                     if (storedInDb.TaxID == null)
                     {

@@ -196,58 +196,36 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
                     var storedInDb = await db.POSLOCExtraDatas.FindAsync(toStore.FACInfoData_FACInfoDataID);
 
                     /*Obtengo los FormDict del objeto anterior*/
-                    var currentForm = storedInDb.Forms_sent.Select(x => x.FormsDict_FormsID != null ? x.FormsDict_FormsID.Value : 0).ToArray();
+                    var currentForm = storedInDb.Forms_sent.Select(x => x.FormsDict_FormsID != null ? x.FormsDict_FormsID.Value : 0).Where(c => c > 0).ToArray();
                    
                     /*Creo una lista para registrar los campos modificados*/
                     List<TableInfo> tableColumInfos = new List<TableInfo>();
 
-                    if (SelectedForms != null && SelectedForms.Except(currentForm).Any() || currentForm.Except(SelectedForms).Any())
+                    if (SelectedForms != null && !SelectedForms.Equals(currentForm))
                     {
-                        TableInfo logForms_Sent = new TableInfo{Field_ColumName = "FormsDict", OldValue = "", NewValue = ""};
-
-                        foreach (var current in currentForm)
-                        {
-                            if (current > 0)
-                            {
-                                logForms_Sent.OldValue = logForms_Sent.OldValue + " " + current;
-                            }
-                        }
-
                         var formToStore = SelectedForms.Except(currentForm).ToList();
 
                         foreach (var item in formToStore)
                         {
-                            if (item > 0)
-                            {
-                                var newForm_Sent = new Forms_sent { FormsDict_FormsID = item, POSLOCExtraData_FACInfoData_FACInfoDataID = storedInDb.FACInfoData_FACInfoDataID };
-                                storedInDb.Forms_sent.Add(newForm_Sent);
-                            }
+                            var newForm_Sent = new Forms_sent { FormsDict_FormsID = item, POSLOCExtraData_FACInfoData_FACInfoDataID = storedInDb.FACInfoData_FACInfoDataID };
+                            storedInDb.Forms_sent.Add(newForm_Sent);
                         }
 
                         var formToDelete = currentForm.Except(SelectedForms).ToList();
 
                         foreach (var item in formToDelete)
                         {
-                            if (item > 0)
-                            {
-                                storedInDb.Forms_sent.Remove(db.Forms_sent.First(x => x.POSLOCExtraData_FACInfoData_FACInfoDataID == storedInDb.FACInfoData_FACInfoDataID && x.FormsDict_FormsID == item));
-                            }
+                          storedInDb.Forms_sent.Remove(db.Forms_sent.First(x => x.POSLOCExtraData_FACInfoData_FACInfoDataID == storedInDb.FACInfoData_FACInfoDataID && x.FormsDict_FormsID == item));
                         }
 
-                        var newcurrentForm = storedInDb.Forms_sent.Select(x => x.FormsDict_FormsID != null ? x.FormsDict_FormsID.Value : 0).ToArray();
+                        var newcurrentForm = storedInDb.Forms_sent.Select(x => x.FormsDict_FormsID != null ? x.FormsDict_FormsID.Value : 0).Where(c => c > 0).ToArray();
 
-                        foreach (var item in newcurrentForm)
-                        {
-                            if (item > 0)
-                            {
-                                logForms_Sent.NewValue = logForms_Sent.NewValue + " " + item;
-                            }
-                        }
+                        var oldValue = string.Join(",", currentForm); //C# convert array of integers to comma-separated string
+                        var newValue = string.Join(",", newcurrentForm); //C# convert array of integers to comma-separated string
 
-                        if (logForms_Sent.NewValue != "" && logForms_Sent.OldValue != "" && logForms_Sent.NewValue != logForms_Sent.OldValue)
-                        {
-                            tableColumInfos.Add(logForms_Sent);
-                        }
+                        TableInfo logForms_Sent = new TableInfo { Field_ColumName = "FormsDict", OldValue = oldValue, NewValue = newValue };
+                        tableColumInfos.Add(logForms_Sent);
+                       
                     }
 
                     if (storedInDb.Phone_Number != toStore.Phone_Number)

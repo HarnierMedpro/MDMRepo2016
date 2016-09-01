@@ -1,5 +1,6 @@
 ﻿@*@model MDM.WebPortal.Models.FromDB.PHYGroup*@
 
+@using System.Linq
 @model MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMPHYGrp
 
 @{
@@ -12,6 +13,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-5 col-sm-6">
+            @if(ViewBag.FAC != null)
+            {
+                <div class="alert alert-info">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="Close">&times;</a>
+                    <p>@ViewBag.FAC</p>
+                </div>
+            }
             <div class="pricign-box pricign-box-pro">
                 <div class="pricing-box-header">
                 </div>
@@ -25,7 +33,7 @@
                     </ul>
                 </div>
                 <div class="pricing-box-footer">
-                  
+
                 </div>
             </div>
         </div>
@@ -52,7 +60,7 @@
 @if (Model.PHYGrpID == 0)
 {
     <div class="pull-right">
-        <a href="@Url.Action("Create", new {locationPOSID = ViewBag.Facitity_DBs_IDPK})" class="btn btn-ar btn-primary">
+        <a id="btn-Create" href="@Url.Action("Create", new {locationPOSID = ViewBag.Facitity_DBs_IDPK})" class="btn btn-ar btn-primary">
             <i class="fa fa-cloud-upload"></i> FILL OUT
         </a>
         <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
@@ -63,7 +71,7 @@
 else
 {
     <div class="pull-right">
-        <a href="@Url.Action("Edit", new { id = Model.PHYGrpID })" class="btn btn-ar btn-primary">
+        <a href="@Url.Action("Edit", new { /*id = Model.PHYGrpID,*/ locationPOSID = ViewBag.Facitity_DBs_IDPK })" class="btn btn-ar btn-primary">
             <i class="fa fa-cloud-upload"></i> UPDATE
         </a>
         <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
@@ -75,3 +83,12 @@ else
         </a>*@
     </div>
 }
+
+<script>
+    $(document).ready(function() {
+        var isFac = '@(ViewBag.FAC)';
+        if (isFac != null) {
+            $("#btn-Create").hide();
+        } 
+    });
+</script>

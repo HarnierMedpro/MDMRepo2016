@@ -153,56 +153,61 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
                     }
 
                     var storedInDb = await db.PHYGroups.FindAsync(toStore.PHYGrpID);
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
 
-                    var currentProviders = from pInG in storedInDb.ProvidersInGrps
-                        join prov in db.Providers on pInG.Providers_ProvID equals prov.ProvID
-                        select new VMProvider
+                    var physiciansByParam = toStore.Physicians.Select(x => x.ProvID).ToArray();
+
+                    var currentPhysicians = storedInDb.ProvidersInGrps.Select(x => x.Providers_ProvID).ToArray();
+
+                    if (!currentPhysicians.Equals(physiciansByParam))
+                    {
+                        var physicianToStore = physiciansByParam.Except(currentPhysicians).ToList();
+
+                        foreach (var item in physicianToStore)
                         {
-                            ProvID = prov.ProvID,
-                            ProviderName = prov.ProviderName,
-                            NPI_Num = prov.NPI_Num
-                        };
-                    List<int> ent2 = new List<int> { 1, 2 };
-                    List<int> ent1 = new List<int>{1,2,3};
+                            storedInDb.ProvidersInGrps.Add(new ProvidersInGrp { Providers_ProvID = item, PHYGroups_PHYGrpID = storedInDb.PHYGrpID });
+                        }
 
-                    var resutl = ent2.Except(ent1).ToList();
+                        var physicianToDelete = currentPhysicians.Except(physiciansByParam).ToList();
 
-                    if (resutl.Any())
-                    {
-                        
+                        foreach (var provId in physicianToDelete)
+                        {
+                            var proInGrpToDelete = await db.ProvidersInGrps.FirstOrDefaultAsync(x => x.Providers_ProvID == provId && x.PHYGroups_PHYGrpID == storedInDb.PHYGrpID);
+                            if (proInGrpToDelete != null)
+                            {
+                                storedInDb.ProvidersInGrps.Remove(proInGrpToDelete);
+                            }
+                        }
+
+                        var oldValue = string.Join(",", currentPhysicians); //C# convert array of integers to comma-separated string
+                        var newValue = string.Join(",", storedInDb.ProvidersInGrps.Select(x => x.Providers_ProvID).ToArray()); //C# convert array of integers to comma-separated string
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Providers", OldValue = oldValue, NewValue = newValue });
                     }
-                    var excepto = currentProviders.ToList();
-                    var newToStore = toStore.Physicians.ToList().Except(excepto).ToList();
-
-                    foreach (var store in newToStore)
+                    if (storedInDb.PHYGroupName != toStore.PHYGroupName)
                     {
-                        
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "PHYGroupName", OldValue = storedInDb.PHYGroupName, NewValue = toStore.PHYGroupName });
+                        storedInDb.PHYGroupName = toStore.PHYGroupName;
                     }
-
-                    //var newProvidersInGroup = toStore.Physicians.Select(x => new VMProvidersInGrp {Providers_ProvID = x.ProvID, PHYGroups_PHYGrpID = storedInDb.PHYGrpID}).ToList();
-
-                    //var currentProvidersInGroup = storedInDb.ProvidersInGrps.Select(ob => new VMProvidersInGrp { Providers_ProvID = ob.Providers_ProvID, PHYGroups_PHYGrpID = ob.PHYGroups_PHYGrpID.Value }).ToList();
-
-                    //var providerInGroupToStore = newProvidersInGroup.Except(currentProvidersInGroup).ToList();
-
-                    //foreach (var store in providerInGroupToStore)
-                    //{
-                    //    storedInDb.ProvidersInGrps.Add(new ProvidersInGrp{Providers_ProvID = store.Providers_ProvID, PHYGroups_PHYGrpID = store.PHYGroups_PHYGrpID});
-                    //}
-
-                    //var providerInGroupToDelete = currentProvidersInGroup.Except(newProvidersInGroup).ToList();
-
-                    //foreach (var delete in providerInGroupToDelete)
-                    //{
-                    //    storedInDb.ProvidersInGrps.Remove(storedInDb.ProvidersInGrps.First(x => x.Providers_ProvID == delete.Providers_ProvID && x.PHYGroups_PHYGrpID == delete.PHYGroups_PHYGrpID));
-                    //}
-
-                    storedInDb.PHYGroupName = toStore.PHYGroupName;
-                    storedInDb.PHYGrpNPI_Num = toStore.PHYGrpNPI_Num;
-
+                    if (storedInDb.PHYGrpNPI_Num != toStore.PHYGrpNPI_Num)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "PHYGrpNPI_Num", OldValue = storedInDb.PHYGrpNPI_Num, NewValue = toStore.PHYGrpNPI_Num });
+                        storedInDb.PHYGrpNPI_Num = toStore.PHYGrpNPI_Num;
+                    }
                     db.PHYGroups.Attach(storedInDb);
                     db.Entry(storedInDb).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        UserLogons = User.Identity.GetUserName(),
+                        AuditDateTime = DateTime.Now,
+                        TableName = "PHYGroups",
+                        AuditAction = "U",
+                        ModelPKey = toStore.PHYGrpID,
+                        tableInfos = tableColumnInfos
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
                 catch (Exception)
                 {
@@ -224,6 +229,11 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
             if (pos == null)
             {
                 return RedirectToAction("Index", "Error", new { area = "Error" });
+            }
+            if (pos.FvPList.FvPName == "FAC")
+            {
+                ViewBag.FAC = "This POS doesn't has a Physician Group.";
+                //return RedirectToAction("Index", "LocationsPOS", new { area = "PlaceOfServices" });
             }
             PHYGroup pHYGroup = pos.PHYGroup;
             VMPHYGrp toView = new VMPHYGrp();
@@ -331,7 +341,11 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
             {
                 return RedirectToAction("Index", "Error", new { area = "Error" });
             }
-
+            if (pos.FvPList.FvPName == "FAC")
+            {
+                TempData["Error"] = "You can not assign a Physician Group to a Facility. Please try again!";
+                return RedirectToAction("Index", "LocationsPOS", new { area = "PlaceOfServices" });
+            }
            // ViewBag.GroupCount = db.PHYGroups.Count();
 
             ViewBag.Facitity_DBs_IDPK = locationPOSID;
@@ -356,7 +370,7 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Facitity_DBs_IDPK,PHYGrpID,PHYGroupName,PHYGrpNPI_Num,Physicians")] VMPHYGrp toStore, params int[] Physicians)
+        public async Task<ActionResult> Create([Bind(Include = "Facitity_DBs_IDPK,PHYGrpID,PHYGroupName,PHYGrpNPI_Num")] VMPHYGrp toStore, params int[] Physicians)
         {
             if (ModelState.IsValid && Physicians != null && await db.LocationsPOS.FindAsync(toStore.Facitity_DBs_IDPK) != null)
             {
@@ -534,18 +548,59 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
         }
 
         // GET: PlaceOfServices/PHYGroups/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public async Task<ActionResult> Edit(/*int? id,*/ int? locationPOSID)
         {
-            if (id == null)
+            if (locationPOSID == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index", "Error", new { area = "Error" });
             }
-            PHYGroup pHYGroup = await db.PHYGroups.FindAsync(id);
+            LocationsPOS currrentPos = await db.LocationsPOS.FindAsync(locationPOSID);
+            if (currrentPos == null)
+            {
+                return RedirectToAction("Index", "Error", new { area = "Error" });
+            }
+            if (currrentPos.FvPList.FvPName == "FAC")
+            {
+                TempData["Error"] = "You can not assign a Physician Group to a Facility. Please try again!";
+                return RedirectToAction("Index", "LocationsPOS", new { area = "PlaceOfServices" });
+            }
+            PHYGroup pHYGroup = currrentPos.PHYGroup;
             if (pHYGroup == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("Index", "Error", new { area = "Error" });
             }
-            return View(pHYGroup);
+            var toView = new VMPHYGrp
+            {
+                PHYGrpID = pHYGroup.PHYGrpID,
+                PHYGroupName = pHYGroup.PHYGroupName,
+                PHYGrpNPI_Num = pHYGroup.PHYGrpNPI_Num,
+                Facitity_DBs_IDPK = locationPOSID.Value
+            };
+
+            var currentProviders = from doc in pHYGroup.ProvidersInGrps
+                                     join prov in db.Providers on doc.Providers_ProvID equals prov.ProvID
+                                     select new VMProvider
+                                     {
+                                         ProvID = prov.ProvID,
+                                         ProviderName = prov.ProviderName,
+                                         NPI_Num = prov.NPI_Num
+                                     };
+
+            toView.Physicians = currentProviders.ToList();
+
+            /*Dame solo aquellos grupos de doctores que no esten asociados a ningun POS; de esta manera se garantiza que un grupo solo puede
+             pertenecer a un POS*/
+            var groups = db.PHYGroups.Where(x => !x.LocationsPOS.Any()).OrderBy(x => x.PHYGroupName).Select(x => new { x.PHYGrpID, x.PHYGroupName });
+            ViewBag.PHYGrpID = new SelectList(groups, "PHYGrpID", "PHYGroupName");
+
+            ViewData["Providers"] = db.Providers.OrderBy(x => x.ProviderName).Select(x => new VMProvider
+            {
+                ProvID = x.ProvID,
+                ProviderName = x.ProviderName,
+                NPI_Num = x.NPI_Num
+            });
+
+            return View(toView);
         }
 
         // POST: PlaceOfServices/PHYGroups/Edit/5
@@ -553,42 +608,158 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "PHYGrpID,PHYGroupName,PHYGrpNPI_Num")] PHYGroup pHYGroup)
+        public async Task<ActionResult> Edit([Bind(Include = "Facitity_DBs_IDPK,PHYGrpID,PHYGroupName,PHYGrpNPI_Num")] VMPHYGrp toStore, params int[] Physicians)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && Physicians != null && await db.LocationsPOS.FindAsync(toStore.Facitity_DBs_IDPK) != null)
             {
-                db.Entry(pHYGroup).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    if (await db.PHYGroups.AnyAsync(grp => (grp.PHYGroupName.Equals(toStore.PHYGroupName, StringComparison.InvariantCultureIgnoreCase)
+                                    || grp.PHYGrpNPI_Num.Equals(toStore.PHYGrpNPI_Num, StringComparison.InvariantCultureIgnoreCase)) && grp.PHYGrpID != toStore.PHYGrpID))
+                    {
+                        ViewBag.Doc = "Duplicate data. Please try again!";
+                       
+                        /*Dame solo aquellos grupos de doctores que no esten asociados a ningun POS; de esta manera se garantiza que un grupo solo puede
+                        pertenecer a un POS*/
+                        var phyGroups = db.PHYGroups.Where(x => !x.LocationsPOS.Any()).OrderBy(x => x.PHYGroupName).Select(x => new { x.PHYGrpID, x.PHYGroupName });
+                        ViewBag.PHYGrpID = new SelectList(phyGroups, "PHYGrpID", "PHYGroupName");
+
+                        var providersSelected1 = from doc in Physicians
+                                                 join prov in db.Providers on doc equals prov.ProvID
+                                                 select new VMProvider
+                                                 {
+                                                     ProvID = prov.ProvID,
+                                                     ProviderName = prov.ProviderName,
+                                                     NPI_Num = prov.NPI_Num
+                                                 };
+
+                        toStore.Physicians = providersSelected1.ToList();
+
+                        ViewData["Providers"] = db.Providers.OrderBy(x => x.ProviderName).Select(x => new VMProvider
+                        {
+                            ProvID = x.ProvID,
+                            ProviderName = x.ProviderName,
+                            NPI_Num = x.NPI_Num
+                        });
+
+                        return View(toStore);
+                    }
+
+                    var storedInDb = await db.PHYGroups.FindAsync(toStore.PHYGrpID);
+
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                    var currentPhysicians = storedInDb.ProvidersInGrps.Select(x => x.Providers_ProvID).ToArray();
+
+                    if (!currentPhysicians.Equals(Physicians))
+                    {
+                        var physicianToStore = Physicians.Except(currentPhysicians).ToList();
+
+                        foreach (var item in physicianToStore)
+                        {
+                            storedInDb.ProvidersInGrps.Add(new ProvidersInGrp { Providers_ProvID = item, PHYGroups_PHYGrpID = storedInDb.PHYGrpID });
+                        }
+
+                        var physicianToDelete = currentPhysicians.Except(Physicians).ToList();
+
+                        foreach (var provId in physicianToDelete)
+                        {
+                            var proInGrpToDelete = await db.ProvidersInGrps.FirstOrDefaultAsync(x => x.Providers_ProvID == provId && x.PHYGroups_PHYGrpID == storedInDb.PHYGrpID);
+                            if (proInGrpToDelete != null)
+                            {
+                                storedInDb.ProvidersInGrps.Remove(proInGrpToDelete);
+                            }
+                        }
+
+                        var oldValue = string.Join(",", currentPhysicians); //C# convert array of integers to comma-separated string
+                        var newValue = string.Join(",", storedInDb.ProvidersInGrps.Select(x => x.Providers_ProvID).ToArray()); //C# convert array of integers to comma-separated string
+                        tableColumnInfos.Add(new TableInfo{Field_ColumName = "Providers", OldValue = oldValue, NewValue = newValue});
+                    }
+                    if (storedInDb.PHYGroupName != toStore.PHYGroupName)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "PHYGroupName", OldValue = storedInDb.PHYGroupName, NewValue = toStore.PHYGroupName});
+                        storedInDb.PHYGroupName = toStore.PHYGroupName;
+                    }
+                    if (storedInDb.PHYGrpNPI_Num != toStore.PHYGrpNPI_Num)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "PHYGrpNPI_Num", OldValue = storedInDb.PHYGrpNPI_Num, NewValue = toStore.PHYGrpNPI_Num });
+                        storedInDb.PHYGrpNPI_Num = toStore.PHYGrpNPI_Num;
+                    }
+                    
+                    db.PHYGroups.Attach(storedInDb);
+                    db.Entry(storedInDb).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        UserLogons = User.Identity.GetUserName(),
+                        AuditDateTime = DateTime.Now,
+                        TableName = "PHYGroups",
+                        AuditAction = "U",
+                        ModelPKey = toStore.PHYGrpID,
+                        tableInfos = tableColumnInfos
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
+
+                    return RedirectToAction("Index", "LocationsPOS", new {area = "PlaceOfServices"});
+                }
+                catch (Exception)
+                {
+                    ViewBag.Doc = "Something failed. Please try again!";
+
+                    var phyGroups = db.PHYGroups.Where(x => !x.LocationsPOS.Any()).OrderBy(x => x.PHYGroupName).Select(x => new { x.PHYGrpID, x.PHYGroupName });
+                    ViewBag.PHYGrpID = new SelectList(phyGroups, "PHYGrpID", "PHYGroupName");
+
+                    var providersSelected1 = from doc in Physicians
+                                             join prov in db.Providers on doc equals prov.ProvID
+                                             select new VMProvider { ProvID = prov.ProvID, ProviderName = prov.ProviderName, NPI_Num = prov.NPI_Num };
+
+                    toStore.Physicians = providersSelected1.ToList();
+
+                    ViewData["Providers"] = db.Providers.OrderBy(x => x.ProviderName).Select(x => new VMProvider
+                    {
+                        ProvID = x.ProvID,
+                        ProviderName = x.ProviderName,
+                        NPI_Num = x.NPI_Num
+                    });
+
+                    return View(toStore);
+                }
             }
-            return View(pHYGroup);
+            if (Physicians == null)
+            {
+                ViewBag.Doc = "You have to select at least one PHYSICIAN. Please try again!";
+            }
+            else
+            {
+                var providersSelected = from doc in Physicians
+                                        join prov in db.Providers on doc equals prov.ProvID
+                                        select new VMProvider { ProvID = prov.ProvID, ProviderName = prov.ProviderName, NPI_Num = prov.NPI_Num };
+
+                toStore.Physicians = providersSelected.ToList();
+            }
+
+            if (db.LocationsPOS.Find(toStore.Facitity_DBs_IDPK) == null)
+            {
+                ViewBag.Doc = "This POS is not stored in DB. Please try again!";
+            }
+            /*Dame solo aquellos grupos de doctores que no esten asociados a ningun POS; de esta manera se garantiza que un grupo solo puede
+             pertenecer a un POS*/
+            var groups = db.PHYGroups.Where(x => !x.LocationsPOS.Any()).OrderBy(x => x.PHYGroupName).Select(x => new { x.PHYGrpID, x.PHYGroupName });
+            ViewBag.PHYGrpID = new SelectList(groups, "PHYGrpID", "PHYGroupName");
+
+            ViewData["Providers"] = db.Providers.OrderBy(x => x.ProviderName).Select(x => new VMProvider
+            {
+                ProvID = x.ProvID,
+                ProviderName = x.ProviderName,
+                NPI_Num = x.NPI_Num
+            });
+
+            return View(toStore);
         }
 
-        // GET: PlaceOfServices/PHYGroups/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            PHYGroup pHYGroup = await db.PHYGroups.FindAsync(id);
-            if (pHYGroup == null)
-            {
-                return HttpNotFound();
-            }
-            return View(pHYGroup);
-        }
-
-        // POST: PlaceOfServices/PHYGroups/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            PHYGroup pHYGroup = await db.PHYGroups.FindAsync(id);
-            db.PHYGroups.Remove(pHYGroup);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+       
 
         protected override void Dispose(bool disposing)
         {

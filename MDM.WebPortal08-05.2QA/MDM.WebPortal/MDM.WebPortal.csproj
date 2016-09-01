@@ -1382,11 +1382,9 @@
     <Content Include="Areas\PlaceOfServices\Views\POSLOCExtraDatas\Edit.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\POSLOCExtraDatas\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\PHYGroups\Create.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\PHYGroups\Delete.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\PHYGroups\Details.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\PHYGroups\Edit.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\PHYGroups\Index.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\PHYGroups\StoreGroup.cshtml" />
     <None Include="Properties\PublishProfiles\QASite.pubxml" />
     <None Include="Properties\PublishProfiles\Site02.pubxml" />
     <None Include="Properties\PublishProfiles\TestQA.pubxml" />

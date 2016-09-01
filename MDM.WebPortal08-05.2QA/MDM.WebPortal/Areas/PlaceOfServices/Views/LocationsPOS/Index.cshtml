@@ -1,4 +1,5 @@
 ﻿@using System.Collections
+@using System.Collections.Generic
 @using Kendo.Mvc.UI
 @using MDM.WebPortal.Models.FromDB
 
@@ -38,7 +39,7 @@
 
               column.Bound(pos => pos.PosName).Width(110);
 
-              column.ForeignKey(pos => pos.FvPList_FvPID, (IEnumerable<MDM.WebPortal.Models.ViewModel.Delete.VMFvpList>) ViewData["FvPLists"], "id", "FvpName").Width(110);
+              column.ForeignKey(pos => pos.FvPList_FvPID, (IEnumerable<MDM.WebPortal.Models.ViewModel.Delete.VMFvpList>) ViewData["FvPLists"], "id", "FvpName").Width(70);
 
               column.Bound(pos => pos.TaxID).Width(110);
 
@@ -51,6 +52,14 @@
                   command.Edit();
               }).Title("ACTIONS").Width(110);
           })
+          .Pageable(ps => ps.Refresh(true)
+              .PreviousNext(true).PageSizes(true))
+          .Sortable()
+          .Filterable()
+          .Selectable(selectable => selectable
+              .Mode(GridSelectionMode.Multiple)
+              .Type(GridSelectionType.Cell))
+          
           .DataSource(datasource => datasource
               .Ajax()
               .ServerOperation(true)
@@ -60,14 +69,22 @@
                   model.Id(pos => pos.Facitity_DBs_IDPK);
                   model.Field(pos => pos.Facitity_DBs_IDPK).Editable(false);
               })
-              .Events(events => events.Error("error_handler"))
+              .Events(events =>
+              {
+                  events.Error("error_handler");
+                  /*Grid DataSource "Change" event: Si se va a modificar un row del grid se dispara este evento*/
+                  events.Change("onChangeInside"); 
+              })
               .Read(read => read.Action("Read_LocationPOS", "LocationsPOS"))
               .Update(update => update.Action("Update_LocationPOS", "LocationsPOS"))
           )
 
           .ClientDetailTemplateId("template")
+          
           )
 </div>
+
+
 
 <script id="template" type="text/kendo-tmpl">
     @(Html.Kendo().TabStrip()
@@ -83,7 +100,7 @@
               items.Add().Text("Additional Info")
                   .LoadContentFrom("Details", "FACInfoDatas", new { id = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });
 
-              items.Add().Text("Physician Group")
+              items.Add().Text("Physician Group").HtmlAttributes(new {id="phyGrp"})
                  .LoadContentFrom("Details", "PHYGroups", new { locationPOSID = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });  
               
               items.Add().Text("Level Of Care").Content(@<text>
@@ -165,27 +182,20 @@
                           .ToClientTemplate())
             </text>
                   );
-              //items.Add().Text("Contact Information").Content(
-              //    "<div class='employee-details'>" +
-              //        "<ul>" +
-              //            "<li><label>Country:</label>#= Country #</li>" +
-              //            "<li><label>City:</label>#= City #</li>" +
-              //            "<li><label>Address:</label>#= Address #</li>" +
-              //            "<li><label>Home Phone:</label>#= HomePhone #</li>" +
-              //        "</ul>" +
-              //    "</div>"
-              //);
+              
           })
         .ToClientTemplate())
 </script>
+
+
 
 <script type="text/javascript">
     function error_handler(e) {
         if (e.errors) {
             var message = "Errors:\n";
-            $.each(e.errors, function (key, value) {
+            $.each(e.errors, function(key, value) {
                 if ('errors' in value) {
-                    $.each(value.errors, function () {
+                    $.each(value.errors, function() {
                         message += this + "\n";
                     });
                 }
@@ -200,4 +210,46 @@
             grid1.cancelChanges();
         }
     }
+
+    /*Como se esta actualizando un objeto LocationPOS*/
+    function onChangeInside(e) {
+        if (e.action == "itemchange") { //primero me cersioro de que sea mientras se esta haciendo un update
+            if (e.field == "FvPList_FvPID") { //especificamente cuando se esta modificando el tipo de POS: "FAC" or "PHY"
+                var model = e.items[0]; //Obtengo el row completo del objeto que se esta actualizando
+                model.get("FvPList_FvPID"); //obtengo el valor especificamente del nuevo tipo seleccionado
+                var pk = model.get("Facitity_DBs_IDPK"); //obtengo el valor del primary key del correspondiente LocationPOS object
+                if (model.get("FvPList_FvPID") == 3) { //Si el tipo de POS es PHY entonces muestro el tab 2: "Physician Group"
+                    $($("#tabStrip_" + pk).data("kendoTabStrip").items()[2]).attr("style", "display:true");
+                } else {
+                    $($("#tabStrip_" + pk).data("kendoTabStrip").items()[2]).attr("style", "display:none");
+                }
+            }
+        }
+    }
+
+    //function getCurrentEditedModel() {
+    //    var grid = $("#POSLOC").data("kendoGrid");
+    //    var editRow = grid.tbody.find("tr:has(.k-edit-cell)");
+    //    alert(grid.dataItem(editRow));
+    //    return grid.dataItem(editRow);
+    //}
+
+    //function filterPosType() {
+    //    var model = getCurrentEditedModel();
+    //    return {
+    //        customerId: model.FvPList_FvPID
+    //    };
+    //}
+
+    //function onChange(arg) {
+    //    var selected = $.map(this.select(), function (item) {
+    //        return $(item).text();
+    //    });
+
+    //    alert("Selected: " + selected.length + " item(s), [" + selected.join(", ") + "]");
+    //}
+
+   
 </script>
+
+
