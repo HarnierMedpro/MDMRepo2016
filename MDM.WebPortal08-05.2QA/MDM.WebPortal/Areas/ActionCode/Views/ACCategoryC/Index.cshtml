@@ -59,9 +59,12 @@
           .Groupable()
           .Reorderable(r => r.Columns(true))
           .Resizable(r => r.Columns(true))
-          .Selectable(s => s.Enabled(true)
-              .Type(GridSelectionType.Row)
-              .Mode(GridSelectionMode.Single))
+                  .Selectable(selectable => selectable
+                      .Mode(GridSelectionMode.Multiple)
+                      .Type(GridSelectionType.Cell))
+          //.Selectable(s => s.Enabled(true)
+          //    .Type(GridSelectionType.Row)
+          //    .Mode(GridSelectionMode.Single))
     )
 </div>
 

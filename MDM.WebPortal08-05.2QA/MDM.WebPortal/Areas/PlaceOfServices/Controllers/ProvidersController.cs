@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Kendo.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
@@ -29,7 +31,11 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
 
         public ActionResult Read_Provider([DataSourceRequest] DataSourceRequest request)
         {
-            return Json(db.Providers.OrderBy(x => x.ProviderName).ToDataSourceResult(request, provider => new VMProvider
+            //SortDescriptor sort = new SortDescriptor { Member = "ProviderName", SortDirection = ListSortDirection.Ascending};
+            //request.Sorts.Add(sort);
+            //OR
+            var result = db.Providers.OrderBy(x => x.ProviderName).ToList();
+            return Json(result.ToDataSourceResult(request, provider => new VMProvider
             {
                 ProvID = provider.ProvID,
                 ProviderName = provider.ProviderName,

@@ -26,14 +26,12 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
         {
             return View();
         }
-        //public async Task<ActionResult> Index()
-        //{
-        //    return View(await db.MPServices.ToListAsync());
-        //}
+        
 
         public ActionResult Read_Service([DataSourceRequest] DataSourceRequest request)
         {
-            return Json(db.MPServices.OrderBy(x => x.ServName).ToDataSourceResult(request, x => new VMMPService
+            var result = db.MPServices.OrderBy(x => x.ServName).ToList();
+            return Json(result.ToDataSourceResult(request, x => new VMMPService
             {
                 MPServID = x.MPServID,
                 ServName = x.ServName

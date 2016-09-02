@@ -232,7 +232,7 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
             }
             if (pos.FvPList.FvPName == "FAC")
             {
-                ViewBag.FAC = "This POS doesn't has a Physician Group.";
+                ViewBag.FAC = "A Facility doesn't have a Physician Group.";
                 //return RedirectToAction("Index", "LocationsPOS", new { area = "PlaceOfServices" });
             }
             PHYGroup pHYGroup = pos.PHYGroup;

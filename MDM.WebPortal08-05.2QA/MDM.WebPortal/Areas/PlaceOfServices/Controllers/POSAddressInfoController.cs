@@ -188,7 +188,7 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
                     //if (storeInDb.Notes.Equals(locPosAddressInfo.Notes, StringComparison.CurrentCulture))
                     //{
                     //    tableColumnInfos.Add(new TableInfo { Field_ColumName = "Notes", OldValue = storeInDb.Notes, NewValue = locPosAddressInfo.Notes });
-                    //    storeInDb.Notes = locPosAddressInfo.Notes;
+                        storeInDb.Notes = locPosAddressInfo.Notes;
                     //}
 
                     db.LocationsPOS.Attach(storeInDb);

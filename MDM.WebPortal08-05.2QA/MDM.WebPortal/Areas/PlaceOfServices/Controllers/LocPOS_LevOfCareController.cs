@@ -30,7 +30,9 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
                 {
                     if (await db.LocPOS_LevOfCare.AnyAsync(x => x.Lev_of_Care_LevOfCareID == pOSLOC.Lev_of_Care_LevOfCareID && x.LocationsPOS_Facitity_DBs_IDPK == ParentID))
                     {
-                        ModelState.AddModelError("","Duplicate Data. Please try again!");
+                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                        pOSLOC.LocationsPOS_Facitity_DBs_IDPK = ParentID;
+
                         return Json(new[] {pOSLOC}.ToDataSourceResult(request, ModelState));
                     }
                     var toStore = new LocPOS_LevOfCare

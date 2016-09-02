@@ -32,6 +32,7 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels
 
         [Required]
         [Display(Name = "ACCOUNT MANAGER")]
+        [RegularExpression(@"^([a-zA-Z \\&\'\-]+)$", ErrorMessage = "Invalid Name.")]
         public string POSFAC_Manager { get; set; }
     }
 }

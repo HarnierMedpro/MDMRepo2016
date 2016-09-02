@@ -29,7 +29,8 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
 
         public ActionResult Read_Level([DataSourceRequest] DataSourceRequest request)
         {
-            return Json(db.Lev_of_Care.OrderBy(x => x.LevOfCareName).ToDataSourceResult(request, lv => new VMLevelOfCare
+            var result = db.Lev_of_Care.OrderBy(x => x.LevOfCareName).ToList();
+            return Json(result.ToDataSourceResult(request, lv => new VMLevelOfCare
             {
                 LevOfCareID = lv.LevOfCareID,
                 LevOfCareName = lv.LevOfCareName

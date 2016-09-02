@@ -43,7 +43,7 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
             FACInfoData fACInfoData = currentLocationPos.FACInfoData;
             if (fACInfoData == null)
             {
-                return View(new VMFACInfoData{Facitity_DBs_IDPK = id.Value});
+                return View( new VMFACInfoData { Facitity_DBs_IDPK = id.Value, LicEffectiveDate = DateTime.Now, LicExpireDate = DateTime.Now} );
             }
             VMFACInfoData toView = new VMFACInfoData
             {
@@ -76,7 +76,7 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
             /*Si locPOS es nulo quiere decir que no se definio a que LocationsPOS object se le va a crear un objeto FACInfoData, por eso se redirecciona al index de LocationsPOS
              y se le notifica al usuario que ocurrio un error*/
             TempData["Error"] = "Something failed. Please try again!";
-            return RedirectToAction("Index","LocationsPOS", new {area ="PlaceOfServices"});
+            return RedirectToAction("Index", "LocationsPOS", new { area = "PlaceOfServices" });
         }
 
         // POST: PlaceOfServices/FACInfoDatas/Create

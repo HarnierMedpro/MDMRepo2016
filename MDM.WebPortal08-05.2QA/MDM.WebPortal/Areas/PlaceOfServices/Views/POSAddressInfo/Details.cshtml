@@ -25,14 +25,14 @@
                 </p>
                 <div class="row">
                     <div class="col-md-5">
-                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel-group" id="accordion @Model.Facitity_DBs_IDPK" role="tablist" aria-multiselectable="true">
                             <div class="panel panel-default">
                                 <div class="panel-heading panel-heading-link">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" class="collapsed">
+                                    <a data-toggle="collapse" data-parent="#accordion @Model.Facitity_DBs_IDPK" href="#collapseOne_@Model.Facitity_DBs_IDPK" aria-expanded="false" class="collapsed">
                                         <i class="fa fa-globe"></i> Time Zone
                                     </a>
                                 </div>
-                                <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div id="collapseOne_@Model.Facitity_DBs_IDPK" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                     <div class="panel-body">
                                         <p class="text-justify">@Model.Time_Zone</p>
                                     </div>
@@ -40,11 +40,11 @@
                             </div>
                             <div class="panel panel-default">
                                 <div class="panel-heading panel-heading-link">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed" aria-expanded="false">
+                                    <a data-toggle="collapse" data-parent="#accordion @Model.Facitity_DBs_IDPK" href="#collapseTwo_@Model.Facitity_DBs_IDPK" class="collapsed" aria-expanded="false">
                                         <i class="fa fa-envelope"></i> Payment Address
                                     </a>
                                 </div>
-                                <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div id="collapseTwo_@Model.Facitity_DBs_IDPK" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                     <div class="panel-body">
                                         <p class="text-justify">@paymentAdd</p>
                                     </div>
@@ -52,11 +52,11 @@
                             </div>
                             <div class="panel panel-default">
                                 <div class="panel-heading panel-heading-link">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="collapsed" aria-expanded="false">
+                                    <a data-toggle="collapse" data-parent="#accordion @Model.Facitity_DBs_IDPK" href="#collapseThree_@Model.Facitity_DBs_IDPK" class="collapsed" aria-expanded="false">
                                         <i class="fa fa-map-marker"></i> Physical Address
                                     </a>
                                 </div>
-                                <div id="collapseThree" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div id="collapseThree_@Model.Facitity_DBs_IDPK" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                     <div class="panel-body">
                                         <p class="text-justify">@physicalAdd</p>
 

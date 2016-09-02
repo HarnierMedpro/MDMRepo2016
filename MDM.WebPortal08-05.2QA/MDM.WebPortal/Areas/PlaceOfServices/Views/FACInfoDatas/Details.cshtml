@@ -84,7 +84,7 @@
 @if (Model.FACInfoDataID == 0)
 {
     <div class="pull-right">
-        <a href="@Url.Action("Create", new {locPOS = Model.Facitity_DBs_IDPK})" class="btn btn-ar btn-primary">
+        <a href="@Url.Action("Create", new {locPOS = Model.Facitity_DBs_IDPK })" class="btn btn-ar btn-primary">
             <i class="fa fa-cloud-upload"></i> FILL OUT
         </a>
         <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">

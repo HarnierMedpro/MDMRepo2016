@@ -60,12 +60,22 @@
 @if (Model.PHYGrpID == 0)
 {
     <div class="pull-right">
-        <a id="btn-Create" href="@Url.Action("Create", new {locationPOSID = ViewBag.Facitity_DBs_IDPK})" class="btn btn-ar btn-primary">
-            <i class="fa fa-cloud-upload"></i> FILL OUT
-        </a>
-        <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
-            <i class="fa fa-ban"></i> CANCEL
-        </a>
+        @if (ViewBag.FAC != null)
+        {
+            <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
+                <i class="fa fa-ban"></i> CANCEL
+            </a>
+        }
+        else
+        {
+            <a id="btn-Create" href="@Url.Action("Create", new {locationPOSID = ViewBag.Facitity_DBs_IDPK})" class="btn btn-ar btn-primary">
+                <i class="fa fa-cloud-upload"></i> FILL OUT
+            </a>
+            <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
+                <i class="fa fa-ban"></i> CANCEL
+            </a>
+        }
+       
     </div>
 }
 else
@@ -77,18 +87,17 @@ else
         <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
             <i class="fa fa-ban"></i> CANCEL
         </a>
-
-        @*<a href="@Url.Action("Details", "POSLOCExtraDatas", new { parentFacInfoDataID = Model.FACInfoDataID, area = "PlaceOfServices" })" class="btn btn-ar btn-default">
-            <i class="fa fa-arrow-circle-o-right"></i> NEXT PAGE
-        </a>*@
     </div>
 }
 
-<script>
-    $(document).ready(function() {
-        var isFac = '@(ViewBag.FAC)';
-        if (isFac != null) {
-            $("#btn-Create").hide();
-        } 
-    });
-</script>
+@*<script>
+        $(document).ready(function() {
+            @*var isFac = '@(ViewBag.FAC)';
+            var isFAC = @(ViewBag.FAC);
+            alert(isFAC);
+            if (isFac === 1) {
+                $("#btn-Create").hide();
+            }
+
+        });
+    </script>*@

@@ -29,7 +29,8 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
 
         public ActionResult Read_Code([DataSourceRequest] DataSourceRequest request)
         {
-            return Json(db.CodeMasterLists.ToDataSourceResult(request, x => new VMCodeMasterList
+            var result = db.CodeMasterLists.OrderBy(x => x.Code).ToList();
+            return Json(result.ToDataSourceResult(request, x => new VMCodeMasterList
             {
                 CodeID = x.CodeID,
                 Code = x.Code

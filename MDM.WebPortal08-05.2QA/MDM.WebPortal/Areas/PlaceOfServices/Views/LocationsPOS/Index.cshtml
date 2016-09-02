@@ -59,7 +59,7 @@
           .Selectable(selectable => selectable
               .Mode(GridSelectionMode.Multiple)
               .Type(GridSelectionType.Cell))
-          
+          .Events(events => events.Change("onChange"))
           .DataSource(datasource => datasource
               .Ajax()
               .ServerOperation(true)
@@ -95,12 +95,11 @@
           {
               items.Add().Text("Address Info")
                   .LoadContentFrom("Details", "POSAddressInfo", new { id = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });
-                  //.Action("Edit", "POSAddressInfo", new {id = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices"});
               
               items.Add().Text("Additional Info")
                   .LoadContentFrom("Details", "FACInfoDatas", new { id = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });
 
-              items.Add().Text("Physician Group").HtmlAttributes(new {id="phyGrp"})
+              items.Add().Text("Physician Group").HtmlAttributes(new {id="phyGrp"/*, style = "display:none"*/})
                  .LoadContentFrom("Details", "PHYGroups", new { locationPOSID = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });  
               
               items.Add().Text("Level Of Care").Content(@<text>
@@ -130,7 +129,7 @@
                                   model.Field(x => x.LocPosLocID).Editable(false);
                                   model.Field(x => x.LocationsPOS_Facitity_DBs_IDPK).Editable(false);
                               })
-                              .Events(events => events.Error("error_handler"))
+                              .Events(events => events.Error("lOCError_handler"))
                               .Read(read => read.Action("Read_LevelsOfCareByLocPOS", "LocationsPOS", new {locPOSID = "#=Facitity_DBs_IDPK#"}))
                               .Update(update => update.Action("Update_POS_LOfCare", "LocPOS_LevOfCare"))
                               /*The fact that I was using 'LocationsPOS_Facitity_DBs_IDPK' as my route variable and it was the problem. It was trying to use the 'LocationsPOS_Facitity_DBs_IDPK' of the new row,
@@ -170,7 +169,7 @@
                                   model.Field(x => x.LocPosMPServID).Editable(false);
                                   model.Field(x => x.LocationsPOS_Facitity_DBs_IDPK).Editable(false);
                               })
-                              .Events(events => events.Error("error_handler"))
+                              .Events(events => events.Error("ServError_handler"))
                               .Read(read => read.Action("Read_ServicesByLocPOS", "LocationsPOS", new { locPOSID = "#=Facitity_DBs_IDPK#" }))
                               .Update(update => update.Action("Update_POSService", "LocPOS_MPServ"))
                               /*The fact that I was using 'LocationsPOS_Facitity_DBs_IDPK' as my route variable and it was the problem. It was trying to use the 'LocationsPOS_Facitity_DBs_IDPK' of the new row,
@@ -187,8 +186,6 @@
         .ToClientTemplate())
 </script>
 
-
-
 <script type="text/javascript">
     function error_handler(e) {
         if (e.errors) {
@@ -200,15 +197,58 @@
                     });
                 }
             });
-            // Display the message
             alert(message);
-            // Cancel the changes
             var grid = $("#POSLOC").data("kendoGrid");
             grid.cancelChanges();
+        }
+    }
 
-            var grid1 = $("#grid_").data("kendoGrid");
+    function lOCError_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            
+            alert(message);
+            var pk = message.split(" ");
+            var fst = pk[1];
+            var grid1 = $("#grid_" + fst).data("kendoGrid");
             grid1.cancelChanges();
         }
+    }
+
+    function ServError_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+
+            alert(message);
+            var pk = message.split(" ");
+            var fst = pk[1];
+            var grid1 = $("#gridService_" + fst).data("kendoGrid");
+            grid1.cancelChanges();
+        }
+    }
+    
+    function onChange(arg) {
+        var selected = $.map(this.select(), function (item) {
+            return $(item).text();
+        });
+        if (COND) {
+            
+        }
+        alert("Selected: " + selected.length + " item(s), [" + selected.join(", ") + "]");
     }
 
     /*Como se esta actualizando un objeto LocationPOS*/
@@ -226,28 +266,6 @@
             }
         }
     }
-
-    //function getCurrentEditedModel() {
-    //    var grid = $("#POSLOC").data("kendoGrid");
-    //    var editRow = grid.tbody.find("tr:has(.k-edit-cell)");
-    //    alert(grid.dataItem(editRow));
-    //    return grid.dataItem(editRow);
-    //}
-
-    //function filterPosType() {
-    //    var model = getCurrentEditedModel();
-    //    return {
-    //        customerId: model.FvPList_FvPID
-    //    };
-    //}
-
-    //function onChange(arg) {
-    //    var selected = $.map(this.select(), function (item) {
-    //        return $(item).text();
-    //    });
-
-    //    alert("Selected: " + selected.length + " item(s), [" + selected.join(", ") + "]");
-    //}
 
    
 </script>

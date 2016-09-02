@@ -18,6 +18,7 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels
 
         [Required]
         [Display(Name = "NPI NUMBER")]
+        [RegularExpression(@"[a-zA-Z0-9]+$", ErrorMessage = "No Special character and/or white space allowed.")]
         [StringLength(10, MinimumLength = 10, ErrorMessage = "The NPI Number needs to have a length of 10.")]
         public string NPI_Num { get; set; }
     }
