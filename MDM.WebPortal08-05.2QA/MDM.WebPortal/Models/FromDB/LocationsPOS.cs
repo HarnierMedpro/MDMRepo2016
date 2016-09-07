@@ -19,6 +19,8 @@ namespace MDM.WebPortal.Models.FromDB
         {
             this.LocPOS_LevOfCare = new HashSet<LocPOS_LevOfCare>();
             this.LocPOS_MPServ = new HashSet<LocPOS_MPServ>();
+            this.LocPOS_Contact = new HashSet<LocPOS_Contact>();
+            this.POSFiles = new HashSet<POSFile>();
         }
     
         public int Facitity_DBs_IDPK { get; set; }
@@ -50,5 +52,9 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual ICollection<LocPOS_LevOfCare> LocPOS_LevOfCare { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LocPOS_MPServ> LocPOS_MPServ { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LocPOS_Contact> LocPOS_Contact { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<POSFile> POSFiles { get; set; }
     }
 }

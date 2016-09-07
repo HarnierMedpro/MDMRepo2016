@@ -237,6 +237,7 @@
     <Compile Include="Areas\PlaceOfServices\Controllers\MPServicesController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\PHYGroupsController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\POSAddressInfoController.cs" />
+    <Compile Include="Areas\PlaceOfServices\Controllers\POSFilesController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\POSLOCExtraDatasController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\ProvidersController.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMChooseGrp.cs" />
@@ -250,10 +251,12 @@
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocPOS_MPServ.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMMPService.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMPHYGrp.cs" />
+    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMPOSFile.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMPOSLOCExtraData.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMProvider.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMProvidersInGrp.cs" />
     <Compile Include="Areas\PlaceOfServices\PlaceOfServicesAreaRegistration.cs" />
+    <Compile Include="Areas\PlaceOfServices\Tools\WindowsIdentityMembers.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActionSystemsController.cs" />
     <Compile Include="Controllers\APP\CorporateMasterListController.cs" />
@@ -320,6 +323,12 @@
     <Compile Include="Models\FromDB\CollNoteTypeCatPriority.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FromDB\Contact.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\ContactType.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FromDB\CorporateMasterList.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
@@ -347,6 +356,9 @@
     <Compile Include="Models\FromDB\Facitity_DBs.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FromDB\FileTypeI.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FromDB\FormsDict.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
@@ -360,6 +372,9 @@
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\LocationsPOS.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\LocPOS_Contact.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\LocPOS_LevOfCare.cs">
@@ -393,6 +408,9 @@
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\PHYGroup.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\POSFile.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\POSLOCExtraData.cs">
@@ -495,6 +513,7 @@
     <Compile Include="Models\ViewModel\VMUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Areas\PlaceOfServices\Tools\ActiveDirectoryHelper.cs" />
     <Compile Include="Tools\ConfDAL.cs" />
     <Compile Include="Tools\JSON2CSharp\AllUSStates.cs" />
     <Compile Include="Tools\JSON2CSharp\States.cs" />
@@ -1141,6 +1160,12 @@
     <Content Include="Content\themes\jquery-ui.structure.min.css" />
     <Content Include="Content\themes\jquery-ui.theme.css" />
     <Content Include="Content\themes\jquery-ui.theme.min.css" />
+    <Content Include="Content\web\upload\default.png" />
+    <Content Include="Content\web\upload\doc.png" />
+    <Content Include="Content\web\upload\jpg.png" />
+    <Content Include="Content\web\upload\pdf.png" />
+    <Content Include="Content\web\upload\xls.png" />
+    <Content Include="Content\web\upload\zip.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -1385,6 +1410,12 @@
     <Content Include="Areas\PlaceOfServices\Views\PHYGroups\Details.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\PHYGroups\Edit.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\PHYGroups\Index.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\POSFiles\Create.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\POSFiles\Delete.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\POSFiles\Details.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\POSFiles\Edit.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\POSFiles\Index.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\POSFiles\DownloadsTest.cshtml" />
     <None Include="Properties\PublishProfiles\QASite.pubxml" />
     <None Include="Properties\PublishProfiles\Site02.pubxml" />
     <None Include="Properties\PublishProfiles\TestQA.pubxml" />
@@ -2780,6 +2811,7 @@
     <Content Include="Views\Shared\EditorTemplates\POS_DBSViewModelEditor.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ProvidersEditor.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ProviderViewModelEditor.cshtml" />
+    <Content Include="Views\Shared\SaveFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

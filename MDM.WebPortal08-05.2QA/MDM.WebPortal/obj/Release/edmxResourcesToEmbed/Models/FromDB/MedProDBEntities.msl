@@ -436,5 +436,57 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="FileTypeIs">
+      <EntityTypeMapping TypeName="MedProDBEntities.FileTypeI">
+        <MappingFragment StoreEntitySet="FileTypeI">
+          <ScalarProperty Name="FileType_Name" ColumnName="FileType_Name" />
+          <ScalarProperty Name="FileTypeID" ColumnName="FileTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Contacts">
+      <EntityTypeMapping TypeName="MedProDBEntities.Contact">
+        <MappingFragment StoreEntitySet="Contact">
+          <ScalarProperty Name="ContactTypeID" ColumnName="ContactTypeID" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LName" ColumnName="LName" />
+          <ScalarProperty Name="FName" ColumnName="FName" />
+          <ScalarProperty Name="Facitity_DBs_IDPK" ColumnName="Facitity_DBs_IDPK" />
+          <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ContactTypes">
+      <EntityTypeMapping TypeName="MedProDBEntities.ContactType">
+        <MappingFragment StoreEntitySet="ContactType">
+          <ScalarProperty Name="ContactType_Name" ColumnName="ContactType_Name" />
+          <ScalarProperty Name="ContactTypeID" ColumnName="ContactTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LocPOS_Contact">
+      <EntityTypeMapping TypeName="MedProDBEntities.LocPOS_Contact">
+        <MappingFragment StoreEntitySet="LocPOS_Contact">
+          <ScalarProperty Name="LocPOSContactID" ColumnName="LocPOSContactID" />
+          <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+          <ScalarProperty Name="Facility_DBs_IDPK" ColumnName="Facility_DBs_IDPK" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="POSFiles">
+      <EntityTypeMapping TypeName="MedProDBEntities.POSFile">
+        <MappingFragment StoreEntitySet="POSFiles">
+          <ScalarProperty Name="FileTypeID" ColumnName="FileTypeID" />
+          <ScalarProperty Name="UploadTime" ColumnName="UploadTime" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Facitity_DBs_IDPK" ColumnName="Facitity_DBs_IDPK" />
+          <ScalarProperty Name="FileExtension" ColumnName="FileExtension" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="ServerLocation" ColumnName="ServerLocation" />
+          <ScalarProperty Name="FileID" ColumnName="FileID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

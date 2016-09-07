@@ -429,6 +429,31 @@
       <End Role="MPService" EntitySet="MPServices" />
       <End Role="LocPOS_MPServ" EntitySet="LocPOS_MPServ" />
     </AssociationSet>
+    <EntitySet Name="FileTypeIs" EntityType="MedProDBEntities.FileTypeI" />
+    <EntitySet Name="Contacts" EntityType="MedProDBEntities.Contact" />
+    <EntitySet Name="ContactTypes" EntityType="MedProDBEntities.ContactType" />
+    <EntitySet Name="LocPOS_Contact" EntityType="MedProDBEntities.LocPOS_Contact" />
+    <AssociationSet Name="FK_Contact_ContactType" Association="MedProDBEntities.FK_Contact_ContactType">
+      <End Role="ContactType" EntitySet="ContactTypes" />
+      <End Role="Contact" EntitySet="Contacts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LocPOS_Contact_Contact" Association="MedProDBEntities.FK_LocPOS_Contact_Contact">
+      <End Role="Contact" EntitySet="Contacts" />
+      <End Role="LocPOS_Contact" EntitySet="LocPOS_Contact" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LocPOS_Contact_LocationsPOS" Association="MedProDBEntities.FK_LocPOS_Contact_LocationsPOS">
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+      <End Role="LocPOS_Contact" EntitySet="LocPOS_Contact" />
+    </AssociationSet>
+    <EntitySet Name="POSFiles" EntityType="MedProDBEntities.POSFile" />
+    <AssociationSet Name="FK_POSFiles_FileTypeI" Association="MedProDBEntities.FK_POSFiles_FileTypeI">
+      <End Role="FileTypeI" EntitySet="FileTypeIs" />
+      <End Role="POSFile" EntitySet="POSFiles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_POSFiles_LocationsPOS" Association="MedProDBEntities.FK_POSFiles_LocationsPOS">
+      <End Role="LocationsPOS" EntitySet="LocationsPOS" />
+      <End Role="POSFile" EntitySet="POSFiles" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="CollNoteTypeCatPriority">
     <Key>
@@ -736,6 +761,8 @@
     <NavigationProperty Name="FACInfoData" Relationship="MedProDBEntities.FK__Locations__FACIn__75235608" FromRole="LocationsPOS" ToRole="FACInfoData" />
     <NavigationProperty Name="LocPOS_LevOfCare" Relationship="MedProDBEntities.FK__LocPOS_Le__Locat__064DE20A" FromRole="LocationsPOS" ToRole="LocPOS_LevOfCare" />
     <NavigationProperty Name="LocPOS_MPServ" Relationship="MedProDBEntities.FK__LocPOS_MP__Locat__0A1E72EE" FromRole="LocationsPOS" ToRole="LocPOS_MPServ" />
+    <NavigationProperty Name="LocPOS_Contact" Relationship="MedProDBEntities.FK_LocPOS_Contact_LocationsPOS" FromRole="LocationsPOS" ToRole="LocPOS_Contact" />
+    <NavigationProperty Name="POSFiles" Relationship="MedProDBEntities.FK_POSFiles_LocationsPOS" FromRole="LocationsPOS" ToRole="POSFile" />
   </EntityType>
   <Association Name="FK__Locations__Facit__764C846B">
     <End Type="MedProDBEntities.Facitity_DBs" Role="Facitity_DBs" Multiplicity="1" />
@@ -920,6 +947,121 @@
       </Principal>
       <Dependent Role="LocPOS_MPServ">
         <PropertyRef Name="MPServices_MPServID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="FileTypeI">
+    <Key>
+      <PropertyRef Name="FileTypeID" />
+    </Key>
+    <Property Name="FileTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FileType_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="POSFiles" Relationship="MedProDBEntities.FK_POSFiles_FileTypeI" FromRole="FileTypeI" ToRole="POSFile" />
+  </EntityType>
+  <EntityType Name="Contact">
+    <Key>
+      <PropertyRef Name="ContactID" />
+    </Key>
+    <Property Name="ContactID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Facitity_DBs_IDPK" Type="Int32" Nullable="false" />
+    <Property Name="FName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="ContactTypeID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ContactType" Relationship="MedProDBEntities.FK_Contact_ContactType" FromRole="Contact" ToRole="ContactType" />
+    <NavigationProperty Name="LocPOS_Contact" Relationship="MedProDBEntities.FK_LocPOS_Contact_Contact" FromRole="Contact" ToRole="LocPOS_Contact" />
+  </EntityType>
+  <EntityType Name="ContactType">
+    <Key>
+      <PropertyRef Name="ContactTypeID" />
+    </Key>
+    <Property Name="ContactTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ContactType_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Contacts" Relationship="MedProDBEntities.FK_Contact_ContactType" FromRole="ContactType" ToRole="Contact" />
+  </EntityType>
+  <EntityType Name="LocPOS_Contact">
+    <Key>
+      <PropertyRef Name="LocPOSContactID" />
+    </Key>
+    <Property Name="Facility_DBs_IDPK" Type="Int32" Nullable="false" />
+    <Property Name="ContactID" Type="Int32" Nullable="false" />
+    <Property Name="LocPOSContactID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Contact" Relationship="MedProDBEntities.FK_LocPOS_Contact_Contact" FromRole="LocPOS_Contact" ToRole="Contact" />
+    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK_LocPOS_Contact_LocationsPOS" FromRole="LocPOS_Contact" ToRole="LocationsPOS" />
+  </EntityType>
+  <Association Name="FK_Contact_ContactType">
+    <End Type="MedProDBEntities.ContactType" Role="ContactType" Multiplicity="1" />
+    <End Type="MedProDBEntities.Contact" Role="Contact" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ContactType">
+        <PropertyRef Name="ContactTypeID" />
+      </Principal>
+      <Dependent Role="Contact">
+        <PropertyRef Name="ContactTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LocPOS_Contact_Contact">
+    <End Type="MedProDBEntities.Contact" Role="Contact" Multiplicity="1" />
+    <End Type="MedProDBEntities.LocPOS_Contact" Role="LocPOS_Contact" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Contact">
+        <PropertyRef Name="ContactID" />
+      </Principal>
+      <Dependent Role="LocPOS_Contact">
+        <PropertyRef Name="ContactID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LocPOS_Contact_LocationsPOS">
+    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="1" />
+    <End Type="MedProDBEntities.LocPOS_Contact" Role="LocPOS_Contact" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LocationsPOS">
+        <PropertyRef Name="Facitity_DBs_IDPK" />
+      </Principal>
+      <Dependent Role="LocPOS_Contact">
+        <PropertyRef Name="Facility_DBs_IDPK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="POSFile">
+    <Key>
+      <PropertyRef Name="FileID" />
+    </Key>
+    <Property Name="FileID" Type="Guid" Nullable="false" />
+    <Property Name="ServerLocation" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FileName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FileExtension" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Facitity_DBs_IDPK" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UploadTime" Type="DateTime" Precision="3" />
+    <Property Name="FileTypeID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="FileTypeI" Relationship="MedProDBEntities.FK_POSFiles_FileTypeI" FromRole="POSFile" ToRole="FileTypeI" />
+    <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK_POSFiles_LocationsPOS" FromRole="POSFile" ToRole="LocationsPOS" />
+  </EntityType>
+  <Association Name="FK_POSFiles_FileTypeI">
+    <End Type="MedProDBEntities.FileTypeI" Role="FileTypeI" Multiplicity="1" />
+    <End Type="MedProDBEntities.POSFile" Role="POSFile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileTypeI">
+        <PropertyRef Name="FileTypeID" />
+      </Principal>
+      <Dependent Role="POSFile">
+        <PropertyRef Name="FileTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_POSFiles_LocationsPOS">
+    <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="1" />
+    <End Type="MedProDBEntities.POSFile" Role="POSFile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LocationsPOS">
+        <PropertyRef Name="Facitity_DBs_IDPK" />
+      </Principal>
+      <Dependent Role="POSFile">
+        <PropertyRef Name="Facitity_DBs_IDPK" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

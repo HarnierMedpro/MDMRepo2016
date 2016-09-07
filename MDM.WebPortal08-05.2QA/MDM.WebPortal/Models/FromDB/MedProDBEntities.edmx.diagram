@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d06f693510bc41608816329a792477ad" Name="Diagram1">
+      <Diagram DiagramId="d06f693510bc41608816329a792477ad" Name="Diagram1" ZoomLevel="64">
         <EntityTypeShape EntityType="MedProDBEntities.ADPMaster" Width="1.5" PointX="0.5" PointY="6" IsExpanded="true" />
         <EntityTypeShape EntityType="MedProDBEntities.BI_DB_FvP_Access" Width="1.5" PointX="10.625" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="MedProDBEntities.Corp_DBs" Width="1.5" PointX="8.25" PointY="3.125" IsExpanded="true" />
@@ -69,6 +69,16 @@
         <AssociationConnector Association="MedProDBEntities.FK__LocPOS_Le__Locat__064DE20A" />
         <AssociationConnector Association="MedProDBEntities.FK__LocPOS_MP__Locat__0A1E72EE" />
         <AssociationConnector Association="MedProDBEntities.FK__LocPOS_MP__MPSer__0B129727" />
+        <EntityTypeShape EntityType="MedProDBEntities.FileTypeI" Width="1.5" PointX="5.5" PointY="46.625" />
+        <EntityTypeShape EntityType="MedProDBEntities.Contact" Width="1.5" PointX="11.875" PointY="43.25" />
+        <EntityTypeShape EntityType="MedProDBEntities.ContactType" Width="1.5" PointX="9.625" PointY="43.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.LocPOS_Contact" Width="1.5" PointX="14.125" PointY="42.625" />
+        <AssociationConnector Association="MedProDBEntities.FK_Contact_ContactType" />
+        <AssociationConnector Association="MedProDBEntities.FK_LocPOS_Contact_Contact" />
+        <AssociationConnector Association="MedProDBEntities.FK_LocPOS_Contact_LocationsPOS" />
+        <EntityTypeShape EntityType="MedProDBEntities.POSFile" Width="1.5" PointX="5.625" PointY="42.5" />
+        <AssociationConnector Association="MedProDBEntities.FK_POSFiles_FileTypeI" />
+        <AssociationConnector Association="MedProDBEntities.FK_POSFiles_LocationsPOS" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -62,5 +62,10 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual DbSet<FACInfoData> FACInfoDatas { get; set; }
         public virtual DbSet<LocPOS_LevOfCare> LocPOS_LevOfCare { get; set; }
         public virtual DbSet<LocPOS_MPServ> LocPOS_MPServ { get; set; }
+        public virtual DbSet<FileTypeI> FileTypeIs { get; set; }
+        public virtual DbSet<Contact> Contacts { get; set; }
+        public virtual DbSet<ContactType> ContactTypes { get; set; }
+        public virtual DbSet<LocPOS_Contact> LocPOS_Contact { get; set; }
+        public virtual DbSet<POSFile> POSFiles { get; set; }
     }
 }

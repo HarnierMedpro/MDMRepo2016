@@ -1,0 +1,42 @@
+﻿@model MDM.WebPortal.Models.FromDB.POSFile
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>POSFile</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.UploadTime)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UploadTime)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.LocationsPOS.PosName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.LocationsPOS.PosName)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

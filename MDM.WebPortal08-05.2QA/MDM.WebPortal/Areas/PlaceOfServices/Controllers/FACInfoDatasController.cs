@@ -52,7 +52,7 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
                 LicExpireDate = fACInfoData.LicExpireDate,
                 LicEffectiveDate = fACInfoData.LicEffectiveDate,
                 Taxonomy = fACInfoData.Taxonomy,
-                LicNumCLIA_waiver = fACInfoData.Taxonomy,
+                LicNumCLIA_waiver = fACInfoData.LicNumCLIA_waiver,
                 FAC_NPI_Num = fACInfoData.FAC_NPI_Num,
                 LicType = fACInfoData.LicType,
                 StateLic = fACInfoData.StateLic,
@@ -248,7 +248,7 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
                         if (storedInDb.LicEffectiveDate != toUpdate.LicEffectiveDate)
                         {
                             tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicEffectiveDate", OldValue = storedInDb.LicEffectiveDate.ToShortDateString(), NewValue = toUpdate.LicEffectiveDate.ToShortDateString() });
-                            storedInDb.LicNumCLIA_waiver = toUpdate.LicNumCLIA_waiver;
+                            storedInDb.LicEffectiveDate = toUpdate.LicEffectiveDate;
                         }
                         if (storedInDb.LicExpireDate != toUpdate.LicExpireDate)
                         {

@@ -19,13 +19,14 @@
 </header>
 
 <div class="container-fluid">
-    @if (TempData["Error"] != null)
+    @if (TempData["Error"] != null || TempData["Access"] != null)
     {
         <div class="row">
             <div class="col-md-5">
                 <div class="alert alert-danger">
                     <a href="#" class="close" data-dismiss="alert" aria-label="Close">&times;</a>
                     <p>@TempData["Error"]</p>
+                    <p>@TempData["Access"]</p>
                 </div>
             </div>
         </div>
@@ -181,6 +182,9 @@
                           .ToClientTemplate())
             </text>
                   );
+
+              items.Add().Text("Attachments")
+               .LoadContentFrom("Index", "POSFiles", new { locationPOSID = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });
               
           })
         .ToClientTemplate())
