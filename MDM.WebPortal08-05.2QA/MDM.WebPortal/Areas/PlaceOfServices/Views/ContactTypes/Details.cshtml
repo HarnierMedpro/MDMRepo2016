@@ -1,0 +1,27 @@
+﻿@model MDM.WebPortal.Models.FromDB.ContactType
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ContactType</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactType_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContactType_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ContactTypeID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

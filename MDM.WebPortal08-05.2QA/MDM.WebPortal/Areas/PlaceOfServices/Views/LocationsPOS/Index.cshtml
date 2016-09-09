@@ -180,12 +180,117 @@
                           
                           .Sortable()
                           .ToClientTemplate())
-            </text>
+                    </text>
                   );
 
               items.Add().Text("Attachments")
                .LoadContentFrom("Index", "POSFiles", new { locationPOSID = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });
-              
+
+              items.Add().Text("Contacts").Content(@<text>
+                @(Html.Kendo().Grid<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMContact>()
+                          .Name("Contactos_#=Facitity_DBs_IDPK#") // template expression, to be evaluated in the master context
+                          //.ToolBar(tool =>
+                          //{
+                          //    tool.Create().Text("NEW CONTACT");
+                          //})
+                          .Columns(column =>
+                          {
+                              column.Bound(cnt => cnt.ContactID).Hidden(true);
+
+                              column.Bound(cnt => cnt.FName).Width(110);
+
+                              column.Bound(cnt => cnt.LName).Width(110);
+
+                              column.Bound(cnt => cnt.PhoneNumber).Width(110);
+
+                              column.Bound(cnt => cnt.Email).Width(110);
+
+                              //column.Command(command =>
+                              //{
+                              //    command.Edit();
+                              //}).Title("ACTIONS").Width(110);
+                          })
+                          .DataSource(dataSource => dataSource
+                              .Ajax()
+                              .PageSize(5)
+                              //.Model(model =>
+                              //{
+                              //    model.Id(cnt => cnt.ContactID);
+                              //    model.Field(cnt => cnt.ContactID).Editable(false);
+                              //})
+                              //.Events(events => events.Error("ServError_handler"))
+                              .Read(read => read.Action("Read_ContactsOfPOS", "LocationsPOS", new { locPOSID = "#=Facitity_DBs_IDPK#" }))
+                              //.Update(update => update.Action("Update_POSService", "LocPOS_MPServ"))
+                              /*The fact that I was using 'LocationsPOS_Facitity_DBs_IDPK' as my route variable and it was the problem. It was trying to use the 'LocationsPOS_Facitity_DBs_IDPK' of the new row,
+                               * which of course was 0. * Changing the name of the route variable to 'ParentID' fixed the problem.*/
+                              //.Create(create => create.Action("Create_POSService", "LocPOS_MPServ", new { ParentID = "#=Facitity_DBs_IDPK#" }))
+                          )
+
+                          .Sortable()
+                          .ToClientTemplate())
+            </text>
+                  );
+
+
+              @*items.Add().Text("Contacts").Content(@<text>
+                 @(Html.Kendo().Grid<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMContact>()
+                  .Name("Contactos_#=Facitity_DBs_IDPK#")
+                  .ToolBar(tool =>
+                  {
+                      //tool.Create().Text("NEW CONTACT");
+                      tool.Excel();
+                  })
+                  .Excel(e =>
+                  {
+                      e.AllPages(true);
+                      e.FileName("Export_Contacts");
+                  })
+                  .Columns(column =>
+                  {
+                      column.Bound(cnt => cnt.ContactID).Hidden(true);
+
+                      column.Bound(cnt => cnt.FName).Width(110);
+
+                      column.Bound(cnt => cnt.LName).Width(110);
+
+                      column.Bound(cnt => cnt.PhoneNumber).Width(110);
+
+                      column.Bound(cnt => cnt.Email).Width(110);
+
+                      column.ForeignKey(cnt => cnt.ContactTypeID, (IEnumerable<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMContactType>)ViewData["ContactType"], "ContactTypeID", "ContactType_Name").Width(110);
+
+                      //column.Command(command =>
+                      //{
+                      //    command.Edit();
+                      //}).Title("ACTIONS").Width(110);
+                  })
+                  .Sortable()
+                  .Filterable()
+                  .Groupable()
+                  .Pageable(ps => ps.Refresh(true)
+                    .PreviousNext(true).PageSizes(true))
+                  //.Editable(editable =>
+                  //{
+                  //    editable.TemplateName("ContactViewModelEditor");
+                  //    editable.Mode(GridEditMode.PopUp);
+                  //})
+                  .DataSource(datasource => datasource
+                      .Ajax()
+                      .ServerOperation(true)
+                      .PageSize(10)
+                      //.Model(model =>
+                      //{
+                      //    model.Id(cnt => cnt.ContactID);
+                      //    model.Field(cnt => cnt.ContactID).Editable(false);
+                      //})
+                      //.Events(events => events.Error("error_handler"))
+                      .Read(read => read.Action("Read_ContactsOfPOS", "LocationsPOS"))
+                      //.Create(create => create.Action("Create_Contact", "Contacts"))
+                      //.Update("Update_Contact", "Contacts")
+                  )
+               )                                 
+              </text>);*@
+
           })
         .ToClientTemplate())
 </script>

@@ -104,7 +104,6 @@
             <PropertyRef Name="ContactID" />
           </Key>
           <Property Name="ContactID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Facitity_DBs_IDPK" Type="int" Nullable="false" />
           <Property Name="FName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="LName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
@@ -388,7 +387,7 @@
           <Key>
             <PropertyRef Name="FileID" />
           </Key>
-          <Property Name="FileID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ServerLocation" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="FileName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="FileExtension" Type="varchar" MaxLength="50" Nullable="false" />
@@ -1440,17 +1439,8 @@
             <End Role="LocPOS_MPServ" EntitySet="LocPOS_MPServ" />
           </AssociationSet>
           <EntitySet Name="FileTypeIs" EntityType="MedProDBEntities.FileTypeI" />
-          <EntitySet Name="Contacts" EntityType="MedProDBEntities.Contact" />
           <EntitySet Name="ContactTypes" EntityType="MedProDBEntities.ContactType" />
           <EntitySet Name="LocPOS_Contact" EntityType="MedProDBEntities.LocPOS_Contact" />
-          <AssociationSet Name="FK_Contact_ContactType" Association="MedProDBEntities.FK_Contact_ContactType">
-            <End Role="ContactType" EntitySet="ContactTypes" />
-            <End Role="Contact" EntitySet="Contacts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_LocPOS_Contact_Contact" Association="MedProDBEntities.FK_LocPOS_Contact_Contact">
-            <End Role="Contact" EntitySet="Contacts" />
-            <End Role="LocPOS_Contact" EntitySet="LocPOS_Contact" />
-          </AssociationSet>
           <AssociationSet Name="FK_LocPOS_Contact_LocationsPOS" Association="MedProDBEntities.FK_LocPOS_Contact_LocationsPOS">
             <End Role="LocationsPOS" EntitySet="LocationsPOS" />
             <End Role="LocPOS_Contact" EntitySet="LocPOS_Contact" />
@@ -1463,6 +1453,15 @@
           <AssociationSet Name="FK_POSFiles_LocationsPOS" Association="MedProDBEntities.FK_POSFiles_LocationsPOS">
             <End Role="LocationsPOS" EntitySet="LocationsPOS" />
             <End Role="POSFile" EntitySet="POSFiles" />
+          </AssociationSet>
+          <EntitySet Name="Contacts" EntityType="MedProDBEntities.Contact" />
+          <AssociationSet Name="FK_Contact_ContactType" Association="MedProDBEntities.FK_Contact_ContactType">
+            <End Role="ContactType" EntitySet="ContactTypes" />
+            <End Role="Contact" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LocPOS_Contact_Contact" Association="MedProDBEntities.FK_LocPOS_Contact_Contact">
+            <End Role="Contact" EntitySet="Contacts" />
+            <End Role="LocPOS_Contact" EntitySet="LocPOS_Contact" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="CollNoteTypeCatPriority">
@@ -1968,20 +1967,6 @@
           <Property Name="FileType_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="POSFiles" Relationship="MedProDBEntities.FK_POSFiles_FileTypeI" FromRole="FileTypeI" ToRole="POSFile" />
         </EntityType>
-        <EntityType Name="Contact">
-          <Key>
-            <PropertyRef Name="ContactID" />
-          </Key>
-          <Property Name="ContactID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Facitity_DBs_IDPK" Type="Int32" Nullable="false" />
-          <Property Name="FName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PhoneNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="ContactTypeID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ContactType" Relationship="MedProDBEntities.FK_Contact_ContactType" FromRole="Contact" ToRole="ContactType" />
-          <NavigationProperty Name="LocPOS_Contact" Relationship="MedProDBEntities.FK_LocPOS_Contact_Contact" FromRole="Contact" ToRole="LocPOS_Contact" />
-        </EntityType>
         <EntityType Name="ContactType">
           <Key>
             <PropertyRef Name="ContactTypeID" />
@@ -1997,33 +1982,9 @@
           <Property Name="Facility_DBs_IDPK" Type="Int32" Nullable="false" />
           <Property Name="ContactID" Type="Int32" Nullable="false" />
           <Property Name="LocPOSContactID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Contact" Relationship="MedProDBEntities.FK_LocPOS_Contact_Contact" FromRole="LocPOS_Contact" ToRole="Contact" />
           <NavigationProperty Name="LocationsPOS" Relationship="MedProDBEntities.FK_LocPOS_Contact_LocationsPOS" FromRole="LocPOS_Contact" ToRole="LocationsPOS" />
+          <NavigationProperty Name="Contact" Relationship="MedProDBEntities.FK_LocPOS_Contact_Contact" FromRole="LocPOS_Contact" ToRole="Contact" />
         </EntityType>
-        <Association Name="FK_Contact_ContactType">
-          <End Type="MedProDBEntities.ContactType" Role="ContactType" Multiplicity="1" />
-          <End Type="MedProDBEntities.Contact" Role="Contact" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ContactType">
-              <PropertyRef Name="ContactTypeID" />
-            </Principal>
-            <Dependent Role="Contact">
-              <PropertyRef Name="ContactTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_LocPOS_Contact_Contact">
-          <End Type="MedProDBEntities.Contact" Role="Contact" Multiplicity="1" />
-          <End Type="MedProDBEntities.LocPOS_Contact" Role="LocPOS_Contact" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Contact">
-              <PropertyRef Name="ContactID" />
-            </Principal>
-            <Dependent Role="LocPOS_Contact">
-              <PropertyRef Name="ContactID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_LocPOS_Contact_LocationsPOS">
           <End Type="MedProDBEntities.LocationsPOS" Role="LocationsPOS" Multiplicity="1" />
           <End Type="MedProDBEntities.LocPOS_Contact" Role="LocPOS_Contact" Multiplicity="*" />
@@ -2040,7 +2001,7 @@
           <Key>
             <PropertyRef Name="FileID" />
           </Key>
-          <Property Name="FileID" Type="Guid" Nullable="false" />
+          <Property Name="FileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ServerLocation" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FileName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FileExtension" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -2072,6 +2033,43 @@
             </Principal>
             <Dependent Role="POSFile">
               <PropertyRef Name="Facitity_DBs_IDPK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="ContactID" />
+          </Key>
+          <Property Name="ContactID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ContactTypeID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ContactType" Relationship="MedProDBEntities.FK_Contact_ContactType" FromRole="Contact" ToRole="ContactType" />
+          <NavigationProperty Name="LocPOS_Contact" Relationship="MedProDBEntities.FK_LocPOS_Contact_Contact" FromRole="Contact" ToRole="LocPOS_Contact" />
+        </EntityType>
+        <Association Name="FK_Contact_ContactType">
+          <End Type="MedProDBEntities.ContactType" Role="ContactType" Multiplicity="1" />
+          <End Type="MedProDBEntities.Contact" Role="Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContactType">
+              <PropertyRef Name="ContactTypeID" />
+            </Principal>
+            <Dependent Role="Contact">
+              <PropertyRef Name="ContactTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LocPOS_Contact_Contact">
+          <End Type="MedProDBEntities.Contact" Role="Contact" Multiplicity="1" />
+          <End Type="MedProDBEntities.LocPOS_Contact" Role="LocPOS_Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contact">
+              <PropertyRef Name="ContactID" />
+            </Principal>
+            <Dependent Role="LocPOS_Contact">
+              <PropertyRef Name="ContactID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2524,19 +2522,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Contacts">
-            <EntityTypeMapping TypeName="MedProDBEntities.Contact">
-              <MappingFragment StoreEntitySet="Contact">
-                <ScalarProperty Name="ContactTypeID" ColumnName="ContactTypeID" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="LName" ColumnName="LName" />
-                <ScalarProperty Name="FName" ColumnName="FName" />
-                <ScalarProperty Name="Facitity_DBs_IDPK" ColumnName="Facitity_DBs_IDPK" />
-                <ScalarProperty Name="ContactID" ColumnName="ContactID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ContactTypes">
             <EntityTypeMapping TypeName="MedProDBEntities.ContactType">
               <MappingFragment StoreEntitySet="ContactType">
@@ -2565,6 +2550,18 @@
                 <ScalarProperty Name="FileName" ColumnName="FileName" />
                 <ScalarProperty Name="ServerLocation" ColumnName="ServerLocation" />
                 <ScalarProperty Name="FileID" ColumnName="FileID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Contacts">
+            <EntityTypeMapping TypeName="MedProDBEntities.Contact">
+              <MappingFragment StoreEntitySet="Contact">
+                <ScalarProperty Name="ContactTypeID" ColumnName="ContactTypeID" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LName" ColumnName="LName" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
+                <ScalarProperty Name="ContactID" ColumnName="ContactID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

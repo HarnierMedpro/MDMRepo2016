@@ -172,6 +172,23 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
+     
+
+        public ActionResult Read_ContactsOfPOS(int locPOSID, [DataSourceRequest] DataSourceRequest request)
+        {
+            var conactsOfPOS = db.LocPOS_Contact.Include(x => x.Contact).Where(x => x.Facility_DBs_IDPK == locPOSID).Select(x => x.Contact).OrderBy(x => x.LName);
+
+            return Json(conactsOfPOS.ToDataSourceResult(request, x => new VMContact
+            {
+                ContactID = x.ContactID,
+                ContactTypeID = x.ContactTypeID,
+                FName = x.FName,
+                Email = x.Email,
+                LName = x.LName,
+                PhoneNumber = x.PhoneNumber
+            }), JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

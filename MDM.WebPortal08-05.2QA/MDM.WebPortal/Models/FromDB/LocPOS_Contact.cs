@@ -18,7 +18,7 @@ namespace MDM.WebPortal.Models.FromDB
         public int ContactID { get; set; }
         public int LocPOSContactID { get; set; }
     
-        public virtual Contact Contact { get; set; }
         public virtual LocationsPOS LocationsPOS { get; set; }
+        public virtual Contact Contact { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace MDM.WebPortal.Models.FromDB
     
     public partial class POSFile
     {
-        public System.Guid FileID { get; set; }
+        public int FileID { get; set; }
         public string ServerLocation { get; set; }
         public string FileName { get; set; }
         public string FileExtension { get; set; }

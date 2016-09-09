@@ -85,6 +85,9 @@ D:\Dev\Projects\MDM.WebPortal07-21\MDM.WebPortal\obj\Release\MDM.WebPortal.Migra
 D:\Dev\Projects\MDM.WebPortal07-21\MDM.WebPortal\obj\Release\MDM.WebPortal.csproj.GenerateResource.Cache
 D:\Dev\Projects\MDM.WebPortal07-21\MDM.WebPortal\obj\Release\MDM.WebPortal.dll
 D:\Dev\Projects\MDM.WebPortal07-21\MDM.WebPortal\obj\Release\MDM.WebPortal.pdb
+C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.csprojResolveAssemblyReference.cache
+C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.Migrations.init.resources
+C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.csproj.GenerateResource.Cache
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\MDM.WebPortal.dll.config
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\MDM.WebPortal.dll
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\MDM.WebPortal.pdb
@@ -171,7 +174,5 @@ C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPort
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\sv\FluentValidation.resources.dll
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\tr\FluentValidation.resources.dll
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\bin\zh-CN\FluentValidation.resources.dll
-C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.Migrations.init.resources
-C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.csproj.GenerateResource.Cache
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.dll
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.pdb

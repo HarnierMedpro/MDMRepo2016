@@ -444,19 +444,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Contacts">
-      <EntityTypeMapping TypeName="MedProDBEntities.Contact">
-        <MappingFragment StoreEntitySet="Contact">
-          <ScalarProperty Name="ContactTypeID" ColumnName="ContactTypeID" />
-          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="LName" ColumnName="LName" />
-          <ScalarProperty Name="FName" ColumnName="FName" />
-          <ScalarProperty Name="Facitity_DBs_IDPK" ColumnName="Facitity_DBs_IDPK" />
-          <ScalarProperty Name="ContactID" ColumnName="ContactID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="ContactTypes">
       <EntityTypeMapping TypeName="MedProDBEntities.ContactType">
         <MappingFragment StoreEntitySet="ContactType">
@@ -485,6 +472,18 @@
           <ScalarProperty Name="FileName" ColumnName="FileName" />
           <ScalarProperty Name="ServerLocation" ColumnName="ServerLocation" />
           <ScalarProperty Name="FileID" ColumnName="FileID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Contacts">
+      <EntityTypeMapping TypeName="MedProDBEntities.Contact">
+        <MappingFragment StoreEntitySet="Contact">
+          <ScalarProperty Name="ContactTypeID" ColumnName="ContactTypeID" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LName" ColumnName="LName" />
+          <ScalarProperty Name="FName" ColumnName="FName" />
+          <ScalarProperty Name="ContactID" ColumnName="ContactID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

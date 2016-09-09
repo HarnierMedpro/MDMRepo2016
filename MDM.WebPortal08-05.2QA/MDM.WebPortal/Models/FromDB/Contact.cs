@@ -21,7 +21,6 @@ namespace MDM.WebPortal.Models.FromDB
         }
     
         public int ContactID { get; set; }
-        public int Facitity_DBs_IDPK { get; set; }
         public string FName { get; set; }
         public string LName { get; set; }
         public string Email { get; set; }

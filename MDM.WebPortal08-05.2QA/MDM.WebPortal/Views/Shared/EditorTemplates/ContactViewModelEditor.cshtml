@@ -1,0 +1,72 @@
+﻿@model MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMContact
+@{
+    //required in order to render validation attributes
+    ViewContext.FormContext = new FormContext();
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border text-bold text-uppercase">contact:</legend>
+
+                <dl>
+                    <dd>
+                        @Html.LabelFor(x => x.FName)
+                    </dd>
+                    <dt>
+                        @Html.EditorFor(model => model.FName, new {htmlAttributes = new {@style = "width:100%; border-radius:3px !important; height:26px;"}})
+                    </dt>
+                </dl>
+
+                <dl>
+                    <dd>
+                        @Html.LabelFor(x => x.LName)
+                    </dd>
+                    <dt>
+                        @Html.EditorFor(model => model.LName, new {htmlAttributes = new {@style = "width:100%; border-radius:3px !important; height:26px;"}})
+                    </dt>
+                </dl>
+
+                <dl>
+                    <dd>
+                        @Html.LabelFor(x => x.PhoneNumber)
+                    </dd>
+                    <dt>
+                        @(Html.Kendo().MaskedTextBoxFor(x => x.PhoneNumber)
+                              .Mask("(999) 000-0000")
+                              .HtmlAttributes(new { @style = "width:100%; border-radius:3px !important; height:32px;" })
+                         )
+                    </dt>
+                </dl>
+
+                <dl>
+                    <dd>
+                        @Html.LabelFor(x => x.Email)
+                    </dd>
+                    <dt>
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @style = "width:100%; border-radius:3px !important; height:26px;" } })
+                    </dt>
+                </dl>
+
+                <dl>
+                    <dt>
+                        @Html.LabelFor(x => x.ContactTypeID):
+                    </dt>
+                    <dd>
+                        @(Html.Kendo().DropDownListFor(m => m.ContactTypeID)
+                           .ValuePrimitive(true)
+                           //.Name("ContactTy")
+                           .OptionLabel("Select Contact Type...")
+                           .DataTextField("ContactType_Name")
+                           .DataValueField("ContactTypeID")
+                           .HtmlAttributes(new { style = "width:100%;" })
+                           .BindTo((IEnumerable<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMContactType>)ViewData["ContactType"])
+                        )
+                        @Html.ValidationMessageFor(m => m.ContactTypeID)
+                    </dd>
+                </dl>
+            </fieldset>
+        </div>
+    </div>
+</div>

@@ -99,7 +99,6 @@
       <PropertyRef Name="ContactID" />
     </Key>
     <Property Name="ContactID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Facitity_DBs_IDPK" Type="int" Nullable="false" />
     <Property Name="FName" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="LName" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
@@ -383,7 +382,7 @@
     <Key>
       <PropertyRef Name="FileID" />
     </Key>
-    <Property Name="FileID" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="FileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ServerLocation" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="FileName" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="FileExtension" Type="varchar" MaxLength="50" Nullable="false" />

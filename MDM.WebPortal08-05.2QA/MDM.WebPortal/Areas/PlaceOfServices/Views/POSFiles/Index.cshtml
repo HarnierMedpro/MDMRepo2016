@@ -24,7 +24,7 @@
             @foreach (var item in Model)
             {
                 <li>
-                    @Html.ActionLink(@item.Description, "Download", new {ImageName = @item.FileName})
+                    @Html.ActionLink(@item.Description, "Download", new { ImageName = @item.FileName })
                 </li>
             }
         </ol>
@@ -48,16 +48,10 @@
                 <h4 class="modal-title text-bold text-uppercase" id="myModalLabel">Upload a File</h4>
             </div>
             <div class="modal-body">
-                @*<p><img src="assets/img/demo/image-1.jpg" alt="" class="img-responsive imageborder aligncenter"></p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus, quasi voluptas nostrum culpa sunt laboriosam corporis perspiciatis animi rem unde. Nihil, doloribus soluta possimus non asperiores eius natus quaerat porro.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium, mollitia eius libero nisi doloremque alias quasi fugit natus aliquam sapiente obcaecati praesentium corporis et temporibus exercitationem blanditiis molestiae totam. Eligendi!</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, ad, adipisci, vel recusandae qui pariatur id nobis officiis dolorum non tempora quae libero cumque consequuntur sint alias odit possimus quo.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, quisquam, tempore, ipsam, blanditiis praesentium cumque commodi vitae minus perferendis officia quidem aliquid natus explicabo! Blanditiis a magni facere temporibus odit.</p>*@
             @Html.Partial("SaveFile", new VMPOSFile { Facitity_DBs_IDPK = currentLocationPOS })
             </div>
             <div class="modal-footer">
-                @*<button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-ar btn-primary">Upload</button>*@
+  
             </div>
         </div>
     </div>

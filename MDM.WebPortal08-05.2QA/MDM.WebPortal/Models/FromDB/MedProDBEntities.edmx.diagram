@@ -70,15 +70,15 @@
         <AssociationConnector Association="MedProDBEntities.FK__LocPOS_MP__Locat__0A1E72EE" />
         <AssociationConnector Association="MedProDBEntities.FK__LocPOS_MP__MPSer__0B129727" />
         <EntityTypeShape EntityType="MedProDBEntities.FileTypeI" Width="1.5" PointX="5.5" PointY="46.625" />
-        <EntityTypeShape EntityType="MedProDBEntities.Contact" Width="1.5" PointX="11.875" PointY="43.25" />
         <EntityTypeShape EntityType="MedProDBEntities.ContactType" Width="1.5" PointX="9.625" PointY="43.75" />
         <EntityTypeShape EntityType="MedProDBEntities.LocPOS_Contact" Width="1.5" PointX="14.125" PointY="42.625" />
-        <AssociationConnector Association="MedProDBEntities.FK_Contact_ContactType" />
-        <AssociationConnector Association="MedProDBEntities.FK_LocPOS_Contact_Contact" />
         <AssociationConnector Association="MedProDBEntities.FK_LocPOS_Contact_LocationsPOS" />
-        <EntityTypeShape EntityType="MedProDBEntities.POSFile" Width="1.5" PointX="5.625" PointY="42.5" />
+        <EntityTypeShape EntityType="MedProDBEntities.POSFile" Width="1.5" PointX="6.125" PointY="42.875" />
         <AssociationConnector Association="MedProDBEntities.FK_POSFiles_FileTypeI" />
         <AssociationConnector Association="MedProDBEntities.FK_POSFiles_LocationsPOS" />
+        <EntityTypeShape EntityType="MedProDBEntities.Contact" Width="1.5" PointX="11.875" PointY="43.25" />
+        <AssociationConnector Association="MedProDBEntities.FK_Contact_ContactType" />
+        <AssociationConnector Association="MedProDBEntities.FK_LocPOS_Contact_Contact" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

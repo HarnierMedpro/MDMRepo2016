@@ -9,8 +9,8 @@ namespace MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels
 {
     public class VMPOSFile
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public System.Guid FileID { get; set; }
+        
+        public int FileID { get; set; }
 
         public int Facitity_DBs_IDPK { get; set; }
 
