@@ -17,7 +17,9 @@ namespace MDM.WebPortal.Models.FromDB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Contact()
         {
-            this.LocPOS_Contact = new HashSet<LocPOS_Contact>();
+            this.MasterPOS_Contact = new HashSet<MasterPOS_Contact>();
+            this.ContactType_Contact = new HashSet<ContactType_Contact>();
+            this.Corp_Owner = new HashSet<Corp_Owner>();
         }
     
         public int ContactID { get; set; }
@@ -25,10 +27,13 @@ namespace MDM.WebPortal.Models.FromDB
         public string LName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public int ContactTypeID { get; set; }
+        public bool active { get; set; }
     
-        public virtual ContactType ContactType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LocPOS_Contact> LocPOS_Contact { get; set; }
+        public virtual ICollection<MasterPOS_Contact> MasterPOS_Contact { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ContactType_Contact> ContactType_Contact { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Corp_Owner> Corp_Owner { get; set; }
     }
 }

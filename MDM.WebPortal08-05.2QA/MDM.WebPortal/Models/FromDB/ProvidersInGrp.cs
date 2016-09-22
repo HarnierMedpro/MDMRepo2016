@@ -16,7 +16,7 @@ namespace MDM.WebPortal.Models.FromDB
     {
         public int ProvInGrpID { get; set; }
         public int Providers_ProvID { get; set; }
-        public Nullable<int> PHYGroups_PHYGrpID { get; set; }
+        public int PHYGroups_PHYGrpID { get; set; }
     
         public virtual PHYGroup PHYGroup { get; set; }
         public virtual Provider Provider { get; set; }

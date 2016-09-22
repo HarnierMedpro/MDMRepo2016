@@ -19,7 +19,7 @@ namespace MDM.WebPortal.Models.ViewModel
         public string Cont_Name { get; set; }
 
         [Display(Name = "AREA")]
-        public int? AreaID { get; set; }
+        public int AreaID { get; set; }
 
        
     }

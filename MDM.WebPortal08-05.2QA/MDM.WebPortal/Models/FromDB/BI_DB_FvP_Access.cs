@@ -20,8 +20,8 @@ namespace MDM.WebPortal.Models.FromDB
         public int FvPID { get; set; }
         public bool Active { get; set; }
     
-        public virtual DBList DBList { get; set; }
         public virtual FvPList FvPList { get; set; }
         public virtual Manager_Master Manager_Master { get; set; }
+        public virtual DBList DBList { get; set; }
     }
 }

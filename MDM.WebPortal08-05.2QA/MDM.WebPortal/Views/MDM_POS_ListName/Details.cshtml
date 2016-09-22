@@ -1,27 +1,74 @@
-﻿@model MDM.WebPortal.Models.FromDB.MDM_POS_ListName
+﻿
 
 @{
     ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_Layout1.cshtml";
+    Layout = null;
 }
 
-<h2>Details</h2>
+<div class="container-fluid">
+    @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMMDM_POS_ListName>()
+    .Name("grid")
+            .ToolBar(tools => { tools.Excel(); tools.Create().Text("NEW POS"); })
+    .Excel(excel => excel
+    .AllPages(true)
+    .FileName("ExportPOS.xlsx")
+    .Filterable(false))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.MDMPOS_ListNameID).Hidden(true);//Filterable(false);
+        columns.Bound(p => p.PosName).Title("NAME").Width(300);
+        columns.Bound(p => p.active).Title("ACTIVE").Width(110);
 
-<div>
-    <h4>MDM_POS_ListName</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.PosName)
-        </dt>
+        columns.Command(commands =>
+        {
+            commands.Edit();
+        }).Title("COMMANDS").Width(200);
 
-        <dd>
-            @Html.DisplayFor(model => model.PosName)
-        </dd>
+    })
 
-    </dl>
+   .Filterable()
+   .Pageable(ps => ps.Refresh(true)
+   .PreviousNext(true).PageSizes(true))
+   .Sortable()
+   .Groupable()
+   .Reorderable(r => r.Columns(true))
+   .Resizable(r => r.Columns(true))
+   .Selectable(s => s.Enabled(true)
+   .Type(GridSelectionType.Row)
+   .Mode(GridSelectionMode.Single))
+
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+          .Model(model =>
+            {
+                model.Id(x => x.MDMPOS_ListNameID); // Specify the property which is the unique identifier of the model
+                model.Field(x => x.MDMPOS_ListNameID).Editable(false); // Make the ProductID property not editable
+            })
+        .Events(events => events.Error("error_handler"))
+        .Read(read => read.Action("Read", "MDM_POS_ListName"))
+        .Update(x => x.Action("Update", "MDM_POS_ListName"))
+        .Create(create => create.Action("Create_POS", "MDM_POS_ListName"))
+     )
+    )
 </div>
-<p>
-    @*@Html.ActionLink("Edit", "Edit", new { id = Model.MDMPOS_ListNameID }) |*@
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<script src="~/Scripts/kendo/jszip.min.js"></script>
+<script>
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            // Display the message
+            alert(message);
+            // Cancel the changes
+            var grid = $("#grid").data("kendoGrid");
+            grid.cancelChanges();
+        }
+    }
+</script>

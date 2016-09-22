@@ -16,155 +16,123 @@
     </div>
 </header>
 
+
 <div class="container-fluid">
 
     @(Html.Kendo().TabStrip()
-      .Name("Action_Codes")
-      .SelectedIndex(0)
-      .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
-      .Items(elem =>
-      {
-          elem.Add().Text("ACTION CODE").Content(@<text>
-                                                     @(Html.Kendo().Grid<MDM.WebPortal.Areas.ActionCode.Models.ViewModels.VMActionCode>()
-                                                           .Name("ActionsC")
-                                                           .ToolBar(tools =>
-                                                           {
-                                                               tools.Excel();
-                                                               tools.Create().Text("NEW ROW");
-                                                           })
-                                                           .Excel(e =>
-                                                           {
-                                                               e.AllPages(true);
-                                                               e.FileName("ExportAction_Code");
-                                                           })
-                                                           .Columns(column =>
-                                                           {
-                                                               column.Bound(x => x.ActionCodeID).Hidden(true);
-
-                                                               column.Bound(x => x.CollNoteType).Width(110);
-
-                                                               column.ForeignKey(x => x.CodeID, (IEnumerable) ViewData["Codigos"], "CodeID", "Code").Width(110);
-
-                                                               column.ForeignKey(x => x.CategoryID, (IEnumerable) ViewData["Category"], "CatogoryID", "CategoryName").Width(110);
-
-                                                               column.ForeignKey(x => x.PriorityID, (IEnumerable) ViewData["Priority"], "PriorityID", "PriorityName").Width(110);
-
-                                                               column.Bound(x => x.Active).Width(110);
-
-                                                               column.ForeignKey(x => x.ParsingYN, (IEnumerable) ViewData["Parsing"], "Value", "Text").Width(110);
-
-                                                               column.ForeignKey(x => x.ACTypeID, (IEnumerable) ViewData["ACType"], "ACTypeID", "ACTypeName").Width(110);
-
-                                                               column.Command(command =>
-                                                               {
-                                                                   command.Edit();
-                                                               }).Title("EDIT").Width(110);
-                                                           })
-                                                           .DataSource(dataSource => dataSource
-                                                               .Ajax()
-                                                               .PageSize(10)
-                                                               .Model(model =>
-                                                               {
-                                                                   model.Id(x => x.ActionCodeID);
-                                                                   model.Field(x => x.ActionCodeID).Editable(false);
-                                                               })
-                                                               .Events(events => events.Error("error_handler"))
-                                                               .Read(read => read.Action("Read_ActionCode", "ActionCodes"))
-                                                               .Update(update => update.Action("Update_ActionCode", "ActionCodes"))
-                                                               .Create(create => create.Action("Create_ActionCode", "ActionCodes"))
-                                                           )
-                                                           .Sortable()
-                                                           .Filterable()
-                                                           .Pageable(ps => ps.Refresh(true)
-                                                               .PreviousNext(true).PageSizes(true))
-                                                           .Groupable()
-                                                           .Reorderable(r => r.Columns(true))
-                                                           .Resizable(r => r.Columns(true))
-                                                           .Selectable(selectable => selectable
-                                                               .Mode(GridSelectionMode.Multiple)
-                                                               .Type(GridSelectionType.Cell))
-                                                           //.Selectable(s => s.Enabled(true)
-                                                           //    .Type(GridSelectionType.Row)
-                                                           //    .Mode(GridSelectionMode.Single))
-                                                           )
-                                                  </text>
-    );
-
-          elem.Add().Text("NEW CODE")
-           .LoadContentFrom("Index", "CodeMasterLists", new { area = "ActionCode" });
-      })
-     )
-
-    @*@Html.ActionLink("NEW CODE", "Index", "CodeMasterLists", new {Area = "ActionCode"}, new {})
-    <br/>
-    <br/>
-    @(Html.Kendo().Grid<MDM.WebPortal.Areas.ActionCode.Models.ViewModels.VMActionCode>()
-          .Name("ActionsC")
-          .ToolBar(tools =>
+          .Name("Action_Codes")
+          .SelectedIndex(0)
+          .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+          .Items(elem =>
           {
-              tools.Excel();
-              tools.Create().Text("NEW ACTIONCODE");
+              elem.Add().Text("ACTION CODE").Content(@<text>
+                     @(Html.Kendo().Grid<MDM.WebPortal.Areas.ActionCode.Models.ViewModels.VMActionCode>()
+                            .Name("ActionsC")
+                            .ToolBar(tools =>
+                                {
+                                  tools.Excel();
+                                  tools.Create().Text("NEW ROW");
+                                })
+                             .Excel(e =>
+                                 {
+                                   e.AllPages(true);
+                                   e.FileName("ExportAction_Code");
+                                 })
+                             .Columns(column =>
+                                 {
+                                    column.Bound(x => x.ActionCodeID).Hidden(true);
+
+                                    column.Bound(x => x.CollNoteType).Width(110);
+
+                                    column.ForeignKey(x => x.CodeID, (IEnumerable) ViewData["Codigos"], "CodeID", "Code").Width(110);
+
+                                    column.ForeignKey(x => x.CategoryID, (IEnumerable) ViewData["Category"], "CatogoryID", "CategoryName").Width(110);
+
+                                    column.ForeignKey(x => x.PriorityID, (IEnumerable) ViewData["Priority"], "PriorityID", "PriorityName").Width(110);
+
+                                    column.Bound(x => x.Active).Width(110);
+
+                                    column.ForeignKey(x => x.ParsingYN, (IEnumerable) ViewData["Parsing"], "Value", "Text").Width(110);
+
+                                    column.ForeignKey(x => x.ACTypeID, (IEnumerable) ViewData["ACType"], "ACTypeID", "ACTypeName").Width(110);
+
+                                    column.Command(command =>
+                                       {
+                                         command.Edit();
+                                       }).Title("EDIT").Width(110);
+                                  })
+                                                               .DataSource(dataSource => dataSource
+                                                                   .Ajax()
+                                                                   .PageSize(10)
+                                                                   .Model(model =>
+                                                                   {
+                                                                       model.Id(x => x.ActionCodeID);
+                                                                       model.Field(x => x.ActionCodeID).Editable(false);
+                                                                   })
+                                                                   .Events(events => events.Error("error_handler"))
+                                                                   .Read(read => read.Action("Read_ActionCode", "ActionCodes"))
+                                                                   .Update(update => update.Action("Update_ActionCode", "ActionCodes"))
+                                                                   .Create(create => create.Action("Create_ActionCode", "ActionCodes"))
+                                                               )
+                                                               .Sortable()
+                                                               .Filterable()
+                                                               .Pageable(ps => ps.Refresh(true)
+                                                                   .PreviousNext(true).PageSizes(true))
+                                                               .Groupable()
+                                                               .Reorderable(r => r.Columns(true))
+                                                               .Resizable(r => r.Columns(true))
+                                                               .Selectable(selectable => selectable
+                                                                   .Mode(GridSelectionMode.Multiple)
+                                                                   .Type(GridSelectionType.Cell))
+                                                               //.Selectable(s => s.Enabled(true)
+                                                               //    .Type(GridSelectionType.Row)
+                                                               //    .Mode(GridSelectionMode.Single))
+                     )
+                   </text>
+                  );
+
+              elem.Add().Text("NEW CODE")
+                  .LoadContentFrom("Details", "CodeMasterLists", new {area = "ActionCode"});
           })
-          .Excel(e =>
-          {
-              e.AllPages(true);
-              e.FileName("ExportAction_Code");
-          })
-          .Columns(column =>
-          {
-              column.Bound(x => x.ActionCodeID).Hidden(true);
-
-              column.Bound(x => x.CollNoteType).Width(110);
-
-              column.ForeignKey(x => x.CodeID, (IEnumerable) ViewData["Codigos"], "CodeID", "Code").Width(110);
-
-              column.ForeignKey(x => x.CategoryID, (IEnumerable) ViewData["Category"], "CatogoryID", "CategoryName").Width(110);
-
-              column.ForeignKey(x => x.PriorityID, (IEnumerable) ViewData["Priority"], "PriorityID", "PriorityName").Width(110);
-
-              column.Bound(x => x.Active).Width(110);
-
-              column.ForeignKey(x => x.ParsingYN, (IEnumerable) ViewData["Parsing"], "Value", "Text").Width(110);
-
-              column.ForeignKey(x => x.ACTypeID, (IEnumerable) ViewData["ACType"], "ACTypeID", "ACTypeName").Width(110);
-
-              column.Command(command =>
-              {
-                  command.Edit();
-              }).Title("EDIT").Width(110);
-          })
-          .DataSource(dataSource => dataSource
-              .Ajax()
-              .PageSize(10)
-              .Model(model =>
-              {
-                  model.Id(x => x.ActionCodeID);
-                  model.Field(x => x.ActionCodeID).Editable(false);
-              })
-              .Events(events => events.Error("error_handler"))
-              .Read(read => read.Action("Read_ActionCode", "ActionCodes"))
-              .Update(update => update.Action("Update_ActionCode", "ActionCodes"))
-              .Create(create => create.Action("Create_ActionCode", "ActionCodes"))
           )
-          .Sortable()
-          .Filterable()
-          .Pageable(ps => ps.Refresh(true)
-              .PreviousNext(true).PageSizes(true))
-          .Groupable()
-          .Reorderable(r => r.Columns(true))
-          .Resizable(r => r.Columns(true))
-          .Selectable(selectable => selectable
-              .Mode(GridSelectionMode.Multiple)
-              .Type(GridSelectionType.Cell))
-          //.Selectable(s => s.Enabled(true)
-          //    .Type(GridSelectionType.Row)
-          //    .Mode(GridSelectionMode.Single))
-          )*@
 </div>
 
+@*<input id="dropdownlist" />
+<script>
+    $("#dropdownlist").kendoDropDownList({
+        dataSource: [
+            { id: 1, name: "Apples" },
+            { id: 2, name: "Oranges" }
+        ],
+        dataTextField: "name",
+        dataValueField: "id",
+        index: 1
+    });
+</script>*@
+
+
+<script src="~/Scripts/jquery.signalR-2.1.2.min.js"></script>
+<script src="~/signalr/hubs"></script>
 <script src="~/Scripts/kendo/jszip.min.js"></script>
+
 <script>
     function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function(key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function() {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+            var grid = $("#ActionsC").data("kendoGrid");
+            grid.cancelChanges();
+        }
+    }
+
+    function error_CodeHandler(e) {
         if (e.errors) {
             var message = "Errors:\n";
             $.each(e.errors, function (key, value) {
@@ -177,8 +145,38 @@
             // Display the message
             alert(message);
             // Cancel the changes
-            var grid = $("#ActionsC").data("kendoGrid");
+            var grid = $("#Code").data("kendoGrid");
             grid.cancelChanges();
         }
     }
+</script>
+
+<script type="text/javascript">
+    $(function notifyCreateCodeMaster() {
+        var connection = $.hubConnection();
+        var hub = connection.createHubProxy("CodeMaster");
+        hub.on("notifyIfCreated", function (CodeID, Code) {
+
+            //<input data-val="true" data-val-number="The field CODE must be a number." data-val-required="The CODE field is required."
+            //id="CodeID" name="CodeID" type="text" value="0" data-role="dropdownlist" data-bind="value:CodeID" style="display: none;">
+
+            alert(CodeID + " " + Code + " " + $("#CodeID").length);
+
+            $('#ActionsC').data('kendoGrid').dataSource.read();
+            $('#ActionsC').data('kendoGrid').refresh();
+       
+
+            var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
+            dropdownlist.dataSource.add({ "name": Code.toString(), "id": CodeID.toString() });
+
+            //var dataSource = new kendo.data.DataSource({
+            //    data: [{"Text":"Bananas","Value":"87"}, {"Text":"Cherries","Value":"89"}]
+            //});
+            //dropdownlist.setDataSource(dataSource);
+          
+        });
+        connection.start(function () {
+            hub.invoke("doIfCodeCreated");
+        });
+    });
 </script>

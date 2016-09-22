@@ -19,6 +19,6 @@ namespace MDM.WebPortal.Models.FromDB
         public string CPT_Description { get; set; }
         public string ShortD { get; set; }
         public string NTUser { get; set; }
-        public Nullable<bool> Active { get; set; }
+        public bool Active { get; set; }
     }
 }

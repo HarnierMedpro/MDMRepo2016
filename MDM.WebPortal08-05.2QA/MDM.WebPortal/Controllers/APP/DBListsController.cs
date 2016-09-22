@@ -14,6 +14,7 @@ using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
+using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
 using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Controllers.APP
@@ -29,7 +30,7 @@ namespace MDM.WebPortal.Controllers.APP
             return View();
         }
 
-        public ActionResult Read([DataSourceRequest]DataSourceRequest request)
+        public ActionResult Read_DB([DataSourceRequest]DataSourceRequest request)
         {
             return Json(db.DBLists.ToDataSourceResult(request, x => new VMDBList
             {
@@ -40,7 +41,7 @@ namespace MDM.WebPortal.Controllers.APP
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<ActionResult> Update([DataSourceRequest]DataSourceRequest request, 
+        public async Task<ActionResult> Update_DB([DataSourceRequest]DataSourceRequest request, 
             [Bind(Include = "DB_ID,DB,databaseName, active")] VMDBList dBList)
         {
             if (dBList != null && ModelState.IsValid)
@@ -100,7 +101,7 @@ namespace MDM.WebPortal.Controllers.APP
            
         }
 
-        public async Task<ActionResult> Create_DBs([DataSourceRequest] DataSourceRequest request,
+        public async Task<ActionResult> Create_DB([DataSourceRequest] DataSourceRequest request,
             [Bind(Include = "DB_ID,DB,databaseName, active")] VMDBList dBList)
         {
             if (ModelState.IsValid)

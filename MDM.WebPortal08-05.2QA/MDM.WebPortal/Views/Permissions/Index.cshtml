@@ -60,7 +60,7 @@
     .Selectable(s => s.Enabled(true)
     .Type(GridSelectionType.Row)
     .Mode(GridSelectionMode.Single))
-
+    
     .Editable(editable => { editable.TemplateName("PermissionViewModelEditor"); editable.Mode(GridEditMode.PopUp); })
     .DataSource(dataSource => dataSource
       .Ajax()

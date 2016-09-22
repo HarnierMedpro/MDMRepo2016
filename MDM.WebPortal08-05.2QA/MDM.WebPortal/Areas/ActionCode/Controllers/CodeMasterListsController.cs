@@ -12,6 +12,7 @@ using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.ActionCode.Models.ViewModels;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
+using MDM.WebPortal.Hubs;
 using MDM.WebPortal.Models.FromDB;
 using Microsoft.AspNet.Identity;
 
@@ -23,6 +24,11 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
 
         // GET: ActionCode/CodeMasterLists
         public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Details()
         {
             return View();
         }
@@ -55,6 +61,8 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
                     db.CodeMasterLists.Add(toStore);
                     await db.SaveChangesAsync();
                     codeMaster.CodeID = toStore.CodeID;
+
+                    CodeMasterListHub.DoIfCodeCreated(codeMaster.CodeID, codeMaster.Code);
 
                     AuditToStore auditLog = new AuditToStore
                     {

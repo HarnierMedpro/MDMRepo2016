@@ -19,5 +19,8 @@ namespace MDM.WebPortal.Models.ViewModel
         //public string CorporateName { get; set; }
 
         public bool active { get; set; }
+
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
     }
 }

@@ -26,7 +26,8 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
 
         public ActionResult Index()
         {
-            ViewData["Manager"] = db.Manager_Master.Select(manager => new {manager.ManagerID, manager.AliasName});
+            ViewData["Type"] = db.Manager_Type.Select(x => new { x.ManagerTypeID, x.Name }).OrderBy(x => x.Name);
+            //ViewData["Manager"] = db.Manager_Master.Select(manager => new {manager.ManagerID, manager.AliasName});
             ViewData["DB"] = db.DBLists.Select(dB => new {dB.DB_ID, dB.DB});
             ViewData["FvP"] = db.FvPLists.Select(fvp => new {fvp.FvPID, fvp.FvPName});
             return View();
@@ -35,7 +36,7 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
         public ActionResult Read_GroupByManager([DataSourceRequest] DataSourceRequest request)
         {
             //var result = db.BI_DB_FvP_Access.Include(manager => manager.Manager_Master).Select(manager => manager.Manager_Master).Distinct();
-            var result = db.Manager_Master.Include(x => x.Manager_Type);
+            var result = db.Manager_Master.Include(x => x.Manager_Type).OrderBy(x => x.AliasName).ToList();
             return Json(result.ToDataSourceResult(request, x => new VMManager_BI
             {
                 ManagerID = x.ManagerID, //PK from Manager_Master table

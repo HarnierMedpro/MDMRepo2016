@@ -17,13 +17,13 @@ namespace MDM.WebPortal.Models.FromDB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public MPService()
         {
-            this.LocPOS_MPServ = new HashSet<LocPOS_MPServ>();
+            this.MasterPOS_MPServ = new HashSet<MasterPOS_MPServ>();
         }
     
         public int MPServID { get; set; }
         public string ServName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LocPOS_MPServ> LocPOS_MPServ { get; set; }
+        public virtual ICollection<MasterPOS_MPServ> MasterPOS_MPServ { get; set; }
     }
 }

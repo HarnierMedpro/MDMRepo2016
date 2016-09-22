@@ -1,0 +1,65 @@
+﻿<dl>
+    <dt>
+        @Html.Label("OWNERS")
+    </dt>
+    <dd>
+        @*@(Html.Kendo().AutoComplete()
+            .Name("OwnersID")
+            .DataTextField("LastName") //Specify which property of the Product to be used by the autocomplete as a text.
+            .MinLength(2)
+            .HtmlAttributes(new { style = "width:100%" })
+            .Placeholder("Type a owner's name")
+            //.Template("#= LastName #, #= FirstName #")
+            .DataSource(source =>
+            {
+                source.Custom()
+                      .ServerFiltering(true)
+                      .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances.
+                      .Transport(transport =>
+                      {
+                          transport.Read("Read", "OwnerLists");
+                      })
+                      .Schema(schema =>
+                      {
+                          schema.Data("Data") //Define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option.
+                                .Total("Total"); //Define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option.
+                      });
+            })
+        )*@
+
+
+
+
+
+
+
+        @(Html.Kendo().DropDownList()
+              .Name("OwnersID")
+              .AutoBind(false)
+              .ValuePrimitive(true)
+              .OptionLabel("Select Owner...")
+              .DataTextField("FullName")
+              .DataValueField("OwnersID")
+              .HtmlAttributes(new {style = "width:100%;"})
+              .Filter(FilterType.Contains)
+              .DataSource(source =>
+              {
+                  source.Custom()
+                      .ServerFiltering(true)
+                      .ServerPaging(true)
+                      .PageSize(80)
+                      .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                      .Transport(transport =>
+                      {
+                          transport.Read("GetAllOwners", "OwnerLists");
+                      })
+                      .Schema(schema =>
+                      {
+                          schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                              .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                      });
+              }))
+
+    </dd>
+</dl>
+

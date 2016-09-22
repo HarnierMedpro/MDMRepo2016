@@ -23,7 +23,9 @@ namespace MDM.WebPortal.Models.FromDB
     
         public int corpID { get; set; }
         public string CorporateName { get; set; }
-        public Nullable<bool> active { get; set; }
+        public bool active { get; set; }
+        public string TaxID { get; set; }
+        public string W9 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Corp_DBs> Corp_DBs { get; set; }

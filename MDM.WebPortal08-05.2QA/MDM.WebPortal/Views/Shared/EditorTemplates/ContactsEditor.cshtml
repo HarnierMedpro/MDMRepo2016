@@ -1,0 +1,39 @@
+﻿@*See: C:\Users\hsuarez\Desktop\Documentation\Kendo UI for ASP.NET MVC5\ui-for-aspnet-mvc-examples-master\grid\multiselect-in-grid-popup*@
+@model IEnumerable<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMContactInfo>
+
+@(
+ Html.Kendo().MultiSelectFor(m => m)
+        .Name("Contacts")
+        //.DataTextField("FullName")
+        .DataTextField("FullName")
+        .DataValueField("ContactID")
+        //.BindTo((IEnumerable<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMProvider>)ViewData["Providers"])
+        .Placeholder("Select contacts...")
+        .AutoBind(false)
+        .DataSource(source =>
+            {
+                source.Custom()
+                    .ServerFiltering(true)
+                    .ServerPaging(true)
+                    .PageSize(80)
+                    .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                    .Transport(transport =>
+                    {
+                        transport.Read("GetContacts", "Contacts", new { LocationPOSID = ViewBag.Facility_DBs_IDPK });
+                    })
+                    .Schema(schema =>
+                    {
+                        schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                              .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                    });
+            })
+        //.DataSource(source =>
+        //    {
+        //        source.Read(read =>
+        //        {
+        //            read.Action("GetContacts", "Contacts", new { LocationPOSID = ViewBag.Facility_DBs_IDPK });
+        //        })
+        //        .ServerFiltering(true);
+        //    })
+        //.ItemTemplate("<span class=\"k-state-default\"><h5>#: data.LName #,  #: data.FName #</h5></span>")     
+)

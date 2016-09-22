@@ -17,13 +17,14 @@ namespace MDM.WebPortal.Models.FromDB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ContactType()
         {
-            this.Contacts = new HashSet<Contact>();
+            this.ContactType_Contact = new HashSet<ContactType_Contact>();
         }
     
         public int ContactTypeID { get; set; }
         public string ContactType_Name { get; set; }
+        public string ContactLevel { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contact> Contacts { get; set; }
+        public virtual ICollection<ContactType_Contact> ContactType_Contact { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace MDM.WebPortal.Models.FromDB
         public FvPList()
         {
             this.BI_DB_FvP_Access = new HashSet<BI_DB_FvP_Access>();
-            this.LocationsPOS = new HashSet<LocationsPOS>();
+            this.MasterPOS = new HashSet<MasterPOS>();
         }
     
         public int FvPID { get; set; }
@@ -27,6 +27,6 @@ namespace MDM.WebPortal.Models.FromDB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BI_DB_FvP_Access> BI_DB_FvP_Access { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LocationsPOS> LocationsPOS { get; set; }
+        public virtual ICollection<MasterPOS> MasterPOS { get; set; }
     }
 }

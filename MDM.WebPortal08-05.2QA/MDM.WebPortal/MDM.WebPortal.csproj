@@ -216,6 +216,15 @@
     <Compile Include="Areas\AudiTrails\Models\AuditToStore.cs" />
     <Compile Include="Areas\AudiTrails\Models\TableInfo.cs" />
     <Compile Include="Areas\AudiTrails\Models\VMAuditLog.cs" />
+    <Compile Include="Areas\Credentials\Controllers\ContactsController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\ContactTypesController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\CorporateMasterListsController.cs" />
+    <Compile Include="Areas\Credentials\CredentialsAreaRegistration.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMContact.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMContactType.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMCorpContact.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMCorporateMasterList.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMCorp_Contact.cs" />
     <Compile Include="Areas\Error\Controllers\ErrorController.cs" />
     <Compile Include="Areas\Error\ErrorAreaRegistration.cs" />
     <Compile Include="Areas\ManagerDBA\Controllers\BI_DB_FvP_AccessController.cs" />
@@ -227,14 +236,15 @@
     <Compile Include="Areas\ManagerDBA\Models\ViewModels\VMManager_BI.cs" />
     <Compile Include="Areas\ManagerDBA\Models\ViewModels\VMManager_Master.cs" />
     <Compile Include="Areas\ManagerDBA\Models\ViewModels\VMManager_Type.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\ContactsController.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\ContactTypesController.cs" />
+    <Compile Include="Areas\PlaceOfServices\Controllers\Contacts1Controller.cs" />
+    <Compile Include="Areas\PlaceOfServices\Controllers\ContactTypes1Controller.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\FACInfoDatasController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\Facitity_DBsController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\FileTypeIsController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\FormsDictsController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\LevelOfCareController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\LocationsPOSController.cs" />
+    <Compile Include="Areas\PlaceOfServices\Controllers\LocPOS_ContactController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\LocPOS_LevOfCareController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\LocPOS_MPServController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\MPServicesController.cs" />
@@ -244,8 +254,9 @@
     <Compile Include="Areas\PlaceOfServices\Controllers\POSLOCExtraDatasController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\ProvidersController.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMChooseGrp.cs" />
-    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMContact.cs" />
-    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMContactType.cs" />
+    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMContact1.cs" />
+    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMContactInfo.cs" />
+    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMContactType1.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMFacility_DBs.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMFACInfoData.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMFileType.cs" />
@@ -253,6 +264,7 @@
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLevelOfCare.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocationPOS_AddressInfo.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocationsPOS.cs" />
+    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocPOS_Contact.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocPOS_LevOfCare.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocPOS_MPServ.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMMPService.cs" />
@@ -265,14 +277,14 @@
     <Compile Include="Areas\PlaceOfServices\Tools\WindowsIdentityMembers.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActionSystemsController.cs" />
-    <Compile Include="Controllers\APP\CorporateMasterListController.cs" />
-    <Compile Include="Controllers\APP\Corp_DBsController.cs" />
-    <Compile Include="Controllers\APP\Corp_OwnerController.cs" />
+    <Compile Include="Controllers\APP\CorporateMasterListController1.cs" />
+    <Compile Include="Areas\Credentials\Controllers\Corp_DBsController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\Corp_OwnerController.cs" />
     <Compile Include="Controllers\APP\CPTDatasController.cs" />
     <Compile Include="Controllers\APP\DBListsController.cs" />
     <Compile Include="Controllers\APP\MDM_POS_ListNameController.cs" />
     <Compile Include="Controllers\APP\MDM_POS_Name_DBPOS_grpController.cs" />
-    <Compile Include="Controllers\APP\OwnerListsController.cs" />
+    <Compile Include="Controllers\APP\OwnerListsController1.cs" />
     <Compile Include="Controllers\AreaSystemsController.cs" />
     <Compile Include="Controllers\ControllerSystemsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -280,10 +292,6 @@
     <Compile Include="Controllers\Menus1Controller.cs" />
     <Compile Include="Controllers\MenusController.cs" />
     <Compile Include="Controllers\PermissionsController.cs" />
-    <Compile Include="Controllers\Remove\CollNoteTypeCatPrioritiesController.cs" />
-    <Compile Include="Controllers\Remove\CorporateNameListsController.cs" />
-    <Compile Include="Controllers\Remove\DBAController.cs" />
-    <Compile Include="Controllers\Remove\MasterUserListsController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
     <Compile Include="Controllers\WebAPI\WSCorp_DBsController.cs" />
@@ -297,9 +305,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201608181847456_init.cs" />
-    <Compile Include="Migrations\201608181847456_init.Designer.cs">
-      <DependentUpon>201608181847456_init.cs</DependentUpon>
+    <Compile Include="Hubs\CodeMasterListHub.cs" />
+    <Compile Include="Hubs\CorporateMasterListHub.cs" />
+    <Compile Include="Migrations\201609141408473_init.cs" />
+    <Compile Include="Migrations\201609141408473_init.Designer.cs">
+      <DependentUpon>201609141408473_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\FromDB\ACCategory.cs">
@@ -326,19 +336,16 @@
     <Compile Include="Models\FromDB\CodeMasterList.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\CollNoteTypeCatPriority.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\FromDB\Contact.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\ContactType.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\CorporateMasterList.cs">
+    <Compile Include="Models\FromDB\ContactType_Contact.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\CorporateNameList.cs">
+    <Compile Include="Models\FromDB\CorporateMasterList.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\Corp_DBs.cs">
@@ -356,10 +363,7 @@
     <Compile Include="Models\FromDB\Edgemed_Logons.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\FACInfoData.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FromDB\Facitity_DBs.cs">
+    <Compile Include="Models\FromDB\FACInfo.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\FileTypeI.cs">
@@ -374,22 +378,10 @@
     <Compile Include="Models\FromDB\FvPList.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FromDB\InfoData.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FromDB\Lev_of_Care.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FromDB\LocationsPOS.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FromDB\LocPOS_Contact.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FromDB\LocPOS_LevOfCare.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FromDB\LocPOS_MPServ.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FromDB\ManagerDBAccessBI.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\Manager_Master.cs">
@@ -398,28 +390,31 @@
     <Compile Include="Models\FromDB\Manager_Type.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\MasterUserList.cs">
+    <Compile Include="Models\FromDB\MasterFile.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\MDM_POS_ListName.cs">
+    <Compile Include="Models\FromDB\MasterPOS.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\MDM_POS_Name_DBPOS_grp.cs">
+    <Compile Include="Models\FromDB\MasterPOS_Contact.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\MasterPOS_LevOfCare.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\MasterPOS_MPServ.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\MPService.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\OwnerList.cs">
-      <DependentUpon>MedProDBEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\FromDB\PHYGroup.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\POSFile.cs">
+    <Compile Include="Models\FromDB\POSAddr.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FromDB\POSLOCExtraData.cs">
+    <Compile Include="Models\FromDB\POSExtraData.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\POSLOCExtraDataMeta.cs" />
@@ -432,9 +427,7 @@
     <Compile Include="Models\Identity\AreaSystem.cs" />
     <Compile Include="Models\FromDB\BI_DB_FvP_AccessMeta.cs" />
     <Compile Include="Models\FromDB\CollNoteTypeCatPrioritiesMeta.cs" />
-    <Compile Include="Models\FromDB\CorporateMasterListMeta.cs" />
     <Compile Include="Models\FromDB\CorporateNameListsMeta.cs" />
-    <Compile Include="Models\FromDB\Corp_OwnerMeta.cs" />
     <Compile Include="Models\FromDB\CPTDataMeta.cs" />
     <Compile Include="Models\FromDB\DBListMeta.cs" />
     <Compile Include="Models\FromDB\Edgemed_LogonsMeta.cs" />
@@ -496,27 +489,27 @@
     <Compile Include="Models\ViewModel\VMAreaSystems.cs" />
     <Compile Include="Models\ViewModel\VMControllerSystem.cs" />
     <Compile Include="Models\ViewModel\VMCorporateNameList.cs" />
-    <Compile Include="Models\ViewModel\VMCorp_DB.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMCorp_DB.cs" />
     <Compile Include="Models\ViewModel\ManagerDBAccessBIViewModel.cs" />
     <Compile Include="Models\ViewModel\ProductViewModel.cs" />
-    <Compile Include="Models\ViewModel\VMCorporateMasterLists.cs" />
     <Compile Include="Models\ViewModel\VMCorp_Owner.cs" />
     <Compile Include="Models\ViewModel\VMCPTData.cs" />
     <Compile Include="Models\ViewModel\VMCreate_Corp_Owner.cs" />
     <Compile Include="Models\ViewModel\VMDB.cs" />
-    <Compile Include="Models\ViewModel\VMDBList.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMDBList.cs" />
     <Compile Include="Models\ViewModel\VMDB_Fac.cs" />
     <Compile Include="Models\ViewModel\VMDB_Name.cs" />
     <Compile Include="Models\ViewModel\VMFacility.cs" />
     <Compile Include="Models\ViewModel\VMMDM_POS_ListName.cs" />
     <Compile Include="Models\ViewModel\VMMenu.cs" />
-    <Compile Include="Models\ViewModel\VMOwnerList.cs" />
+    <Compile Include="Models\ViewModel\VMOwnerList1.cs" />
     <Compile Include="Models\ViewModel\VMParentMenu.cs" />
     <Compile Include="Models\ViewModel\VMPermission.cs" />
     <Compile Include="Models\ViewModel\VMPermissionRole.cs" />
     <Compile Include="Models\ViewModel\VMPOS_Name_DBPOS_grp.cs" />
     <Compile Include="Models\ViewModel\VMRole.cs" />
     <Compile Include="Models\ViewModel\VMUser.cs" />
+    <Compile Include="Models\VMOwner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Areas\PlaceOfServices\Tools\ActiveDirectoryHelper.cs" />
@@ -1394,16 +1387,10 @@
     <Content Include="Areas\PlaceOfServices\Views\FormsDicts\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\Facitity_DBs\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\LocPOS_LevOfCare\Index.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\LocPOS_MPServ\Create.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\LocPOS_MPServ\Delete.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\LocPOS_MPServ\Details.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\LocPOS_MPServ\Edit.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\LocPOS_MPServ\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\POSAddressInfo\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\POSAddressInfo\Edit.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\POSAddressInfo\Details.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\FACInfoDatas\Create.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\FACInfoDatas\Delete.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\FACInfoDatas\Details.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\FACInfoDatas\Edit.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\FACInfoDatas\Index.cshtml" />
@@ -1423,18 +1410,23 @@
     <Content Include="Areas\PlaceOfServices\Views\POSFiles\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\POSFiles\DownloadsTest.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\FileTypeIs\Index.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\ContactTypes\Create.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\ContactTypes\Delete.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\ContactTypes\Details.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\ContactTypes\Edit.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\ContactTypes\Index.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\Contacts\Create.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\Contacts\Delete.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\Contacts\Details.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\Contacts\Edit.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\Contacts\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\ContactTypes\ContactTypeList.cshtml" />
-    <None Include="Properties\PublishProfiles\QASite.pubxml" />
+    <Content Include="Areas\PlaceOfServices\Views\LocPOS_Contact\Create.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\LocPOS_Contact\Delete.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\LocPOS_Contact\Details.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\LocPOS_Contact\Edit.cshtml" />
+    <Content Include="Areas\PlaceOfServices\Views\LocPOS_Contact\Index.cshtml" />
+    <Content Include="Areas\ActionCode\Views\CodeMasterLists\Details.cshtml" />
+    <Content Include="Areas\Credentials\Views\web.config" />
+    <Content Include="Areas\Credentials\Views\ContactTypes\Index.cshtml" />
+    <Content Include="Areas\Credentials\Views\Contacts\Index.cshtml" />
+    <Content Include="Areas\Credentials\Views\ContactTypes\ContactTypeList.cshtml" />
+    <Content Include="Areas\Credentials\Views\CorporateMasterLists\Index.cshtml" />
+    <Content Include="Areas\Credentials\Views\Corp_Owner\AllCorpContacts.cshtml" />
+    <Content Include="Areas\Credentials\Views\Corp_Owner\Create.cshtml" />
+    <None Include="Properties\PublishProfiles\TEST_QASite.pubxml" />
     <None Include="Properties\PublishProfiles\Site02.pubxml" />
     <None Include="Properties\PublishProfiles\TestQA.pubxml" />
     <None Include="Scripts\jquery-2.2.4.intellisense.js" />
@@ -2733,40 +2725,25 @@
     <Content Include="Views\DBLists\Delete.cshtml" />
     <Content Include="Views\DBLists\Edit.cshtml" />
     <Content Include="Views\DBLists\Index.cshtml" />
-    <Content Include="Views\Corp_DBs\Create.cshtml" />
-    <Content Include="Views\Corp_DBs\Index.cshtml" />
     <Content Include="Views\DBLists\CheckDB.cshtml" />
     <Content Include="Views\DBLists\Read.cshtml" />
     <Content Include="Views\CorporateMasterList\Index.cshtml" />
-    <Content Include="Views\CorporateMasterList\Create.cshtml" />
-    <Content Include="Views\Corp_DBs\Read.cshtml" />
-    <Content Include="Views\CorporateMasterList\CorporateMasterLists_Read.cshtml" />
-    <Content Include="Views\OwnerLists\Create.cshtml" />
-    <Content Include="Views\OwnerLists\Delete.cshtml" />
-    <Content Include="Views\OwnerLists\Details.cshtml" />
-    <Content Include="Views\OwnerLists\Edit.cshtml" />
-    <Content Include="Views\OwnerLists\Index.cshtml" />
-    <Content Include="Views\OwnerLists\Read.cshtml" />
-    <Content Include="Views\Corp_Owner\Create.cshtml" />
-    <Content Include="Views\Corp_Owner\Delete.cshtml" />
-    <Content Include="Views\Corp_Owner\Edit.cshtml" />
-    <Content Include="Views\Corp_Owner\Index.cshtml" />
+    <Content Include="Views\OwnerLists1\Create.cshtml" />
+    <Content Include="Views\OwnerLists1\Delete.cshtml" />
+    <Content Include="Views\OwnerLists1\Details.cshtml" />
+    <Content Include="Views\OwnerLists1\Edit.cshtml" />
+    <Content Include="Views\OwnerLists1\Index.cshtml" />
+    <Content Include="Views\OwnerLists1\Read.cshtml" />
     <Content Include="Views\MDM_POS_ListName\Create.cshtml" />
     <Content Include="Views\MDM_POS_ListName\Delete.cshtml" />
     <Content Include="Views\MDM_POS_ListName\Details.cshtml" />
     <Content Include="Views\MDM_POS_ListName\Edit.cshtml" />
     <Content Include="Views\MDM_POS_ListName\Index.cshtml" />
     <Content Include="Views\MDM_POS_ListName\Read.cshtml" />
-    <Content Include="Views\CorporateMasterList\CorporateMasterLists_Update.cshtml" />
-    <Content Include="Views\CorporateMasterList\HierarchyBinding_DBs.cshtml" />
     <Content Include="Views\MDM_POS_Name_DBPOS_grp\Create.cshtml" />
     <Content Include="Views\MDM_POS_Name_DBPOS_grp\Edit.cshtml" />
     <Content Include="Views\MDM_POS_Name_DBPOS_grp\Index.cshtml" />
-    <Content Include="Views\CorporateMasterList\HierarchyBinding_Owner.cshtml" />
-    <Content Include="Views\OwnerLists\HierarchyBinding_Corp.cshtml" />
-    <Content Include="Views\Corp_DBs\HierarchyBinding_DBs.cshtml" />
-    <Content Include="Views\Corp_Owner\Owners.cshtml" />
-    <Content Include="Views\Corp_Owner\Corporate.cshtml" />
+    <Content Include="Views\OwnerLists1\HierarchyBinding_Corp.cshtml" />
     <Content Include="Views\MDM_POS_Name_DBPOS_grp\GetFacilities.cshtml" />
     <Content Include="Views\MDM_POS_Name_DBPOS_grp\EditorTemplates\DB_ID.cshtml" />
     <Content Include="Views\MDM_POS_Name_DBPOS_grp\EditorTemplates\FacilityId.cshtml" />
@@ -2789,7 +2766,6 @@
     <Content Include="Views\Permissions\Create.cshtml" />
     <Content Include="Views\Permissions\Index.cshtml" />
     <Content Include="Views\Permissions\GetAllRoles.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\UpdatePermission.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PermissionViewModelEditor.cshtml" />
     <Content Include="Views\ControllerSystems\Create.cshtml" />
     <Content Include="Views\ControllerSystems\Delete.cshtml" />
@@ -2806,15 +2782,6 @@
     <Content Include="Views\AreaSystems\Index.cshtml" />
     <Content Include="Views\Menus1\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ActionsInSystem.cshtml" />
-    <Content Include="Views\MasterUserLists\Create.cshtml" />
-    <Content Include="Views\MasterUserLists\Details.cshtml" />
-    <Content Include="Views\MasterUserLists\Edit.cshtml" />
-    <Content Include="Views\MasterUserLists\Index.cshtml" />
-    <Content Include="Views\CorporateNameLists\Create.cshtml" />
-    <Content Include="Views\CorporateNameLists\Details.cshtml" />
-    <Content Include="Views\CorporateNameLists\Edit.cshtml" />
-    <Content Include="Views\CorporateNameLists\Index.cshtml" />
-    <Content Include="Views\CorporateNameLists\z__Delete.cshtml" />
     <Content Include="Views\CollNoteTypeCatPriorities\Create.cshtml" />
     <Content Include="Views\CollNoteTypeCatPriorities\Details.cshtml" />
     <Content Include="Views\CollNoteTypeCatPriorities\Edit.cshtml" />
@@ -2822,8 +2789,6 @@
     <Content Include="Views\Shared\EditorTemplates\MenuViewModelEditor.cshtml" />
     <Content Include="Views\Menus\Create.cshtml" />
     <Content Include="Views\Menus\Index.cshtml" />
-    <Content Include="Views\DBA\Index.cshtml" />
-    <Content Include="Views\DBA\Create.cshtml" />
     <Content Include="Views\Shared\_ItemsMenu.cshtml" />
     <Content Include="Views\Menus\Testing.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\POS_DBSViewModelEditor.cshtml" />
@@ -2832,14 +2797,26 @@
     <Content Include="Views\Shared\SaveFile.cshtml" />
     <Content Include="Views\Shared\_SaveFileType.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ContactViewModelEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ContactsEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Corp_DBViewModelEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ContactTypeEditorNew.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\OwnersEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CorpContactEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CorpDBEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CorporationViewModelEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ContactType_CorporationEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CorpCntViewModelEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CorpContactsEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\ActionCode\Views\Shared\" />
     <Folder Include="Areas\AudiTrails\Views\Shared\" />
+    <Folder Include="Areas\Credentials\Views\Shared\" />
     <Folder Include="Areas\Error\Models\" />
     <Folder Include="Areas\Error\Views\Shared\" />
     <Folder Include="Areas\ManagerDBA\Views\Shared\" />
+    <Folder Include="Areas\PlaceOfServices\Views\LocPOS_MPServ\" />
     <Folder Include="Areas\PlaceOfServices\Views\Shared\" />
     <Folder Include="Scripts\lib\JQueryUI\" />
   </ItemGroup>
@@ -2851,8 +2828,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201608181847456_init.resx">
-      <DependentUpon>201608181847456_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201609141408473_init.resx">
+      <DependentUpon>201609141408473_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

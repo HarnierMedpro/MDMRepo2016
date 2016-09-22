@@ -17,62 +17,77 @@
 </header>
 
 <div class="container-fluid">
-    @*<p>
-        @Html.ActionLink("Create New", "Create")
-    </p>*@
+
+@(Html.Kendo().TabStrip()
+          .Name("Action_Codes")
+          .SelectedIndex(0)
+          .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+           .Items(elem =>
+           {
+               elem.Add().Text("BI_POSName").Content(@<text>
+                       @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMPOS_Name_DBPOS_grp>()
+                          .Name("popupGrid")
+                          .Columns(columns =>
+                          {
+                              columns.Bound(p => p.MDMPOS_NameID).Width(20).Hidden().HeaderHtmlAttributes(new { @title = "Entity" });
+                              columns.ForeignKey(o => o.MDMPOS_ListNameID, (System.Collections.IEnumerable)ViewData["POS"], "MDMPOS_ListNameID", "PosName").Title("POS").Width(110);
 
 
-    @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMPOS_Name_DBPOS_grp>()
-          .Name("popupGrid")
-          .Columns(columns =>
-          {
-              columns.Bound(p => p.MDMPOS_NameID).Width(20).Hidden().HeaderHtmlAttributes(new {@title = "Entity"});
-              columns.ForeignKey(o => o.MDMPOS_ListNameID, (System.Collections.IEnumerable) ViewData["POS"], "MDMPOS_ListNameID", "PosName").Title("POS").Width(110);
+                              columns.ForeignKey(o => o.DB_ID, (System.Collections.IEnumerable)ViewData["DB"], "DB_ID", "DB").Title("DB").Width(70);
 
+                              columns.Bound(x => x.FacilityID).Title("FACILITY").Width(70);
 
-              columns.ForeignKey(o => o.DB_ID, (System.Collections.IEnumerable) ViewData["DB"], "DB_ID", "DB").Title("DB").Width(70);
-              
-              columns.Bound(x => x.FacilityID).Title("FACILITY").Width(70);
+                              columns.Bound(x => x.Extra).Title("EXTRA").Width(110);
 
-              columns.Bound(x => x.Extra).Title("EXTRA").Width(110);
+                              columns.Bound(x => x.Active).Title("ACTIVE").Width(70);
 
-              columns.Bound(x => x.Active).Title("ACTIVE").Width(70);
+                              columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(80);
+                          })
+                          .ToolBar(tools => { tools.Excel(); tools.Create().Text("NEW RELATIONSHIP"); })
+                          .Excel(excel => excel
+                              .AllPages(true)
+                              .FileName("ExportPOS_Name_DBPOS_grp.xlsx")
+                              .Filterable(false)
+                          )
 
-              columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new {@title = "Edit"})).Width(80);
-          })
-          .ToolBar(tools => { tools.Excel(); tools.Create().Text("NEW RELATIONSHIP"); })
-          .Excel(excel => excel
-              .AllPages(true)
-              .FileName("ExportPOS_Name_DBPOS_grp.xlsx")
-              .Filterable(false)
-          )
-          
-          .Groupable()
-          .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("PopupEditView"))
-          .Events(e => e.Edit("onEdit"))
-          .Sortable()
-          .Filterable()
-          .Pageable(ps => ps.Refresh(true)
-          .PreviousNext(true).PageSizes(true))
-          .Reorderable(r => r.Columns(true))
-          .Resizable(r => r.Columns(true))
-          .Selectable(s => s.Enabled(true)
-          .Type(GridSelectionType.Row)
-          .Mode(GridSelectionMode.Single))
-          
-          .DataSource(dataSource => dataSource
-              .Ajax()
-              .Model(model => { model.Id(p => p.MDMPOS_NameID);
+                          .Groupable()
+                          .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("PopupEditView"))
+                          .Events(e => e.Edit("onEdit"))
+                          .Sortable()
+                          .Filterable()
+                          .Pageable(ps => ps.Refresh(true)
+                          .PreviousNext(true).PageSizes(true))
+                          .Reorderable(r => r.Columns(true))
+                          .Resizable(r => r.Columns(true))
+                          .Selectable(s => s.Enabled(true)
+                          .Type(GridSelectionType.Row)
+                          .Mode(GridSelectionMode.Single))
+
+                          .DataSource(dataSource => dataSource
+                              .Ajax()
+                              .Model(model =>
+                              {
+                                  model.Id(p => p.MDMPOS_NameID);
                                   model.Field(x => x.Extra).Editable(false);
-              } )
-              .PageSize(10)
-              .Events(events => events.Error("error_handler")) //allows us catch the errors sent by the JSON object, especificados por ModelState
-              .Group(x => x.Add(c => c.MDMPOS_ListNameID)) //Agrupa por defecto usando la columna POS
-              .Read(read => read.Action("Read", "MDM_POS_Name_DBPOS_grp").Type(HttpVerbs.Post))
-              .Update(update => update.Action("Update_Entity", "MDM_POS_Name_DBPOS_grp").Type(HttpVerbs.Post))
-              .Create(create => create.Action("Create_Entity", "MDM_POS_Name_DBPOS_grp"))
-          )
-          )
+                              })
+                              .PageSize(10)
+                              .Events(events => events.Error("error_handler")) //allows us catch the errors sent by the JSON object, especificados por ModelState
+                              .Group(x => x.Add(c => c.MDMPOS_ListNameID)) //Agrupa por defecto usando la columna POS
+                              .Read(read => read.Action("Read", "MDM_POS_Name_DBPOS_grp").Type(HttpVerbs.Post))
+                              .Update(update => update.Action("Update_Entity", "MDM_POS_Name_DBPOS_grp").Type(HttpVerbs.Post))
+                              .Create(create => create.Action("Create_Entity", "MDM_POS_Name_DBPOS_grp"))
+                          )
+                    )
+
+               </text>);
+
+               elem.Add().Text("BI_POS_MasterListName")
+                 .LoadContentFrom("Details", "MDM_POS_ListName", new { area = "" });
+           }
+      )
+ )
+
+    
 </div>
 <script src="Scripts/kendo/jszip.min.js"></script>
 <script>

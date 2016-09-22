@@ -17,6 +17,7 @@ namespace MDM.WebPortal.Models.FromDB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Provider()
         {
+            this.MasterPOS = new HashSet<MasterPOS>();
             this.ProvidersInGrps = new HashSet<ProvidersInGrp>();
         }
     
@@ -24,6 +25,8 @@ namespace MDM.WebPortal.Models.FromDB
         public string ProviderName { get; set; }
         public string NPI_Num { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MasterPOS> MasterPOS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProvidersInGrp> ProvidersInGrps { get; set; }
     }

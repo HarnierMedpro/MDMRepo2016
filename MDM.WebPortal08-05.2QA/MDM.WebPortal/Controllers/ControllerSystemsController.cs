@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
@@ -29,11 +30,16 @@ namespace MDM.WebPortal.Controllers
 
         public ActionResult Read_ControllerSystem([DataSourceRequest] DataSourceRequest request)
         {
-            return Json(db.Controllers.ToDataSourceResult(request, x => new VMControllerSystem
+            var result = db.Controllers.OrderBy(x => x.Cont_Name).ToList();
+            return Json(result.ToDataSourceResult(request, x => x.AreaID != null ? new VMControllerSystem
             {
                 ControllerID = x.ControllerID,
                 Cont_Name = x.Cont_Name,
-                AreaID = x.AreaID
+                AreaID = x.AreaID.Value
+            } : new VMControllerSystem
+            {
+                ControllerID = x.ControllerID,
+                Cont_Name = x.Cont_Name 
             }), JsonRequestBehavior.AllowGet);
         }
 
@@ -44,16 +50,19 @@ namespace MDM.WebPortal.Controllers
             {
                 try
                 {
-                    if (await db.Controllers.AnyAsync(x => x.Cont_Name == controllerSystem.Cont_Name))
+                    if (await db.Controllers.AnyAsync(x => x.Cont_Name.Equals(controllerSystem.Cont_Name, StringComparison.InvariantCultureIgnoreCase) ))
                     {
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
                         return Json(new[] { controllerSystem }.ToDataSourceResult(request, ModelState));
                     }
                     var toStore = new ControllerSystem 
                     {                       
-                        Cont_Name = controllerSystem.Cont_Name,
-                        AreaID = controllerSystem.AreaID 
+                        Cont_Name = controllerSystem.Cont_Name
                     };
+                    if (controllerSystem.AreaID > 0)
+                    {
+                        toStore.AreaID = controllerSystem.AreaID;
+                    }
                     db.Controllers.Add(toStore);
                     await db.SaveChangesAsync();
                     controllerSystem.ControllerID = toStore.ControllerID;                    
@@ -68,7 +77,7 @@ namespace MDM.WebPortal.Controllers
         }
 
         public async Task<ActionResult> Update_ControllerSystem([DataSourceRequest] DataSourceRequest request,
-            [Bind(Include = "ControllerID,Cont_Name")] VMControllerSystem controllerSystem)
+            [Bind(Include = "ControllerID,Cont_Name,AreaID")] VMControllerSystem controllerSystem)
         {
             if (ModelState.IsValid)
             {
@@ -79,16 +88,15 @@ namespace MDM.WebPortal.Controllers
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
                         return Json(new[] { controllerSystem }.ToDataSourceResult(request, ModelState));
                     }
-                    //var storedInDb = await db.Controllers.FindAsync(controllerSystem.ControllerID);
-                    //storedInDb.Cont_Name = controllerSystem.Cont_Name;
-                    //db.Entry(storedInDb).State = EntityState.Modified;
-                    //await db.SaveChangesAsync();
-                    //return Json(new[] { controllerSystem }.ToDataSourceResult(request));
                     var storeInDb = new ControllerSystem
                     {
                         ControllerID = controllerSystem.ControllerID,
                         Cont_Name = controllerSystem.Cont_Name
-                    };
+                    };  
+                    if (controllerSystem.AreaID > 0)
+                    {
+                        storeInDb.AreaID = controllerSystem.AreaID;
+                    }
 
                     db.Controllers.Attach(storeInDb);
                     db.Entry(storeInDb).State = EntityState.Modified;

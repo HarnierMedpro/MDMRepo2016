@@ -4,81 +4,81 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d06f693510bc41608816329a792477ad" Name="Diagram1" ZoomLevel="64">
-        <EntityTypeShape EntityType="MedProDBEntities.ADPMaster" Width="1.5" PointX="0.5" PointY="6" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.BI_DB_FvP_Access" Width="1.5" PointX="10.625" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.Corp_DBs" Width="1.5" PointX="8.25" PointY="3.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.Corp_Owner" Width="1.5" PointX="5.75" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.CorporateMasterList" Width="1.5" PointX="8.125" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.CPTData" Width="1.5" PointX="0.5" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.DBList" Width="1.5" PointX="8.375" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.Edgemed_Logons" Width="1.5" PointX="2.75" PointY="6.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.Facitity_DBs" Width="1.5" PointX="8.25" PointY="29.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.FvPList" Width="1.5" PointX="13.25" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.Manager_Master" Width="1.5" PointX="10.75" PointY="10.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.Manager_Type" Width="1.5" PointX="10.875" PointY="13.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.MDM_POS_ListName" Width="1.5" PointX="0.5" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.MDM_POS_Name_DBPOS_grp" Width="1.5" PointX="2.75" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="MedProDBEntities.OwnerList" Width="1.5" PointX="5.75" PointY="3.375" IsExpanded="true" />
+      <Diagram DiagramId="d06f693510bc41608816329a792477ad" Name="Diagram1" ZoomLevel="63">
+        <EntityTypeShape EntityType="MedProDBEntities.ADPMaster" Width="1.5" PointX="17.625" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.BI_DB_FvP_Access" Width="1.5" PointX="23.875" PointY="28.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.Corp_DBs" Width="1.5" PointX="19.375" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.Edgemed_Logons" Width="1.875" PointX="19.875" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.FvPList" Width="1.5" PointX="13.5" PointY="36.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.Manager_Master" Width="1.5" PointX="24" PointY="31.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MedProDBEntities.Manager_Type" Width="1.5" PointX="24" PointY="34.875" IsExpanded="true" />
         <AssociationConnector Association="MedProDBEntities.FK_Edgemed_Logons_ADPMaster" ManuallyRouted="false" />
-        <AssociationConnector Association="MedProDBEntities.FK_BI_DB_FvP_Access_DBList" ManuallyRouted="false" />
         <AssociationConnector Association="MedProDBEntities.FK_BI_DB_FvP_Access_FvPList" ManuallyRouted="false" />
         <AssociationConnector Association="MedProDBEntities.FK_BI_DB_FvP_Access_Manager_Master" ManuallyRouted="false" />
-        <AssociationConnector Association="MedProDBEntities.FK_Corp_DBs_CorporateMasterList" ManuallyRouted="false" />
-        <AssociationConnector Association="MedProDBEntities.FK_Corp_DBs_DBList" ManuallyRouted="false" />
-        <AssociationConnector Association="MedProDBEntities.FK_Corp_Owner_CorporateMasterList" ManuallyRouted="false" />
-        <AssociationConnector Association="MedProDBEntities.FK_Corp_Owner_OwnerList" ManuallyRouted="false" />
         <AssociationConnector Association="MedProDBEntities.FK_Manager_Master_Manager_Type" ManuallyRouted="false" />
-        <AssociationConnector Association="MedProDBEntities.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="MedProDBEntities.CollNoteTypeCatPriority" Width="1.5" PointX="10.875" PointY="0.875" />
-        <EntityTypeShape EntityType="MedProDBEntities.ACCategory" Width="1.5" PointX="3.375" PointY="15" />
-        <EntityTypeShape EntityType="MedProDBEntities.ACPriority" Width="1.5" PointX="6.875" PointY="19.75" />
-        <EntityTypeShape EntityType="MedProDBEntities.ActionCode" Width="1.5" PointX="5.625" PointY="14" />
-        <EntityTypeShape EntityType="MedProDBEntities.ACtype" Width="1.5" PointX="3.375" PointY="22.25" />
-        <EntityTypeShape EntityType="MedProDBEntities.CodeMasterList" Width="1.5" PointX="8.875" PointY="17.5" />
+        <EntityTypeShape EntityType="MedProDBEntities.ACCategory" Width="1.5" PointX="14.375" PointY="4.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.ACPriority" Width="1.5" PointX="12.125" PointY="4.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.ActionCode" Width="1.875" PointX="11.125" PointY="0.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.ACtype" Width="1.5" PointX="8" PointY="4.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.CodeMasterList" Width="1.5" PointX="10" PointY="4.75" />
         <AssociationConnector Association="MedProDBEntities.FK_ActionCode_ACCategory" />
         <AssociationConnector Association="MedProDBEntities.FK_ActionCode_ACPriority" />
-        <AssociationConnector Association="MedProDBEntities.FK_ActionCode_ACtypes" />
+        <AssociationConnector Association="MedProDBEntities.FK_ActionCode_ACtypes" ManuallyRouted="false" >
+        </AssociationConnector>
         <AssociationConnector Association="MedProDBEntities.FK_ActionCode_CodeMasterList" />
-        <EntityTypeShape EntityType="MedProDBEntities.AuditLog" Width="1.5" PointX="5.375" PointY="6.75" />
-        <EntityTypeShape EntityType="MedProDBEntities.MasterUserList" Width="1.5" PointX="7.375" PointY="8.75" />
-        <EntityTypeShape EntityType="MedProDBEntities.CorporateNameList" Width="1.5" PointX="0.625" PointY="22.625" />
-        <EntityTypeShape EntityType="MedProDBEntities.ManagerDBAccessBI" Width="1.5" PointX="0.75" PointY="12.75" />
-        <EntityTypeShape EntityType="MedProDBEntities.MPService" Width="1.5" PointX="12" PointY="31.625" />
-        <EntityTypeShape EntityType="MedProDBEntities.Lev_of_Care" Width="1.5" PointX="1" PointY="38.75" />
-        <EntityTypeShape EntityType="MedProDBEntities.PHYGroup" Width="1.5" PointX="4.5" PointY="34.375" />
-        <EntityTypeShape EntityType="MedProDBEntities.Provider" Width="1.5" PointX="3.375" PointY="29.75" />
-        <EntityTypeShape EntityType="MedProDBEntities.ProvidersInGrp" Width="1.5" PointX="1" PointY="32.875" />
-        <AssociationConnector Association="MedProDBEntities.FK__Providers__PHYGr__46D27B73" />
-        <AssociationConnector Association="MedProDBEntities.FK__Providers__Provi__45DE573A" />
-        <EntityTypeShape EntityType="MedProDBEntities.POSLOCExtraData" Width="1.5" PointX="14.5" PointY="34.25" />
-        <EntityTypeShape EntityType="MedProDBEntities.LocationsPOS" Width="1.5" PointX="7.875" PointY="34.375" />
-        <AssociationConnector Association="MedProDBEntities.FK__Locations__Facit__764C846B" />
-        <AssociationConnector Association="MedProDBEntities.FK__Locations__FvPLi__74643BF9" />
-        <AssociationConnector Association="MedProDBEntities.FK__Locations__PHYGr__7740A8A4" />
-        <EntityTypeShape EntityType="MedProDBEntities.Forms_sent" Width="1.5" PointX="16.875" PointY="37" />
-        <EntityTypeShape EntityType="MedProDBEntities.FormsDict" Width="1.5" PointX="19.25" PointY="37.125" />
-        <AssociationConnector Association="MedProDBEntities.FK__Forms_sen__Forms__2F8501C7" />
-        <AssociationConnector Association="MedProDBEntities.FK__Forms_sen__POSLO__2E90DD8E" />
-        <EntityTypeShape EntityType="MedProDBEntities.FACInfoData" Width="1.5" PointX="11.125" PointY="39.25" />
-        <AssociationConnector Association="MedProDBEntities.FK__Locations__FACIn__75235608" />
-        <AssociationConnector Association="MedProDBEntities.FK__POSLOCExt__FACIn__7BD05397" />
-        <EntityTypeShape EntityType="MedProDBEntities.LocPOS_LevOfCare" Width="1.5" PointX="4.5" PointY="38.625" />
-        <EntityTypeShape EntityType="MedProDBEntities.LocPOS_MPServ" Width="1.5" PointX="10.375" PointY="35.5" />
+        <EntityTypeShape EntityType="MedProDBEntities.DBList" Width="1.5" PointX="22.5" PointY="22.75" />
+        <AssociationConnector Association="MedProDBEntities.FK_BI_DB_FvP_Access_DBList" />
+        <AssociationConnector Association="MedProDBEntities.FK_Corp_DBs_DBList" />
+        <EntityTypeShape EntityType="MedProDBEntities.CorporateMasterList" Width="1.5" PointX="16.5" PointY="22.75" />
+        <AssociationConnector Association="MedProDBEntities.FK_Corp_DBs_CorporateMasterList" />
+        <EntityTypeShape EntityType="MedProDBEntities.MasterPOS" Width="1.5" PointX="13.5" PointY="30" />
+        <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__DBLis__46E78A0C" />
+        <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__FvPLi__3F466844" />
+        <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__Manag__440B1D61" />
+        <EntityTypeShape EntityType="MedProDBEntities.InfoData" Width="1.5" PointX="13.875" PointY="14.25" />
+        <EntityTypeShape EntityType="MedProDBEntities.Lev_of_Care" Width="1.5" PointX="0.625" PointY="37.375" />
+        <EntityTypeShape EntityType="MedProDBEntities.MasterPOS_LevOfCare" Width="1.5" PointX="0.5" PointY="33.875" />
+        <EntityTypeShape EntityType="MedProDBEntities.MasterPOS_MPServ" Width="1.5" PointX="3.25" PointY="34.125" />
+        <EntityTypeShape EntityType="MedProDBEntities.MPService" Width="1.5" PointX="3.125" PointY="37.5" />
+        <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__InfoD__403A8C7D" />
         <AssociationConnector Association="MedProDBEntities.FK__LocPOS_Le__Lev_o__07420643" />
-        <AssociationConnector Association="MedProDBEntities.FK__LocPOS_Le__Locat__064DE20A" />
-        <AssociationConnector Association="MedProDBEntities.FK__LocPOS_MP__Locat__0A1E72EE" />
+        <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__Maste__03F0984C" />
+        <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__Maste__07C12930" />
         <AssociationConnector Association="MedProDBEntities.FK__LocPOS_MP__MPSer__0B129727" />
-        <EntityTypeShape EntityType="MedProDBEntities.FileTypeI" Width="1.5" PointX="5.5" PointY="46.625" />
-        <EntityTypeShape EntityType="MedProDBEntities.ContactType" Width="1.5" PointX="9.625" PointY="43.75" />
-        <EntityTypeShape EntityType="MedProDBEntities.LocPOS_Contact" Width="1.5" PointX="14.125" PointY="42.625" />
-        <AssociationConnector Association="MedProDBEntities.FK_LocPOS_Contact_LocationsPOS" />
-        <EntityTypeShape EntityType="MedProDBEntities.POSFile" Width="1.5" PointX="6.125" PointY="42.875" />
+        <EntityTypeShape EntityType="MedProDBEntities.POSAddr" Width="1.5" PointX="10.375" PointY="13.375" />
+        <EntityTypeShape EntityType="MedProDBEntities.POSExtraData" Width="1.5" PointX="1.25" PointY="13.375" />
+        <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__POSAd__4222D4EF" />
+        <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__POSEx__412EB0B6" />
+        <EntityTypeShape EntityType="MedProDBEntities.FACInfo" Width="1.5" PointX="0.875" PointY="28.25" />
+        <EntityTypeShape EntityType="MedProDBEntities.PHYGroup" Width="1.5" PointX="7.25" PointY="23.25" />
+        <EntityTypeShape EntityType="MedProDBEntities.Provider" Width="1.5" PointX="0.75" PointY="23.125" />
+        <EntityTypeShape EntityType="MedProDBEntities.ProvidersInGrp" Width="1.5" PointX="4" PointY="23.125" />
+        <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__FACIn__45F365D3" />
+        <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__PHYGr__4316F928" />
+        <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__Provi__44FF419A" />
+        <AssociationConnector Association="MedProDBEntities.FK__Providers__PHYGr__10CB707D" />
+        <AssociationConnector Association="MedProDBEntities.FK__Providers__Provi__0FD74C44" />
+        <EntityTypeShape EntityType="MedProDBEntities.FileTypeI" Width="1.5" PointX="8.625" PointY="40.5" />
+        <EntityTypeShape EntityType="MedProDBEntities.Forms_sent" Width="1.5" PointX="14.25" PointY="25.625" />
+        <EntityTypeShape EntityType="MedProDBEntities.FormsDict" Width="1.5" PointX="14.125" PointY="22.875" />
+        <EntityTypeShape EntityType="MedProDBEntities.MasterFile" Width="1.5" PointX="8.5" PointY="36.25" />
         <AssociationConnector Association="MedProDBEntities.FK_POSFiles_FileTypeI" />
-        <AssociationConnector Association="MedProDBEntities.FK_POSFiles_LocationsPOS" />
-        <EntityTypeShape EntityType="MedProDBEntities.Contact" Width="1.5" PointX="11.875" PointY="43.25" />
-        <AssociationConnector Association="MedProDBEntities.FK_Contact_ContactType" />
+        <AssociationConnector Association="MedProDBEntities.FK__Forms_sen__Forms__0371755F" />
+        <AssociationConnector Association="MedProDBEntities.FK__Forms_sen__Maste__778AC167" />
+        <AssociationConnector Association="MedProDBEntities.FK__MasterFil__Maste__7C4F7684" />
+        <EntityTypeShape EntityType="MedProDBEntities.Contact" Width="1.5" PointX="21.625" PointY="17" />
+        <EntityTypeShape EntityType="MedProDBEntities.ContactType" Width="1.5" PointX="21.625" PointY="11.5" />
+        <EntityTypeShape EntityType="MedProDBEntities.MasterPOS_Contact" Width="1.5" PointX="19.125" PointY="26.5" />
         <AssociationConnector Association="MedProDBEntities.FK_LocPOS_Contact_Contact" />
+        <AssociationConnector Association="MedProDBEntities.Relation_104" />
+        <EntityTypeShape EntityType="MedProDBEntities.AuditLog" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="MedProDBEntities.ContactType_Contact" Width="1.5" PointX="24.25" PointY="14.625" />
+        <EntityTypeShape EntityType="MedProDBEntities.Corp_Owner" Width="1.5" PointX="17.625" PointY="18.375" />
+        <EntityTypeShape EntityType="MedProDBEntities.CPTData" Width="1.5" PointX="0.75" PointY="0.75" />
+        <AssociationConnector Association="MedProDBEntities.FK__ContactTy__Conta__5AD97420" />
+        <AssociationConnector Association="MedProDBEntities.Relation_102" />
+        <AssociationConnector Association="MedProDBEntities.Relation_101" />
+        <AssociationConnector Association="MedProDBEntities.FK_Corp_Owner_CorporateMasterList" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

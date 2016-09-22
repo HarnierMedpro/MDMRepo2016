@@ -8,9 +8,8 @@
     }
 </script>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-3">
+<div class="container-fluid">
+    
             
             <fieldset class="scheduler-border">
                 <legend class="scheduler-border">Update Relationship:</legend>
@@ -20,11 +19,42 @@
                     </dt>
                     <dd>
                         @(Html.Kendo().DropDownListFor(m => m.MDMPOS_ListNameID)
+                          .DataTextField("PosName")
+                          .DataValueField("MDMPOS_ListNameID")
+                          .MinLength(3)
+                          .OptionLabel("Select POS...")
+                          .HtmlAttributes(new { style = "width:100%" })
+                          .Filter(FilterType.Contains)
+                          .DataSource(source =>
+                          {
+                              source.Custom()
+                                  .ServerFiltering(true)
+                                  .ServerPaging(true)
+                                  .PageSize(80)
+                                  .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                                  .Transport(transport =>
+                                  {
+                                      transport.Read("GetCascadePos", "MDM_POS_Name_DBPOS_grp");
+                                  })
+                                  .Schema(schema =>
+                                  {
+                                      schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                                            .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                                  });
+                          })
+                              // .Virtual(v => v.ItemHeight(26).ValueMapper("valueMapper"))
+                        )
+                        @Html.ValidationMessageFor(m => m.MDMPOS_ListNameID)
+                    </dd>
+                    @* WITHOUT VIRTUALIZATION
+                      <dd>
+                        @(Html.Kendo().DropDownListFor(m => m.MDMPOS_ListNameID)
                               .ValuePrimitive(true)
                               .OptionLabel("Select POS...")
                               .DataTextField("PosName")
                               .DataValueField("MDMPOS_ListNameID")
                               .HtmlAttributes(new { style = "width:100%;" })
+                              .Filter("Contains")
                               .DataSource(dataSource =>
                               {
                                   dataSource.Read(read => read.Action("GetCascadePos", "MDM_POS_Name_DBPOS_grp"))
@@ -32,13 +62,43 @@
                               })
                               )
                         @Html.ValidationMessageFor(m => m.MDMPOS_ListNameID)
-                    </dd>
+                    </dd>*@
                 </dl>
                 <dl>
                     <dt>
                         @Html.Label("DB"):
                     </dt>
                     <dd>
+                        @(Html.Kendo().DropDownListFor(m => m.DB_ID)
+                          .DataTextField("DB")
+                          .DataValueField("DB_ID")
+                          .OptionLabel("Select DB...")
+                          .MinLength(3)
+                          .HtmlAttributes(new { style = "width:100%" })
+                          .Filter(FilterType.Contains)
+                          .DataSource(source =>
+                          {
+                              source.Custom()
+                                  .ServerFiltering(true)
+                                  .ServerPaging(true)
+                                  .PageSize(80)
+                                  .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                                  .Transport(transport =>
+                                  {
+                                      transport.Read("GetCascadeDbs", "MDM_POS_Name_DBPOS_grp");
+                                  })
+                                  .Schema(schema =>
+                                  {
+                                      schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                                            .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                                  });
+                          })
+                          
+                         )
+                        @Html.ValidationMessageFor(m => m.DB_ID)
+                    </dd>
+                    @* WITHOUT VIRTUALIZATION
+                      <dd>
                         @(Html.Kendo().DropDownListFor(m => m.DB_ID)
                               .AutoBind(false)
                               .ValuePrimitive(true)
@@ -54,7 +114,7 @@
 
                               )
                         @Html.ValidationMessageFor(m => m.DB_ID)
-                    </dd>
+                    </dd>*@
                 </dl>
 
 
@@ -70,7 +130,8 @@
                               .OptionLabel("Select Facility...")
                               .DataTextField("FacilityID")
                               .DataValueField("FacilityID")
-                                      .HtmlAttributes(new { style = "width:100%;" })
+                              .HtmlAttributes(new { style = "width:100%;" })
+                              .Enable(false)
                               .DataSource(dataSource =>
                               {
                                   dataSource.Read(read => read.Action("GetFacByDbs", "MDM_POS_Name_DBPOS_grp").Data("filterFacilities"))
@@ -94,8 +155,7 @@
 
                 </dl>
             </fieldset>
-        </div>
-    </div>
+      
 </div>
 
 

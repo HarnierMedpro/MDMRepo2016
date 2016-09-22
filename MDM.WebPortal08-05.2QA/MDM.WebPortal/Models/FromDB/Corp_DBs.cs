@@ -18,7 +18,7 @@ namespace MDM.WebPortal.Models.FromDB
         public int corpID { get; set; }
         public int DB_ID { get; set; }
     
-        public virtual CorporateMasterList CorporateMasterList { get; set; }
         public virtual DBList DBList { get; set; }
+        public virtual CorporateMasterList CorporateMasterList { get; set; }
     }
 }

@@ -140,8 +140,7 @@
                           .Pageable()
                           .Sortable()
                           .ToClientTemplate())
-                </text>
-                  );
+                </text>); //End of Leve Of Care Grid
 
               items.Add().Text("Services").Content(@<text>
                     @(Html.Kendo().Grid<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMLocPOS_MPServ>()
@@ -180,119 +179,93 @@
                           
                           .Sortable()
                           .ToClientTemplate())
-                    </text>
-                  );
+                    </text>); //End of MPServices Grid
 
               items.Add().Text("Attachments")
                .LoadContentFrom("Index", "POSFiles", new { locationPOSID = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" });
 
               items.Add().Text("Contacts").Content(@<text>
-                @(Html.Kendo().Grid<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMContact>()
-                          .Name("Contactos_#=Facitity_DBs_IDPK#") // template expression, to be evaluated in the master context
-                          //.ToolBar(tool =>
-                          //{
-                          //    tool.Create().Text("NEW CONTACT");
-                          //})
-                          .Columns(column =>
-                          {
-                              column.Bound(cnt => cnt.ContactID).Hidden(true);
 
-                              column.Bound(cnt => cnt.FName).Width(110);
-
-                              column.Bound(cnt => cnt.LName).Width(110);
-
-                              column.Bound(cnt => cnt.PhoneNumber).Width(110);
-
-                              column.Bound(cnt => cnt.Email).Width(110);
-
-                              //column.Command(command =>
-                              //{
-                              //    command.Edit();
-                              //}).Title("ACTIONS").Width(110);
-                          })
-                          .DataSource(dataSource => dataSource
-                              .Ajax()
-                              .PageSize(5)
-                              //.Model(model =>
-                              //{
-                              //    model.Id(cnt => cnt.ContactID);
-                              //    model.Field(cnt => cnt.ContactID).Editable(false);
-                              //})
-                              //.Events(events => events.Error("ServError_handler"))
-                              .Read(read => read.Action("Read_ContactsOfPOS", "LocationsPOS", new { locPOSID = "#=Facitity_DBs_IDPK#" }))
-                              //.Update(update => update.Action("Update_POSService", "LocPOS_MPServ"))
-                              /*The fact that I was using 'LocationsPOS_Facitity_DBs_IDPK' as my route variable and it was the problem. It was trying to use the 'LocationsPOS_Facitity_DBs_IDPK' of the new row,
-                               * which of course was 0. * Changing the name of the route variable to 'ParentID' fixed the problem.*/
-                              //.Create(create => create.Action("Create_POSService", "LocPOS_MPServ", new { ParentID = "#=Facitity_DBs_IDPK#" }))
-                          )
-
-                          .Sortable()
-                          .ToClientTemplate())
-            </text>
+                      @RenderNewTabStrip() @*Calling the MVC Razor helper function*@                                                      
+              
+                     
+                    </text>
                   );
-
-
-              @*items.Add().Text("Contacts").Content(@<text>
-                 @(Html.Kendo().Grid<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMContact>()
-                  .Name("Contactos_#=Facitity_DBs_IDPK#")
-                  .ToolBar(tool =>
-                  {
-                      //tool.Create().Text("NEW CONTACT");
-                      tool.Excel();
-                  })
-                  .Excel(e =>
-                  {
-                      e.AllPages(true);
-                      e.FileName("Export_Contacts");
-                  })
-                  .Columns(column =>
-                  {
-                      column.Bound(cnt => cnt.ContactID).Hidden(true);
-
-                      column.Bound(cnt => cnt.FName).Width(110);
-
-                      column.Bound(cnt => cnt.LName).Width(110);
-
-                      column.Bound(cnt => cnt.PhoneNumber).Width(110);
-
-                      column.Bound(cnt => cnt.Email).Width(110);
-
-                      column.ForeignKey(cnt => cnt.ContactTypeID, (IEnumerable<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMContactType>)ViewData["ContactType"], "ContactTypeID", "ContactType_Name").Width(110);
-
-                      //column.Command(command =>
-                      //{
-                      //    command.Edit();
-                      //}).Title("ACTIONS").Width(110);
-                  })
-                  .Sortable()
-                  .Filterable()
-                  .Groupable()
-                  .Pageable(ps => ps.Refresh(true)
-                    .PreviousNext(true).PageSizes(true))
-                  //.Editable(editable =>
-                  //{
-                  //    editable.TemplateName("ContactViewModelEditor");
-                  //    editable.Mode(GridEditMode.PopUp);
-                  //})
-                  .DataSource(datasource => datasource
-                      .Ajax()
-                      .ServerOperation(true)
-                      .PageSize(10)
-                      //.Model(model =>
-                      //{
-                      //    model.Id(cnt => cnt.ContactID);
-                      //    model.Field(cnt => cnt.ContactID).Editable(false);
-                      //})
-                      //.Events(events => events.Error("error_handler"))
-                      .Read(read => read.Action("Read_ContactsOfPOS", "LocationsPOS"))
-                      //.Create(create => create.Action("Create_Contact", "Contacts"))
-                      //.Update("Update_Contact", "Contacts")
-                  )
-               )                                 
-              </text>);*@
-
           })
-        .ToClientTemplate())
+       .ToClientTemplate()
+       
+       )@*//End of TabStrip: tabStrip_#=Facitity_DBs_IDPK# Component*@
+    
+@helper RenderNewTabStrip()
+{
+    @(Html.Kendo().TabStrip()
+         .Name("tabStripCnt_#=Facitity_DBs_IDPK#")
+         .SelectedIndex(0)
+         .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+         .Items(elem =>
+         {
+             elem.Add().Text("NEW CONTACT").Content(@<text>
+                   @(Html.Kendo().Grid<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMContact>()
+                      .Name("Contactos_#=Facitity_DBs_IDPK#")
+                      .ToolBar(tool =>
+                         {
+                           tool.Create().Text("ADD");
+                         })
+                      .Columns(column =>
+                        {
+                          column.Bound(cnt => cnt.ContactID).Hidden(true);
+
+                          column.Bound(cnt => cnt.FName).Width(110);
+
+                          column.Bound(cnt => cnt.LName).Width(110);
+
+                          column.Bound(cnt => cnt.PhoneNumber).Width(110);
+
+                          column.Bound(cnt => cnt.Email).Width(110);
+
+                          //column.Bound(cnt => cnt.ContactTypeID).EditorTemplateName("ContactTypeEditor").Width(110);
+                          column.ForeignKey(cnt => cnt.ContactTypeID, (IEnumerable<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMContactType>)ViewData["ContactType"], "ContactTypeID", "ContactType_Name").Width(110);
+
+                          column.Command(command =>
+                            {
+                                command.Edit();
+                            }).Title("ACTIONS").Width(110);
+                       })//End of Column feature
+
+                       .Editable(editable =>{editable.TemplateName("ContactViewModelEditor");editable.Mode(GridEditMode.PopUp);})
+                       
+                       .DataSource(dataSource => dataSource
+                         .Ajax()
+                         .PageSize(5)
+                         .Model(model =>
+                            {
+                              model.Id(cnt => cnt.ContactID);
+                              model.Field(cnt => cnt.ContactID).Editable(false);
+                            })
+                          //.Events(events => events.Error("ContactError_handler"))
+                          .Read(read => read.Action("Read_ContactsOfPOS", "LocationsPOS", new { locPOSID = "#=Facitity_DBs_IDPK#" }))
+                          .Update(update => update.Action("Update_POSContact", "Contacts", new { ParentID = "#=Facitity_DBs_IDPK#" }))
+
+                                  /*The fact that I was using 'LocationsPOS_Facitity_DBs_IDPK' as my route variable and it was the problem. It was trying to use the 'LocationsPOS_Facitity_DBs_IDPK' of the new row,
+                                       * which of course was 0. * Changing the name of the route variable to 'ParentID' fixed the problem.*/
+                          .Create(create => create.Action("Create_NewPOSContact", "Contacts", new { ParentID = "#=Facitity_DBs_IDPK#" }))
+                        )//End of datasource feature
+                       .Sortable()
+                       .Filterable()
+                       .Groupable()
+                       .Pageable(ps => ps.Refresh(true)
+                                  .PreviousNext(true).PageSizes(true))
+                       .ToClientTemplate()
+                    )
+             </text>);//End of the first tab
+
+             elem.Add().Text("CHOOSE CONTACTS")
+              .LoadContentFrom("Create", "LocPOS_Contact", new { LocationPOSID = "#=Facitity_DBs_IDPK#", area = "PlaceOfServices" }
+              ); //End of the second tab
+            })
+         .ToClientTemplate()
+         )//End of the tabStrip Component
+}
 </script>
 
 <script type="text/javascript">

@@ -16,9 +16,9 @@ namespace MDM.WebPortal.Models.FromDB
     {
         public int corpOwnerID { get; set; }
         public int corpID { get; set; }
-        public int OwnersID { get; set; }
+        public int Contact_ContactID { get; set; }
     
+        public virtual Contact Contact { get; set; }
         public virtual CorporateMasterList CorporateMasterList { get; set; }
-        public virtual OwnerList OwnerList { get; set; }
     }
 }

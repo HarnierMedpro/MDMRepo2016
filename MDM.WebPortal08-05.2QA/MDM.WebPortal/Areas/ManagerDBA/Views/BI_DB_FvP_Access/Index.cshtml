@@ -19,9 +19,13 @@
 </header>
 
 <div class="container-fluid">
-    @(Html.Kendo().Grid<MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels.VMManager_BI>()
+    @(Html.Kendo().Grid<MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels.VMManager_Master>()
           .Name("Manager")
-          .ToolBar(tools => { tools.Excel();})
+          .ToolBar(tools =>
+          {
+              tools.Excel();
+              tools.Create().Text("NEW MANAGER");
+          })
           .Excel(e =>
           {
               e.AllPages(true);
@@ -33,17 +37,31 @@
 
               columns.Bound(x => x.AliasName).Width(110);
 
-              columns.Bound(x => x.Classification).Filterable(false).Sortable(false).Groupable(false).Width(110);
+              //columns.Bound(x => x.Classification).Filterable(false).Sortable(false).Groupable(false).Width(110);
+
+              columns.ForeignKey(x => x.ManagerTypeID, (System.Collections.IEnumerable)ViewData["Type"], "ManagerTypeID", "Name").Title("CLASSIFICATION").Width(110);
               
               columns.Bound(x => x.Active).Width(110);
 
-              //columns.ForeignKey(o => o.ManagerID, (System.Collections.IEnumerable)ViewData["Manager"], "ManagerID", "AliasName").Title("MANAGER").Width(70);
+              columns.Command(command =>
+              {
+                  command.Edit();
+              }).Title("COMMANDS").Width(110);
+             
           })
 
           .DataSource(dataSource => dataSource
               .Ajax()
               .PageSize(10)
-              .Read(read => read.Action("Read_GroupByManager", "BI_DB_FvP_Access"))
+              .Model(model =>
+                {
+                  model.Id(x => x.ManagerID);
+                  model.Field(x => x.ManagerID).Editable(false);
+                })
+              .Events(events => events.Error("error_handler"))
+              .Read(read => read.Action("Read_Manager", "Manager_Master"))
+              .Update(update => update.Action("Update_Manager", "Manager_Master"))
+              .Create(create => create.Action("Create_Manager", "Manager_Master"))
           )
           .Events(events => events.DataBound("dataBound"))
 
@@ -57,8 +75,8 @@
           .Reorderable(r => r.Columns(true))
           .Resizable(r => r.Columns(true))
           .Selectable(s => s.Enabled(true)
-              .Type(GridSelectionType.Row)
-              .Mode(GridSelectionMode.Single))
+              .Type(GridSelectionType.Cell)
+              .Mode(GridSelectionMode.Multiple))
           )
 </div>
 <script src="~/Scripts/kendo/jszip.min.js"></script>

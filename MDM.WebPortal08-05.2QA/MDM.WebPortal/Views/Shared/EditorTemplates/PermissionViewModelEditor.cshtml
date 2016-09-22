@@ -7,14 +7,13 @@
 <script type="text/javascript">
     function filterActions() {
         return {
-            ControllerID: $("#Controller").data("kendoDropDownList").value()
+            ControllerID: $("#ControllerID").data("kendoDropDownList").value()
         };
     }
 </script>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-3">
+<div class="container-fluid">
+    
             <fieldset class="scheduler-border">
                 <legend class="scheduler-border text-uppercase text-bold">Permission:</legend>
                 <dl>
@@ -22,6 +21,40 @@
                         @(Html.LabelFor(model => model.ControllerID)):
                     </dt>
                     <dd>
+                        @*WITH VIRTUALIZATION*@
+                        @(Html.Kendo().DropDownListFor(m => m.ControllerID)
+                          //.Name("Controller")
+                          .OptionLabel("Select Controller...")
+                          .DataTextField("Cont_Name")
+                          .DataValueField("ControllerID")
+                          .MinLength(3)
+                          .HtmlAttributes(new { style = "width:100%" })
+                          //.Template("#= OrderID # | For: #= ShipName #, #= ShipCountry #")
+                          //.Height(290)
+                          .Filter(FilterType.Contains)
+                          .DataSource(source =>
+                          {
+                              source.Custom()
+                                  .ServerFiltering(true)
+                                  .ServerPaging(true)
+                                  .PageSize(80)
+                                  .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                                  .Transport(transport =>
+                                  {
+                                      transport.Read("Virtualization_GetControllers", "Permissions");
+                                  })
+                                  .Schema(schema =>
+                                  {
+                                      schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                                            .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                                  });
+                          })
+                              //.Virtual(v => v.ItemHeight(26).ValueMapper("valueMapper"))
+                          )
+                        @Html.ValidationMessageFor(m => m.ControllerID)
+                    </dd>
+                    @*  WITHOUT VIRTUALIZATION
+                      <dd>
                         @(Html.Kendo().DropDownListFor(m => m.ControllerID)
                               .ValuePrimitive(true)
                               .Name("Controller")
@@ -29,33 +62,40 @@
                               .DataTextField("Cont_Name")
                               .DataValueField("ControllerID")
                               .HtmlAttributes(new { style = "width:100%;" })
+                              .Filter("contains")
                               .DataSource(dataSource =>
-                              {
-                                  dataSource.Read(read => read.Action("Controllers", "Permissions"))
-                                      .ServerFiltering(true);
-                              })
+                                {
+                                 dataSource.Read(read => read.Action("Controllers", "Permissions"))
+                                     .ServerFiltering(true);
+                                })
+                              
                         )
                         @Html.ValidationMessageFor(m => m.ControllerID)
-                    </dd>
+                    </dd>*@
                 </dl>
                 <dl>
                     <dt>
                         @(Html.LabelFor(model => model.ActionID)):
                     </dt>
+
+
+                    @* WITHOUT VIRTUALIZATION*@
                     <dd>
                         @(Html.Kendo().DropDownListFor(m => m.ActionID)
                               .AutoBind(false)
+                              .Enable(false)
                               .ValuePrimitive(true)
                               .OptionLabel("Select Action...")
                               .DataTextField("Act_Name")
                               .DataValueField("ActionID")
                               .HtmlAttributes(new { style = "width:100%;" })
+                              .Filter(FilterType.Contains)
                               .DataSource(dataSource =>
                               {
                                   dataSource.Read(read => read.Action("GetCascadeActions", "Permissions").Data("filterActions"))
                                       .ServerFiltering(true);
                               })
-                                 .CascadeFrom("Controller")
+                              .CascadeFrom("ControllerID")
                         )
                         @Html.ValidationMessageFor(m => m.ActionID)
                     </dd>
@@ -77,8 +117,7 @@
 
                 </dl>
             </fieldset>
-        </div>
-    </div>
+        
 </div>
 
 

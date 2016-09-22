@@ -17,13 +17,13 @@ namespace MDM.WebPortal.Models.FromDB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Lev_of_Care()
         {
-            this.LocPOS_LevOfCare = new HashSet<LocPOS_LevOfCare>();
+            this.MasterPOS_LevOfCare = new HashSet<MasterPOS_LevOfCare>();
         }
     
         public int LevOfCareID { get; set; }
         public string LevOfCareName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LocPOS_LevOfCare> LocPOS_LevOfCare { get; set; }
+        public virtual ICollection<MasterPOS_LevOfCare> MasterPOS_LevOfCare { get; set; }
     }
 }

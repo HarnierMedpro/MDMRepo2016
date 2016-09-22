@@ -19,16 +19,19 @@ namespace MDM.WebPortal.Models.FromDB
         {
             this.BI_DB_FvP_Access = new HashSet<BI_DB_FvP_Access>();
             this.Corp_DBs = new HashSet<Corp_DBs>();
+            this.MasterPOS = new HashSet<MasterPOS>();
         }
     
         public int DB_ID { get; set; }
-        public string DB { get; set; }
+        public bool active { get; set; }
         public string databaseName { get; set; }
-        public Nullable<bool> active { get; set; }
+        public string DB { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BI_DB_FvP_Access> BI_DB_FvP_Access { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Corp_DBs> Corp_DBs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MasterPOS> MasterPOS { get; set; }
     }
 }

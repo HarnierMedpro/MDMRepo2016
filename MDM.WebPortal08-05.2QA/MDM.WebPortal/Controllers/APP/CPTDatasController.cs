@@ -37,7 +37,7 @@ namespace MDM.WebPortal.Controllers.APP
                 CPT = x.CPT,
                 CPT_Description = x.CPT_Description,
                 ShortD = x.ShortD,
-                Active = x.Active != null && x.Active.Value
+                Active = x.Active 
             }), JsonRequestBehavior.AllowGet);
         }
 

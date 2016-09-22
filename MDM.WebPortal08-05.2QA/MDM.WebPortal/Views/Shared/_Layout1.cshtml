@@ -70,33 +70,41 @@
             <ul class="nav navbar-nav">
            
 
-            @*This is it Hard code MENU
+            @*This is it Hard code MENU*@
                     
                     @if (User.Identity.IsAuthenticated && User.IsInRole("ADMIN") || User.IsInRole("MANAGER"))
                     {
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="False">Dictionaries</a>
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">Dictionaries</a>
                             <ul class="dropdown-menu dropdown-menu-left animated-2x animated fadeIn">
+                                <li>@Html.ActionLink("ADP_Masters", "Index", "ADPMasters", new {Area = "ADP"}, new {})</li>
 
                                 <li class="dropdown-submenu">
                                     <a href="javascript:void(0);" class="has_children">Corporation</a>
                                     <ul class="dropdown-menu dropdown-menu-left">
                                         <li>@Html.ActionLink("Owners", "Index", "OwnerLists", new { Area = "" }, new { })</li>
                                         <li>@Html.ActionLink("Corporations", "Index", "CorporateMasterList", new {Area = ""}, new {})</li>
-                                        <li>@Html.ActionLink("Corp_DBs", "Index", "Corp_DBs", new {Area = ""}, new {})</li>
-                                        <li>@Html.ActionLink("Corp_Owners", "Index", "Corp_Owner", new {Area = ""}, new {})</li>
+                                        @*<li>@Html.ActionLink("Corp_DBs", "Index", "Corp_DBs", new {Area = ""}, new {})</li>
+                                        <li>@Html.ActionLink("Corp_Owners", "Index", "Corp_Owner", new {Area = ""}, new {})</li>*@
                                     </ul>
                                 </li>
                                 <li>@Html.ActionLink("CPT_Data", "Index", "CPTDatas", new { Area = "" }, new { })</li>
-                                <li>@Html.ActionLink("ADP_Masters", "Index", "ADPMasters", new { Area = "ADP" }, new { })</li>
+                               
                                 <li>@Html.ActionLink("Action_Codes", "Index", "ActionCodes", new { Area = "ActionCode" }, new { })</li>
-                                <li>@Html.ActionLink("Manager_DB_Access", "Index", "BI_DB_FvP_Access", new {Area = "ManagerDBA"}, new {})</li>
-
+                                <li>@Html.ActionLink("BI-ManagerAccess", "Index", "BI_DB_FvP_Access", new { Area = "ManagerDBA" }, new { })</li>
+                                <li>@Html.ActionLink("BI-POSName", "Index", "MDM_POS_Name_DBPOS_grp", new {Area = ""}, new {})</li>
+                                
                                 <li class="dropdown-submenu">
-                                    <a href="javascript:void(0);" class="has_children">POSNAME</a>
+                                    <a href="javascript:void(0);" class="has_children">BI-PlaceOfServices</a>
                                     <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>@Html.ActionLink("POS_Names_grouping", "Index", "MDM_POS_Name_DBPOS_grp", new { Area = "" }, new { })</li>
-                                        <li>@Html.ActionLink("Master_Name_List", "Index", "MDM_POS_ListName", new { Area = "" }, new { })</li>
+                                        <li>@Html.ActionLink("BI-PlaceOfServices", "Index", "LocationsPOS", new { Area = "PlaceOfServices" }, new { })</li>
+                                        <li>@Html.ActionLink("Level Of Care", "Index", "LevelOfCare", new {Area = "PlaceOfServices"}, new {})</li>
+                                        <li>@Html.ActionLink("MPServices", "Index", "MPServices", new {Area = "PlaceOfServices"}, new {})</li>
+                                        <li>@Html.ActionLink("Providers", "Index", "Providers", new {Area = "PlaceOfServices"}, new {})</li>
+                                        <li>@Html.ActionLink("Physician Group", "Index", "PHYGroups", new {Area = "PlaceOfServices"}, new {})</li>
+                                        <li>@Html.ActionLink("Contacts", "Index", "Contacts", new {Area = "PlaceOfServices"}, new {})</li>
+                                        <li>@Html.ActionLink("Forms Sent", "Index", "FormsDicts", new {Area = "PlaceOfServices"}, new {})</li>
+                                        <li>@Html.ActionLink("File Classification", "Index", "FileTypeIs", new { Area = "PlaceOfServices" }, new { })</li>
                                     </ul>
                                 </li>
                             </ul>
@@ -123,23 +131,23 @@
                                 <li>@Html.ActionLink("Permissions", "Index", "Permissions", new { Area = "" }, new { })</li>
                             </ul>
                         </li>
-                    }*@
+                    }
 
-            @if (User.Identity.IsAuthenticated && User.IsInRole("ADMIN") || User.IsInRole("MANAGER"))
+            @*PRODUCTION MENU
+                @if (User.Identity.IsAuthenticated && User.IsInRole("ADMIN") || User.IsInRole("MANAGER"))
             {
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="False">Dictionaries</a>
                     <ul class="dropdown-menu dropdown-menu-left animated-2x animated fadeIn">
-                       
                         <li>@Html.ActionLink("MasterUserLists", "Index", "ADPMasters", new {Area = "ADP"}, new {})</li>
-                        <li>@Html.ActionLink("BI-CorporateNameLists", "Index", "CorporateNameLists", new {Area = ""}, new {})</li>
+                        <li>@Html.ActionLink("BI-CorporateNameLists", "Index", "CorporateMasterList", new {Area = ""}, new {})</li>
                         <li>@Html.ActionLink("CPT_Data", "Index", "CPTDatas", new {Area = ""}, new {})</li>
-                       
                         <li>@Html.ActionLink("Action_Codes", "Index", "ActionCodes", new {Area = "ActionCode"}, new {})</li>
-                        <li>@Html.ActionLink("BI-ManagerAccess", "Index", "DBA", new {Area = ""}, new {})</li>
+                        <li>@Html.ActionLink("BI-ManagerAccess", "Index", "BI_DB_FvP_Access", new {Area = "ManagerDBA"}, new {})</li>
+                        <li>@Html.ActionLink("BI-POSName", "Index", "MDM_POS_Name_DBPOS_grp", new { Area = "" }, new { })</li>
                     </ul>
                 </li>
-            }
+            }*@
             </ul>
 
             @Html.Partial("_LoginPartial")

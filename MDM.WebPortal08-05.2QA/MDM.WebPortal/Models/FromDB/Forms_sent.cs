@@ -15,10 +15,10 @@ namespace MDM.WebPortal.Models.FromDB
     public partial class Forms_sent
     {
         public int FormSentID { get; set; }
-        public Nullable<int> POSLOCExtraData_FACInfoData_FACInfoDataID { get; set; }
-        public Nullable<int> FormsDict_FormsID { get; set; }
+        public int FormsDict_FormsID { get; set; }
+        public int MasterPOS_MasterPOSID { get; set; }
     
         public virtual FormsDict FormsDict { get; set; }
-        public virtual POSLOCExtraData POSLOCExtraData { get; set; }
+        public virtual MasterPOS MasterPOS { get; set; }
     }
 }

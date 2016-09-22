@@ -18,6 +18,7 @@ namespace MDM.WebPortal.Models.FromDB
         public Manager_Master()
         {
             this.BI_DB_FvP_Access = new HashSet<BI_DB_FvP_Access>();
+            this.MasterPOS = new HashSet<MasterPOS>();
         }
     
         public int ManagerID { get; set; }
@@ -28,5 +29,7 @@ namespace MDM.WebPortal.Models.FromDB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BI_DB_FvP_Access> BI_DB_FvP_Access { get; set; }
         public virtual Manager_Type Manager_Type { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MasterPOS> MasterPOS { get; set; }
     }
 }

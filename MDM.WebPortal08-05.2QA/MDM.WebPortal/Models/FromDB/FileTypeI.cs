@@ -17,13 +17,14 @@ namespace MDM.WebPortal.Models.FromDB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public FileTypeI()
         {
-            this.POSFiles = new HashSet<POSFile>();
+            this.MasterFiles = new HashSet<MasterFile>();
         }
     
         public int FileTypeID { get; set; }
         public string FileType_Name { get; set; }
+        public string FileLevel { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<POSFile> POSFiles { get; set; }
+        public virtual ICollection<MasterFile> MasterFiles { get; set; }
     }
 }

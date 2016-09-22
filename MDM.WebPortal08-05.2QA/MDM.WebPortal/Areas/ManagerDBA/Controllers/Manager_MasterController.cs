@@ -43,7 +43,7 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
 
         public ActionResult Index()
         {
-            ViewData["Type"] = db.Manager_Type.Select(x => new { x.ManagerTypeID, x.Name });
+            ViewData["Type"] = db.Manager_Type.Select(x => new { x.ManagerTypeID, x.Name }).OrderBy(x => x.Name);
             return View();
         }
 
@@ -61,7 +61,7 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
         public async Task<ActionResult> Create_Manager([DataSourceRequest] DataSourceRequest request,
             [Bind(Include = "ManagerID,ManagerTypeID,AliasName,Active")] VMManager_Master manager_Master)
         {
-            if (manager_Master != null && ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -115,7 +115,7 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
                 
                 try
                 {
-                    if (await db.Manager_Master.AnyAsync(x => x.ManagerTypeID == manager_Master.ManagerTypeID || x.AliasName.Equals(manager_Master.AliasName, StringComparison.CurrentCultureIgnoreCase) && x.ManagerID != manager_Master.ManagerID))
+                    if (await db.Manager_Master.AnyAsync(x => (x.ManagerTypeID == manager_Master.ManagerTypeID || x.AliasName.Equals(manager_Master.AliasName, StringComparison.CurrentCultureIgnoreCase)) && x.ManagerID != manager_Master.ManagerID))
                     {
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
                         return Json(new[]{new Manager_Master()}.ToDataSourceResult(request, ModelState));

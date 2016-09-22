@@ -30,7 +30,7 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
 
         public ActionResult Read_Adp([DataSourceRequest] DataSourceRequest request)
         {
-            return Json(db.ADPMasters.ToDataSourceResult(request, x => new VMAdpMaster
+            var result = db.ADPMasters.Select(x => new VMAdpMaster
             {
                 ADPMaster_ID = x.ADPMasterID,
                 ADP = x.ADP_ID,
@@ -39,7 +39,8 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
                 LName = x.LName,
                 Manager = x.Manager,
                 Active = x.Active
-            }), JsonRequestBehavior.AllowGet);
+            }).OrderBy(x => x.ADP);
+            return Json(result.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
         /*Get al EdgeMedLogons of specific ADP*/

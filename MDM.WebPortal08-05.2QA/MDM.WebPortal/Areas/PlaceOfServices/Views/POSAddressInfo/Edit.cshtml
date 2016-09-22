@@ -164,7 +164,20 @@
                     <div class="col-md-12">
                         <fieldset class="scheduler-border">
                             <legend class="scheduler-border text-uppercase text-bold">notes:</legend>
-                            @(Html.Kendo().EditorFor(model => model.Notes))
+                            @*@(Html.Kendo().EditorFor(model => model.Notes)
+                                    .PasteCleanup(p => p
+                                    .All(false)
+                                    .Css(false)
+                                    .KeepNewLines(false)
+                                    .MsAllFormatting(false)
+                                    .MsConvertLists(true)
+                                    .MsTags(true)
+                                    .None(false)
+                                    .Span(false)
+                                    )
+                             )*@
+                            @Html.TextAreaFor(model => model.Notes, 5, 50, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
                         </fieldset>
                     </div>
 

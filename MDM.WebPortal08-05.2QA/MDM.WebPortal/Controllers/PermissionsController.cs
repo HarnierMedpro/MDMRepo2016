@@ -41,32 +41,99 @@ namespace MDM.WebPortal.Controllers
         public ActionResult Read_Permissions([DataSourceRequest] DataSourceRequest request)
         {
             /*See: C:\Users\hsuarez\Desktop\Documentation\Kendo UI for ASP.NET MVC5\ui-for-aspnet-mvc-examples-master\grid\multiselect-in-grid-popup*/
-            return Json(db.Permissions.Include(x => x.Action).Include(x => x.Roles).ToDataSourceResult(request, x => new VMPermission
+            var result = db.Permissions.Include(x => x.Action).Include(x => x.Roles).Select(x => new VMPermission
             {
                 PermissionID = x.PermissionID,
                 ControllerID = x.Action.ControllerID,
                 ActionID = x.ActionID,
                 Active = x.Active,
-                Roles = x.Roles.Select(s => new VMPermissionRole { Id = s.Id, Name = s.Name }).ToList()
+                Roles = x.Roles.Select(s => new VMPermissionRole {Id = s.Id, Name = s.Name}).ToList()
+            });
+            return Json(result.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+            // ORIGINAL CODE
+            //return Json(db.Permissions.Include(x => x.Action).Include(x => x.Roles).ToDataSourceResult(request, x => new VMPermission
+            //{
+            //    PermissionID = x.PermissionID,
+            //    ControllerID = x.Action.ControllerID,
+            //    ActionID = x.ActionID,
+            //    Active = x.Active,
+            //    Roles = x.Roles.Select(s => new VMPermissionRole { Id = s.Id, Name = s.Name }).ToList()
+            //}), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Virtualization_GetCascadeActions([DataSourceRequest] DataSourceRequest request,
+            int ControllerID)
+        {
+            var actionsWOutPermissions = db.Actions.Include(x => x.Permissions).Where(x => x.ControllerID == ControllerID && !x.Permissions.Any()).OrderBy(x => x.Act_Name).ToList();
+            return Json(actionsWOutPermissions.ToDataSourceResult(request, x => new VMActionSystem
+            {
+                ActionID = x.ActionID,
+                Act_Name = x.Act_Name
             }), JsonRequestBehavior.AllowGet);
+
+            // ORIGINAL CODE
+            //return Json(db.Actions.Where(x => x.ControllerID == ControllerID).OrderBy(x => x.Act_Name).ToDataSourceResult(request, x => new VMActionSystem
+            //{
+            //    ActionID = x.ActionID, 
+            //    Act_Name = x.Act_Name
+            //}), JsonRequestBehavior.AllowGet);
+
         }
 
         public JsonResult GetCascadeActions(int ControllerID)
         {
-            return Json(db.Actions.Where(x => x.ControllerID == ControllerID)
-                                  .OrderBy(x => x.Act_Name)
-                                  .Select(x => new VMActionSystem
+            var actionsWOutPermissions = db.Actions.Include(x => x.Permissions).Where(x => x.ControllerID == ControllerID && !x.Permissions.Any()).ToList();
+           
+            return Json(actionsWOutPermissions.OrderBy(x => x.Act_Name).Select(x => new VMActionSystem
             {
-                ActionID = x.ActionID, 
+                ActionID = x.ActionID,
                 Act_Name = x.Act_Name
             }), JsonRequestBehavior.AllowGet);
+            
+            // ORIGINAL CODE
+            //return Json(db.Actions.Where(x => x.ControllerID == ControllerID).OrderBy(x => x.Act_Name).Select(x => new VMActionSystem
+            //{
+            //    ActionID = x.ActionID, 
+            //    Act_Name = x.Act_Name
+            //}), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Virtualization_GetControllers([DataSourceRequest] DataSourceRequest request)
+        {
+            /*Solo voy a obtener aquellos controladores cuyas acciones no tienen permisos asignados aun*/
+            var controllersWPendingPermissions = db.Controllers.Include(controller => controller.ActionSystems).Where(controller => controller.ActionSystems.Any(action => !action.Permissions.Any())).
+                OrderBy(x => x.Cont_Name).ToList();
+            
+            return Json(controllersWPendingPermissions.ToDataSourceResult(request,
+                x => new VMControllerSystem
+                {
+                    ControllerID = x.ControllerID,
+                    Cont_Name = x.Cont_Name
+                }), JsonRequestBehavior.AllowGet);
+
+            // ORIGINAL CODE
+            //return Json(db.Controllers.OrderBy(x => x.Cont_Name).ToDataSourceResult(request, x => new VMControllerSystem
+            //{
+            //    ControllerID = x.ControllerID,
+            //    Cont_Name = x.Cont_Name
+            //}), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult Controllers()
         {
+            /*Solo voy a obtener aquellos controladores cuyas acciones no tienen permisos asignados aun*/
+            var aux = db.Controllers.Include(controller => controller.ActionSystems).Where(controller => controller.ActionSystems.Any(action => !action.Permissions.Any())).ToList();
+           
+            //return Json(aux.Select(x => new VMControllerSystem
+            //{
+            //    ControllerID = x.ControllerID,
+            //    Cont_Name = x.Cont_Name
+            //}), JsonRequestBehavior.AllowGet);
+
+            // ORIGINAL CODE
             return Json(db.Controllers.OrderBy(x => x.Cont_Name).Select(x => new VMControllerSystem
             {
-                ControllerID = x.ControllerID, 
+                ControllerID = x.ControllerID,
                 Cont_Name = x.Cont_Name
             }), JsonRequestBehavior.AllowGet);
         }
@@ -130,10 +197,13 @@ namespace MDM.WebPortal.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (permission.Roles.Any())
-                {
-                    try
+                try
                     {
+                        if (! permission.Roles.Any())
+                        {
+                            ModelState.AddModelError("", "You have to select at least one Role. Please try again!");
+                            return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
+                        }
                         if (await db.Permissions.AnyAsync(x => x.ActionID == permission.ActionID))
                         {
                             ModelState.AddModelError("", "Duplicate Data. Please try again!");
@@ -155,16 +225,15 @@ namespace MDM.WebPortal.Controllers
                         db.Permissions.Add(permissionObj);
                         await db.SaveChangesAsync();
                         permission.PermissionID = permissionObj.PermissionID;
-                        permission.ControllerID = db.Actions.Find(permissionObj.ActionID).ControllerID;
+                        //permission.ControllerID = db.Actions.Find(permissionObj.ActionID).ControllerID;
+                        permission.ControllerID = permission.ControllerID;
                     }
                     catch (Exception)
                     {
                         ModelState.AddModelError("", "Something failed. Please try again!");
                         return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
                     }
-                }
-                ModelState.AddModelError("","You have to select at least one Role. Please try again!");
-                return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
+               
             }
             return Json(new[] { permission }.ToDataSourceResult(request, ModelState));
         }
