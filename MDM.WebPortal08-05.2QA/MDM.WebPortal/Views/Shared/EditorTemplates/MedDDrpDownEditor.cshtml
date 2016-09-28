@@ -1,0 +1,29 @@
+﻿@*@model int*@
+
+@(Html.Kendo().DropDownList()
+          .Name("ProvID")
+          .DataTextField("ProviderName")
+          .DataValueField("ProvID")
+          .MinLength(3)
+          .HtmlAttributes(new { style = "width:100%" })
+          .Template("#= ProviderName # | NPI: #= NPI_Num #")
+          .Height(290)
+          .Filter(FilterType.Contains)
+          .DataSource(source =>
+          {
+              source.Custom()
+                  .ServerFiltering(true)
+                  .ServerPaging(true)
+                  .PageSize(80)
+                  .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                  .Transport(transport =>
+                  {
+                      transport.Read("Read_Provider", "Providers", new { area ="Credentials" });
+                  })
+                  .Schema(schema =>
+                  {
+                      schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                            .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                  });
+          })
+)

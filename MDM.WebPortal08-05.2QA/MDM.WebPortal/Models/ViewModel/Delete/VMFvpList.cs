@@ -7,7 +7,7 @@ namespace MDM.WebPortal.Models.ViewModel.Delete
 {
     public class VMFvpList
     {
-        public int id { get; set; }
+        public int FvPID { get; set; }
         public string FvpName { get; set; }
     }
 }

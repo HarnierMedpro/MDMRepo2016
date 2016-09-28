@@ -54,6 +54,18 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Read_POSContactType([DataSourceRequest] DataSourceRequest request)
+        {
+            var result = db.ContactTypes.Where(ct => ct.ContactLevel.Equals("pos", StringComparison.InvariantCultureIgnoreCase)).
+                                              OrderBy(ct => ct.ContactType_Name).ToList();
+            return Json(result.ToDataSourceResult(request, x => new VMContactType
+            {
+                ContactTypeID = x.ContactTypeID,
+                ContactType_Name = x.ContactType_Name,
+                ContactLevel = x.ContactLevel
+            }), JsonRequestBehavior.AllowGet); 
+        }
+
         public async Task<ActionResult> Create_ContactType([DataSourceRequest] DataSourceRequest request,
             [Bind(Include = "ContactTypeID,ContactType_Name,ContactLevel")] VMContactType contactType)
         {

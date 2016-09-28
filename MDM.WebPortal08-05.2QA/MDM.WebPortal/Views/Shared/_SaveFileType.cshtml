@@ -1,4 +1,4 @@
-﻿@model MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMFileType
+﻿@model MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMFileType
 
 <div class="panel panel-primary">
     <div class="panel-body">
@@ -13,6 +13,17 @@
                         <label class="control-label">FILE TYPE <sup class="text-danger">*</sup></label>
                         @Html.EditorFor(model => model.FileType_Name, new {htmlAttributes = new {id = "tbType", @class = "form-control form-control1", @style = "height:25px !important;"}})
                         @Html.ValidationMessageFor(model => model.FileType_Name, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-11">
+                        <label class="control-label">FILE LEVEL <sup class="text-danger">*</sup></label>
+                        @*@Html.DropDownListFor(x => x.FileLevel, new List<SelectListItem> { new SelectListItem { Text = "CORPORATION", Value = "CORPORATION" }, new SelectListItem { Text = "POS", Value = "POS" } }, new { htmlAttributes = new { id = "", @class = "form-control form-control1", @style = "height:25px !important;" } })*@
+                        <select name="FileLevel" class="form-control form-control1" style="height:25px !important;">
+                            <option value="CORPORATION">CORPORATION</option>
+                            <option value="POS">POS</option>
+                        </select> 
                     </div>
                 </div>
 

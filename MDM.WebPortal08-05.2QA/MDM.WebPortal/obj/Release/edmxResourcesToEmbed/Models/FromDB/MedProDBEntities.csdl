@@ -309,6 +309,12 @@
       <End Role="CorporateMasterList" EntitySet="CorporateMasterLists" />
       <End Role="Corp_Owner" EntitySet="Corp_Owner" />
     </AssociationSet>
+    <EntitySet Name="ZoomDB_POSID_grp" EntityType="MedProDBEntities.ZoomDB_POSID_grp" />
+    <AssociationSet Name="FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" Association="MedProDBEntities.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName">
+      <End Role="MasterPOS" EntitySet="MasterPOS" />
+      <End Role="ZoomDB_POSID_grp" EntitySet="ZoomDB_POSID_grp" />
+    </AssociationSet>
+    <EntitySet Name="Facitity_DBs" EntityType="MedProDBEntities.Facitity_DBs" />
   </EntityContainer>
   <EntityType Name="ACCategory">
     <Key>
@@ -498,6 +504,7 @@
     <NavigationProperty Name="Forms_sent" Relationship="MedProDBEntities.FK__Forms_sen__Maste__778AC167" FromRole="MasterPOS" ToRole="Forms_sent" />
     <NavigationProperty Name="MasterFiles" Relationship="MedProDBEntities.FK__MasterFil__Maste__7C4F7684" FromRole="MasterPOS" ToRole="MasterFile" />
     <NavigationProperty Name="MasterPOS_Contact" Relationship="MedProDBEntities.Relation_104" FromRole="MasterPOS" ToRole="MasterPOS_Contact" />
+    <NavigationProperty Name="ZoomDB_POSID_grp" Relationship="MedProDBEntities.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" FromRole="MasterPOS" ToRole="ZoomDB_POSID_grp" />
   </EntityType>
   <Association Name="FK__MasterPOS__DBLis__46E78A0C">
     <End Type="MedProDBEntities.DBList" Role="DBList" Multiplicity="1" />
@@ -1064,4 +1071,39 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="ZoomDB_POSID_grp">
+    <Key>
+      <PropertyRef Name="ZoomDBPOSID" />
+    </Key>
+    <Property Name="ZoomDBPOSID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ZoomPos_ID" Type="Int64" Nullable="false" />
+    <Property Name="Extra" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="MasterPOSID" Type="Int32" Nullable="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" FromRole="ZoomDB_POSID_grp" ToRole="MasterPOS" />
+  </EntityType>
+  <Association Name="FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName">
+    <End Type="MedProDBEntities.MasterPOS" Role="MasterPOS" Multiplicity="1" />
+    <End Type="MedProDBEntities.ZoomDB_POSID_grp" Role="ZoomDB_POSID_grp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MasterPOS">
+        <PropertyRef Name="MasterPOSID" />
+      </Principal>
+      <Dependent Role="ZoomDB_POSID_grp">
+        <PropertyRef Name="MasterPOSID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Facitity_DBs">
+    <Key>
+      <PropertyRef Name="IDPK" />
+    </Key>
+    <Property Name="IDPK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DB" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="DatabaseName" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="false" />
+    <Property Name="Facility_ID" Type="Int64" Nullable="false" />
+    <Property Name="Fac_NAME" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <Property Name="DB_ID" Type="Int32" Nullable="false" />
+  </EntityType>
 </Schema>

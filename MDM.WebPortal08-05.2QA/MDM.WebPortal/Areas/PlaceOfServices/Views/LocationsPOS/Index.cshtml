@@ -1,6 +1,7 @@
 ﻿@using System.Collections
 @using System.Collections.Generic
 @using Kendo.Mvc.UI
+@using MDM.WebPortal.Areas.Credentials.Models.ViewModel
 @using MDM.WebPortal.Models.FromDB
 
 @{
@@ -114,7 +115,7 @@
                           {
                               columns.Bound(o => o.LocPosLocID).Hidden(true);
                               columns.Bound(o => o.LocationsPOS_Facitity_DBs_IDPK).Hidden(true);
-                              columns.ForeignKey(o => o.Lev_of_Care_LevOfCareID, (IEnumerable<MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMLevelOfCare>) ViewData["LevOfCare"], "LevOfCareID", "LevOfCareName").Width(110);
+                              columns.ForeignKey(o => o.Lev_of_Care_LevOfCareID, (IEnumerable<VMLevelOfCare>) ViewData["LevOfCare"], "LevOfCareID", "LevOfCareName").Width(110);
                               
                               columns.Command(command =>
                               {

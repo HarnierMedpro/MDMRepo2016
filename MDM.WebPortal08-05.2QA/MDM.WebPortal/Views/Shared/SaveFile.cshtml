@@ -1,5 +1,6 @@
-﻿@using MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels
-@model MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMPOSFile
+﻿@using MDM.WebPortal.Areas.Credentials.Models.ViewModel
+@using MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels
+@model MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMPOSFile
 
 <div class="container-fluid">
    
@@ -19,7 +20,7 @@
                             @using (Html.BeginForm("Save", "POSFiles", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
-                                @Html.HiddenFor(x => x.Facitity_DBs_IDPK)
+                                @Html.HiddenFor(x => x.MasterPOSID)
                                 <div class="form-horizontal">
                                     <hr />
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })

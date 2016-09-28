@@ -11,6 +11,7 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
+using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
 using MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels;
 using MDM.WebPortal.Models.FromDB;
 using MDM.WebPortal.Models.ViewModel;

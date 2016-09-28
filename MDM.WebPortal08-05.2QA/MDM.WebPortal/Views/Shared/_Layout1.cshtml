@@ -82,8 +82,8 @@
                                 <li class="dropdown-submenu">
                                     <a href="javascript:void(0);" class="has_children">Corporation</a>
                                     <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>@Html.ActionLink("Owners", "Index", "OwnerLists", new { Area = "" }, new { })</li>
-                                        <li>@Html.ActionLink("Corporations", "Index", "CorporateMasterList", new {Area = ""}, new {})</li>
+                                       
+                                        <li>@Html.ActionLink("Corporations", "Index", "CorporateMasterLists", new {Area = "Credentials"}, new {})</li>
                                         @*<li>@Html.ActionLink("Corp_DBs", "Index", "Corp_DBs", new {Area = ""}, new {})</li>
                                         <li>@Html.ActionLink("Corp_Owners", "Index", "Corp_Owner", new {Area = ""}, new {})</li>*@
                                     </ul>
@@ -97,14 +97,14 @@
                                 <li class="dropdown-submenu">
                                     <a href="javascript:void(0);" class="has_children">BI-PlaceOfServices</a>
                                     <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>@Html.ActionLink("BI-PlaceOfServices", "Index", "LocationsPOS", new { Area = "PlaceOfServices" }, new { })</li>
-                                        <li>@Html.ActionLink("Level Of Care", "Index", "LevelOfCare", new {Area = "PlaceOfServices"}, new {})</li>
-                                        <li>@Html.ActionLink("MPServices", "Index", "MPServices", new {Area = "PlaceOfServices"}, new {})</li>
-                                        <li>@Html.ActionLink("Providers", "Index", "Providers", new {Area = "PlaceOfServices"}, new {})</li>
-                                        <li>@Html.ActionLink("Physician Group", "Index", "PHYGroups", new {Area = "PlaceOfServices"}, new {})</li>
-                                        <li>@Html.ActionLink("Contacts", "Index", "Contacts", new {Area = "PlaceOfServices"}, new {})</li>
-                                        <li>@Html.ActionLink("Forms Sent", "Index", "FormsDicts", new {Area = "PlaceOfServices"}, new {})</li>
-                                        <li>@Html.ActionLink("File Classification", "Index", "FileTypeIs", new { Area = "PlaceOfServices" }, new { })</li>
+                                        <li>@Html.ActionLink("BI-PlaceOfServices", "Index", "MasterPOS", new { Area = "Credentials" }, new { })</li>
+                                        <li>@Html.ActionLink("Level Of Care", "Index", "LevelOfCare", new { Area = "Credentials" }, new { })</li>
+                                        <li>@Html.ActionLink("MPServices", "Index", "MPServices", new { Area = "Credentials" }, new { })</li>
+                                        <li>@Html.ActionLink("Providers", "Index", "Providers", new { Area = "Credentials" }, new { })</li>
+                                        <li>@Html.ActionLink("Physician Group", "Index", "PHYGroups", new { Area = "Credentials" }, new { })</li>
+                                        <li>@Html.ActionLink("Contacts", "Index", "Contacts", new { Area = "Credentials" }, new { })</li>
+                                        <li>@Html.ActionLink("Forms Sent", "Index", "FormsDicts", new { Area = "Credentials" }, new { })</li>
+                                        <li>@Html.ActionLink("File Classification", "Index", "FileTypeIs", new { Area = "Credentials" }, new { })</li>
                                     </ul>
                                 </li>
                             </ul>

@@ -170,6 +170,18 @@
     <Property Name="FACInfoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="NPI_Number" Type="varchar" MaxLength="15" Nullable="false" />
   </EntityType>
+  <EntityType Name="Facitity_DBs">
+    <Key>
+      <PropertyRef Name="IDPK" />
+    </Key>
+    <Property Name="IDPK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DB" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="DatabaseName" Type="varchar" MaxLength="75" Nullable="false" />
+    <Property Name="Facility ID" Type="bigint" Nullable="false" />
+    <Property Name="Fac NAME" Type="varchar" MaxLength="75" Nullable="false" />
+    <Property Name="Active" Type="bit" Nullable="false" />
+    <Property Name="DB_ID" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="FileTypeI">
     <Key>
       <PropertyRef Name="FileTypeID" />
@@ -376,6 +388,16 @@
     <Property Name="ProvInGrpID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Providers_ProvID" Type="int" Nullable="false" />
     <Property Name="PHYGroups_PHYGrpID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ZoomDB_POSID_grp">
+    <Key>
+      <PropertyRef Name="ZoomDBPOSID" />
+    </Key>
+    <Property Name="ZoomDBPOSID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ZoomPos_ID" Type="bigint" Nullable="false" />
+    <Property Name="Extra" Type="varchar" MaxLength="255" />
+    <Property Name="MasterPOSID" Type="int" Nullable="false" />
+    <Property Name="Active" Type="bit" Nullable="false" />
   </EntityType>
   <Association Name="ConstCorpOwner">
     <End Role="Contact" Type="Self.Contact" Multiplicity="1" />
@@ -761,6 +783,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName">
+    <End Role="MasterPOS" Type="Self.MasterPOS" Multiplicity="1" />
+    <End Role="ZoomDB_POSID_grp" Type="Self.ZoomDB_POSID_grp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MasterPOS">
+        <PropertyRef Name="MasterPOSID" />
+      </Principal>
+      <Dependent Role="ZoomDB_POSID_grp">
+        <PropertyRef Name="MasterPOSID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_POSFiles_FileTypeI">
     <End Role="FileTypeI" Type="Self.FileTypeI" Multiplicity="1" />
     <End Role="MasterFiles" Type="Self.MasterFiles" Multiplicity="*" />
@@ -828,6 +862,7 @@
     <EntitySet Name="DBList" EntityType="Self.DBList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Edgemed_Logons" EntityType="Self.Edgemed_Logons" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FACInfo" EntityType="Self.FACInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Facitity_DBs" EntityType="Self.Facitity_DBs" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FileTypeI" EntityType="Self.FileTypeI" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Forms_sent" EntityType="Self.Forms_sent" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FormsDict" EntityType="Self.FormsDict" Schema="dbo" store:Type="Tables" />
@@ -847,6 +882,7 @@
     <EntitySet Name="POSExtraData" EntityType="Self.POSExtraData" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Providers" EntityType="Self.Providers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProvidersInGrp" EntityType="Self.ProvidersInGrp" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ZoomDB_POSID_grp" EntityType="Self.ZoomDB_POSID_grp" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="ConstCorpOwner" Association="Self.ConstCorpOwner">
       <End Role="Contact" EntitySet="Contact" />
       <End Role="Corp_Owner" EntitySet="Corp_Owner" />
@@ -974,6 +1010,10 @@
     <AssociationSet Name="FK_Manager_Master_Manager_Type" Association="Self.FK_Manager_Master_Manager_Type">
       <End Role="Manager_Type" EntitySet="Manager_Type" />
       <End Role="Manager_Master" EntitySet="Manager_Master" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" Association="Self.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName">
+      <End Role="MasterPOS" EntitySet="MasterPOS" />
+      <End Role="ZoomDB_POSID_grp" EntitySet="ZoomDB_POSID_grp" />
     </AssociationSet>
     <AssociationSet Name="FK_POSFiles_FileTypeI" Association="Self.FK_POSFiles_FileTypeI">
       <End Role="FileTypeI" EntitySet="FileTypeI" />

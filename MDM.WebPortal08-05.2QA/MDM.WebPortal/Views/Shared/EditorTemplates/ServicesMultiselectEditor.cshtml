@@ -1,0 +1,25 @@
+﻿@*See: C:\Users\hsuarez\Desktop\Documentation\Kendo UI for ASP.NET MVC5\ui-for-aspnet-mvc-examples-master\grid\multiselect-in-grid-popup*@
+@model IEnumerable<MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMMPService>
+
+@(Html.Kendo().MultiSelectFor(m => m)
+        .DataTextField("ServName")
+        .DataValueField("MPServID")
+        .Placeholder("Select Services...")
+        .DataSource(source =>
+            {
+                source.Custom()
+                    .ServerFiltering(true)
+                    .ServerPaging(true)
+                    .PageSize(80)
+                    .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                    .Transport(transport =>
+                    {
+                        transport.Read("Read_Service", "MPServices", new { area = "Credentials" });
+                    })
+                    .Schema(schema =>
+                    {
+                        schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                              .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                    });
+            })
+)

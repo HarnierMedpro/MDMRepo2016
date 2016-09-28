@@ -85,7 +85,6 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-
         public ActionResult Read_CorpOwners([DataSourceRequest] DataSourceRequest request, int? corpID)
         {
             var corpContacts = db.Corp_Owner.Include(corp => corp.CorporateMasterList).Include(cnt => cnt.Contact).Where(x => x.corpID == corpID).Select(cnt => cnt.Contact);
@@ -123,7 +122,27 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 active = x.active
             }), JsonRequestBehavior.AllowGet);
         }
-       
+
+        public ActionResult Read_MasterPOSOfThisCorp([DataSourceRequest] DataSourceRequest request, int? corpID)
+        {
+            List<MasterPOS> posOfThisCorp = new List<MasterPOS>();
+            if (corpID != null)
+            {
+                var dbsOfThisCorp = db.Corp_DBs.Include(d => d.DBList).Include(c => c.CorporateMasterList)
+                                               .Where(c => c.corpID == corpID).Select(d => d.DBList);
+                foreach (var item in dbsOfThisCorp)
+                {
+                    posOfThisCorp.AddRange(item.MasterPOS);
+                }
+            }
+            return Json(posOfThisCorp.OrderBy(p => p.PosMasterName).ToDataSourceResult(request, x => new VMMasterPOS
+            {
+                MasterPOSID = x.MasterPOSID,
+                PosMasterName = x.PosMasterName,
+                active = x.active
+            }));
+        }
+
 
         public async Task<ActionResult> Create_Corporation([DataSourceRequest]DataSourceRequest request,
             [Bind(Include = "corpID,CorporateName,TaxID,W9,active,Owners, DBs")] VMCorporateMasterList corpMasterList)

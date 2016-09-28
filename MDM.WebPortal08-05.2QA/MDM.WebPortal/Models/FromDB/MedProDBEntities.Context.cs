@@ -62,5 +62,7 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual DbSet<ContactType_Contact> ContactType_Contact { get; set; }
         public virtual DbSet<Corp_Owner> Corp_Owner { get; set; }
         public virtual DbSet<CPTData> CPTDatas { get; set; }
+        public virtual DbSet<ZoomDB_POSID_grp> ZoomDB_POSID_grp { get; set; }
+        public virtual DbSet<Facitity_DBs> Facitity_DBs { get; set; }
     }
 }

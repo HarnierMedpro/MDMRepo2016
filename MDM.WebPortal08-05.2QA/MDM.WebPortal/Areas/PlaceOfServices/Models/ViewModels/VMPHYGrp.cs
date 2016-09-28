@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
 
 namespace MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels
 {

@@ -219,12 +219,22 @@
     <Compile Include="Areas\Credentials\Controllers\ContactsController.cs" />
     <Compile Include="Areas\Credentials\Controllers\ContactTypesController.cs" />
     <Compile Include="Areas\Credentials\Controllers\CorporateMasterListsController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\Forms_SentController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\MasterPOSController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\MasterPOS_ContactController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\VMPosIds.cs" />
+    <Compile Include="Areas\Credentials\Controllers\ZoomDB_POSID_grpController.cs" />
     <Compile Include="Areas\Credentials\CredentialsAreaRegistration.cs" />
     <Compile Include="Areas\Credentials\Models\ViewModel\VMContact.cs" />
     <Compile Include="Areas\Credentials\Models\ViewModel\VMContactType.cs" />
     <Compile Include="Areas\Credentials\Models\ViewModel\VMCorpContact.cs" />
     <Compile Include="Areas\Credentials\Models\ViewModel\VMCorporateMasterList.cs" />
     <Compile Include="Areas\Credentials\Models\ViewModel\VMCorp_Contact.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMForms_Sent.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMMasterPOS.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMMasterPOS_Contact.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMPosContact.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMZoomDB_POSID.cs" />
     <Compile Include="Areas\Error\Controllers\ErrorController.cs" />
     <Compile Include="Areas\Error\ErrorAreaRegistration.cs" />
     <Compile Include="Areas\ManagerDBA\Controllers\BI_DB_FvP_AccessController.cs" />
@@ -238,40 +248,40 @@
     <Compile Include="Areas\ManagerDBA\Models\ViewModels\VMManager_Type.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\Contacts1Controller.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\ContactTypes1Controller.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\FACInfoDatasController.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\Facitity_DBsController.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\FileTypeIsController.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\FormsDictsController.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\LevelOfCareController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\FACInfoDatasController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\Facitity_DBsController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\FileTypeIsController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\FormsDictsController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\LevelOfCareController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\LocationsPOSController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\LocPOS_ContactController.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\LocPOS_LevOfCareController.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\LocPOS_MPServController.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\MPServicesController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\MasterPOS_LevOfCareController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\MasterPOS_MPServController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\MPServicesController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\PHYGroupsController.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\POSAddressInfoController.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\POSFilesController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\POSAddressInfoController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\POSFilesController.cs" />
     <Compile Include="Areas\PlaceOfServices\Controllers\POSLOCExtraDatasController.cs" />
-    <Compile Include="Areas\PlaceOfServices\Controllers\ProvidersController.cs" />
+    <Compile Include="Areas\Credentials\Controllers\ProvidersController.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMChooseGrp.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMContact1.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMContactInfo.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMContactType1.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMFacility_DBs.cs" />
-    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMFACInfoData.cs" />
-    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMFileType.cs" />
-    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMFormsDict.cs" />
-    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLevelOfCare.cs" />
-    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocationPOS_AddressInfo.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMFACInfoData.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMFileType.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMFormsDict.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMLevelOfCare.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMLocationPOS_AddressInfo.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocationsPOS.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocPOS_Contact.cs" />
-    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocPOS_LevOfCare.cs" />
-    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMLocPOS_MPServ.cs" />
-    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMMPService.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMMasterPOS_LevOfCare.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMMasterPOS_MPServ.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMMPService.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMPHYGrp.cs" />
-    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMPOSFile.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMPOSFile.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMPOSLOCExtraData.cs" />
-    <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMProvider.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMProvider.cs" />
     <Compile Include="Areas\PlaceOfServices\Models\ViewModels\VMProvidersInGrp.cs" />
     <Compile Include="Areas\PlaceOfServices\PlaceOfServicesAreaRegistration.cs" />
     <Compile Include="Areas\PlaceOfServices\Tools\WindowsIdentityMembers.cs" />
@@ -307,6 +317,7 @@
     </Compile>
     <Compile Include="Hubs\CodeMasterListHub.cs" />
     <Compile Include="Hubs\CorporateMasterListHub.cs" />
+    <Compile Include="Hubs\PosNameMasterListHub.cs" />
     <Compile Include="Migrations\201609141408473_init.cs" />
     <Compile Include="Migrations\201609141408473_init.Designer.cs">
       <DependentUpon>201609141408473_init.cs</DependentUpon>
@@ -366,6 +377,9 @@
     <Compile Include="Models\FromDB\FACInfo.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FromDB\Facitity_DBs.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FromDB\FileTypeI.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
@@ -422,6 +436,9 @@
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FromDB\ProvidersInGrp.cs">
+      <DependentUpon>MedProDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FromDB\ZoomDB_POSID_grp.cs">
       <DependentUpon>MedProDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Identity\AreaSystem.cs" />
@@ -514,6 +531,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Areas\PlaceOfServices\Tools\ActiveDirectoryHelper.cs" />
     <Compile Include="Tools\ConfDAL.cs" />
+    <Compile Include="Tools\IQuetable\POSIDsComparer.cs" />
     <Compile Include="Tools\JSON2CSharp\AllUSStates.cs" />
     <Compile Include="Tools\JSON2CSharp\States.cs" />
     <Compile Include="Tools\LogDAL.cs" />
@@ -1380,20 +1398,17 @@
     <Content Include="Areas\AudiTrails\Views\web.config" />
     <Content Include="Areas\AudiTrails\Views\AuditLogs\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\web.config" />
-    <Content Include="Areas\PlaceOfServices\Views\MPServices\Index.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\LevelOfCare\Index.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\Providers\Index.cshtml" />
+    <Content Include="Areas\Credentials\Views\MPServices\Index.cshtml" />
+    <Content Include="Areas\Credentials\Views\LevelOfCare\Index.cshtml" />
+    <Content Include="Areas\Credentials\Views\Providers\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\LocationsPOS\Index.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\FormsDicts\Index.cshtml" />
+    <Content Include="Areas\Credentials\Views\FormsDicts\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\Facitity_DBs\Index.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\LocPOS_LevOfCare\Index.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\POSAddressInfo\Index.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\POSAddressInfo\Edit.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\POSAddressInfo\Details.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\FACInfoDatas\Create.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\FACInfoDatas\Details.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\FACInfoDatas\Edit.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\FACInfoDatas\Index.cshtml" />
+    <Content Include="Areas\Credentials\Views\POSAddressInfo\Index.cshtml" />
+    <Content Include="Areas\Credentials\Views\POSAddressInfo\Edit.cshtml" />
+    <Content Include="Areas\Credentials\Views\FACInfoDatas\Create.cshtml" />
+    <Content Include="Areas\Credentials\Views\FACInfoDatas\Details.cshtml" />
+    <Content Include="Areas\Credentials\Views\FACInfoDatas\Edit.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\POSLOCExtraDatas\Create.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\POSLOCExtraDatas\Delete.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\POSLOCExtraDatas\Details.cshtml" />
@@ -1403,13 +1418,9 @@
     <Content Include="Areas\PlaceOfServices\Views\PHYGroups\Details.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\PHYGroups\Edit.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\PHYGroups\Index.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\POSFiles\Create.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\POSFiles\Delete.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\POSFiles\Details.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\POSFiles\Edit.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\POSFiles\Index.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\POSFiles\DownloadsTest.cshtml" />
-    <Content Include="Areas\PlaceOfServices\Views\FileTypeIs\Index.cshtml" />
+    <Content Include="Areas\Credentials\Views\POSFiles\Index.cshtml" />
+    <Content Include="Areas\Credentials\Views\POSFiles\DownloadsTest.cshtml" />
+    <Content Include="Areas\Credentials\Views\FileTypeIs\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\ContactTypes\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\Contacts\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\ContactTypes\ContactTypeList.cshtml" />
@@ -1426,6 +1437,14 @@
     <Content Include="Areas\Credentials\Views\CorporateMasterLists\Index.cshtml" />
     <Content Include="Areas\Credentials\Views\Corp_Owner\AllCorpContacts.cshtml" />
     <Content Include="Areas\Credentials\Views\Corp_Owner\Create.cshtml" />
+    <Content Include="Areas\Credentials\Views\MasterPOS\Index_MasterPOS.cshtml" />
+    <Content Include="Areas\Credentials\Views\POSAddressInfo\Details.cshtml" />
+    <Content Include="Areas\Credentials\Views\ZoomDB_POSID_grp\Create.cshtml" />
+    <Content Include="Areas\Credentials\Views\ZoomDB_POSID_grp\Delete.cshtml" />
+    <Content Include="Areas\Credentials\Views\ZoomDB_POSID_grp\Details.cshtml" />
+    <Content Include="Areas\Credentials\Views\ZoomDB_POSID_grp\Edit.cshtml" />
+    <Content Include="Areas\Credentials\Views\ZoomDB_POSID_grp\Index.cshtml" />
+    <Content Include="Areas\Credentials\Views\MasterPOS_Contact\Create.cshtml" />
     <None Include="Properties\PublishProfiles\TEST_QASite.pubxml" />
     <None Include="Properties\PublishProfiles\Site02.pubxml" />
     <None Include="Properties\PublishProfiles\TestQA.pubxml" />
@@ -2807,6 +2826,17 @@
     <Content Include="Views\Shared\EditorTemplates\ContactType_CorporationEditor.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CorpCntViewModelEditor.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CorpContactsEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ManagersDrpDownEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MedDDrpDownEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DatabaseDrpDownEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\LevOfCMultiselectEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ServicesMultiselectEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\POSIDMultiselectEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MasterPOSViewModelEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\FormsSentMultiselectEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ContactType_POSEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\PosCntViewModelEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\AvailablePOSContactEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

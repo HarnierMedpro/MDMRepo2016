@@ -238,6 +238,18 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
         }
 
+        public ActionResult Read_DbsWithCorp([DataSourceRequest] DataSourceRequest request)
+        {
+           var result = db.Corp_DBs.Include(c => c.CorporateMasterList).Include(d => d.DBList).Select(d => d.DBList).Distinct();
+            return Json(result.ToDataSourceResult(request, x => new VMDBList
+            {
+                DB_ID = x.DB_ID,
+                DB = x.DB,
+                databaseName = x.databaseName,
+                active = x.active
+            }), JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

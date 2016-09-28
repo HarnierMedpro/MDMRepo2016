@@ -17,7 +17,7 @@
                     .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
                     .Transport(transport =>
                     {
-                        transport.Read("Read_CorpContacts", "Contacts");
+                        transport.Read("Read_CorpContacts", "Contacts", new { corpID = ViewBag.Corporation });
                     })
                     .Schema(schema =>
                     {

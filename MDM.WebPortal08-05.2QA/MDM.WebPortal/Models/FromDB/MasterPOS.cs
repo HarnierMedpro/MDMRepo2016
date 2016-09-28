@@ -22,6 +22,7 @@ namespace MDM.WebPortal.Models.FromDB
             this.Forms_sent = new HashSet<Forms_sent>();
             this.MasterFiles = new HashSet<MasterFile>();
             this.MasterPOS_Contact = new HashSet<MasterPOS_Contact>();
+            this.ZoomDB_POSID_grp = new HashSet<ZoomDB_POSID_grp>();
         }
     
         public int MasterPOSID { get; set; }
@@ -56,5 +57,7 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual ICollection<MasterFile> MasterFiles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MasterPOS_Contact> MasterPOS_Contact { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ZoomDB_POSID_grp> ZoomDB_POSID_grp { get; set; }
     }
 }

@@ -79,6 +79,9 @@
         <AssociationConnector Association="MedProDBEntities.Relation_102" />
         <AssociationConnector Association="MedProDBEntities.Relation_101" />
         <AssociationConnector Association="MedProDBEntities.FK_Corp_Owner_CorporateMasterList" />
+        <EntityTypeShape EntityType="MedProDBEntities.ZoomDB_POSID_grp" Width="1.5" PointX="15.75" PointY="32" />
+        <AssociationConnector Association="MedProDBEntities.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" />
+        <EntityTypeShape EntityType="MedProDBEntities.Facitity_DBs" Width="1.5" PointX="0.75" PointY="3.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

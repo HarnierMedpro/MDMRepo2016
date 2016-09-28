@@ -26,6 +26,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 return RedirectToAction("Index", "Error", new { area = "Error" });
             }
             VMCorp_Contact toView = new VMCorp_Contact{corpID = corpID.Value};
+            ViewBag.Corporation = corpID;
             return View(toView);
         }
 

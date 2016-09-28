@@ -69,18 +69,54 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         public ActionResult Read_CorpContacts([DataSourceRequest] DataSourceRequest request, int? corpID)
         {
             /*Obtener todos los contactos a nivel de corporacion excepto los de tipo Owner*/
-            var result =
-                db.ContactType_Contact.Include(cnt => cnt.Contact)
-                    .Include(ty => ty.ContactType)
-                    .Where(ty => ty.ContactType.ContactLevel.Equals("corporation", StringComparison.InvariantCultureIgnoreCase) && ty.ContactType.ContactType_Name.Equals("owner", StringComparison.InvariantCultureIgnoreCase) == false)
-                    .Select(tv => tv.Contact).Distinct();
-            if (corpID != null)
+            var result = db.ContactType_Contact.Include(cnt => cnt.Contact).Include(ty => ty.ContactType)
+                           .Where(ty => ty.ContactType.ContactLevel.Equals("corporation", StringComparison.InvariantCultureIgnoreCase) && 
+                                  ty.ContactType.ContactType_Name.Equals("owner", StringComparison.InvariantCultureIgnoreCase) == false)
+                           .Select(tv => tv.Contact).Distinct();
+            if (corpID != null && corpID > 0)
             {
                 var allContactsOfThisCorp = db.Corp_Owner.Include(x => x.Contact).Where(x => x.corpID == corpID).Select(x => x.Contact);
                 var allNonOwnerOfThisCorp = result.Intersect(allContactsOfThisCorp);
                 result = result.Except(allNonOwnerOfThisCorp);
             }
+            
             return Json(result.ToDataSourceResult(request, x => new VMContact
+            {
+                ContactID = x.ContactID,
+                FName = x.FName,
+                LName = x.LName,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                active = x.active
+            }));
+        }
+
+        public ActionResult Read_POSContacts([DataSourceRequest] DataSourceRequest request, int? masterPOSID)
+        {
+            var result = new List<Contact>();
+            if (masterPOSID != null && masterPOSID > 0)
+            {
+                result = db.MasterPOS_Contact.Include(c => c.Contact).Include(p => p.MasterPOS).Where(p => p.MasterPOS_MasterPOSID == masterPOSID).Select(c => c.Contact).ToList();
+            }
+            return Json(result.ToDataSourceResult(request, x => new VMPosContact
+            {
+                ContactID = x.ContactID,
+                FName = x.FName,
+                LName = x.LName,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                active = x.active
+            }));
+        }
+
+        public ActionResult Read_AvailablePOSContacts([DataSourceRequest] DataSourceRequest request, int? masterPOSID)
+        {
+            var currentCntOfThisPos = db.MasterPOS_Contact.Include(c => c.Contact).Include(p => p.MasterPOS).Where(p => p.MasterPOS_MasterPOSID == masterPOSID).Select(c => c.Contact);
+            var allPosCnts = db.ContactType_Contact.Include(cnt => cnt.Contact).Include(ty => ty.ContactType)
+                                                   .Where(ty => ty.ContactType.ContactLevel.Equals("pos", StringComparison.InvariantCultureIgnoreCase))
+                                                   .Select(tv => tv.Contact).Distinct();
+            var avaliables = allPosCnts.Except(currentCntOfThisPos).ToList();
+            return Json(avaliables.ToDataSourceResult(request, x => new VMContact
             {
                 ContactID = x.ContactID,
                 FName = x.FName,
@@ -216,7 +252,62 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return Json(new[] { contact }.ToDataSourceResult(request, ModelState));
         }
 
-       
+        public async Task<ActionResult> Create_MasterPOSContact([DataSourceRequest] DataSourceRequest request,
+            [Bind(Include = "ContactID,FName,LName,Email,PhoneNumber,active,ContactTypes")] VMPosContact masterPosContact, int? posName)
+        {
+            if (ModelState.IsValid)
+            {
+                if (posName == null || posName <= 0)
+                {
+                    ModelState.AddModelError("","Invalid POS. Please try again!");
+                    return Json(new[] { masterPosContact }.ToDataSourceResult(request, ModelState));
+                }
+                if (await db.Contacts.AnyAsync(x => x.Email.Equals(masterPosContact.Email, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                    return Json(new[] { masterPosContact }.ToDataSourceResult(request, ModelState));
+                }
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var contactToStore = new Contact
+                        {
+                            FName = masterPosContact.FName,
+                            LName = masterPosContact.LName,
+                            PhoneNumber = masterPosContact.PhoneNumber,
+                            Email = masterPosContact.Email,
+                            active = masterPosContact.active
+                        };
+                        db.Contacts.Add(contactToStore);
+                        await db.SaveChangesAsync();
+                        masterPosContact.ContactID = contactToStore.ContactID;
+
+                        db.ContactType_Contact.AddRange(masterPosContact.ContactTypes.Select(x => new ContactType_Contact
+                        {
+                            Contact_ContactID = contactToStore.ContactID,
+                            ContactType_ContactTypeID = x.ContactTypeID
+                        }));
+
+                        db.MasterPOS_Contact.Add(new MasterPOS_Contact
+                        {
+                            ContactID = contactToStore.ContactID,
+                            MasterPOS_MasterPOSID = posName.Value
+                        });
+
+                        await db.SaveChangesAsync();
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                      dbTransaction.Rollback();
+                      ModelState.AddModelError("", "Something failed. Please try again!");
+                      return Json(new[] { masterPosContact }.ToDataSourceResult(request, ModelState));
+                    }
+                }
+            }
+            return Json(new[] { masterPosContact }.ToDataSourceResult(request, ModelState));
+        }
 
         protected override void Dispose(bool disposing)
         {

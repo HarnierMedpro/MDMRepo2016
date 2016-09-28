@@ -415,5 +415,29 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="ZoomDB_POSID_grp">
+      <EntityTypeMapping TypeName="MedProDBEntities.ZoomDB_POSID_grp">
+        <MappingFragment StoreEntitySet="ZoomDB_POSID_grp">
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="MasterPOSID" ColumnName="MasterPOSID" />
+          <ScalarProperty Name="Extra" ColumnName="Extra" />
+          <ScalarProperty Name="ZoomPos_ID" ColumnName="ZoomPos_ID" />
+          <ScalarProperty Name="ZoomDBPOSID" ColumnName="ZoomDBPOSID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Facitity_DBs">
+      <EntityTypeMapping TypeName="MedProDBEntities.Facitity_DBs">
+        <MappingFragment StoreEntitySet="Facitity_DBs">
+          <ScalarProperty Name="DB_ID" ColumnName="DB_ID" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="Fac_NAME" ColumnName="Fac NAME" />
+          <ScalarProperty Name="Facility_ID" ColumnName="Facility ID" />
+          <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+          <ScalarProperty Name="DB" ColumnName="DB" />
+          <ScalarProperty Name="IDPK" ColumnName="IDPK" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>
