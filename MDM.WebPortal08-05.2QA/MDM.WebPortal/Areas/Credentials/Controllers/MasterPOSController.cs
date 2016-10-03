@@ -5,15 +5,20 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
 using MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels;
+using MDM.WebPortal.Areas.PlaceOfServices.Tools;
 using MDM.WebPortal.Hubs;
 using MDM.WebPortal.Models.FromDB;
 using MDM.WebPortal.Models.ViewModel.Delete;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
@@ -59,7 +64,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                                PosIDs = from a in x.ZoomDB_POSID_grp join b in db.Facitity_DBs on a.ZoomPos_ID equals b.Facility_ID where b.DB_ID == x.DBList_DB_ID
                                         select new VMZoomDB_POSID { ZoomPos_ID = b.Facility_ID, ZoomPos_Name = b.Fac_NAME},
                                Forms_Sents = x.Forms_sent.Select(d => new VMFormsDict{FormsID = d.FormsDict_FormsID, FormName = d.FormsDict.FormName})
-                            });
+                            }).OrderBy(f => f.PosMasterName).ToList();
            
 
             return Json(result.ToDataSourceResult(request),JsonRequestBehavior.AllowGet);
@@ -227,6 +232,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                             db.MasterPOS.Add(toStore);
                             await db.SaveChangesAsync();
                             masterPos.MasterPOSID = toStore.MasterPOSID;
+                            masterPos.Corporation = db.Corp_DBs.FirstOrDefault(d => d.DB_ID == masterPos.DB_ID) != null ? db.Corp_DBs.FirstOrDefault(d => d.DB_ID == masterPos.DB_ID).CorporateMasterList.CorporateName : "";
                             if (masterPos.LevelOfCares.Any())
                             {
                                 db.MasterPOS_LevOfCare.AddRange( masterPos.LevelOfCares.Select(lv => new MasterPOS_LevOfCare
@@ -359,6 +365,68 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 }
             }
             return Json(result.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Download(string ImageName)
+        {
+            string ServerLocation = @"\\fl-nas02\MDMFiles\";
+            // Retrieve the Windows account token for specific user.
+            IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("hsuarez", "Medpro705!", "MEDPROBILL"); //Have permissions
+            //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MDMTest", "Medpro1", "MEDPROBILL");  //Doesn't have permissions
+
+            WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
+            WindowsImpersonationContext wic = null;
+            try
+            {
+                wic = wi.Impersonate();
+
+                var dir = new System.IO.DirectoryInfo(ServerLocation);
+                System.IO.FileInfo[] fileNames = dir.GetFiles("*.*");
+
+                if (fileNames.Any(x => x.Name == ImageName))
+                {
+                    /*-------------------Audit Log------------------------*/
+
+                    MasterFile currentStoredInDb = db.MasterFiles.FirstOrDefault(x => x.FileName == ImageName);
+                    if (currentStoredInDb != null)
+                    {
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditDateTime = DateTime.Now,
+                            AuditAction = "D",
+                            TableName = "POSFile",
+                            ModelPKey = currentStoredInDb.FileID,
+                            tableInfos = new List<TableInfo>
+                                 {
+                                     new TableInfo{Field_ColumName = "FileName", OldValue = ImageName, NewValue = ImageName}
+                                 }
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+                    }
+                    /*-------------------Audit Log------------------------*/
+                    return File(ServerLocation + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet, ImageName);
+                }
+                else
+                {
+                    TempData["Error"] = "The file that you are trying to download doesn't exist in the directory.";
+                    return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
+                }
+
+            }
+            catch (Exception)
+            {
+                TempData["Access"] = "Something failed. You need to have permissions to read/write in this directory.";
+                return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
+            }
+            finally
+            {
+                if (wic != null)
+                {
+                    wic.Undo();
+                }
+            }
         }
 
         protected override void Dispose(bool disposing)

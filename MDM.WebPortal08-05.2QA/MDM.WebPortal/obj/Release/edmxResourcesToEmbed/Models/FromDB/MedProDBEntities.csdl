@@ -199,15 +199,10 @@
       <End Role="Manager_Master" EntitySet="Manager_Master" />
       <End Role="MasterPOS" EntitySet="MasterPOS" />
     </AssociationSet>
-    <EntitySet Name="InfoDatas" EntityType="MedProDBEntities.InfoData" />
     <EntitySet Name="Lev_of_Care" EntityType="MedProDBEntities.Lev_of_Care" />
     <EntitySet Name="MasterPOS_LevOfCare" EntityType="MedProDBEntities.MasterPOS_LevOfCare" />
     <EntitySet Name="MasterPOS_MPServ" EntityType="MedProDBEntities.MasterPOS_MPServ" />
     <EntitySet Name="MPServices" EntityType="MedProDBEntities.MPService" />
-    <AssociationSet Name="FK__MasterPOS__InfoD__403A8C7D" Association="MedProDBEntities.FK__MasterPOS__InfoD__403A8C7D">
-      <End Role="InfoData" EntitySet="InfoDatas" />
-      <End Role="MasterPOS" EntitySet="MasterPOS" />
-    </AssociationSet>
     <AssociationSet Name="FK__LocPOS_Le__Lev_o__07420643" Association="MedProDBEntities.FK__LocPOS_Le__Lev_o__07420643">
       <End Role="Lev_of_Care" EntitySet="Lev_of_Care" />
       <End Role="MasterPOS_LevOfCare" EntitySet="MasterPOS_LevOfCare" />
@@ -225,18 +220,12 @@
       <End Role="MasterPOS_MPServ" EntitySet="MasterPOS_MPServ" />
     </AssociationSet>
     <EntitySet Name="POSAddrs" EntityType="MedProDBEntities.POSAddr" />
-    <EntitySet Name="POSExtraDatas" EntityType="MedProDBEntities.POSExtraData" />
     <AssociationSet Name="FK__MasterPOS__POSAd__4222D4EF" Association="MedProDBEntities.FK__MasterPOS__POSAd__4222D4EF">
       <End Role="POSAddr" EntitySet="POSAddrs" />
       <End Role="MasterPOS" EntitySet="MasterPOS" />
     </AssociationSet>
-    <AssociationSet Name="FK__MasterPOS__POSEx__412EB0B6" Association="MedProDBEntities.FK__MasterPOS__POSEx__412EB0B6">
-      <End Role="POSExtraData" EntitySet="POSExtraDatas" />
-      <End Role="MasterPOS" EntitySet="MasterPOS" />
-    </AssociationSet>
     <EntitySet Name="FACInfoes" EntityType="MedProDBEntities.FACInfo" />
     <EntitySet Name="PHYGroups" EntityType="MedProDBEntities.PHYGroup" />
-    <EntitySet Name="Providers" EntityType="MedProDBEntities.Provider" />
     <EntitySet Name="ProvidersInGrps" EntityType="MedProDBEntities.ProvidersInGrp" />
     <AssociationSet Name="FK__MasterPOS__FACIn__45F365D3" Association="MedProDBEntities.FK__MasterPOS__FACIn__45F365D3">
       <End Role="FACInfo" EntitySet="FACInfoes" />
@@ -246,16 +235,8 @@
       <End Role="PHYGroup" EntitySet="PHYGroups" />
       <End Role="MasterPOS" EntitySet="MasterPOS" />
     </AssociationSet>
-    <AssociationSet Name="FK__MasterPOS__Provi__44FF419A" Association="MedProDBEntities.FK__MasterPOS__Provi__44FF419A">
-      <End Role="Provider" EntitySet="Providers" />
-      <End Role="MasterPOS" EntitySet="MasterPOS" />
-    </AssociationSet>
     <AssociationSet Name="FK__Providers__PHYGr__10CB707D" Association="MedProDBEntities.FK__Providers__PHYGr__10CB707D">
       <End Role="PHYGroup" EntitySet="PHYGroups" />
-      <End Role="ProvidersInGrp" EntitySet="ProvidersInGrps" />
-    </AssociationSet>
-    <AssociationSet Name="FK__Providers__Provi__0FD74C44" Association="MedProDBEntities.FK__Providers__Provi__0FD74C44">
-      <End Role="Provider" EntitySet="Providers" />
       <End Role="ProvidersInGrp" EntitySet="ProvidersInGrps" />
     </AssociationSet>
     <EntitySet Name="FileTypeIs" EntityType="MedProDBEntities.FileTypeI" />
@@ -315,6 +296,25 @@
       <End Role="ZoomDB_POSID_grp" EntitySet="ZoomDB_POSID_grp" />
     </AssociationSet>
     <EntitySet Name="Facitity_DBs" EntityType="MedProDBEntities.Facitity_DBs" />
+    <EntitySet Name="Providers" EntityType="MedProDBEntities.Provider" />
+    <AssociationSet Name="ConstMasterPOS6" Association="MedProDBEntities.ConstMasterPOS6">
+      <End Role="Provider" EntitySet="Providers" />
+      <End Role="MasterPOS" EntitySet="MasterPOS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Providers__Provi__0FD74C44" Association="MedProDBEntities.FK__Providers__Provi__0FD74C44">
+      <End Role="Provider" EntitySet="Providers" />
+      <End Role="ProvidersInGrp" EntitySet="ProvidersInGrps" />
+    </AssociationSet>
+    <EntitySet Name="InfoDatas" EntityType="MedProDBEntities.InfoData" />
+    <EntitySet Name="POSExtraDatas" EntityType="MedProDBEntities.POSExtraData" />
+    <AssociationSet Name="ConstMasterPOS2" Association="MedProDBEntities.ConstMasterPOS2">
+      <End Role="InfoData" EntitySet="InfoDatas" />
+      <End Role="MasterPOS" EntitySet="MasterPOS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__MasterPOS__POSEx__178D7CA5" Association="MedProDBEntities.FK__MasterPOS__POSEx__178D7CA5">
+      <End Role="POSExtraData" EntitySet="POSExtraDatas" />
+      <End Role="MasterPOS" EntitySet="MasterPOS" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="ACCategory">
     <Key>
@@ -493,18 +493,18 @@
     <NavigationProperty Name="DBList" Relationship="MedProDBEntities.FK__MasterPOS__DBLis__46E78A0C" FromRole="MasterPOS" ToRole="DBList" />
     <NavigationProperty Name="FvPList" Relationship="MedProDBEntities.FK__MasterPOS__FvPLi__3F466844" FromRole="MasterPOS" ToRole="FvPList" />
     <NavigationProperty Name="Manager_Master" Relationship="MedProDBEntities.FK__MasterPOS__Manag__440B1D61" FromRole="MasterPOS" ToRole="Manager_Master" />
-    <NavigationProperty Name="InfoData" Relationship="MedProDBEntities.FK__MasterPOS__InfoD__403A8C7D" FromRole="MasterPOS" ToRole="InfoData" />
     <NavigationProperty Name="MasterPOS_LevOfCare" Relationship="MedProDBEntities.FK__MasterPOS__Maste__03F0984C" FromRole="MasterPOS" ToRole="MasterPOS_LevOfCare" />
     <NavigationProperty Name="MasterPOS_MPServ" Relationship="MedProDBEntities.FK__MasterPOS__Maste__07C12930" FromRole="MasterPOS" ToRole="MasterPOS_MPServ" />
     <NavigationProperty Name="POSAddr" Relationship="MedProDBEntities.FK__MasterPOS__POSAd__4222D4EF" FromRole="MasterPOS" ToRole="POSAddr" />
-    <NavigationProperty Name="POSExtraData" Relationship="MedProDBEntities.FK__MasterPOS__POSEx__412EB0B6" FromRole="MasterPOS" ToRole="POSExtraData" />
     <NavigationProperty Name="FACInfo" Relationship="MedProDBEntities.FK__MasterPOS__FACIn__45F365D3" FromRole="MasterPOS" ToRole="FACInfo" />
     <NavigationProperty Name="PHYGroup" Relationship="MedProDBEntities.FK__MasterPOS__PHYGr__4316F928" FromRole="MasterPOS" ToRole="PHYGroup" />
-    <NavigationProperty Name="Provider" Relationship="MedProDBEntities.FK__MasterPOS__Provi__44FF419A" FromRole="MasterPOS" ToRole="Provider" />
     <NavigationProperty Name="Forms_sent" Relationship="MedProDBEntities.FK__Forms_sen__Maste__778AC167" FromRole="MasterPOS" ToRole="Forms_sent" />
     <NavigationProperty Name="MasterFiles" Relationship="MedProDBEntities.FK__MasterFil__Maste__7C4F7684" FromRole="MasterPOS" ToRole="MasterFile" />
     <NavigationProperty Name="MasterPOS_Contact" Relationship="MedProDBEntities.Relation_104" FromRole="MasterPOS" ToRole="MasterPOS_Contact" />
     <NavigationProperty Name="ZoomDB_POSID_grp" Relationship="MedProDBEntities.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" FromRole="MasterPOS" ToRole="ZoomDB_POSID_grp" />
+    <NavigationProperty Name="Provider" Relationship="MedProDBEntities.ConstMasterPOS6" FromRole="MasterPOS" ToRole="Provider" />
+    <NavigationProperty Name="InfoData" Relationship="MedProDBEntities.ConstMasterPOS2" FromRole="MasterPOS" ToRole="InfoData" />
+    <NavigationProperty Name="POSExtraData" Relationship="MedProDBEntities.FK__MasterPOS__POSEx__178D7CA5" FromRole="MasterPOS" ToRole="POSExtraData" />
   </EntityType>
   <Association Name="FK__MasterPOS__DBLis__46E78A0C">
     <End Type="MedProDBEntities.DBList" Role="DBList" Multiplicity="1" />
@@ -542,19 +542,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="InfoData">
-    <Key>
-      <PropertyRef Name="InfoDataID" />
-    </Key>
-    <Property Name="InfoDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="LicType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="StateLic" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-    <Property Name="LicNumCLIA_waiver" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="LicEffectiveDate" Type="DateTime" Nullable="false" Precision="0" />
-    <Property Name="LicExpireDate" Type="DateTime" Nullable="false" Precision="0" />
-    <Property Name="Taxonomy" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.FK__MasterPOS__InfoD__403A8C7D" FromRole="InfoData" ToRole="MasterPOS" />
-  </EntityType>
   <EntityType Name="Lev_of_Care">
     <Key>
       <PropertyRef Name="LevOfCareID" />
@@ -591,18 +578,6 @@
     <Property Name="ServName" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="MasterPOS_MPServ" Relationship="MedProDBEntities.FK__LocPOS_MP__MPSer__0B129727" FromRole="MPService" ToRole="MasterPOS_MPServ" />
   </EntityType>
-  <Association Name="FK__MasterPOS__InfoD__403A8C7D">
-    <End Type="MedProDBEntities.InfoData" Role="InfoData" Multiplicity="0..1" />
-    <End Type="MedProDBEntities.MasterPOS" Role="MasterPOS" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="InfoData">
-        <PropertyRef Name="InfoDataID" />
-      </Principal>
-      <Dependent Role="MasterPOS">
-        <PropertyRef Name="InfoData_InfoDataID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK__LocPOS_Le__Lev_o__07420643">
     <End Type="MedProDBEntities.Lev_of_Care" Role="Lev_of_Care" Multiplicity="1" />
     <End Type="MedProDBEntities.MasterPOS_LevOfCare" Role="MasterPOS_LevOfCare" Multiplicity="*" />
@@ -671,44 +646,6 @@
     <Property Name="Time_Zone" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.FK__MasterPOS__POSAd__4222D4EF" FromRole="POSAddr" ToRole="MasterPOS" />
   </EntityType>
-  <EntityType Name="POSExtraData">
-    <Key>
-      <PropertyRef Name="POSExtraDataID" />
-    </Key>
-    <Property Name="POSExtraDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Phone_Number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Fax_Number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Website" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="W_9_on_File" Type="Boolean" />
-    <Property Name="Number_of_beds" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Have_24hrs_nursing" Type="Boolean" />
-    <Property Name="how_many_days_week_open" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Ancillary_outpatient_services" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Lab_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Out_of_Network_In_Network" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Licensure_on_File" Type="Boolean" />
-    <Property Name="Mental_License" Type="Boolean" />
-    <Property Name="BCBS_ID_Number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="UPIN_Number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Medicaid_Number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="State_of_MD_or_PhyGrp" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Regulations_on_File" Type="Boolean" />
-    <Property Name="JACHO_CARF" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Has_facility_billed_ins_before" Type="Boolean" />
-    <Property Name="Manage_care_contracts" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Copies_of_all_managed_care_contracts_on_file" Type="Boolean" />
-    <Property Name="Forms_created" Type="Boolean" />
-    <Property Name="In_Service_scheduled" Type="Boolean" />
-    <Property Name="In_Service_date_time" Type="DateTime" Precision="3" />
-    <Property Name="Portal_training_setup" Type="Boolean" />
-    <Property Name="email_regarding_conference_set_up" Type="Boolean" />
-    <Property Name="Database_set_up" Type="Boolean" />
-    <Property Name="Availavility_request_sent_out" Type="Boolean" />
-    <Property Name="Availavility_completed" Type="Boolean" />
-    <Property Name="Navinet_request_completed" Type="Boolean" />
-    <Property Name="Fee_schedule_in_binder" Type="Boolean" />
-    <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.FK__MasterPOS__POSEx__412EB0B6" FromRole="POSExtraData" ToRole="MasterPOS" />
-  </EntityType>
   <Association Name="FK__MasterPOS__POSAd__4222D4EF">
     <End Type="MedProDBEntities.POSAddr" Role="POSAddr" Multiplicity="0..1" />
     <End Type="MedProDBEntities.MasterPOS" Role="MasterPOS" Multiplicity="*" />
@@ -718,18 +655,6 @@
       </Principal>
       <Dependent Role="MasterPOS">
         <PropertyRef Name="POSAddr_POSAddrID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__MasterPOS__POSEx__412EB0B6">
-    <End Type="MedProDBEntities.POSExtraData" Role="POSExtraData" Multiplicity="0..1" />
-    <End Type="MedProDBEntities.MasterPOS" Role="MasterPOS" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="POSExtraData">
-        <PropertyRef Name="POSExtraDataID" />
-      </Principal>
-      <Dependent Role="MasterPOS">
-        <PropertyRef Name="POSExtraData_POSExtraDataID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -750,16 +675,6 @@
     <Property Name="PHYGrpNPI_Num" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.FK__MasterPOS__PHYGr__4316F928" FromRole="PHYGroup" ToRole="MasterPOS" />
     <NavigationProperty Name="ProvidersInGrps" Relationship="MedProDBEntities.FK__Providers__PHYGr__10CB707D" FromRole="PHYGroup" ToRole="ProvidersInGrp" />
-  </EntityType>
-  <EntityType Name="Provider">
-    <Key>
-      <PropertyRef Name="ProvID" />
-    </Key>
-    <Property Name="ProvID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ProviderName" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="NPI_Num" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.FK__MasterPOS__Provi__44FF419A" FromRole="Provider" ToRole="MasterPOS" />
-    <NavigationProperty Name="ProvidersInGrps" Relationship="MedProDBEntities.FK__Providers__Provi__0FD74C44" FromRole="Provider" ToRole="ProvidersInGrp" />
   </EntityType>
   <EntityType Name="ProvidersInGrp">
     <Key>
@@ -795,18 +710,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__MasterPOS__Provi__44FF419A">
-    <End Type="MedProDBEntities.Provider" Role="Provider" Multiplicity="1" />
-    <End Type="MedProDBEntities.MasterPOS" Role="MasterPOS" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Provider">
-        <PropertyRef Name="ProvID" />
-      </Principal>
-      <Dependent Role="MasterPOS">
-        <PropertyRef Name="Providers_ProvID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK__Providers__PHYGr__10CB707D">
     <End Type="MedProDBEntities.PHYGroup" Role="PHYGroup" Multiplicity="1" />
     <End Type="MedProDBEntities.ProvidersInGrp" Role="ProvidersInGrp" Multiplicity="*" />
@@ -816,18 +719,6 @@
       </Principal>
       <Dependent Role="ProvidersInGrp">
         <PropertyRef Name="PHYGroups_PHYGrpID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Providers__Provi__0FD74C44">
-    <End Type="MedProDBEntities.Provider" Role="Provider" Multiplicity="1" />
-    <End Type="MedProDBEntities.ProvidersInGrp" Role="ProvidersInGrp" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Provider">
-        <PropertyRef Name="ProvID" />
-      </Principal>
-      <Dependent Role="ProvidersInGrp">
-        <PropertyRef Name="Providers_ProvID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1106,4 +997,128 @@
     <Property Name="Active" Type="Boolean" Nullable="false" />
     <Property Name="DB_ID" Type="Int32" Nullable="false" />
   </EntityType>
+  <EntityType Name="Provider">
+    <Key>
+      <PropertyRef Name="ProvID" />
+    </Key>
+    <Property Name="ProvID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProviderName" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="NPI_Num" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="MedicalDirectorLicNum" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="MedicalDirectorLicExpireDate" Type="DateTime" Precision="0" />
+    <Property Name="MedicalDirectorState" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.ConstMasterPOS6" FromRole="Provider" ToRole="MasterPOS" />
+    <NavigationProperty Name="ProvidersInGrps" Relationship="MedProDBEntities.FK__Providers__Provi__0FD74C44" FromRole="Provider" ToRole="ProvidersInGrp" />
+  </EntityType>
+  <Association Name="ConstMasterPOS6">
+    <End Type="MedProDBEntities.Provider" Role="Provider" Multiplicity="1" />
+    <End Type="MedProDBEntities.MasterPOS" Role="MasterPOS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Provider">
+        <PropertyRef Name="ProvID" />
+      </Principal>
+      <Dependent Role="MasterPOS">
+        <PropertyRef Name="Providers_ProvID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Providers__Provi__0FD74C44">
+    <End Type="MedProDBEntities.Provider" Role="Provider" Multiplicity="1" />
+    <End Type="MedProDBEntities.ProvidersInGrp" Role="ProvidersInGrp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Provider">
+        <PropertyRef Name="ProvID" />
+      </Principal>
+      <Dependent Role="ProvidersInGrp">
+        <PropertyRef Name="Providers_ProvID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="InfoData">
+    <Key>
+      <PropertyRef Name="InfoDataID" />
+    </Key>
+    <Property Name="InfoDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LicType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="StateLic" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="LicNumCLIA_waiver" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="LicEffectiveDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="LicExpireDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Taxonomy" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="CLIA_EffectiveDate" Type="DateTime" Precision="0" />
+    <Property Name="CLIA_ExpireDate" Type="DateTime" Precision="0" />
+    <Property Name="LicNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.ConstMasterPOS2" FromRole="InfoData" ToRole="MasterPOS" />
+  </EntityType>
+  <EntityType Name="POSExtraData">
+    <Key>
+      <PropertyRef Name="POSExtraDataID" />
+    </Key>
+    <Property Name="POSExtraDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Phone_Number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Fax_Number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Website" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="W_9_on_File" Type="Boolean" />
+    <Property Name="Number_of_beds" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Have_24hrs_nursing" Type="Boolean" />
+    <Property Name="how_many_days_week_open" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Ancillary_outpatient_services" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Lab_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Out_of_Network_In_Network" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Licensure_on_File" Type="Boolean" />
+    <Property Name="Mental_License" Type="Boolean" />
+    <Property Name="BCBS_ID_Number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="UPIN_Number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Medicaid_Number" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="State_of_MD_or_PhyGrp" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Regulations_on_File" Type="Boolean" />
+    <Property Name="JACHO_CARF" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Has_facility_billed_ins_before" Type="Boolean" />
+    <Property Name="Manage_care_contracts" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Copies_of_all_managed_care_contracts_on_file" Type="Boolean" />
+    <Property Name="Forms_created" Type="Boolean" />
+    <Property Name="In_Service_scheduled" Type="Boolean" />
+    <Property Name="In_Service_date_time" Type="DateTime" Precision="3" />
+    <Property Name="Portal_training_setup" Type="Boolean" />
+    <Property Name="email_regarding_conference_set_up" Type="Boolean" />
+    <Property Name="Database_set_up" Type="Boolean" />
+    <Property Name="Availavility_request_sent_out" Type="Boolean" />
+    <Property Name="Availavility_completed" Type="Boolean" />
+    <Property Name="Navinet_request_completed" Type="Boolean" />
+    <Property Name="Fee_schedule_in_binder" Type="Boolean" />
+    <Property Name="AdmissionPhone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="ScholarshipRate" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="AcreditationOnFile" Type="Boolean" />
+    <Property Name="AverageLenOfStay" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="HowManyUAPanels" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="HighComplexityCLIA" Type="Boolean" />
+    <Property Name="RegistrationAnalyzer" Type="Boolean" />
+    <Property Name="PaidToPatientState" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="MedicareNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.FK__MasterPOS__POSEx__178D7CA5" FromRole="POSExtraData" ToRole="MasterPOS" />
+  </EntityType>
+  <Association Name="ConstMasterPOS2">
+    <End Type="MedProDBEntities.InfoData" Role="InfoData" Multiplicity="0..1" />
+    <End Type="MedProDBEntities.MasterPOS" Role="MasterPOS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InfoData">
+        <PropertyRef Name="InfoDataID" />
+      </Principal>
+      <Dependent Role="MasterPOS">
+        <PropertyRef Name="InfoData_InfoDataID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__MasterPOS__POSEx__178D7CA5">
+    <End Type="MedProDBEntities.POSExtraData" Role="POSExtraData" Multiplicity="0..1" />
+    <End Type="MedProDBEntities.MasterPOS" Role="MasterPOS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="POSExtraData">
+        <PropertyRef Name="POSExtraDataID" />
+      </Principal>
+      <Dependent Role="MasterPOS">
+        <PropertyRef Name="POSExtraData_POSExtraDataID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

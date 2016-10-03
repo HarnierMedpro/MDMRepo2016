@@ -24,6 +24,9 @@ namespace MDM.WebPortal.Models.FromDB
         public int ProvID { get; set; }
         public string ProviderName { get; set; }
         public string NPI_Num { get; set; }
+        public string MedicalDirectorLicNum { get; set; }
+        public Nullable<System.DateTime> MedicalDirectorLicExpireDate { get; set; }
+        public string MedicalDirectorState { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MasterPOS> MasterPOS { get; set; }

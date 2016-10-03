@@ -160,19 +160,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="InfoDatas">
-      <EntityTypeMapping TypeName="MedProDBEntities.InfoData">
-        <MappingFragment StoreEntitySet="InfoData">
-          <ScalarProperty Name="Taxonomy" ColumnName="Taxonomy" />
-          <ScalarProperty Name="LicExpireDate" ColumnName="LicExpireDate" />
-          <ScalarProperty Name="LicEffectiveDate" ColumnName="LicEffectiveDate" />
-          <ScalarProperty Name="LicNumCLIA_waiver" ColumnName="LicNumCLIA_waiver" />
-          <ScalarProperty Name="StateLic" ColumnName="StateLic" />
-          <ScalarProperty Name="LicType" ColumnName="LicType" />
-          <ScalarProperty Name="InfoDataID" ColumnName="InfoDataID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Lev_of_Care">
       <EntityTypeMapping TypeName="MedProDBEntities.Lev_of_Care">
         <MappingFragment StoreEntitySet="Lev_of_Care">
@@ -227,44 +214,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="POSExtraDatas">
-      <EntityTypeMapping TypeName="MedProDBEntities.POSExtraData">
-        <MappingFragment StoreEntitySet="POSExtraData">
-          <ScalarProperty Name="Fee_schedule_in_binder" ColumnName="Fee_schedule_in_binder" />
-          <ScalarProperty Name="Navinet_request_completed" ColumnName="Navinet_request_completed" />
-          <ScalarProperty Name="Availavility_completed" ColumnName="Availavility_completed" />
-          <ScalarProperty Name="Availavility_request_sent_out" ColumnName="Availavility_request_sent_out" />
-          <ScalarProperty Name="Database_set_up" ColumnName="Database_set_up" />
-          <ScalarProperty Name="email_regarding_conference_set_up" ColumnName="email_regarding_conference_set_up" />
-          <ScalarProperty Name="Portal_training_setup" ColumnName="Portal_training_setup" />
-          <ScalarProperty Name="In_Service_date_time" ColumnName="In_Service_date_time" />
-          <ScalarProperty Name="In_Service_scheduled" ColumnName="In_Service_scheduled" />
-          <ScalarProperty Name="Forms_created" ColumnName="Forms_created" />
-          <ScalarProperty Name="Copies_of_all_managed_care_contracts_on_file" ColumnName="Copies_of_all_managed_care_contracts_on_file" />
-          <ScalarProperty Name="Manage_care_contracts" ColumnName="Manage_care_contracts" />
-          <ScalarProperty Name="Has_facility_billed_ins_before" ColumnName="Has_facility_billed_ins_before" />
-          <ScalarProperty Name="JACHO_CARF" ColumnName="JACHO_CARF" />
-          <ScalarProperty Name="Regulations_on_File" ColumnName="Regulations_on_File" />
-          <ScalarProperty Name="State_of_MD_or_PhyGrp" ColumnName="State_of_MD_or_PhyGrp" />
-          <ScalarProperty Name="Medicaid_Number" ColumnName="Medicaid_Number" />
-          <ScalarProperty Name="UPIN_Number" ColumnName="UPIN_Number" />
-          <ScalarProperty Name="BCBS_ID_Number" ColumnName="BCBS_ID_Number" />
-          <ScalarProperty Name="Mental_License" ColumnName="Mental_License" />
-          <ScalarProperty Name="Licensure_on_File" ColumnName="Licensure_on_File" />
-          <ScalarProperty Name="Out_of_Network_In_Network" ColumnName="Out_of_Network_In_Network" />
-          <ScalarProperty Name="Lab_Name" ColumnName="Lab_Name" />
-          <ScalarProperty Name="Ancillary_outpatient_services" ColumnName="Ancillary_outpatient_services" />
-          <ScalarProperty Name="how_many_days_week_open" ColumnName="how_many_days_week_open" />
-          <ScalarProperty Name="Have_24hrs_nursing" ColumnName="Have_24hrs_nursing" />
-          <ScalarProperty Name="Number_of_beds" ColumnName="Number_of_beds" />
-          <ScalarProperty Name="W_9_on_File" ColumnName="W_9_on_File" />
-          <ScalarProperty Name="Website" ColumnName="Website" />
-          <ScalarProperty Name="Fax_Number" ColumnName="Fax_Number" />
-          <ScalarProperty Name="Phone_Number" ColumnName="Phone_Number" />
-          <ScalarProperty Name="POSExtraDataID" ColumnName="POSExtraDataID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="FACInfoes">
       <EntityTypeMapping TypeName="MedProDBEntities.FACInfo">
         <MappingFragment StoreEntitySet="FACInfo">
@@ -279,15 +228,6 @@
           <ScalarProperty Name="PHYGrpNPI_Num" ColumnName="PHYGrpNPI_Num" />
           <ScalarProperty Name="PHYGroupName" ColumnName="PHYGroupName" />
           <ScalarProperty Name="PHYGrpID" ColumnName="PHYGrpID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Providers">
-      <EntityTypeMapping TypeName="MedProDBEntities.Provider">
-        <MappingFragment StoreEntitySet="Providers">
-          <ScalarProperty Name="NPI_Num" ColumnName="NPI_Num" />
-          <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
-          <ScalarProperty Name="ProvID" ColumnName="ProvID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -436,6 +376,81 @@
           <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
           <ScalarProperty Name="DB" ColumnName="DB" />
           <ScalarProperty Name="IDPK" ColumnName="IDPK" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Providers">
+      <EntityTypeMapping TypeName="MedProDBEntities.Provider">
+        <MappingFragment StoreEntitySet="Providers">
+          <ScalarProperty Name="MedicalDirectorState" ColumnName="MedicalDirectorState" />
+          <ScalarProperty Name="MedicalDirectorLicExpireDate" ColumnName="MedicalDirectorLicExpireDate" />
+          <ScalarProperty Name="MedicalDirectorLicNum" ColumnName="MedicalDirectorLicNum" />
+          <ScalarProperty Name="NPI_Num" ColumnName="NPI_Num" />
+          <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+          <ScalarProperty Name="ProvID" ColumnName="ProvID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InfoDatas">
+      <EntityTypeMapping TypeName="MedProDBEntities.InfoData">
+        <MappingFragment StoreEntitySet="InfoData">
+          <ScalarProperty Name="LicNumber" ColumnName="LicNumber" />
+          <ScalarProperty Name="CLIA_ExpireDate" ColumnName="CLIA_ExpireDate" />
+          <ScalarProperty Name="CLIA_EffectiveDate" ColumnName="CLIA_EffectiveDate" />
+          <ScalarProperty Name="Taxonomy" ColumnName="Taxonomy" />
+          <ScalarProperty Name="LicExpireDate" ColumnName="LicExpireDate" />
+          <ScalarProperty Name="LicEffectiveDate" ColumnName="LicEffectiveDate" />
+          <ScalarProperty Name="LicNumCLIA_waiver" ColumnName="LicNumCLIA_waiver" />
+          <ScalarProperty Name="StateLic" ColumnName="StateLic" />
+          <ScalarProperty Name="LicType" ColumnName="LicType" />
+          <ScalarProperty Name="InfoDataID" ColumnName="InfoDataID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="POSExtraDatas">
+      <EntityTypeMapping TypeName="MedProDBEntities.POSExtraData">
+        <MappingFragment StoreEntitySet="POSExtraData">
+          <ScalarProperty Name="MedicareNumber" ColumnName="MedicareNumber" />
+          <ScalarProperty Name="PaidToPatientState" ColumnName="PaidToPatientState" />
+          <ScalarProperty Name="RegistrationAnalyzer" ColumnName="RegistrationAnalyzer" />
+          <ScalarProperty Name="HighComplexityCLIA" ColumnName="HighComplexityCLIA" />
+          <ScalarProperty Name="HowManyUAPanels" ColumnName="HowManyUAPanels" />
+          <ScalarProperty Name="AverageLenOfStay" ColumnName="AverageLenOfStay" />
+          <ScalarProperty Name="AcreditationOnFile" ColumnName="AcreditationOnFile" />
+          <ScalarProperty Name="ScholarshipRate" ColumnName="ScholarshipRate" />
+          <ScalarProperty Name="AdmissionPhone" ColumnName="AdmissionPhone" />
+          <ScalarProperty Name="Fee_schedule_in_binder" ColumnName="Fee_schedule_in_binder" />
+          <ScalarProperty Name="Navinet_request_completed" ColumnName="Navinet_request_completed" />
+          <ScalarProperty Name="Availavility_completed" ColumnName="Availavility_completed" />
+          <ScalarProperty Name="Availavility_request_sent_out" ColumnName="Availavility_request_sent_out" />
+          <ScalarProperty Name="Database_set_up" ColumnName="Database_set_up" />
+          <ScalarProperty Name="email_regarding_conference_set_up" ColumnName="email_regarding_conference_set_up" />
+          <ScalarProperty Name="Portal_training_setup" ColumnName="Portal_training_setup" />
+          <ScalarProperty Name="In_Service_date_time" ColumnName="In_Service_date_time" />
+          <ScalarProperty Name="In_Service_scheduled" ColumnName="In_Service_scheduled" />
+          <ScalarProperty Name="Forms_created" ColumnName="Forms_created" />
+          <ScalarProperty Name="Copies_of_all_managed_care_contracts_on_file" ColumnName="Copies_of_all_managed_care_contracts_on_file" />
+          <ScalarProperty Name="Manage_care_contracts" ColumnName="Manage_care_contracts" />
+          <ScalarProperty Name="Has_facility_billed_ins_before" ColumnName="Has_facility_billed_ins_before" />
+          <ScalarProperty Name="JACHO_CARF" ColumnName="JACHO_CARF" />
+          <ScalarProperty Name="Regulations_on_File" ColumnName="Regulations_on_File" />
+          <ScalarProperty Name="State_of_MD_or_PhyGrp" ColumnName="State_of_MD_or_PhyGrp" />
+          <ScalarProperty Name="Medicaid_Number" ColumnName="Medicaid_Number" />
+          <ScalarProperty Name="UPIN_Number" ColumnName="UPIN_Number" />
+          <ScalarProperty Name="BCBS_ID_Number" ColumnName="BCBS_ID_Number" />
+          <ScalarProperty Name="Mental_License" ColumnName="Mental_License" />
+          <ScalarProperty Name="Licensure_on_File" ColumnName="Licensure_on_File" />
+          <ScalarProperty Name="Out_of_Network_In_Network" ColumnName="Out_of_Network_In_Network" />
+          <ScalarProperty Name="Lab_Name" ColumnName="Lab_Name" />
+          <ScalarProperty Name="Ancillary_outpatient_services" ColumnName="Ancillary_outpatient_services" />
+          <ScalarProperty Name="how_many_days_week_open" ColumnName="how_many_days_week_open" />
+          <ScalarProperty Name="Have_24hrs_nursing" ColumnName="Have_24hrs_nursing" />
+          <ScalarProperty Name="Number_of_beds" ColumnName="Number_of_beds" />
+          <ScalarProperty Name="W_9_on_File" ColumnName="W_9_on_File" />
+          <ScalarProperty Name="Website" ColumnName="Website" />
+          <ScalarProperty Name="Fax_Number" ColumnName="Fax_Number" />
+          <ScalarProperty Name="Phone_Number" ColumnName="Phone_Number" />
+          <ScalarProperty Name="POSExtraDataID" ColumnName="POSExtraDataID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

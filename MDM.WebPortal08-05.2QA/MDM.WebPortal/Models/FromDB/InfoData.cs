@@ -27,6 +27,9 @@ namespace MDM.WebPortal.Models.FromDB
         public System.DateTime LicEffectiveDate { get; set; }
         public System.DateTime LicExpireDate { get; set; }
         public string Taxonomy { get; set; }
+        public Nullable<System.DateTime> CLIA_EffectiveDate { get; set; }
+        public Nullable<System.DateTime> CLIA_ExpireDate { get; set; }
+        public string LicNumber { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MasterPOS> MasterPOS { get; set; }

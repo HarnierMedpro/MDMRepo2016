@@ -1,0 +1,295 @@
+﻿@model MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMLocationPOS_AddressInfo
+
+<div class="container-fluid">
+    <fieldset class="scheduler-border">
+        <legend class="scheduler-border text-bold text-uppercase">time zone & dba:</legend>
+        <dl>
+            <dd>
+                <label class="text-uppercase">time zone<sup class="text-danger">*</sup></label>
+            </dd>
+            <dt>
+                @(Html.Kendo().DropDownListFor(x => x.Time_Zone)
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .HtmlAttributes(new {style = "width: 100%"})
+                      .BindTo(new List<SelectListItem>
+                      {
+                          new SelectListItem {Value = "CST", Text = "Central Time Zone"},
+                          new SelectListItem {Text = "Eastern Time Zone", Value = "EST"},
+                          new SelectListItem {Text = "Mountain Time Zone", Value = "MST"},
+                          new SelectListItem {Value = "PST", Text = "Pacific Time Zone"}
+                      })
+                  )
+            </dt>
+        </dl>
+
+        <dl>
+            <dd>
+                <label class="text-uppercase">dba name<sup class="text-danger">*</sup></label>
+            </dd>
+            <dt>
+                @Html.EditorFor(model => model.DBA_Name, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })
+                @Html.ValidationMessageFor(model => model.DBA_Name, "", new { @class = "text-danger" })
+             </dt>
+        </dl>
+    </fieldset>
+
+    <fieldset class="scheduler-border">
+        <legend class="scheduler-border text-bold text-uppercase">payment info:</legend>
+        <dl>
+            <dd>
+                <label class="control-label text-uppercase text-bold">address 1 <sup class="text-danger">*</sup></label>
+            </dd>
+            <dt>
+                @Html.EditorFor(model => model.Payment_Addr1, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important;height:20.15px !important;" } })
+                @Html.ValidationMessageFor(model => model.Physical_Addr1, "", new { @class = "text-danger" })
+            </dt>
+        </dl>
+        <dl>
+            <dd>
+                @Html.LabelFor(model => model.Payment_Addr2, htmlAttributes: new {@class = "control-label"})
+            </dd>
+            <dt>
+                @Html.EditorFor(model => model.Payment_Addr2, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important;height:20.15px !important;" } })
+                @Html.ValidationMessageFor(model => model.Payment_Addr2, "", new { @class = "text-danger" })
+            </dt>
+        </dl>
+        <div class="row">
+            <div class="col-md-3">
+                <dl>
+                    <dd>
+                        <label class="control-label text-uppercase text-bold">city <sup class="text-danger">*</sup></label>
+                    </dd>
+                    <dt>
+                        @Html.EditorFor(model => model.Payment_City, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important;height:20.15px !important;" } })
+                        @Html.ValidationMessageFor(model => model.Payment_City, "", new { @class = "text-danger" })
+                    </dt>
+                </dl>
+            </div>
+            <div class="col-md-3">
+                <dl>
+                    <dd>
+                        <label class="control-label text-uppercase text-bold">state <sup class="text-danger">*</sup></label>
+                    </dd>
+                    <dt>
+                        @(Html.Kendo().DropDownListFor(x => x.Payment_state)
+                              .Name("Payment_state")
+                              .DataTextField("Text")
+                              .DataValueField("Value")
+                              .HtmlAttributes(new {style = "width: 100%"})
+                              .MinLength(3)
+                              .Filter(FilterType.Contains)
+                              .DataSource(source =>
+                              {
+                                  source.Custom()
+                                      .ServerFiltering(true)
+                                      .ServerPaging(true)
+                                      .PageSize(80)
+                                      .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                                      .Transport(transport =>
+                                      {
+                                          transport.Read("Read_States", "POSAddressInfo");
+                                      })
+                                      .Schema(schema =>
+                                      {
+                                          schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                                              .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                                      });
+                              })
+                              )
+                    </dt>
+                </dl>
+            </div>
+            <div class="col-md-3">
+                <dl>
+                    <dd>
+                        <label class="control-label text-uppercase text-bold">zip code <sup class="text-danger">*</sup></label>
+                    </dd>
+                    <dt>
+                        @Html.EditorFor(model => model.Payment_Zip, new { htmlAttributes = new { id = "payZip", @class = " form-control form-control1", @style = "width:98% !important;height:20.15px !important;" } })
+                        @Html.ValidationMessageFor(model => model.Payment_Zip, "", new { @class = "text-danger" })
+                     </dt>
+                </dl>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="scheduler-border">
+        <legend class="scheduler-border text-bold text-uppercase">physical info:</legend>
+        <dl>
+            <dd>
+                <label class="control-label text-uppercase text-bold">address 1 <sup class="text-danger">*</sup></label>
+            </dd>
+            <dt>
+                @Html.EditorFor(model => model.Physical_Addr1, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important;height:20.15px !important;" } })
+                @Html.ValidationMessageFor(model => model.Physical_Addr1, "", new { @class = "text-danger" })
+            </dt>
+        </dl>
+        <dl>
+            <dd>
+                @Html.LabelFor(model => model.Physical_Addr2, htmlAttributes: new {@class = "control-label"})
+            </dd>
+            <dt>
+                @Html.EditorFor(model => model.Physical_Addr2, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important;height:20.15px !important;" } })
+                @Html.ValidationMessageFor(model => model.Physical_Addr2, "", new { @class = "text-danger" })
+            </dt>
+        </dl>
+        <div class="row">
+            <div class="col-md-3">
+                <dl>
+                    <dd>
+                        <label class="control-label text-uppercase text-bold">city <sup class="text-danger">*</sup></label>
+                    </dd>
+                    <dt>
+                        @Html.EditorFor(model => model.Physical_City, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important;height:20.15px !important;" } })
+                        @Html.ValidationMessageFor(model => model.Physical_City, "", new { @class = "text-danger" })
+                    </dt>
+                </dl>
+            </div>
+            <div class="col-md-3">
+                <dl>
+                    <dd>
+                        <label class="control-label text-uppercase text-bold">state <sup class="text-danger">*</sup></label>
+                    </dd>
+                    <dt>
+                        @(Html.Kendo().DropDownListFor(x => x.Physical_state)
+                              .Name("Physical_state")
+                              .DataTextField("Text")
+                              .DataValueField("Value")
+                              .HtmlAttributes(new {style = "width: 100%"})
+                              .MinLength(3)
+                              .Filter(FilterType.Contains)
+                              .DataSource(source =>
+                              {
+                                  source.Custom()
+                                      .ServerFiltering(true)
+                                      .ServerPaging(true)
+                                      .PageSize(80)
+                                      .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                                      .Transport(transport =>
+                                      {
+                                          transport.Read("Read_States", "POSAddressInfo");
+                                      })
+                                      .Schema(schema =>
+                                      {
+                                          schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                                              .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                                      });
+                              })
+                              )
+                    </dt>
+                </dl>
+            </div>
+            <div class="col-md-3">
+                <dl>
+                    <dd>
+                        <label class="control-label text-uppercase text-bold">zip code <sup class="text-danger">*</sup></label>
+                    </dd>
+                    <dt>
+                        @Html.EditorFor(model => model.Physical_Zip, new { htmlAttributes = new { id = "phyZip", @class = " form-control form-control1", @style = "width:98% !important;height:20.15px !important;" } })
+                        @Html.ValidationMessageFor(model => model.Physical_Zip, "", new { @class = "text-danger" })
+                    </dt>
+                </dl>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="scheduler-border">
+        <legend class="scheduler-border text-uppercase text-bold">notes:</legend>
+        <dl>
+            <dd>
+                @Html.TextAreaFor(model => model.Notes, 5, 50, new { htmlAttributes = new { @class = "form-control" } })
+            </dd>
+        </dl>
+    </fieldset>
+
+<div class="edit-buttons text-center">
+    <a class="k-button k-button-icontext k-update-button btn btn-sm btn-primary" href="\\#"><span class="fa fa-cloud-upload"></span> Save</a>
+    <a class="k-button k-button-icontext k-cancel-button btn btn-sm btn-danger" href="\\#"><span class="fa fa-ban"></span> Cancel</a>
+</div>
+    <br/>
+</div>
+
+
+@*CLASSIC STYLE
+        <div class="product-view">
+        <dl>
+            <dt>DBA</dt>
+            <dd>
+                @(Html.EditorFor(p => p.DBA_Name))
+                <!-- ProductName validation message placeholder -->
+                <span data-for="DBA_Name" class="k-invalid-msg"></span>
+            </dd>
+            <dt>Time Zone</dt>
+            <dd>
+                @(Html.EditorFor(p => p.Time_Zone))
+                <!-- UnitPrice validation message placeholder -->
+                <span data-for="Time_Zone" class="k-invalid-msg"></span>
+            </dd>
+            <dt>Address 1</dt>
+            <dd>
+                @(Html.EditorFor(p => p.Physical_Addr1))
+                <!-- UnitsInStock validation message placeholder -->
+                <span data-for="Physical_Addr1" class="k-invalid-msg"></span>
+            </dd>
+            <dt>Address 2</dt>
+            <dd>
+                @(Html.EditorFor(p => p.Physical_Addr2))
+                <span data-for="Physical_Addr2" class="k-invalid-msg"></span>
+            </dd>
+            <dt>City</dt>
+            <dd>
+                @(Html.EditorFor(p => p.Physical_City))
+                <span data-for="Physical_City" class="k-invalid-msg"></span>
+            </dd>
+            <dt>State</dt>
+            <dd>
+                @(Html.EditorFor(p => p.Physical_state))
+                <span data-for="Physical_state" class="k-invalid-msg"></span>
+            </dd>
+            <dt>Zip</dt>
+            <dd>
+                @(Html.EditorFor(p => p.Physical_Zip))
+                <span data-for="Physical_Zip" class="k-invalid-msg"></span>
+            </dd>
+
+
+            <dt>Address 1</dt>
+            <dd>
+                @(Html.EditorFor(p => p.Payment_Addr1))
+                <!-- UnitsInStock validation message placeholder -->
+                <span data-for="Payment_Addr1" class="k-invalid-msg"></span>
+            </dd>
+            <dt>Address 2</dt>
+            <dd>
+                @(Html.EditorFor(p => p.Payment_Addr2))
+                <span data-for="Payment_Addr2" class="k-invalid-msg"></span>
+            </dd>
+            <dt>City</dt>
+            <dd>
+                @(Html.EditorFor(p => p.Payment_City))
+                <span data-for="Payment_City" class="k-invalid-msg"></span>
+            </dd>
+            <dt>State</dt>
+            <dd>
+                @(Html.EditorFor(p => p.Payment_state))
+                <span data-for="Payment_state" class="k-invalid-msg"></span>
+            </dd>
+            <dt>Zip</dt>
+            <dd>
+                @(Html.EditorFor(p => p.Payment_Zip))
+                <span data-for="Payment_Zip" class="k-invalid-msg"></span>
+            </dd>
+
+            <dt>Notes</dt>
+            <dd>
+                @(Html.EditorFor(p => p.Notes))
+                <span data-for="Notes" class="k-invalid-msg"></span>
+            </dd>
+
+        </dl>
+        <div class="edit-buttons">
+            <a class="k-button k-button-icontext k-update-button" href="\\#"><span class="k-icon k-update"></span>Save</a>
+            <a class="k-button k-button-icontext k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span>Cancel</a>
+        </div>
+    </div>*@

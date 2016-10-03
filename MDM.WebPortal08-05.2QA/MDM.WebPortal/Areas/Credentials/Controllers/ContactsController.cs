@@ -309,6 +309,15 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return Json(new[] { masterPosContact }.ToDataSourceResult(request, ModelState));
         }
 
+        public async Task<ActionResult> Save_PosContacts([DataSourceRequest] DataSourceRequest request,VMContactID contacts, int? MasterPOS)
+        {
+            if (contacts.Contacts.Any() && MasterPOS > 0)
+            {
+                
+            }
+            return Json(new[] {new MasterPOS()}.ToDataSourceResult(request, ModelState));
+        } 
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

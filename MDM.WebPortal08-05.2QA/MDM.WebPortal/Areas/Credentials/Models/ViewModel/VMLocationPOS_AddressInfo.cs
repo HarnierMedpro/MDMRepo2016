@@ -8,6 +8,8 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
 
         public int POSAddrID { get; set; }
 
+        [Required]
+        [Display(Name = "DBA NAME")]
         public string DBA_Name { get; set; }
 
         [Required]

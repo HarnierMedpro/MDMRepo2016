@@ -65,7 +65,7 @@
 //            if (facInfoData != null && await db.FACInfoDatas.FindAsync(facInfoData) != null)
 //            {
 //                ViewBag.FACInfoDataID = facInfoData;
-//                ViewBag.FormsDict = new SelectList(db.FormsDicts.OrderBy(x => x.FormName),"FormsID","FormName");
+//                ViewBag.FormsDict = new SelectList(db.FormsDicts.OrderBy(x => x.FormName), "FormsID", "FormName");
 //                //ViewBag.State_of_MD_or_PhyGrp = new AllUSStates().states;   
 //                return View();
 //            }
@@ -102,7 +102,7 @@
 //                    }
 //                    db.POSLOCExtraDatas.Add(pOSLOCExtraData);
 //                    await db.SaveChangesAsync();
-//                    return RedirectToAction("Index","LocationsPOS",new {area="PlaceOfServices"});
+//                    return RedirectToAction("Index", "LocationsPOS", new { area = "PlaceOfServices" });
 //                }
 //                catch (Exception)
 //                {
@@ -129,7 +129,7 @@
 //            {
 //                return RedirectToAction("Index", "Error", new { area = "Error" });
 //            }
-//            var forms = db.FormsDicts.Select(x => new {x.FormsID, x.FormName}).ToList();
+//            var forms = db.FormsDicts.Select(x => new { x.FormsID, x.FormName }).ToList();
 //            List<string> myCurrentForms = new List<string>();
 
 //            if (storedInDb.Forms_sent.Any())
@@ -197,7 +197,7 @@
 
 //                    /*Obtengo los FormDict del objeto anterior*/
 //                    var currentForm = storedInDb.Forms_sent.Select(x => x.FormsDict_FormsID != null ? x.FormsDict_FormsID.Value : 0).Where(c => c > 0).ToArray();
-                   
+
 //                    /*Creo una lista para registrar los campos modificados*/
 //                    List<TableInfo> tableColumInfos = new List<TableInfo>();
 
@@ -215,7 +215,7 @@
 
 //                        foreach (var item in formToDelete)
 //                        {
-//                          storedInDb.Forms_sent.Remove(db.Forms_sent.First(x => x.POSLOCExtraData_FACInfoData_FACInfoDataID == storedInDb.FACInfoData_FACInfoDataID && x.FormsDict_FormsID == item));
+//                            storedInDb.Forms_sent.Remove(db.Forms_sent.First(x => x.POSLOCExtraData_FACInfoData_FACInfoDataID == storedInDb.FACInfoData_FACInfoDataID && x.FormsDict_FormsID == item));
 //                        }
 
 //                        var newcurrentForm = storedInDb.Forms_sent.Select(x => x.FormsDict_FormsID != null ? x.FormsDict_FormsID.Value : 0).Where(c => c > 0).ToArray();
@@ -225,12 +225,12 @@
 
 //                        TableInfo logForms_Sent = new TableInfo { Field_ColumName = "FormsDict", OldValue = oldValue, NewValue = newValue };
 //                        tableColumInfos.Add(logForms_Sent);
-                       
+
 //                    }
 
 //                    if (storedInDb.Phone_Number != toStore.Phone_Number)
 //                    {
-//                        tableColumInfos.Add(new TableInfo { Field_ColumName = "Phone_Number", OldValue = storedInDb.Phone_Number, NewValue = toStore.Phone_Number});
+//                        tableColumInfos.Add(new TableInfo { Field_ColumName = "Phone_Number", OldValue = storedInDb.Phone_Number, NewValue = toStore.Phone_Number });
 //                        storedInDb.Phone_Number = toStore.Phone_Number;
 //                    }
 //                    if (storedInDb.Fax_Number != toStore.Fax_Number)
@@ -378,7 +378,7 @@
 //                        tableColumInfos.Add(new TableInfo { Field_ColumName = "Fee_schedule_in_binder", OldValue = storedInDb.Fee_schedule_in_binder.ToString(), NewValue = toStore.Fee_schedule_in_binder.ToString() });
 //                        storedInDb.Fee_schedule_in_binder = toStore.Fee_schedule_in_binder;
 //                    }
-                   
+
 
 //                    db.POSLOCExtraDatas.Attach(storedInDb);
 //                    db.Entry(storedInDb).State = EntityState.Modified;
@@ -398,9 +398,9 @@
 //                        new AuditLogRepository().AddAuditLogs(auditLog);
 //                    }
 
-//                    return RedirectToAction("Index","LocationsPOS", new {area ="PlaceOfServices"});
+//                    return RedirectToAction("Index", "LocationsPOS", new { area = "PlaceOfServices" });
 
-                    
+
 //                }
 //                catch (Exception)
 //                {
@@ -420,7 +420,7 @@
 //                    }).ToList();
 //                    return View(toStore);
 //                }
-                
+
 //            }
 
 //            var forms = db.FormsDicts.Select(x => new { x.FormsID, x.FormName }).ToList();

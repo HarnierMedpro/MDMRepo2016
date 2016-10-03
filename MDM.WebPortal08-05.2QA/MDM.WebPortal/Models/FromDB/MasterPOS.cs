@@ -41,16 +41,13 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual DBList DBList { get; set; }
         public virtual FvPList FvPList { get; set; }
         public virtual Manager_Master Manager_Master { get; set; }
-        public virtual InfoData InfoData { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MasterPOS_LevOfCare> MasterPOS_LevOfCare { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MasterPOS_MPServ> MasterPOS_MPServ { get; set; }
         public virtual POSAddr POSAddr { get; set; }
-        public virtual POSExtraData POSExtraData { get; set; }
         public virtual FACInfo FACInfo { get; set; }
         public virtual PHYGroup PHYGroup { get; set; }
-        public virtual Provider Provider { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Forms_sent> Forms_sent { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -59,5 +56,8 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual ICollection<MasterPOS_Contact> MasterPOS_Contact { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ZoomDB_POSID_grp> ZoomDB_POSID_grp { get; set; }
+        public virtual Provider Provider { get; set; }
+        public virtual InfoData InfoData { get; set; }
+        public virtual POSExtraData POSExtraData { get; set; }
     }
 }

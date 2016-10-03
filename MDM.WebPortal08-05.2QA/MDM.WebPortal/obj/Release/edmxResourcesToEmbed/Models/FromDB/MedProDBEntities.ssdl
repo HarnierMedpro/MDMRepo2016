@@ -217,12 +217,15 @@
       <PropertyRef Name="InfoDataID" />
     </Key>
     <Property Name="InfoDataID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="LicType" Type="text" />
+    <Property Name="LicType" Type="varchar" MaxLength="50" />
     <Property Name="StateLic" Type="varchar" MaxLength="2" />
     <Property Name="LicNumCLIA_waiver" Type="varchar" MaxLength="100" />
     <Property Name="LicEffectiveDate" Type="date" Nullable="false" />
     <Property Name="LicExpireDate" Type="date" Nullable="false" />
     <Property Name="Taxonomy" Type="varchar" MaxLength="80" />
+    <Property Name="CLIA_EffectiveDate" Type="date" />
+    <Property Name="CLIA_ExpireDate" Type="date" />
+    <Property Name="LicNumber" Type="varchar" MaxLength="20" />
   </EntityType>
   <EntityType Name="Lev_of_Care">
     <Key>
@@ -360,7 +363,7 @@
     <Property Name="Regulations_on_File" Type="bit" />
     <Property Name="JACHO_CARF" Type="varchar" MaxLength="20" />
     <Property Name="Has_facility_billed_ins_before" Type="bit" />
-    <Property Name="Manage_care_contracts" Type="varchar" MaxLength="100" />
+    <Property Name="Manage_care_contracts" Type="text" />
     <Property Name="Copies_of_all_managed_care_contracts_on_file" Type="bit" />
     <Property Name="Forms_created" Type="bit" />
     <Property Name="In_Service_scheduled" Type="bit" />
@@ -372,6 +375,15 @@
     <Property Name="Availavility_completed" Type="bit" />
     <Property Name="Navinet_request_completed" Type="bit" />
     <Property Name="Fee_schedule_in_binder" Type="bit" />
+    <Property Name="AdmissionPhone" Type="varchar" MaxLength="15" />
+    <Property Name="ScholarshipRate" Type="varchar" MaxLength="100" />
+    <Property Name="AcreditationOnFile" Type="bit" />
+    <Property Name="AverageLenOfStay" Type="varchar" MaxLength="100" />
+    <Property Name="HowManyUAPanels" Type="varchar" MaxLength="100" />
+    <Property Name="HighComplexityCLIA" Type="bit" />
+    <Property Name="RegistrationAnalyzer" Type="bit" />
+    <Property Name="PaidToPatientState" Type="varchar" MaxLength="100" />
+    <Property Name="MedicareNumber" Type="varchar" MaxLength="20" />
   </EntityType>
   <EntityType Name="Providers">
     <Key>
@@ -380,6 +392,9 @@
     <Property Name="ProvID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ProviderName" Type="varchar" MaxLength="80" Nullable="false" />
     <Property Name="NPI_Num" Type="varchar" MaxLength="80" Nullable="false" />
+    <Property Name="MedicalDirectorLicNum" Type="varchar" MaxLength="20" />
+    <Property Name="MedicalDirectorLicExpireDate" Type="date" />
+    <Property Name="MedicalDirectorState" Type="varchar" MaxLength="2" />
   </EntityType>
   <EntityType Name="ProvidersInGrp">
     <Key>

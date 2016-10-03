@@ -5,6 +5,8 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using eMedServiceCorp.Tools;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
@@ -17,9 +19,201 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
     {
         private MedProDBEntities db = new MedProDBEntities();
 
-       
+        /*-------------------------KENDO UI FOR ASP.NET MVC5------------------------------------------*/
 
-        // GET: PlaceOfServices/FACInfoDatas/Details/5
+        public ActionResult LicenseInfo(int? MasterPOSID)
+        {
+            if (MasterPOSID != null && MasterPOSID > 0)
+            {
+                ViewBag.MasterPOS = MasterPOSID;
+            }
+            return View();
+        }
+
+        public async Task<ActionResult> Read_License([DataSourceRequest] DataSourceRequest request, int? MasterPOSID)
+        {
+            //var result = new InfoData();
+            //if (MasterPOSID != null && MasterPOSID > 0)
+            //{
+            //    var MasterPOS = await db.MasterPOS.FindAsync(MasterPOSID);
+            //    if (MasterPOS != null && MasterPOS.InfoData != null)
+            //    {
+            //        result = MasterPOS.InfoData;
+            //    }
+            //}
+            //return Json(new[]{result}.ToDataSourceResult(request, x => new VMFACInfoData
+            //{
+            //   InfoDataID = x.InfoDataID,
+            //   LicType = x.LicType,
+            //   LicNumber = x.LicNumber,
+            //   StateLic = x.StateLic,
+            //   LicEffectiveDate = x.LicEffectiveDate,
+            //   LicExpireDate = x.LicExpireDate,
+            //   LicNumCLIA_waiver = x.LicNumCLIA_waiver,
+            //   CLIA_EffectiveDate = x.CLIA_EffectiveDate,
+            //   CLIA_ExpireDate = x.CLIA_ExpireDate,
+            //   Taxonomy = x.Taxonomy
+            //}));
+            var result = new List<VMFACInfoData>();
+            if (MasterPOSID != null && MasterPOSID > 0)
+            {
+                var pos = await db.MasterPOS.FindAsync(MasterPOSID);
+                if (pos != null && pos.InfoData != null)
+                {
+                    var license = pos.InfoData;
+                    result.Add(new VMFACInfoData
+                    {
+                        MasterPOSID = MasterPOSID.Value,
+                        InfoDataID = license.InfoDataID,
+                        LicType = license.LicType,
+                        LicNumber = license.LicNumber,
+                        StateLic = license.StateLic,
+                        LicEffectiveDate = license.LicEffectiveDate,
+                        LicExpireDate = license.LicExpireDate,
+                        LicNumCLIA_waiver = license.LicNumCLIA_waiver,
+                        CLIA_EffectiveDate = license.CLIA_EffectiveDate,
+                        CLIA_ExpireDate = license.CLIA_ExpireDate,
+                        Taxonomy = license.Taxonomy
+                    });
+                }
+            }
+            return Json(result.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<ActionResult> Create_License([DataSourceRequest] DataSourceRequest request,
+            [Bind(Include = "MasterPOSID,InfoDataID,LicType,LicNumber,StateLic,LicExpireDate,LicEffectiveDate,Taxonomy,LicNumCLIA_waiver,CLIA_EffectiveDate,CLIA_ExpireDate")]
+            VMFACInfoData infoData, int ParentID)
+        {
+            if (ModelState.IsValid)
+            {
+                using (DbContextTransaction dbtTransaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var licenseToStore = new InfoData
+                        {
+                            LicType = infoData.LicType,
+                            LicNumber = infoData.LicNumber,
+                            StateLic = infoData.StateLic,
+                            LicEffectiveDate = infoData.LicEffectiveDate,
+                            LicExpireDate = infoData.LicExpireDate,
+                            LicNumCLIA_waiver = infoData.LicNumCLIA_waiver,
+                            CLIA_EffectiveDate = infoData.CLIA_EffectiveDate,
+                            CLIA_ExpireDate = infoData.CLIA_ExpireDate,
+                            Taxonomy = infoData.Taxonomy
+                        };
+
+                        db.InfoDatas.Add(licenseToStore);
+                        await db.SaveChangesAsync();
+                        infoData.InfoDataID = licenseToStore.InfoDataID;
+                        infoData.MasterPOSID = ParentID;
+
+                        var masterPOS = await db.MasterPOS.FindAsync(ParentID);
+                        masterPOS.InfoData_InfoDataID = infoData.InfoDataID;
+                        db.MasterPOS.Attach(masterPOS);
+                        db.Entry(masterPOS).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+
+                        dbtTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbtTransaction.Rollback();
+                        ModelState.AddModelError("","Something failed. Please try again!");
+                        return Json(new[] { infoData }.ToDataSourceResult(request, ModelState));
+                    }
+                }
+            }
+            return Json(new[] {infoData}.ToDataSourceResult(request, ModelState));
+        }
+
+        public async Task<ActionResult> Update_License([DataSourceRequest] DataSourceRequest request,
+           [Bind(Include = "MasterPOSID,InfoDataID,LicType,LicNumber,StateLic,LicExpireDate,LicEffectiveDate,Taxonomy,LicNumCLIA_waiver,CLIA_EffectiveDate,CLIA_ExpireDate")]
+            VMFACInfoData infoData)
+        {
+            if (ModelState.IsValid)
+            {
+                if (infoData.LicExpireDate < infoData.LicEffectiveDate || infoData.CLIA_ExpireDate < infoData.CLIA_EffectiveDate)
+                {
+                    ModelState.AddModelError("","Invalid Dates. Please try again!");
+                    return Json(new[] { infoData }.ToDataSourceResult(request, ModelState));
+                }
+                try
+                {
+                    var storedInDb = await db.InfoDatas.FindAsync(infoData.InfoDataID);
+
+                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                    if (storedInDb.LicType != infoData.LicType)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicType", OldValue = storedInDb.LicType, NewValue = infoData.LicType });
+                        storedInDb.LicType = infoData.LicType;
+                    }
+                    if (storedInDb.StateLic != infoData.StateLic)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "StateLic", OldValue = storedInDb.StateLic, NewValue = infoData.StateLic });
+                        storedInDb.StateLic = infoData.StateLic;
+                    }
+                    if (storedInDb.LicNumCLIA_waiver != infoData.LicNumCLIA_waiver)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicNumCLIA_waiver", OldValue = storedInDb.LicNumCLIA_waiver, NewValue = infoData.LicNumCLIA_waiver });
+                        storedInDb.LicNumCLIA_waiver = infoData.LicNumCLIA_waiver;
+                    }
+                    if (storedInDb.LicEffectiveDate != infoData.LicEffectiveDate)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicEffectiveDate", OldValue = storedInDb.LicEffectiveDate.ToShortDateString(), NewValue = infoData.LicEffectiveDate.ToShortDateString() });
+                        storedInDb.LicEffectiveDate = infoData.LicEffectiveDate;
+                    }
+                    if (storedInDb.LicExpireDate != infoData.LicExpireDate)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicExpireDate", OldValue = storedInDb.LicExpireDate.ToShortDateString(), NewValue = infoData.LicExpireDate.ToShortDateString() });
+                        storedInDb.LicExpireDate = infoData.LicExpireDate;
+                    }
+                    if (storedInDb.Taxonomy != infoData.Taxonomy)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Taxonomy", OldValue = storedInDb.Taxonomy, NewValue = infoData.Taxonomy });
+                        storedInDb.Taxonomy = infoData.Taxonomy;
+                    }
+                    if (storedInDb.CLIA_EffectiveDate != infoData.CLIA_EffectiveDate)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "CLIA_EffectiveDate", OldValue = storedInDb.CLIA_EffectiveDate.ToString(), NewValue = infoData.CLIA_EffectiveDate.ToString() });
+                        storedInDb.CLIA_EffectiveDate = infoData.CLIA_EffectiveDate;
+                    }
+                    if (storedInDb.CLIA_ExpireDate != infoData.CLIA_ExpireDate)
+                    {
+                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "CLIA_ExpireDate", OldValue = storedInDb.CLIA_ExpireDate.ToString(), NewValue = infoData.CLIA_ExpireDate.ToString() });
+                        storedInDb.CLIA_ExpireDate = infoData.CLIA_ExpireDate;
+                    }
+
+                    db.InfoDatas.Attach(storedInDb);
+                    db.Entry(storedInDb).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        UserLogons = User.Identity.GetUserName(),
+                        AuditDateTime = DateTime.Now,
+                        TableName = "InfoData",
+                        AuditAction = "U",
+                        ModelPKey = storedInDb.InfoDataID,
+                        tableInfos = tableColumnInfos
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("","Something failed. Please try again!");
+                    return Json(new[] { infoData }.ToDataSourceResult(request, ModelState));
+                }
+            }
+            return Json(new[] { infoData }.ToDataSourceResult(request, ModelState));
+        }
+
+        /*-------------------------KENDO UI FOR ASP.NET MVC5------------------------------------------*/
+
+        /*-----------------------------CLASSIC ASP.NET MVC5------------------------------------------*/
+      
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -51,7 +245,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return View(toView);
         }
 
-        // GET: PlaceOfServices/FACInfoDatas/Create
+        
         /*Se va a crear un objeto FACInfoData si y solo si se esta modificando un objeto LocationsPOS; por ende se necesita conocer el ID de dicho LocationsPOS
          y ese es el valor que va a tomar la variable locPOS*/
         public async Task<ActionResult> Create(int? locPOS)
@@ -165,7 +359,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return View(fACInfoData);
         }
 
-        // GET: PlaceOfServices/FACInfoDatas/Edit/5
+        
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -287,7 +481,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return View(toUpdate);
         }
 
-
+        /*-----------------------------CLASSIC ASP.NET MVC5------------------------------------------*/
 
         protected override void Dispose(bool disposing)
         {

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
 
-namespace MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels
+namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
 {
     public class VMPHYGrp
     {
-        public int Facitity_DBs_IDPK { get; set; }
+        public int MasterPOSID { get; set; }
 
         public int PHYGrpID { get; set; }
 

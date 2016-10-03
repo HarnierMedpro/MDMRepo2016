@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
@@ -25,14 +26,101 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         private const string ServerLocation = @"\\fl-nas02\MDMFiles\";
         private string[] MediaExtensions = { ".jpeg", ".jpg", ".png", ".pdf", ".rtf", ".xls", ".xsls", ".doc" };
 
-        public ActionResult PosFiles()
+        public ActionResult PosFiles(int? masterPOSID)
         {
+            if (masterPOSID != null && masterPOSID > 0)
+            {
+                ViewBag.MasterPOS = masterPOSID;
+            }
+            ViewData["FileTy"] = db.FileTypeIs.Where(x => x.FileLevel.Equals("pos", StringComparison.InvariantCultureIgnoreCase)).OrderBy(x => x.FileType_Name)
+                            .Select(x => new VMFileType
+                                    {
+                                        FileTypeID = x.FileTypeID,
+                                        FileType_Name = x.FileType_Name,
+                                        FileLevel = x.FileLevel
+                                    });
             return View();
+        }
+
+        public async Task<ActionResult> Upload_File([DataSourceRequest] DataSourceRequest request,
+            HttpPostedFileBase fichero,
+            [Bind(Include = "FileID, MasterPOSID, FileTypeID, Description")] VMPOSFile posFile, int ParentID)
+        {
+            if (ModelState.IsValid)
+            {
+                if (fichero == null || fichero.ContentLength == 0)
+                {
+                    ModelState.AddModelError("","You need to choose a valid file. Please try again!");
+                    return Json(new[] {posFile}.ToDataSourceResult(request, ModelState));
+                } 
+                string fileName = Path.GetFileName(fichero.FileName);
+                try
+                {
+                   
+                    Guid primaryKey = Guid.NewGuid();
+                    var fileExtension = Path.GetExtension(fichero.FileName);
+
+                    var toStore = new MasterFile
+                    {
+                        MasterPOS_MasterPOSID = posFile.MasterPOSID,
+                        Description = posFile.Description,
+                        FileTypeID = posFile.FileTypeID,
+                        FileExtension = fileExtension,
+                        FileName = primaryKey.ToString() + fileExtension,
+                        ServerLocation = ServerLocation,
+                        UploadTime = DateTime.Now
+                    };
+
+                    db.MasterFiles.Add(toStore);
+                    await db.SaveChangesAsync();
+                    posFile.FileID = toStore.FileID;
+                    posFile.FileName = toStore.FileName;
+                    posFile.FileExtension = toStore.FileExtension;
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Somethig failed. Please try again!");
+                    return Json(new[] { posFile }.ToDataSourceResult(request, ModelState));
+                }
+
+                // Retrieve the Windows account token for specific user.
+                IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("hsuarez", "Medpro705!", "MEDPROBILL"); //USER WITH PERMISSIONS TO CREATE AND READ
+                //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MDMTest", "Medpro1", "MEDPROBILL");  //USER WITHOUT PERMISSIONS
+
+                WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
+                WindowsImpersonationContext wic = null;
+                try
+                {
+                    wic = wi.Impersonate();
+                    // Thread is now impersonating you can call the backend operations here...
+                    var physicalPath = Path.Combine(ServerLocation, fileName);
+                    fichero.SaveAs(physicalPath);
+                }
+                catch (Exception)
+                {
+                    MasterFile currentStoredInDb = db.MasterFiles.FirstOrDefault(x => x.FileName == fileName);
+                    if (currentStoredInDb != null)
+                    {
+                        db.MasterFiles.Remove(currentStoredInDb);
+                        db.SaveChanges();
+                    }
+                    ModelState.AddModelError("", "Something failed. You need to have permissions to read/write in this directory.");
+                    return Json(new[] { posFile }.ToDataSourceResult(request, ModelState));
+                }
+                finally
+                {
+                    if (wic != null)
+                    {
+                        wic.Undo();
+                    }
+                }
+            }
+            return Json(new[] { posFile }.ToDataSourceResult(request, ModelState));
         }
 
         public ActionResult Read_POSFiles([DataSourceRequest] DataSourceRequest request, int? locationPOSID)
         {
-            var result = db.MasterFiles.ToList();
+            var result = db.MasterFiles.OrderBy(x => x.FileName).ToList();
             if (locationPOSID != null)
             {
                 result = result.Where(x => x.MasterPOS_MasterPOSID == locationPOSID.Value).ToList();
@@ -43,7 +131,8 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 FileID = x.FileID, 
                 Description = x.Description,
                 FileExtension = x.FileExtension,
-                FileTypeID = x.FileTypeID
+                FileTypeID = x.FileTypeID,
+                FileName = x.FileName
             }), JsonRequestBehavior.AllowGet);
         }
 

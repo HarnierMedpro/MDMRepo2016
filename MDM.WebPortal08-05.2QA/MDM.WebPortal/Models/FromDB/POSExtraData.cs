@@ -52,6 +52,15 @@ namespace MDM.WebPortal.Models.FromDB
         public Nullable<bool> Availavility_completed { get; set; }
         public Nullable<bool> Navinet_request_completed { get; set; }
         public Nullable<bool> Fee_schedule_in_binder { get; set; }
+        public string AdmissionPhone { get; set; }
+        public string ScholarshipRate { get; set; }
+        public Nullable<bool> AcreditationOnFile { get; set; }
+        public string AverageLenOfStay { get; set; }
+        public string HowManyUAPanels { get; set; }
+        public Nullable<bool> HighComplexityCLIA { get; set; }
+        public Nullable<bool> RegistrationAnalyzer { get; set; }
+        public string PaidToPatientState { get; set; }
+        public string MedicareNumber { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MasterPOS> MasterPOS { get; set; }

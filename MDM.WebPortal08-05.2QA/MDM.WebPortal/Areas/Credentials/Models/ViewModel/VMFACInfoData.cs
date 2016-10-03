@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
 {
@@ -17,12 +18,14 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
         [Display(Name = "LICENSE TYPE")]
         public string LicType { get; set; }
 
+        [Display(Name = "LICENSE NUMBER")]
+        public string LicNumber { get; set; }
+
         [Display(Name = "LICENSE STATE")]
         [StringLength(2, MinimumLength = 2)]
         public string StateLic { get; set; }
 
-        [Display(Name = "CLIA NUMBER")]
-        public string LicNumCLIA_waiver { get; set; }
+        
 
         [Display(Name = "LICENSE EFFECTIVE DATE")]
         [DataType(DataType.Date)]
@@ -34,11 +37,28 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public System.DateTime LicExpireDate { get; set; }
 
+        [Display(Name = "CLIA NUMBER")]
+        public string LicNumCLIA_waiver { get; set; }
+
+        [Display(Name = "CLIA EFFECTIVE DATE")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        public Nullable<System.DateTime> CLIA_EffectiveDate { get; set; }
+
+        [Display(Name = "CLIA EXPIRE DATE")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        public Nullable<System.DateTime> CLIA_ExpireDate { get; set; }
+
         [Display(Name = "TAXONOMY")]
         public string Taxonomy { get; set; }
 
         //[Display(Name = "NPI NUMBER")]
         //[StringLength(10, MinimumLength = 10)]
         //public string FAC_NPI_Num { get; set; }
+
+       
+       
+       
     }
 }

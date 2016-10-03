@@ -18,11 +18,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
     {
         private MedProDBEntities db = new MedProDBEntities();
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+       
         public ActionResult Read_FormsOfThisPOS([DataSourceRequest] DataSourceRequest request, int? masterPOSID)
         {
             var result = db.Forms_sent.Include(p => p.MasterPOS).Include(f => f.FormsDict);

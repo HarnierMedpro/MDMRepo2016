@@ -1,0 +1,45 @@
+﻿@model MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMPOSFile
+
+<div class="container-fluid">
+    <fieldset class="scheduler-border">
+        <legend class="scheduler-border text-bold text-uppercase">file:</legend>
+        <dl>
+            <dt>
+                @(Html.Kendo().Upload()
+                      .Name("fichero")
+                      .Multiple(false)
+                      //.TemplateId("fileTemplate") Me esta dando un error que tengo que corregir
+                  )
+                
+            </dt>
+        </dl>
+
+        <dl>
+            <dd>
+                <label class="text-uppercase">description<sup class="text-danger">*</sup></label>
+            </dd>
+            <dt>
+                @Html.EditorFor(model => model.Description, new {htmlAttributes = new {@style = "width:100%; border-radius:3px !important; height:26px;"}})
+            </dt>
+        </dl>
+
+        <dl>
+            <dd>
+                <label class="text-uppercase">pos classification<sup class="text-danger">*</sup></label>
+            </dd>
+            <dt>
+                @(Html.Kendo().DropDownListFor(x => x.FileTypeID)
+                      .DataTextField("FileType_Name")
+                      .DataValueField("FileTypeID")
+                      .HtmlAttributes(new {style = "width: 100%"})
+                      .BindTo((IEnumerable<MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMFileType>) ViewData["FileTy"])
+                      )
+            </dt>
+        </dl>
+
+        <div class="edit-buttons">
+            <a class="k-button k-button-icontext k-update-button" href="\\#"><span class="k-icon k-update"></span>Save</a>
+            <a class="k-button k-button-icontext k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span>Cancel</a>
+        </div>
+    </fieldset>
+</div>
