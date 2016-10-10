@@ -89,13 +89,7 @@
           {
               columns.Bound(x => x.BIDbFvPID).Hidden(true);
 
-              //columns.Bound(x => x.ManagerID).Title("CURRENT MANAGER").Width(70);
-              //columns.Bound(x => x.ManagerID).Title("CURRENT MANAGER").Width(70).EditorTemplateName("Manager");
-
               columns.ForeignKey(o => o.FvPID, (System.Collections.IEnumerable) ViewData["FvP"], "FvPID", "FvPName").Title("FvP").Width(110);
-
-              //Adding EditorTemplateName() clausule  the approach is autocomplete without it the approach is DropDownList
-              //columns.ForeignKey(o => o.DB_ID, (System.Collections.IEnumerable)ViewData["DB"], "DB_ID", "DB").Title("DB").Width(110).EditorTemplateName("tempDBS");
 
               columns.ForeignKey(o => o.DB_ID, (System.Collections.IEnumerable) ViewData["DB"], "DB_ID", "DB").Title("DB").Width(110);
               
@@ -106,7 +100,7 @@
                   commands.Edit();
               }).Title("COMMANDS").Width(110);
           })
-
+          .Editable(ed => ed.Mode(GridEditMode.PopUp).TemplateName("BIDBFvpViewModelEditor"))
           .DataSource(dataSource => dataSource
               .Ajax()
               .PageSize(10)
@@ -120,13 +114,12 @@
               .Update(update => update.Action("Update_BI_DB_FvP", "BI_DB_FvP_Access", new { ManagerID = "#=ManagerID#" }))
               /*The fact that I was using 'ManagerID' as my route variable was the problem. It was trying to use the 'ManagerID' of the new row, which of course was 0.
                * Changing the name of the route variable to 'ParentID' fixed the problem.*/
-               .Create(create => create.Action("Create_BI_DB_FvP", "BI_DB_FvP_Access", new { ParentID = "#=ManagerID#" }))
+              .Create(create => create.Action("Create_BI_DB_FvP", "BI_DB_FvP_Access", new { ParentID = "#=ManagerID#" }))
           )
           .Pageable()
           .Sortable()
           //.Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("Manager"))
-          .ToClientTemplate() 
-          )
+          .ToClientTemplate())
 </script>
 
 <script>
@@ -140,9 +133,7 @@
                     });
                 }
             });
-            // Display the message
             alert(message);
-            // Cancel the changes
             var grid = $("#Manager").data("kendoGrid");
             grid.cancelChanges();
         }
@@ -150,7 +141,7 @@
 
     function dataBound() {
         detailExportPromises = []; //added
-        this.expandRow(this.tbody.find("tr.k-master-row").first());
+        //this.expandRow(this.tbody.find("tr.k-master-row").first());
     }
 
     var detailExportPromises = [];

@@ -1,4 +1,4 @@
-﻿@using System.Collections
+﻿@*@using System.Collections
 @using System.Collections.Generic
 @using Kendo.Mvc.UI
 @using MDM.WebPortal.Areas.Credentials.Models.ViewModel
@@ -187,7 +187,7 @@
 
               items.Add().Text("Contacts").Content(@<text>
 
-                      @RenderNewTabStrip() @*Calling the MVC Razor helper function*@                                                      
+                      @RenderNewTabStrip() @*Calling the MVC Razor helper function                                                     
               
                      
                     </text>
@@ -195,7 +195,7 @@
           })
        .ToClientTemplate()
        
-       )@*//End of TabStrip: tabStrip_#=Facitity_DBs_IDPK# Component*@
+       )@*//End of TabStrip: tabStrip_#=Facitity_DBs_IDPK# Component
     
 @helper RenderNewTabStrip()
 {
@@ -265,7 +265,7 @@
               ); //End of the second tab
             })
          .ToClientTemplate()
-         )//End of the tabStrip Component
+         )
 }
 </script>
 
@@ -351,6 +351,6 @@
     }
 
    
-</script>
+</script>*@
 
 

@@ -22,12 +22,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (MasterPOSID == null)
             {
-                return RedirectToAction("Error", "Error", new {area = "Error"});
+                return RedirectToAction("Index", "Error", new {area = "BadRequest"});
             }
             var pos = await db.MasterPOS.FindAsync(MasterPOSID);
             if (pos == null)
             {
-                return RedirectToAction("Error", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var extraData = pos.POSExtraData;
             var toView = new List<VMPOSLOCExtraData>();
@@ -88,12 +88,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (MasterPOSID == null)
             {
-                return RedirectToAction("Error", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var pos = await db.MasterPOS.FindAsync(MasterPOSID);
             if (pos == null)
             {
-                return RedirectToAction("Error", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var extraData = pos.POSExtraData;
             var toView = new List<VMPOSLOCExtraData>();
@@ -156,12 +156,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (MasterPOSID == null)
             {
-                return RedirectToAction("Error", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var pos = await db.MasterPOS.FindAsync(MasterPOSID);
             if (pos == null)
             {
-                return RedirectToAction("Error", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var extraData = pos.POSExtraData;
             var toView = new List<VMPOSLOCExtraData>();

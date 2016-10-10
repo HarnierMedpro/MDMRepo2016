@@ -216,6 +216,8 @@
     <Compile Include="Areas\AudiTrails\Models\AuditToStore.cs" />
     <Compile Include="Areas\AudiTrails\Models\TableInfo.cs" />
     <Compile Include="Areas\AudiTrails\Models\VMAuditLog.cs" />
+    <Compile Include="Areas\BadRequest\BadRequestAreaRegistration.cs" />
+    <Compile Include="Areas\BadRequest\Controllers\ErrorController.cs" />
     <Compile Include="Areas\Credentials\Controllers\ContactsController.cs" />
     <Compile Include="Areas\Credentials\Controllers\ContactTypesController.cs" />
     <Compile Include="Areas\Credentials\Controllers\CorporateMasterListsController.cs" />
@@ -223,7 +225,7 @@
     <Compile Include="Areas\Credentials\Controllers\Forms_SentController.cs" />
     <Compile Include="Areas\Credentials\Controllers\MasterPOSController.cs" />
     <Compile Include="Areas\Credentials\Controllers\MasterPOS_ContactController.cs" />
-    <Compile Include="Areas\Credentials\Controllers\VMPosIds.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMPosIds.cs" />
     <Compile Include="Areas\Credentials\Controllers\ZoomDB_POSID_grpController.cs" />
     <Compile Include="Areas\Credentials\CredentialsAreaRegistration.cs" />
     <Compile Include="Areas\Credentials\Models\ViewModel\VMContact.cs" />
@@ -240,8 +242,6 @@
     <Compile Include="Areas\Credentials\Models\ViewModel\VMPOSExtraInfo.cs" />
     <Compile Include="Areas\Credentials\Models\ViewModel\VMZoomDB_POSID.cs" />
     <Compile Include="Areas\Credentials\Controllers\POSExtraDatasController.cs" />
-    <Compile Include="Areas\Error\Controllers\ErrorController.cs" />
-    <Compile Include="Areas\Error\ErrorAreaRegistration.cs" />
     <Compile Include="Areas\ManagerDBA\Controllers\BI_DB_FvP_AccessController.cs" />
     <Compile Include="Areas\ManagerDBA\Controllers\Manager_MasterController.cs" />
     <Compile Include="Areas\ManagerDBA\Controllers\Manager_TypeController.cs" />
@@ -1329,9 +1329,6 @@
     <Content Include="Content\kendo\kendo.silver.mobile.min.css.map" />
     <Content Include="Content\kendo\kendo.uniform.min.css.map" />
     <Content Include="Content\kendo\kendo.uniform.mobile.min.css.map" />
-    <Content Include="Areas\Error\Views\Error\Error.cshtml" />
-    <Content Include="Areas\Error\Views\Error\Index.cshtml" />
-    <Content Include="Areas\Error\Views\web.config" />
     <EntityDeploy Include="Models\FromZoomDB\ZoomDBEntities.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ZoomDBEntities.Designer.cs</LastGenOutput>
@@ -1444,11 +1441,6 @@
     <Content Include="Areas\Credentials\Views\Corp_Owner\Create.cshtml" />
     <Content Include="Areas\Credentials\Views\MasterPOS\Index_MasterPOS.cshtml" />
     <Content Include="Areas\Credentials\Views\POSAddressInfo\Details.cshtml" />
-    <Content Include="Areas\Credentials\Views\ZoomDB_POSID_grp\Create.cshtml" />
-    <Content Include="Areas\Credentials\Views\ZoomDB_POSID_grp\Delete.cshtml" />
-    <Content Include="Areas\Credentials\Views\ZoomDB_POSID_grp\Details.cshtml" />
-    <Content Include="Areas\Credentials\Views\ZoomDB_POSID_grp\Edit.cshtml" />
-    <Content Include="Areas\Credentials\Views\ZoomDB_POSID_grp\Index.cshtml" />
     <Content Include="Areas\Credentials\Views\MasterPOS_Contact\Create.cshtml" />
     <Content Include="Areas\Credentials\Views\POSFiles\PosFiles.cshtml" />
     <Content Include="Areas\Credentials\Views\POSAddressInfo\Create.cshtml" />
@@ -1462,6 +1454,10 @@
     <Content Include="Areas\Credentials\Views\POSExtraDatas\ExtraInfo_Detail.cshtml" />
     <Content Include="Areas\Credentials\Views\POSExtraDatas\ExtraQuestion_Detail.cshtml" />
     <Content Include="Areas\Credentials\Views\PHYGroups\PHYGrp_Info.cshtml" />
+    <Content Include="Views\Shared\Save_POSContacts.cshtml" />
+    <Content Include="Areas\BadRequest\Views\web.config" />
+    <Content Include="Areas\BadRequest\Views\Error\Index.cshtml" />
+    <Content Include="Areas\BadRequest\Views\Error\Forbbiden.cshtml" />
     <None Include="Properties\PublishProfiles\TEST_QASite.pubxml" />
     <None Include="Properties\PublishProfiles\Site02.pubxml" />
     <None Include="Properties\PublishProfiles\TestQA.pubxml" />
@@ -2764,40 +2760,16 @@
     <Content Include="Views\DBLists\CheckDB.cshtml" />
     <Content Include="Views\DBLists\Read.cshtml" />
     <Content Include="Views\CorporateMasterList\Index.cshtml" />
-    <Content Include="Views\OwnerLists1\Create.cshtml" />
-    <Content Include="Views\OwnerLists1\Delete.cshtml" />
-    <Content Include="Views\OwnerLists1\Details.cshtml" />
-    <Content Include="Views\OwnerLists1\Edit.cshtml" />
-    <Content Include="Views\OwnerLists1\Index.cshtml" />
-    <Content Include="Views\OwnerLists1\Read.cshtml" />
-    <Content Include="Views\MDM_POS_ListName\Create.cshtml" />
-    <Content Include="Views\MDM_POS_ListName\Delete.cshtml" />
-    <Content Include="Views\MDM_POS_ListName\Details.cshtml" />
-    <Content Include="Views\MDM_POS_ListName\Edit.cshtml" />
-    <Content Include="Views\MDM_POS_ListName\Index.cshtml" />
-    <Content Include="Views\MDM_POS_ListName\Read.cshtml" />
-    <Content Include="Views\MDM_POS_Name_DBPOS_grp\Create.cshtml" />
-    <Content Include="Views\MDM_POS_Name_DBPOS_grp\Edit.cshtml" />
-    <Content Include="Views\MDM_POS_Name_DBPOS_grp\Index.cshtml" />
-    <Content Include="Views\OwnerLists1\HierarchyBinding_Corp.cshtml" />
-    <Content Include="Views\MDM_POS_Name_DBPOS_grp\GetFacilities.cshtml" />
-    <Content Include="Views\MDM_POS_Name_DBPOS_grp\EditorTemplates\DB_ID.cshtml" />
-    <Content Include="Views\MDM_POS_Name_DBPOS_grp\EditorTemplates\FacilityId.cshtml" />
-    <Content Include="Views\MDM_POS_Name_DBPOS_grp\GetFacByVendors.cshtml" />
-    <Content Include="Views\MDM_POS_Name_DBPOS_grp\EditorTemplates\PosId.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PopupEditView.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DB_ID.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\FacilityId.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PosId.cshtml" />
-    <Content Include="Views\MDM_POS_Name_DBPOS_grp\Read.cshtml" />
     <Content Include="Views\RolesAdmin\Read_UserOfrole.cshtml" />
     <Content Include="Views\RolesAdmin\Read_Roles.cshtml" />
     <Content Include="Views\CPTDatas\Index.cshtml" />
     <Content Include="Views\CPTDatas\Read.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PopUpEditCpt.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Test.cshtml" />
     <Content Include="Views\Shared\_CreateEdmed.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\tempDBS.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Available_Manager_Type.cshtml" />
     <Content Include="Views\Permissions\Create.cshtml" />
     <Content Include="Views\Permissions\Index.cshtml" />
@@ -2818,10 +2790,6 @@
     <Content Include="Views\AreaSystems\Index.cshtml" />
     <Content Include="Views\Menus1\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ActionsInSystem.cshtml" />
-    <Content Include="Views\CollNoteTypeCatPriorities\Create.cshtml" />
-    <Content Include="Views\CollNoteTypeCatPriorities\Details.cshtml" />
-    <Content Include="Views\CollNoteTypeCatPriorities\Edit.cshtml" />
-    <Content Include="Views\CollNoteTypeCatPriorities\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MenuViewModelEditor.cshtml" />
     <Content Include="Views\Menus\Create.cshtml" />
     <Content Include="Views\Menus\Index.cshtml" />
@@ -2862,14 +2830,17 @@
     <Content Include="Views\Shared\EditorTemplates\POSExtraQVMEditor.cshtml" />
     <Content Include="Views\Shared\_SelectContacts.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\POSPhyGViewModelEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ACCodeEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ActionCodeViewModelEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\BIDBFvpViewModelEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\ActionCode\Views\Shared\" />
     <Folder Include="Areas\AudiTrails\Views\Shared\" />
+    <Folder Include="Areas\BadRequest\Models\" />
+    <Folder Include="Areas\BadRequest\Views\Shared\" />
     <Folder Include="Areas\Credentials\Views\Shared\" />
-    <Folder Include="Areas\Error\Models\" />
-    <Folder Include="Areas\Error\Views\Shared\" />
     <Folder Include="Areas\ManagerDBA\Views\Shared\" />
     <Folder Include="Areas\PlaceOfServices\Views\LocPOS_MPServ\" />
     <Folder Include="Areas\PlaceOfServices\Views\Shared\" />

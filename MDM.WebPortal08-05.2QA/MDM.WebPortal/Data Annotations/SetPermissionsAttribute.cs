@@ -91,5 +91,19 @@ namespace MDM.WebPortal.Data_Annotations
             }
             return false;
         }
+
+        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
+        {
+            if (filterContext.HttpContext.Request.IsAuthenticated)
+            {
+                //filterContext.Result = new HttpStatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
+                filterContext.Result = new RedirectResult("/BadRequest/Error/Forbbiden");
+            }
+            else
+            {
+                base.HandleUnauthorizedRequest(filterContext);
+            }
+        }
+      
     }
 }

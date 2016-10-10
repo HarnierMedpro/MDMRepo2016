@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
 using MDM.WebPortal.Models.FromDB;
 
@@ -23,12 +24,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (masterPOSID == null)
             {
-               return RedirectToAction("Index","Error", new{area="Error"}); 
+               return RedirectToAction("Index","Error", new{area="BadRequest"}); 
             }
             var masterPOS = await db.MasterPOS.FindAsync(masterPOSID);
             if (masterPOS == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" }); 
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" }); 
             }
             var toView = new VMMasterPOS_Contact {MasterPOS_MasterPOSID = masterPOSID.Value};
             ViewBag.MasterPOS = masterPOSID;
@@ -85,7 +86,27 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
         }
 
-       
+
+        public async Task<ActionResult> Save_POSContacts([DataSourceRequest] DataSourceRequest request, int MasterPOSID, int[] Contacts)
+        {
+            if (MasterPOSID < 0 || !Contacts.Any())
+            {
+                ModelState.AddModelError("","Something failed. Please try again!");
+            }
+            try
+            {
+                var toStore = Contacts.Select(x => new MasterPOS_Contact { MasterPOS_MasterPOSID = MasterPOSID, ContactID = x }).ToList();
+                db.MasterPOS_Contact.AddRange(toStore);
+                await db.SaveChangesAsync();
+                //ModelState.AddModelError("","Success.");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Something failed. Please try again!");
+            }
+            
+            return Json(new List<VMContact>());
+        }
 
         protected override void Dispose(bool disposing)
         {

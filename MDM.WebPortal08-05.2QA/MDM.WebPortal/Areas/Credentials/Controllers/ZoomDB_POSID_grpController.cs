@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
 using MDM.WebPortal.Models.FromDB;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers

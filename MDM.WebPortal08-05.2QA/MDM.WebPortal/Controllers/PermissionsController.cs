@@ -71,13 +71,7 @@ namespace MDM.WebPortal.Controllers
                 Act_Name = x.Act_Name
             }), JsonRequestBehavior.AllowGet);
 
-            // ORIGINAL CODE
-            //return Json(db.Actions.Where(x => x.ControllerID == ControllerID).OrderBy(x => x.Act_Name).ToDataSourceResult(request, x => new VMActionSystem
-            //{
-            //    ActionID = x.ActionID, 
-            //    Act_Name = x.Act_Name
-            //}), JsonRequestBehavior.AllowGet);
-
+          
         }
 
         public JsonResult GetCascadeActions(int ControllerID)
@@ -89,13 +83,6 @@ namespace MDM.WebPortal.Controllers
                 ActionID = x.ActionID,
                 Act_Name = x.Act_Name
             }), JsonRequestBehavior.AllowGet);
-            
-            // ORIGINAL CODE
-            //return Json(db.Actions.Where(x => x.ControllerID == ControllerID).OrderBy(x => x.Act_Name).Select(x => new VMActionSystem
-            //{
-            //    ActionID = x.ActionID, 
-            //    Act_Name = x.Act_Name
-            //}), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Virtualization_GetControllers([DataSourceRequest] DataSourceRequest request)
@@ -111,12 +98,7 @@ namespace MDM.WebPortal.Controllers
                     Cont_Name = x.Cont_Name
                 }), JsonRequestBehavior.AllowGet);
 
-            // ORIGINAL CODE
-            //return Json(db.Controllers.OrderBy(x => x.Cont_Name).ToDataSourceResult(request, x => new VMControllerSystem
-            //{
-            //    ControllerID = x.ControllerID,
-            //    Cont_Name = x.Cont_Name
-            //}), JsonRequestBehavior.AllowGet);
+           
         }
 
         public JsonResult Controllers()
@@ -124,12 +106,6 @@ namespace MDM.WebPortal.Controllers
             /*Solo voy a obtener aquellos controladores cuyas acciones no tienen permisos asignados aun*/
             var aux = db.Controllers.Include(controller => controller.ActionSystems).Where(controller => controller.ActionSystems.Any(action => !action.Permissions.Any())).ToList();
            
-            //return Json(aux.Select(x => new VMControllerSystem
-            //{
-            //    ControllerID = x.ControllerID,
-            //    Cont_Name = x.Cont_Name
-            //}), JsonRequestBehavior.AllowGet);
-
             // ORIGINAL CODE
             return Json(db.Controllers.OrderBy(x => x.Cont_Name).Select(x => new VMControllerSystem
             {

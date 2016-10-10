@@ -1,22 +1,22 @@
 ﻿using System.Web.Mvc;
 
-namespace eMedServiceCorp.Areas.Error
+namespace MDM.WebPortal.Areas.BadRequest
 {
-    public class ErrorAreaRegistration : AreaRegistration 
+    public class BadRequestAreaRegistration : AreaRegistration 
     {
         public override string AreaName 
         {
             get 
             {
-                return "Error";
+                return "BadRequest";
             }
         }
 
         public override void RegisterArea(AreaRegistrationContext context) 
         {
             context.MapRoute(
-                "Error_default",
-                "Error/{controller}/{action}/{id}",
+                "BadRequest_default",
+                "BadRequest/{controller}/{action}/{id}",
                 new { action = "Index", id = UrlParameter.Optional }
             );
         }

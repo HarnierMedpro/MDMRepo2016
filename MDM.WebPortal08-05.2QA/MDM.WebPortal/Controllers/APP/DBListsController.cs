@@ -41,6 +41,8 @@ namespace MDM.WebPortal.Controllers.APP
             }), JsonRequestBehavior.AllowGet);
         }
 
+       
+
         public async Task<ActionResult> Update_DB([DataSourceRequest]DataSourceRequest request, 
             [Bind(Include = "DB_ID,DB,databaseName, active")] VMDBList dBList)
         {

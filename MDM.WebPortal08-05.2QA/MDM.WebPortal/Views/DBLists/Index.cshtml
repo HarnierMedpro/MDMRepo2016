@@ -18,7 +18,7 @@
 
 <script src="~/Scripts/kendo/jszip.min.js"></script>
 <div class="container-fluid">
-    @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMDBList>()
+    @(Html.Kendo().Grid<MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMDBList>()
           .Name("GridDB")
           .DataSource(dataSource => dataSource
               .Ajax()

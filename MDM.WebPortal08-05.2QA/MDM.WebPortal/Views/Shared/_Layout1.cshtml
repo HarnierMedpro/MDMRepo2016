@@ -92,12 +92,12 @@
                                
                                 <li>@Html.ActionLink("Action_Codes", "Index", "ActionCodes", new { Area = "ActionCode" }, new { })</li>
                                 <li>@Html.ActionLink("BI-ManagerAccess", "Index", "BI_DB_FvP_Access", new { Area = "ManagerDBA" }, new { })</li>
-                                <li>@Html.ActionLink("BI-POSName", "Index", "MDM_POS_Name_DBPOS_grp", new {Area = ""}, new {})</li>
+                                @*<li>@Html.ActionLink("BI-POSName", "Index", "MDM_POS_Name_DBPOS_grp", new {Area = ""}, new {})</li>*@
                                 
                                 <li class="dropdown-submenu">
-                                    <a href="javascript:void(0);" class="has_children">BI-PlaceOfServices</a>
+                                    <a href="javascript:void(0);" class="has_children">MasterPOS</a>
                                     <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>@Html.ActionLink("BI-PlaceOfServices", "Index", "MasterPOS", new { Area = "Credentials" }, new { })</li>
+                                        <li>@Html.ActionLink("MasterPOS", "Index_MasterPOS", "MasterPOS", new { Area = "Credentials" }, new { })</li>
                                         <li>@Html.ActionLink("Level Of Care", "Index", "LevelOfCare", new { Area = "Credentials" }, new { })</li>
                                         <li>@Html.ActionLink("MPServices", "Index", "MPServices", new { Area = "Credentials" }, new { })</li>
                                         <li>@Html.ActionLink("Providers", "Index", "Providers", new { Area = "Credentials" }, new { })</li>
@@ -234,7 +234,7 @@
                 
             } else {
                 // upscroll code
-                if (currentScroll == 0) {
+                if (currentScroll === 0) {
                     $("nav").removeClass("navbar-fixed-top");
                 }
             }

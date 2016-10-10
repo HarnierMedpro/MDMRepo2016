@@ -26,39 +26,71 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         private const string ServerLocation = @"\\fl-nas02\MDMFiles\";
         private string[] MediaExtensions = { ".jpeg", ".jpg", ".png", ".pdf", ".rtf", ".xls", ".xsls", ".doc" };
 
-        public ActionResult PosFiles(int? masterPOSID)
+        public async Task<ActionResult> PosFiles(int? masterPOSID)
         {
-            if (masterPOSID != null && masterPOSID > 0)
+            if (masterPOSID == null)
             {
-                ViewBag.MasterPOS = masterPOSID;
+                return RedirectToAction("Index", "Error", new { area = "Error" });
             }
-            ViewData["FileTy"] = db.FileTypeIs.Where(x => x.FileLevel.Equals("pos", StringComparison.InvariantCultureIgnoreCase)).OrderBy(x => x.FileType_Name)
-                            .Select(x => new VMFileType
-                                    {
-                                        FileTypeID = x.FileTypeID,
-                                        FileType_Name = x.FileType_Name,
-                                        FileLevel = x.FileLevel
-                                    });
-            return View();
+            var currentLocationPos = await db.MasterPOS.FindAsync(masterPOSID);
+            if (currentLocationPos == null)
+            {
+                return RedirectToAction("Index", "Error", new { area = "Error" });
+            }
+            var result = new List<VMPOSFile>();
+            if (currentLocationPos.MasterFiles.Any())
+            {
+                result = currentLocationPos.MasterFiles.Select(x => new VMPOSFile
+                {
+                    MasterPOSID = masterPOSID.Value,
+                    FileName = x.FileName,
+                    FileID = x.FileID,
+                    Description = x.Description,
+                    FileExtension = x.FileExtension,
+                    FileTypeID = x.FileTypeID
+                }).ToList();
+            }
+            ViewBag.MasterPOS = masterPOSID;
+            return View(result);
         }
 
+        public ActionResult Saveds(HttpPostedFileBase files)
+        {
+            // The Name of the Upload component is "files"
+            if (files != null)
+            {
+               
+                    // Some browsers send file names with full path.
+                    // We are only interested in the file name.
+                var fileName = Path.GetFileName(files.FileName);
+                    var physicalPath = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+
+                    // The files are not actually saved in this demo
+                    files.SaveAs(physicalPath);
+             
+            }
+
+            // Return an empty string to signify success
+            return Content("");
+        }
+
+
         public async Task<ActionResult> Upload_File([DataSourceRequest] DataSourceRequest request,
-            HttpPostedFileBase fichero,
-            [Bind(Include = "FileID, MasterPOSID, FileTypeID, Description")] VMPOSFile posFile, int ParentID)
+            HttpPostedFileBase files, [Bind(Include = "FileID, MasterPOSID, FileTypeID, Description")] VMPOSFile posFile, int ParentID)
         {
             if (ModelState.IsValid)
             {
-                if (fichero == null || fichero.ContentLength == 0)
+                if (files == null || files.ContentLength == 0)
                 {
                     ModelState.AddModelError("","You need to choose a valid file. Please try again!");
                     return Json(new[] {posFile}.ToDataSourceResult(request, ModelState));
-                } 
-                string fileName = Path.GetFileName(fichero.FileName);
+                }
+                string fileName = Path.GetFileName(files.FileName);
                 try
                 {
                    
                     Guid primaryKey = Guid.NewGuid();
-                    var fileExtension = Path.GetExtension(fichero.FileName);
+                    var fileExtension = Path.GetExtension(files.FileName);
 
                     var toStore = new MasterFile
                     {
@@ -94,7 +126,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     wic = wi.Impersonate();
                     // Thread is now impersonating you can call the backend operations here...
                     var physicalPath = Path.Combine(ServerLocation, fileName);
-                    fichero.SaveAs(physicalPath);
+                    files.SaveAs(physicalPath);
                 }
                 catch (Exception)
                 {
@@ -118,12 +150,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return Json(new[] { posFile }.ToDataSourceResult(request, ModelState));
         }
 
-        public ActionResult Read_POSFiles([DataSourceRequest] DataSourceRequest request, int? locationPOSID)
+        public ActionResult Read_POSFiles([DataSourceRequest] DataSourceRequest request, int? MasterPOSID)
         {
             var result = db.MasterFiles.OrderBy(x => x.FileName).ToList();
-            if (locationPOSID != null)
+            if (MasterPOSID != null)
             {
-                result = result.Where(x => x.MasterPOS_MasterPOSID == locationPOSID.Value).ToList();
+                result = result.Where(x => x.MasterPOS_MasterPOSID == MasterPOSID.Value).ToList();
             }
             return Json(result.ToDataSourceResult(request, x => new VMPOSFile
             {

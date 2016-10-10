@@ -5,12 +5,17 @@
         <legend class="scheduler-border text-bold text-uppercase">file:</legend>
         <dl>
             <dt>
-                @(Html.Kendo().Upload()
+                @*@(Html.Kendo().Upload()
                       .Name("fichero")
                       .Multiple(false)
+                      //.Async(a => a
+                      //    .Save("Saveds", "POSFiles")
+                      //    .AutoUpload(true) 
+                      //)
                       //.TemplateId("fileTemplate") Me esta dando un error que tengo que corregir
-                  )
-                
+                      .ToClientTemplate()
+                  )*@
+                <input name="files" id="files" type="file"/>
             </dt>
         </dl>
 
@@ -29,10 +34,27 @@
             </dd>
             <dt>
                 @(Html.Kendo().DropDownListFor(x => x.FileTypeID)
+                      .AutoBind(false)
                       .DataTextField("FileType_Name")
                       .DataValueField("FileTypeID")
                       .HtmlAttributes(new {style = "width: 100%"})
-                      .BindTo((IEnumerable<MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMFileType>) ViewData["FileTy"])
+                      .DataSource(source =>
+                      {
+                          source.Custom()
+                              .ServerFiltering(true)
+                              .ServerPaging(true)
+                              .PageSize(80)
+                              .Type("aspnetmvc-ajax")
+                              .Transport(transport =>
+                              {
+                                  transport.Read("Read_PosFileType", "FileTypeIs");
+                              })
+                              .Schema(schema =>
+                              {
+                                  schema.Data("Data")
+                                      .Total("Total");
+                              });
+                      })
                       )
             </dt>
         </dl>
@@ -43,3 +65,6 @@
         </div>
     </fieldset>
 </div>
+
+
+

@@ -21,6 +21,7 @@
 {
     tools.Create().Text("NEW CONTROLLER");
     tools.Excel();
+    tools.Custom().Text("NEW AREA").Url("javascript:showAreaWdw()");
 })
 .Columns(columns =>
 {
@@ -58,27 +59,93 @@
       .Update(update => update.Action("Update_ControllerSystem", "ControllerSystems"))
       .Create(create => create.Action("Create_ControllerSystem", "ControllerSystems"))
  )
-    )
+      )
+
+    <div style="display:none">
+        @(Html.Kendo().Window()
+           .Name("areaWdw")
+           .Width(630)
+           .Height(315)
+           .Actions(actions => actions.Minimize().Maximize().Close())
+           .AutoFocus(true)
+           .Visible(false)
+           .Title("AREA")
+           .Draggable()
+           .Resizable()
+           .Content(@<text>
+                <fieldset class="scheduler-border">
+                    <legend class="scheduler-border text-uppercase text-bold">area:</legend>
+                    <dl>
+                        <dt>
+                            <label class="control-label">NAME <sup class="text-danger">*</sup></label>
+                        </dt>
+                        <dd>
+                            @Html.Editor("AreaName", new {htmlAttributes = new {id="tb_Area", @style = "width:100%; border-radius:3px !important; height:26px;"}})
+                        </dd>
+                    </dl>
+                    <br/>
+                    <div class="text-center">
+                        <a id="btnSave" class="btn btn-ar btn-primary"><i class="fa fa-cloud-upload"></i> Save</a>
+                    </div>
+                </fieldset> 
+          </text>)
+        )
+    </div>
 </div>
 
 <script src="~/Scripts/kendo/jszip.min.js"></script>
+<script src="~/Scripts/lib/Notify/notify.min.js"></script>
 <script type="text/javascript">
     function error_handler(e) {
         if (e.errors) {
             var message = "Errors:\n";
-            // Create a message containing all errors.
-            $.each(e.errors, function (key, value) {
+            $.each(e.errors, function(key, value) {
                 if ('errors' in value) {
-                    $.each(value.errors, function () {
+                    $.each(value.errors, function() {
                         message += this + "\n";
                     });
                 }
             });
-            // Display the message
             alert(message);
-            // Cancel the changes
             var grid = $("#ControllerSystem").data("kendoGrid");
             grid.cancelChanges();
         }
     }
+
+    function showAreaWdw() {
+        $("#areaWdw").data("kendoWindow").open().center();
+    }
+
+    $("#btnSave").click(function() {
+        if ($.trim($('#tb_Area').val()).length === 0) {
+            $("#tb_Area").notify("This field is required. Try again!",
+               {
+                   position: "bottom left",
+                   className: 'error'
+               }
+           );
+            $("#tb_Area").focus();
+        } else {
+            var domainName = "http://" + window.location.host.toString();
+            var area = $("#tb_Area").val();
+            $.ajax({
+                type: "POST",
+                url: domainName + '/AreaSystems/Create_Area',
+                data: {
+                    AreaName: area
+                },
+                success: function (msg) {
+                    $("#areaWdw").data("kendoWindow").close();
+                    var grid = $("#ControllerSystem").data("kendoGrid");
+                    grid.dataSource.read();
+                },
+                complete: function (xhr, success) { },
+                error: function (xhr, ajaxOptions, thrwnError) {
+                    alert('Something failed. Please try again!');
+                }
+            });
+        }
+    });
 </script>
+
+ 

@@ -1,4 +1,5 @@
-﻿@using Kendo.Mvc.UI
+﻿@using System.Collections
+@using Kendo.Mvc.UI
   @*@model IEnumerable<MDM.WebPortal.Models.FromDB.ADPMaster>*@
 
 @{
@@ -81,7 +82,7 @@
      {    
          columns.Bound(o => o.Edgemed_UserName).Width(110);
 
-         columns.Bound(o => o.Zno).Width(70);
+         columns.ForeignKey(o => o.Zno, (IEnumerable<SelectListItem>)ViewData["Zno"],"Text","Value").Width(70);
 
          columns.Bound(o => o.EdgeMed_ID).Width(110);
 

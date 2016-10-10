@@ -16,53 +16,53 @@
 </header>
 <div class="container-fluid">
 
-    @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMActionSystem>()
-.Name("ActionSystem")
-.ToolBar(tools =>
-{
-    tools.Create().Text("NEW ACTION");
-    tools.Excel();
-})
-.Columns(columns =>
-{
-    columns.Bound(x => x.ActionID).Hidden(true);
+@(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMActionSystem>()
+        .Name("ActionSystem")
+        .ToolBar(tools =>
+        {
+            tools.Create().Text("NEW ACTION");
+            tools.Excel();
+        })
+        .Columns(columns =>
+        {
+            columns.Bound(x => x.ActionID).Hidden(true);
 
-    columns.ForeignKey(x => x.ControllerID, (System.Collections.IEnumerable)ViewData["Controllers"], "ControllerID", "Cont_Name").Title("CONTROLLER").Width(110);
+            columns.ForeignKey(x => x.ControllerID, (System.Collections.IEnumerable)ViewData["Controllers"], "ControllerID", "Cont_Name").Title("CONTROLLER").Width(110);
     
-    columns.Bound(x => x.Act_Name).Width(110);
+            columns.Bound(x => x.Act_Name).Width(110);
 
-    columns.Command(commands =>
-    {
-        commands.Edit();
-    }).Title("COMMANDS").Width(110);
-})
-.Sortable()
-.Filterable()
-.Pageable(ps => ps.Refresh(true)
-   .PreviousNext(true).PageSizes(true))
-.Groupable()
-.Reorderable(r => r.Columns(true))
-.Resizable(r => r.Columns(true))
-.Selectable(s => s.Enabled(true)
-.Type(GridSelectionType.Row)
-.Mode(GridSelectionMode.Single))
+            columns.Command(commands =>
+            {
+                commands.Edit();
+            }).Title("COMMANDS").Width(110);
+        })
+        .Sortable()
+        .Filterable()
+        .Pageable(ps => ps.Refresh(true)
+           .PreviousNext(true).PageSizes(true))
+        .Groupable()
+        .Reorderable(r => r.Columns(true))
+        .Resizable(r => r.Columns(true))
+        .Selectable(s => s.Enabled(true)
+        .Type(GridSelectionType.Row)
+        .Mode(GridSelectionMode.Single))
 
-.Editable(editable => { editable.TemplateName("ActionViewModelEditor"); editable.Mode(GridEditMode.PopUp); })
+        .Editable(editable => { editable.TemplateName("ActionViewModelEditor"); editable.Mode(GridEditMode.PopUp); })
 
-.DataSource(dataSource => dataSource
-  .Ajax()
-  .PageSize(10)
-    .Model(model =>
-      {
-          model.Id(e => e.ActionID);
-          model.Field(e => e.ActionID).Editable(false);
-      })
-      .Group(x => x.Add(y => y.ControllerID))
-      .Events(events => events.Error("error_handler"))
-      .Read(read => read.Action("Read_ActionSystems", "ActionSystems"))
-      .Update(update => update.Action("Update_ActionSystems", "ActionSystems"))
-      .Create(create => create.Action("Create_ActionSystems", "ActionSystems"))
- )
+        .DataSource(dataSource => dataSource
+          .Ajax()
+          .PageSize(10)
+            .Model(model =>
+              {
+                  model.Id(e => e.ActionID);
+                  model.Field(e => e.ActionID).Editable(false);
+              })
+              .Group(x => x.Add(y => y.ControllerID))
+              .Events(events => events.Error("error_handler"))
+              .Read(read => read.Action("Read_ActionSystems", "ActionSystems"))
+              .Update(update => update.Action("Update_ActionSystems", "ActionSystems"))
+              .Create(create => create.Action("Create_ActionSystems", "ActionSystems"))
+         )
     )
 </div>
 
@@ -78,9 +78,7 @@
                     });
                 }
             });
-            // Display the message
             alert(message);
-            // Cancel the changes
             var grid = $("#ActionSystem").data("kendoGrid");
             grid.cancelChanges();
         }

@@ -32,28 +32,6 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
         public async Task<ActionResult> Read_License([DataSourceRequest] DataSourceRequest request, int? MasterPOSID)
         {
-            //var result = new InfoData();
-            //if (MasterPOSID != null && MasterPOSID > 0)
-            //{
-            //    var MasterPOS = await db.MasterPOS.FindAsync(MasterPOSID);
-            //    if (MasterPOS != null && MasterPOS.InfoData != null)
-            //    {
-            //        result = MasterPOS.InfoData;
-            //    }
-            //}
-            //return Json(new[]{result}.ToDataSourceResult(request, x => new VMFACInfoData
-            //{
-            //   InfoDataID = x.InfoDataID,
-            //   LicType = x.LicType,
-            //   LicNumber = x.LicNumber,
-            //   StateLic = x.StateLic,
-            //   LicEffectiveDate = x.LicEffectiveDate,
-            //   LicExpireDate = x.LicExpireDate,
-            //   LicNumCLIA_waiver = x.LicNumCLIA_waiver,
-            //   CLIA_EffectiveDate = x.CLIA_EffectiveDate,
-            //   CLIA_ExpireDate = x.CLIA_ExpireDate,
-            //   Taxonomy = x.Taxonomy
-            //}));
             var result = new List<VMFACInfoData>();
             if (MasterPOSID != null && MasterPOSID > 0)
             {
@@ -86,6 +64,11 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (infoData.LicExpireDate <= infoData.LicEffectiveDate || infoData.CLIA_ExpireDate <= infoData.CLIA_EffectiveDate)
+                {
+                    ModelState.AddModelError("", "Invalid Dates. Please try again!");
+                    return Json(new[] { infoData }.ToDataSourceResult(request, ModelState));
+                }
                 using (DbContextTransaction dbtTransaction = db.Database.BeginTransaction())
                 {
                     try
@@ -133,7 +116,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (infoData.LicExpireDate < infoData.LicEffectiveDate || infoData.CLIA_ExpireDate < infoData.CLIA_EffectiveDate)
+                if (infoData.LicExpireDate <= infoData.LicEffectiveDate || infoData.CLIA_ExpireDate <= infoData.CLIA_EffectiveDate)
                 {
                     ModelState.AddModelError("","Invalid Dates. Please try again!");
                     return Json(new[] { infoData }.ToDataSourceResult(request, ModelState));
@@ -218,13 +201,13 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var currentLocationPos = await db.MasterPOS.FindAsync(id);
             //FACInfoData fACInfoData = await db.FACInfoDatas.FindAsync(id);
             if (currentLocationPos == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             InfoData fACInfoData = currentLocationPos.InfoData;
             if (fACInfoData == null)

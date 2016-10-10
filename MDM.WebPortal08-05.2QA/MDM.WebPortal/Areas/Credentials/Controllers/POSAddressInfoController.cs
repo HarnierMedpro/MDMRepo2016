@@ -11,11 +11,13 @@ using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
 using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    [SetPermissions]
     public class POSAddressInfoController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -72,14 +74,14 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             {
                 ViewBag.MasterPOS = MasterPOSID.Value;
             }
-            ViewData["TimeZone"] = new List<SelectListItem>
-            {
-                new SelectListItem{Value = "CST", Text = "Central Time Zone"},
-                new SelectListItem{Text = "Eastern Time Zone", Value = "EST"}, 
-                new SelectListItem{Text = "Mountain Time Zone",Value = "MST"},
-                new SelectListItem{Value = "PST", Text = "Pacific Time Zone"}
-            };
-            ViewData["States"] = new AllUSStates().states;
+            //ViewData["TimeZone"] = new List<SelectListItem>
+            //{
+            //    new SelectListItem{Value = "CST", Text = "Central Time Zone"},
+            //    new SelectListItem{Text = "Eastern Time Zone", Value = "EST"}, 
+            //    new SelectListItem{Text = "Mountain Time Zone",Value = "MST"},
+            //    new SelectListItem{Value = "PST", Text = "Pacific Time Zone"}
+            //};
+            //ViewData["States"] = new AllUSStates().states;
             return View();
         }
 
@@ -87,12 +89,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (MasterPOSID == null)
             {
-              return RedirectToAction("Error","Error", new{area ="Error"});  
+              return RedirectToAction("Forbbiden","Error", new{area ="BadRequest"});  
             }
             var pos = await db.MasterPOS.FindAsync(MasterPOSID);
             if (pos == null)
             {
-                return RedirectToAction("Error", "Error", new { area = "Error" });
+                return RedirectToAction("Forbbiden", "Error", new { area = "BadRequest" });
             }
             var addOfThisPos = pos.POSAddr;
             List<VMLocationPOS_AddressInfo> toView = new List<VMLocationPOS_AddressInfo>();
@@ -141,37 +143,6 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
         public async Task<ActionResult> Read_Address([DataSourceRequest] DataSourceRequest request, int? MasterPOSID)
         {
-            //var result = new POSAddr();
-            //if (MasterPOSID != null && MasterPOSID > 0)
-            //{
-            //    var pos = await db.MasterPOS.FindAsync(MasterPOSID);
-            //    if (pos != null)
-            //    {
-            //        var addr = pos.POSAddr;
-            //        if (addr != null)
-            //        {
-            //            result = addr;
-            //        }
-            //    }
-            //}
-            //return Json(new[] {result}.ToDataSourceResult(request, x => new VMLocationPOS_AddressInfo
-            //{
-            //   DBA_Name = x.DBA_Name,
-            //   Notes = x.Notes,
-            //   POSAddrID = x.POSAddrID,
-            //   Payment_Addr1 = x.Payment_Addr1,
-            //   Payment_Addr2 = x.Payment_Addr2 ?? "",
-            //   Payment_City = x.Payment_City,
-            //   Payment_Zip = x.Payment_Zip,
-            //   Payment_state = x.Payment_state,
-            //   Physical_Addr1 = x.Physical_Addr1,
-            //   Physical_Addr2 = x.Physical_Addr2 ?? "",
-            //   Physical_City = x.Physical_City,
-            //   Physical_Zip = x.Physical_Zip,
-            //   Physical_state = x.Physical_state,
-            //   Time_Zone = x.Time_Zone
-            //}),JsonRequestBehavior.AllowGet);
-
             var result = new List<VMLocationPOS_AddressInfo>();
             if (MasterPOSID != null && MasterPOSID > 0)
             {
@@ -375,12 +346,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var posName = await db.MasterPOS.FindAsync(id);
             if (posName == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var posAddress = posName.POSAddr;
             if (posAddress == null)
@@ -414,12 +385,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (masterPOSID == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var posName = await db.MasterPOS.FindAsync(masterPOSID);
             if (posName == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             ViewBag.Time_Zone = new List<SelectListItem>
             {
@@ -491,13 +462,13 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var posAddress = await db.POSAddrs.FindAsync(id);
 
             if (posAddress == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var toView = new VMLocationPOS_AddressInfo
             {

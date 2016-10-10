@@ -61,18 +61,18 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
         {
             if (ModelState.IsValid)
             {
-                var toStore = new WebPortal.Models.FromDB.ActionCode
-                {
-                    CollNoteType = actionCode.CollNoteType,
-                    CodeID = actionCode.CodeID,
-                    CategoryID = actionCode.CategoryID,
-                    PriorityID = actionCode.PriorityID,
-                    ACTypeID = actionCode.ACTypeID,
-                    Active = actionCode.Active,
-                    ParsingYN = actionCode.ParsingYN
-                };
                 try
                 {
+                    var toStore = new WebPortal.Models.FromDB.ActionCode
+                    {
+                        CollNoteType = actionCode.CollNoteType,
+                        CodeID = actionCode.CodeID,
+                        CategoryID = actionCode.CategoryID,
+                        PriorityID = actionCode.PriorityID,
+                        ACTypeID = actionCode.ACTypeID,
+                        Active = actionCode.Active,
+                        ParsingYN = actionCode.ParsingYN
+                    };
                     db.ActionCodes.Add(toStore);
                     await db.SaveChangesAsync();
                     actionCode.ActionCodeID = toStore.ActionCodeID;

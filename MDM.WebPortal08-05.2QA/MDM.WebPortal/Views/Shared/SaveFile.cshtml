@@ -66,62 +66,10 @@
                 <div class="tab-pane" id="profile">
                         @Html.Partial("_SaveFileType", new VMFileType())
                 </div>
-                
             </div>
-        
-    
-    
 </div>
 
-@*<div class="container-fluid">
-    <div class="panel panel-primary">
-            <div class="panel-body">
-                @using (Html.BeginForm("Save", "POSFiles", FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
-                    @Html.HiddenFor(x => x.Facitity_DBs_IDPK)
-                    <div class="form-horizontal">
-                        <hr/>
-                        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
 
-                        @(Html.Kendo().Upload()
-                              .Name("fichero")
-                              .Multiple(false)
-                              .TemplateId("fileTemplate")
-                              //.Async(a => a
-                              //    .Save("Save", "POSFiles")
-                              //    .Remove("Remove", "POSFiles")
-                              //    .AutoUpload(false)
-                              //)
-                              )
-
-                        <div class="form-group">
-                            <div class="col-md-11">
-                                <label class="control-label">DESCRPTION <sup class="text-danger">*</sup></label>
-                                @Html.EditorFor(model => model.Description, new {htmlAttributes = new {id="tbDescription",@class = "form-control form-control1", @style = "height:25px !important;"}})
-                                @Html.ValidationMessageFor(model => model.Description, "", new {@class = "text-danger"})
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-10">
-                                @Html.LabelFor(model => model.FileTypeID, htmlAttributes: new {@class = "control-label"})
-                                @Html.DropDownList("FileTypeID", null, new {httmlAttributes = new {@class = "form-control"}})
-                                @Html.ValidationMessageFor(model => model.FileTypeID, "", new {@class = "text-danger"})
-                            </div>
-                        </div>
-
-                        <div class="text-center">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-ar btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i>Close</button>
-                                <button id="btnSave" type="submit" class="btn btn-ar btn-primary" onclick="return CheckRequired();"><i class="fa fa-cloud-upload"></i>Upload</button>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>*@
 
 <script src="~/Scripts/lib/Notify/notify.min.js"></script>
 
@@ -195,7 +143,7 @@
                 });
             return false;
         }
-        if ($.trim($("#tbDescription").val().length) == 0) {
+        if ($.trim($("#tbDescription").val().length) === 0) {
             $('#tbDescription').notify("This field is required.", { position: "bottom left" });
             $('#tbDescription').focus();
             return false;

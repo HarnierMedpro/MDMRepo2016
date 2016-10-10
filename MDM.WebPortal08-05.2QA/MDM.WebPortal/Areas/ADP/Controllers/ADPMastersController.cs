@@ -18,13 +18,15 @@ using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.ADP.Controllers
 {
-    [SetPermissions]
+    //[SetPermissions]
+    [AuthorizeAttribute]
     public class ADPMastersController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
 
         public ActionResult Index()
         {
+            ViewData["Zno"] = new List<SelectListItem>{ new SelectListItem{Text = "1", Value = "1"}, new SelectListItem{Text = "2", Value = "2"}};
             return View();
         }
 

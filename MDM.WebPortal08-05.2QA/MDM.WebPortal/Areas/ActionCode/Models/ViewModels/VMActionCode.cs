@@ -16,6 +16,7 @@ namespace MDM.WebPortal.Areas.ActionCode.Models.ViewModels
         public string CollNoteType { get; set; }
 
         [Display(Name = "CODE")]
+        [UIHint("ACCodeEditor")]
         public int CodeID { get; set; }
 
         [Display(Name = "CATEGORY")]

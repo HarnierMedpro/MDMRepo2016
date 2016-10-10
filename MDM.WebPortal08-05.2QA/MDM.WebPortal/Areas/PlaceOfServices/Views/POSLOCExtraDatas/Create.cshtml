@@ -1,4 +1,4 @@
-﻿@using System
+﻿@*@using System
 @using Kendo.Mvc.UI
 @model MDM.WebPortal.Models.FromDB.POSLOCExtraData
 
@@ -144,7 +144,7 @@
                             <div class="col-md-12">
                                 @Html.LabelFor(model => model.State_of_MD_or_PhyGrp, htmlAttributes: new {@class = "control-label"})
                                 @Html.EditorFor(model => model.State_of_MD_or_PhyGrp, new {htmlAttributes = new {@class = "form-control form-control1"}})
-                                @*@Html.DropDownList("State_of_MD_or_PhyGrp", null, new { httmlAttributes = new { @class = "form-control" } })*@
+                               
                                 @Html.ValidationMessageFor(model => model.State_of_MD_or_PhyGrp, "", new {@class = "text-danger"})
                             </div>
                         </div>
@@ -170,7 +170,7 @@
                 <div class="form-group">
                     <div class="col-md-10">
                         @Html.LabelFor(model => model.In_Service_date_time, htmlAttributes: new {@class = "control-label"})
-                        @*@Html.TextBoxFor(model => model.In_Service_date_time, @"{0:MM/dd/yyyy}", htmlAttributes: new { id = "", @class = "form-control form-control1" })*@
+                       
 
                         @(Html.Kendo().DateTimePicker()
                            .Name("In_Service_date_time")
@@ -462,4 +462,4 @@
     //$(function InService() {
     //    $("#In_Service_date_time").inputmask({ "mask": "mm/dd/yyyy" });
     //});
-</script>
+</script>*@

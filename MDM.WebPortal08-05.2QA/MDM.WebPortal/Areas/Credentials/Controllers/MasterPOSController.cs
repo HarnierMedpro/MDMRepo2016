@@ -15,6 +15,7 @@ using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
 using MDM.WebPortal.Areas.ManagerDBA.Models.ViewModels;
 using MDM.WebPortal.Areas.PlaceOfServices.Tools;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Hubs;
 using MDM.WebPortal.Models.FromDB;
 using MDM.WebPortal.Models.ViewModel.Delete;
@@ -22,6 +23,7 @@ using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    //[SetPermissions]
     public class MasterPOSController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();

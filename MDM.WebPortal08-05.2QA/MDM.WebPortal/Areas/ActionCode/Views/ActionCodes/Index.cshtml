@@ -44,7 +44,7 @@
 
                                     column.Bound(x => x.CollNoteType).Width(110);
 
-                                    column.ForeignKey(x => x.CodeID, (IEnumerable) ViewData["Codigos"], "CodeID", "Code").Width(110);
+                                    column.ForeignKey(x => x.CodeID, (IEnumerable)ViewData["Codigos"], "CodeID", "Code").Width(110);
 
                                     column.ForeignKey(x => x.CategoryID, (IEnumerable) ViewData["Category"], "CatogoryID", "CategoryName").Width(110);
 
@@ -61,58 +61,39 @@
                                          command.Edit();
                                        }).Title("EDIT").Width(110);
                                   })
-                                                               .DataSource(dataSource => dataSource
-                                                                   .Ajax()
-                                                                   .PageSize(10)
-                                                                   .Model(model =>
-                                                                   {
-                                                                       model.Id(x => x.ActionCodeID);
-                                                                       model.Field(x => x.ActionCodeID).Editable(false);
-                                                                   })
-                                                                   .Events(events => events.Error("error_handler"))
-                                                                   .Read(read => read.Action("Read_ActionCode", "ActionCodes"))
-                                                                   .Update(update => update.Action("Update_ActionCode", "ActionCodes"))
-                                                                   .Create(create => create.Action("Create_ActionCode", "ActionCodes"))
-                                                               )
-                                                               .Sortable()
-                                                               .Filterable()
-                                                               .Pageable(ps => ps.Refresh(true)
-                                                                   .PreviousNext(true).PageSizes(true))
-                                                               .Groupable()
-                                                               .Reorderable(r => r.Columns(true))
-                                                               .Resizable(r => r.Columns(true))
-                                                               .Selectable(selectable => selectable
-                                                                   .Mode(GridSelectionMode.Multiple)
-                                                                   .Type(GridSelectionType.Cell))
-                                                               //.Selectable(s => s.Enabled(true)
-                                                               //    .Type(GridSelectionType.Row)
-                                                               //    .Mode(GridSelectionMode.Single))
+                                .Editable(ed => ed.Mode(GridEditMode.PopUp).TemplateName("ActionCodeViewModelEditor"))
+                                .DataSource(dataSource => dataSource
+                                    .Ajax()
+                                    .ServerOperation(true)
+                                    .PageSize(10)
+                                    .Model(model =>
+                                    {
+                                        model.Id(x => x.ActionCodeID);
+                                        model.Field(x => x.ActionCodeID).Editable(false);
+                                    })
+                                    .Events(events => events.Error("error_handler"))
+                                    .Read(read => read.Action("Read_ActionCode", "ActionCodes"))
+                                    .Update(update => update.Action("Update_ActionCode", "ActionCodes"))
+                                    .Create(create => create.Action("Create_ActionCode", "ActionCodes"))
+                                )
+                                .Sortable()
+                                .Filterable()
+                                .Pageable(ps => ps.Refresh(true)
+                                    .PreviousNext(true).PageSizes(true))
+                                .Groupable()
+                                .Reorderable(r => r.Columns(true))
+                                .Resizable(r => r.Columns(true))
+                                .Selectable(selectable => selectable
+                                    .Mode(GridSelectionMode.Multiple)
+                                    .Type(GridSelectionType.Cell))
                      )
-                   </text>
-                  );
+                   </text>);
 
-              elem.Add().Text("NEW CODE")
-                  .LoadContentFrom("Details", "CodeMasterLists", new {area = "ActionCode"});
+              elem.Add().Text("NEW CODE").LoadContentFrom("Details", "CodeMasterLists", new {area = "ActionCode"});
           })
-          )
+   )
 </div>
 
-@*<input id="dropdownlist" />
-<script>
-    $("#dropdownlist").kendoDropDownList({
-        dataSource: [
-            { id: 1, name: "Apples" },
-            { id: 2, name: "Oranges" }
-        ],
-        dataTextField: "name",
-        dataValueField: "id",
-        index: 1
-    });
-</script>*@
-
-
-<script src="~/Scripts/jquery.signalR-2.1.2.min.js"></script>
-<script src="~/signalr/hubs"></script>
 <script src="~/Scripts/kendo/jszip.min.js"></script>
 
 <script>
@@ -142,41 +123,10 @@
                     });
                 }
             });
-            // Display the message
             alert(message);
-            // Cancel the changes
             var grid = $("#Code").data("kendoGrid");
             grid.cancelChanges();
         }
     }
 </script>
 
-<script type="text/javascript">
-    $(function notifyCreateCodeMaster() {
-        var connection = $.hubConnection();
-        var hub = connection.createHubProxy("CodeMaster");
-        hub.on("notifyIfCreated", function (CodeID, Code) {
-
-            //<input data-val="true" data-val-number="The field CODE must be a number." data-val-required="The CODE field is required."
-            //id="CodeID" name="CodeID" type="text" value="0" data-role="dropdownlist" data-bind="value:CodeID" style="display: none;">
-
-            alert(CodeID + " " + Code + " " + $("#CodeID").length);
-
-            $('#ActionsC').data('kendoGrid').dataSource.read();
-            $('#ActionsC').data('kendoGrid').refresh();
-       
-
-            var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
-            dropdownlist.dataSource.add({ "name": Code.toString(), "id": CodeID.toString() });
-
-            //var dataSource = new kendo.data.DataSource({
-            //    data: [{"Text":"Bananas","Value":"87"}, {"Text":"Cherries","Value":"89"}]
-            //});
-            //dropdownlist.setDataSource(dataSource);
-          
-        });
-        connection.start(function () {
-            hub.invoke("doIfCodeCreated");
-        });
-    });
-</script>

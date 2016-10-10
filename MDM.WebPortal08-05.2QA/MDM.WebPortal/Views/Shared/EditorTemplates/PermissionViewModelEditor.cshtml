@@ -23,14 +23,13 @@
                     <dd>
                         @*WITH VIRTUALIZATION*@
                         @(Html.Kendo().DropDownListFor(m => m.ControllerID)
-                          //.Name("Controller")
+                          .AutoBind(false)
+                          .ValuePrimitive(true)
                           .OptionLabel("Select Controller...")
                           .DataTextField("Cont_Name")
                           .DataValueField("ControllerID")
                           .MinLength(3)
                           .HtmlAttributes(new { style = "width:100%" })
-                          //.Template("#= OrderID # | For: #= ShipName #, #= ShipCountry #")
-                          //.Height(290)
                           .Filter(FilterType.Contains)
                           .DataSource(source =>
                           {
@@ -49,7 +48,7 @@
                                             .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
                                   });
                           })
-                              //.Virtual(v => v.ItemHeight(26).ValueMapper("valueMapper"))
+                            
                           )
                         @Html.ValidationMessageFor(m => m.ControllerID)
                     </dd>

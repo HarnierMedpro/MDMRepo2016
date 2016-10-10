@@ -36,6 +36,30 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Read_PosFileType([DataSourceRequest] DataSourceRequest request)
+        {
+            var result = db.FileTypeIs.Where(x => x.FileLevel.Equals("pos", StringComparison.InvariantCultureIgnoreCase)).OrderBy(x => x.FileType_Name)
+                           .Select(x => new VMFileType
+                           {
+                               FileTypeID = x.FileTypeID,
+                               FileType_Name = x.FileType_Name,
+                               FileLevel = x.FileLevel
+                           }).ToList();
+            return Json(result.ToDataSourceResult(request),JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Read_CorpFileType([DataSourceRequest] DataSourceRequest request)
+        {
+            var result = db.FileTypeIs.Where(x => x.FileLevel.Equals("corporation", StringComparison.InvariantCultureIgnoreCase)).OrderBy(x => x.FileType_Name)
+                           .Select(x => new VMFileType
+                           {
+                               FileTypeID = x.FileTypeID,
+                               FileType_Name = x.FileType_Name,
+                               FileLevel = x.FileLevel
+                           });
+            return Json(result.ToDataSourceResult(request),JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<ActionResult> Create_FileType([DataSourceRequest] DataSourceRequest request,
             [Bind(Include = "FileTypeID,FileType_Name,FileLevel")] VMFileType fileType)
         {

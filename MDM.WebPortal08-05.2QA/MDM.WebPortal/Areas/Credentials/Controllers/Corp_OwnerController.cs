@@ -18,12 +18,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (corpID == null)
             {
-                return RedirectToAction("Index","Error", new{area="Error"});
+                return RedirectToAction("Index","Error", new{area="BadRequest"});
             }
             var corporation = await db.CorporateMasterLists.FindAsync(corpID);
             if (corporation == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             VMCorp_Contact toView = new VMCorp_Contact{corpID = corpID.Value};
             ViewBag.Corporation = corpID;
@@ -67,6 +67,26 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
            
         }
 
+        public async Task<ActionResult> Save_MultipleCorpContacts(int corpID, params int[] Contacts)
+        {
+            try
+            {
+                if (corpID == 0 || !Contacts.Any())
+                {
+                    return Json(new Corp_Owner(), JsonRequestBehavior.AllowGet);
+                }
+                var currentContacts = db.Corp_Owner.Where(x => x.corpID == corpID).Select(x => x.Contact_ContactID).ToArray();
+                var toStore = Contacts.Except(currentContacts).Select(x => new Corp_Owner { corpID = corpID, Contact_ContactID = x });
+                
+                db.Corp_Owner.AddRange(toStore);
+                await db.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return Json(new Corp_Owner(), JsonRequestBehavior.AllowGet);
+            }
+            return Json(Contacts.Select(x => new Corp_Owner { corpID = corpID, Contact_ContactID = x }), JsonRequestBehavior.AllowGet);
+        }
 
         public async Task<ActionResult> Create_CorpContact([DataSourceRequest] DataSourceRequest request,
             [Bind(Include = "ContactID,FName,LName,Email,PhoneNumber,active, ContactTypes")] VMCorpContact contact, int ParentID)
