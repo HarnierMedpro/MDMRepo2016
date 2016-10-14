@@ -135,7 +135,7 @@
           <Property Name="CorporateName" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="active" Type="bit" Nullable="false" />
           <Property Name="TaxID" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="W9" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="W9" Type="varchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="CPTData">
           <Key>
@@ -1237,11 +1237,6 @@
             <End Role="DBList" EntitySet="DBLists" />
             <End Role="Corp_DBs" EntitySet="Corp_DBs" />
           </AssociationSet>
-          <EntitySet Name="CorporateMasterLists" EntityType="MedProDBEntities.CorporateMasterList" />
-          <AssociationSet Name="FK_Corp_DBs_CorporateMasterList" Association="MedProDBEntities.FK_Corp_DBs_CorporateMasterList">
-            <End Role="CorporateMasterList" EntitySet="CorporateMasterLists" />
-            <End Role="Corp_DBs" EntitySet="Corp_DBs" />
-          </AssociationSet>
           <EntitySet Name="MasterPOS" EntityType="MedProDBEntities.MasterPOS" />
           <AssociationSet Name="FK__MasterPOS__DBLis__46E78A0C" Association="MedProDBEntities.FK__MasterPOS__DBLis__46E78A0C">
             <End Role="DBList" EntitySet="DBLists" />
@@ -1342,10 +1337,6 @@
             <End Role="ContactType" EntitySet="ContactTypes" />
             <End Role="ContactType_Contact" EntitySet="ContactType_Contact" />
           </AssociationSet>
-          <AssociationSet Name="FK_Corp_Owner_CorporateMasterList" Association="MedProDBEntities.FK_Corp_Owner_CorporateMasterList">
-            <End Role="CorporateMasterList" EntitySet="CorporateMasterLists" />
-            <End Role="Corp_Owner" EntitySet="Corp_Owner" />
-          </AssociationSet>
           <EntitySet Name="ZoomDB_POSID_grp" EntityType="MedProDBEntities.ZoomDB_POSID_grp" />
           <AssociationSet Name="FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" Association="MedProDBEntities.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName">
             <End Role="MasterPOS" EntitySet="MasterPOS" />
@@ -1370,6 +1361,15 @@
           <AssociationSet Name="FK__MasterPOS__POSEx__178D7CA5" Association="MedProDBEntities.FK__MasterPOS__POSEx__178D7CA5">
             <End Role="POSExtraData" EntitySet="POSExtraDatas" />
             <End Role="MasterPOS" EntitySet="MasterPOS" />
+          </AssociationSet>
+          <EntitySet Name="CorporateMasterLists" EntityType="MedProDBEntities.CorporateMasterList" />
+          <AssociationSet Name="FK_Corp_DBs_CorporateMasterList" Association="MedProDBEntities.FK_Corp_DBs_CorporateMasterList">
+            <End Role="CorporateMasterList" EntitySet="CorporateMasterLists" />
+            <End Role="Corp_DBs" EntitySet="Corp_DBs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Corp_Owner_CorporateMasterList" Association="MedProDBEntities.FK_Corp_Owner_CorporateMasterList">
+            <End Role="CorporateMasterList" EntitySet="CorporateMasterLists" />
+            <End Role="Corp_Owner" EntitySet="Corp_Owner" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ACCategory">
@@ -1503,30 +1503,6 @@
             </Principal>
             <Dependent Role="Corp_DBs">
               <PropertyRef Name="DB_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="CorporateMasterList">
-          <Key>
-            <PropertyRef Name="corpID" />
-          </Key>
-          <Property Name="corpID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CorporateName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="active" Type="Boolean" Nullable="false" />
-          <Property Name="TaxID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="W9" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Corp_DBs" Relationship="MedProDBEntities.FK_Corp_DBs_CorporateMasterList" FromRole="CorporateMasterList" ToRole="Corp_DBs" />
-          <NavigationProperty Name="Corp_Owner" Relationship="MedProDBEntities.FK_Corp_Owner_CorporateMasterList" FromRole="CorporateMasterList" ToRole="Corp_Owner" />
-        </EntityType>
-        <Association Name="FK_Corp_DBs_CorporateMasterList">
-          <End Type="MedProDBEntities.CorporateMasterList" Role="CorporateMasterList" Multiplicity="1" />
-          <End Type="MedProDBEntities.Corp_DBs" Role="Corp_DBs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CorporateMasterList">
-              <PropertyRef Name="corpID" />
-            </Principal>
-            <Dependent Role="Corp_DBs">
-              <PropertyRef Name="corpID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2006,18 +1982,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Corp_Owner_CorporateMasterList">
-          <End Type="MedProDBEntities.CorporateMasterList" Role="CorporateMasterList" Multiplicity="1" />
-          <End Type="MedProDBEntities.Corp_Owner" Role="Corp_Owner" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CorporateMasterList">
-              <PropertyRef Name="corpID" />
-            </Principal>
-            <Dependent Role="Corp_Owner">
-              <PropertyRef Name="corpID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="ZoomDB_POSID_grp">
           <Key>
             <PropertyRef Name="ZoomDBPOSID" />
@@ -2177,6 +2141,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CorporateMasterList">
+          <Key>
+            <PropertyRef Name="corpID" />
+          </Key>
+          <Property Name="corpID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CorporateName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="active" Type="Boolean" Nullable="false" />
+          <Property Name="TaxID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="W9" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Corp_DBs" Relationship="MedProDBEntities.FK_Corp_DBs_CorporateMasterList" FromRole="CorporateMasterList" ToRole="Corp_DBs" />
+          <NavigationProperty Name="Corp_Owner" Relationship="MedProDBEntities.FK_Corp_Owner_CorporateMasterList" FromRole="CorporateMasterList" ToRole="Corp_Owner" />
+        </EntityType>
+        <Association Name="FK_Corp_DBs_CorporateMasterList">
+          <End Type="MedProDBEntities.CorporateMasterList" Role="CorporateMasterList" Multiplicity="1" />
+          <End Type="MedProDBEntities.Corp_DBs" Role="Corp_DBs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CorporateMasterList">
+              <PropertyRef Name="corpID" />
+            </Principal>
+            <Dependent Role="Corp_DBs">
+              <PropertyRef Name="corpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Corp_Owner_CorporateMasterList">
+          <End Type="MedProDBEntities.CorporateMasterList" Role="CorporateMasterList" Multiplicity="1" />
+          <End Type="MedProDBEntities.Corp_Owner" Role="Corp_Owner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CorporateMasterList">
+              <PropertyRef Name="corpID" />
+            </Principal>
+            <Dependent Role="Corp_Owner">
+              <PropertyRef Name="corpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2310,17 +2310,6 @@
                 <ScalarProperty Name="databaseName" ColumnName="databaseName" />
                 <ScalarProperty Name="active" ColumnName="active" />
                 <ScalarProperty Name="DB_ID" ColumnName="DB_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CorporateMasterLists">
-            <EntityTypeMapping TypeName="MedProDBEntities.CorporateMasterList">
-              <MappingFragment StoreEntitySet="CorporateMasterList">
-                <ScalarProperty Name="W9" ColumnName="W9" />
-                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
-                <ScalarProperty Name="active" ColumnName="active" />
-                <ScalarProperty Name="CorporateName" ColumnName="CorporateName" />
-                <ScalarProperty Name="corpID" ColumnName="corpID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2633,6 +2622,17 @@
                 <ScalarProperty Name="Fax_Number" ColumnName="Fax_Number" />
                 <ScalarProperty Name="Phone_Number" ColumnName="Phone_Number" />
                 <ScalarProperty Name="POSExtraDataID" ColumnName="POSExtraDataID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CorporateMasterLists">
+            <EntityTypeMapping TypeName="MedProDBEntities.CorporateMasterList">
+              <MappingFragment StoreEntitySet="CorporateMasterList">
+                <ScalarProperty Name="W9" ColumnName="W9" />
+                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="CorporateName" ColumnName="CorporateName" />
+                <ScalarProperty Name="corpID" ColumnName="corpID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

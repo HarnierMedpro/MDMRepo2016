@@ -32,6 +32,7 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
         [Display(Name = "PHONE NUMBER")]
         [DataType(DataType.PhoneNumber)]
         [StringLength(14, MinimumLength = 14)]
+        //[RegularExpression(@"[0-9-()]+$", ErrorMessage = "No Special character and/or white space allowed.")]
         public string PhoneNumber { get; set; }
 
         [Required]

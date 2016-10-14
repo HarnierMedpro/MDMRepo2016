@@ -12,11 +12,13 @@ using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.ActionCode.Models.ViewModels;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
 using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.ActionCode.Controllers
 {
+    [SetPermissions]
     public class ACtypesController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();

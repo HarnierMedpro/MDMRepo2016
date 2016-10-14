@@ -97,7 +97,14 @@ namespace MDM.WebPortal.Data_Annotations
             if (filterContext.HttpContext.Request.IsAuthenticated)
             {
                 //filterContext.Result = new HttpStatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
-                filterContext.Result = new RedirectResult("/BadRequest/Error/Forbbiden");
+                if (filterContext.HttpContext.Request.IsAjaxRequest())
+                {
+                    filterContext.Result = new PartialViewResult{ViewName = "UnothorizedRequest"};
+                }
+                else
+                {
+                    filterContext.Result = new RedirectResult("/BadRequest/Error/Forbbiden");
+                }
             }
             else
             {

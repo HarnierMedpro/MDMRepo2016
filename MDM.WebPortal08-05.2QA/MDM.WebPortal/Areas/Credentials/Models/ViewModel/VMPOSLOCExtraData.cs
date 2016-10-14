@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MDM.WebPortal.Data_Annotations;
 
 namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
 {

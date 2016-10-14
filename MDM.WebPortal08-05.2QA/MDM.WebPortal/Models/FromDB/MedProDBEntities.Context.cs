@@ -38,7 +38,6 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual DbSet<ACtype> ACtypes { get; set; }
         public virtual DbSet<CodeMasterList> CodeMasterLists { get; set; }
         public virtual DbSet<DBList> DBLists { get; set; }
-        public virtual DbSet<CorporateMasterList> CorporateMasterLists { get; set; }
         public virtual DbSet<MasterPOS> MasterPOS { get; set; }
         public virtual DbSet<Lev_of_Care> Lev_of_Care { get; set; }
         public virtual DbSet<MasterPOS_LevOfCare> MasterPOS_LevOfCare { get; set; }
@@ -64,5 +63,6 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual DbSet<Provider> Providers { get; set; }
         public virtual DbSet<InfoData> InfoDatas { get; set; }
         public virtual DbSet<POSExtraData> POSExtraDatas { get; set; }
+        public virtual DbSet<CorporateMasterList> CorporateMasterLists { get; set; }
     }
 }

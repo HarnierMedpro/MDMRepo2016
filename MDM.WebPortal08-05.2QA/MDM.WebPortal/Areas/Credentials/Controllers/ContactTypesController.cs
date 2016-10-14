@@ -9,11 +9,16 @@ using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    [SetPermissions]
     public class ContactTypesController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -71,26 +76,47 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.ContactTypes.AnyAsync(x => x.ContactType_Name.Equals(contactType.ContactType_Name, StringComparison.InvariantCultureIgnoreCase)))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
-                        return Json(new[] {contactType}.ToDataSourceResult(request, ModelState));
+                        if (await db.ContactTypes.AnyAsync(x => x.ContactType_Name.Equals(contactType.ContactType_Name, StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { contactType }.ToDataSourceResult(request, ModelState));
+                        }
+                        var toStore = new ContactType
+                        {
+                            ContactType_Name = contactType.ContactType_Name,
+                            ContactLevel = contactType.ContactLevel
+                        };
+                        db.ContactTypes.Add(toStore);
+                        await db.SaveChangesAsync();
+                        contactType.ContactTypeID = toStore.ContactTypeID;
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditDateTime = DateTime.Now,
+                            AuditAction = "I",
+                            TableName = "ContactTypes",
+                            ModelPKey = toStore.ContactTypeID,
+                            tableInfos = new List<TableInfo>
+                            {
+                                new TableInfo{ Field_ColumName = "ContactType_Name", NewValue = contactType.ContactType_Name },
+                                new TableInfo{ Field_ColumName = "ContactLevel", NewValue = contactType.ContactLevel }
+                            }
+                        };
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
                     }
-                    var toStore = new ContactType
+                    catch (Exception)
                     {
-                        ContactType_Name = contactType.ContactType_Name,
-                        ContactLevel = contactType.ContactLevel
-                    };
-                    db.ContactTypes.Add(toStore);
-                    await db.SaveChangesAsync();
-                    contactType.ContactTypeID = toStore.ContactTypeID;
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { contactType }.ToDataSourceResult(request, ModelState));
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { contactType }.ToDataSourceResult(request, ModelState));
+                    }
                 }
             }
             return Json(new[] { contactType }.ToDataSourceResult(request, ModelState));
@@ -101,38 +127,58 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.ContactTypes.AnyAsync(x => x.ContactType_Name.Equals(contactType.ContactType_Name, StringComparison.InvariantCultureIgnoreCase) && x.ContactTypeID != contactType.ContactTypeID))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                        if (await db.ContactTypes.AnyAsync(x => x.ContactType_Name.Equals(contactType.ContactType_Name, StringComparison.InvariantCultureIgnoreCase) && x.ContactTypeID != contactType.ContactTypeID))
+                        {
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { contactType }.ToDataSourceResult(request, ModelState));
+                        }
+                        var storedInDb = await db.ContactTypes.FindAsync(contactType.ContactTypeID);
+                        List<TableInfo> tableColumInfos = new List<TableInfo>();
+
+                        if (storedInDb.ContactType_Name != contactType.ContactType_Name)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "ContactType_Name", OldValue = storedInDb.ContactType_Name, NewValue = contactType.ContactType_Name });
+                            storedInDb.ContactType_Name = contactType.ContactType_Name;
+                        }
+                        if (storedInDb.ContactLevel != contactType.ContactLevel)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "ContactLevel", OldValue = storedInDb.ContactLevel, NewValue = contactType.ContactLevel });
+                            storedInDb.ContactLevel = contactType.ContactLevel;
+                        }
+
+                        db.ContactTypes.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditDateTime = DateTime.Now,
+                            AuditAction = "I",
+                            TableName = "ContactTypes",
+                            ModelPKey = contactType.ContactTypeID,
+                            tableInfos = tableColumInfos
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
                         return Json(new[] { contactType }.ToDataSourceResult(request, ModelState));
                     }
-                    var storedInDb = await db.ContactTypes.FindAsync(contactType.ContactTypeID);
-                    if (storedInDb.ContactType_Name != contactType.ContactType_Name)
-                    {
-                        storedInDb.ContactType_Name = contactType.ContactType_Name;
-                    }
-                    if (storedInDb.ContactLevel != contactType.ContactLevel)
-                    {
-                        storedInDb.ContactLevel = contactType.ContactLevel;
-                    }
-
-                    db.ContactTypes.Attach(storedInDb);
-                    db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-                    
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { contactType }.ToDataSourceResult(request, ModelState));
-                }
+               
             }
             return Json(new[] { contactType }.ToDataSourceResult(request, ModelState));
         }
-
-        
 
         protected override void Dispose(bool disposing)
         {

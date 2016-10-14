@@ -8,18 +8,20 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.UI;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    [SetPermissions]
     public class MasterPOS_ContactController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
-
-      
-
-        // GET: Credentials/MasterPOS_Contact/Create
+        
         public async Task<ActionResult> Create(int? masterPOSID)
         {
             if (masterPOSID == null)
@@ -35,10 +37,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             ViewBag.MasterPOS = masterPOSID;
             return View(toView);
         }
-
-        // POST: Credentials/MasterPOS_Contact/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "MasterPOSContactID,MasterPOS_MasterPOSID")] VMMasterPOS_Contact masterPosContact, params int[] corpCnt)
@@ -86,26 +85,50 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
         }
 
-
         public async Task<ActionResult> Save_POSContacts([DataSourceRequest] DataSourceRequest request, int MasterPOSID, int[] Contacts)
         {
-            if (MasterPOSID < 0 || !Contacts.Any())
+            if (MasterPOSID <= 0 || !Contacts.Any())
             {
-                ModelState.AddModelError("","Something failed. Please try again!");
+                return Json(new List<MasterPOS_Contact>(), JsonRequestBehavior.AllowGet);
             }
-            try
+            using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
             {
-                var toStore = Contacts.Select(x => new MasterPOS_Contact { MasterPOS_MasterPOSID = MasterPOSID, ContactID = x }).ToList();
-                db.MasterPOS_Contact.AddRange(toStore);
-                await db.SaveChangesAsync();
-                //ModelState.AddModelError("","Success.");
+                try
+                {
+                    var toStore = Contacts.Select(x => new MasterPOS_Contact
+                    {
+                        MasterPOS_MasterPOSID = MasterPOSID, 
+                        ContactID = x
+                    }).ToList();
+
+                    db.MasterPOS_Contact.AddRange(toStore);
+                    await db.SaveChangesAsync();
+
+                    var auditLogs = toStore.Select(x => new AuditToStore
+                    {
+                        UserLogons = User.Identity.GetUserName(),
+                        AuditDateTime = DateTime.Now,
+                        TableName = "MasterPOS_Contact",
+                        AuditAction = "I",
+                        ModelPKey = x.MasterPOSContactID,
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo{Field_ColumName = "ContactID", NewValue = x.ContactID.ToString()},
+                            new TableInfo{Field_ColumName = "MasterPOS_MasterPOSID", NewValue = x.MasterPOS_MasterPOSID.ToString()},
+                        }
+                    }).ToList();
+
+                    new AuditLogRepository().SaveLogs(auditLogs);
+
+                    dbTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbTransaction.Rollback();
+                    return Json(new List<MasterPOS_Contact>(), JsonRequestBehavior.AllowGet);
+                }
             }
-            catch (Exception)
-            {
-                ModelState.AddModelError("", "Something failed. Please try again!");
-            }
-            
-            return Json(new List<VMContact>());
+            return Json(Contacts.Select(x => new MasterPOS_Contact{ContactID = x, MasterPOS_MasterPOSID = MasterPOSID}), JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

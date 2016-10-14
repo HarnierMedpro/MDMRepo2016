@@ -22,10 +22,6 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
         [Display(Name = "TAXID")]
         public string TaxID { get; set; }
 
-        [Required]
-        [Display(Name = "W9")]
-        public string W9 { get; set; }
-
         [Display(Name = "OWNERS")]
         [UIHint("OwnersEditor")]
         public IEnumerable<VMContact> Owners { get; set; }

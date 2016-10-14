@@ -18,5 +18,10 @@ namespace MDM.WebPortal.Areas.BadRequest.Controllers
         {
             return View();
         }
+
+        public ActionResult UnothorizedRequest()
+        {
+            return View();
+        }
     }
 }

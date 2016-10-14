@@ -29,8 +29,6 @@
         <EntityTypeShape EntityType="MedProDBEntities.DBList" Width="1.5" PointX="22.5" PointY="22.75" />
         <AssociationConnector Association="MedProDBEntities.FK_BI_DB_FvP_Access_DBList" />
         <AssociationConnector Association="MedProDBEntities.FK_Corp_DBs_DBList" />
-        <EntityTypeShape EntityType="MedProDBEntities.CorporateMasterList" Width="1.5" PointX="16.5" PointY="22.75" />
-        <AssociationConnector Association="MedProDBEntities.FK_Corp_DBs_CorporateMasterList" />
         <EntityTypeShape EntityType="MedProDBEntities.MasterPOS" Width="1.5" PointX="13.5" PointY="30" />
         <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__DBLis__46E78A0C" />
         <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__FvPLi__3F466844" />
@@ -71,7 +69,6 @@
         <AssociationConnector Association="MedProDBEntities.FK__ContactTy__Conta__5AD97420" />
         <AssociationConnector Association="MedProDBEntities.Relation_102" />
         <AssociationConnector Association="MedProDBEntities.Relation_101" />
-        <AssociationConnector Association="MedProDBEntities.FK_Corp_Owner_CorporateMasterList" />
         <EntityTypeShape EntityType="MedProDBEntities.ZoomDB_POSID_grp" Width="1.5" PointX="15.75" PointY="32" />
         <AssociationConnector Association="MedProDBEntities.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" />
         <EntityTypeShape EntityType="MedProDBEntities.Facitity_DBs" Width="1.5" PointX="0.75" PointY="3.75" />
@@ -82,6 +79,9 @@
         <EntityTypeShape EntityType="MedProDBEntities.POSExtraData" Width="1.5" PointX="0.75" PointY="8.25" />
         <AssociationConnector Association="MedProDBEntities.ConstMasterPOS2" />
         <AssociationConnector Association="MedProDBEntities.FK__MasterPOS__POSEx__178D7CA5" />
+        <EntityTypeShape EntityType="MedProDBEntities.CorporateMasterList" Width="1.5" PointX="16.625" PointY="21.125" />
+        <AssociationConnector Association="MedProDBEntities.FK_Corp_DBs_CorporateMasterList" />
+        <AssociationConnector Association="MedProDBEntities.FK_Corp_Owner_CorporateMasterList" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

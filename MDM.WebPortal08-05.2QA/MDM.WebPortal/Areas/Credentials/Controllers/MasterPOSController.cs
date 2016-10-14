@@ -23,7 +23,7 @@ using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
-    //[SetPermissions]
+    [SetPermissions]
     public class MasterPOSController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -171,7 +171,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                              {
                                  posNameStoredInDb.PHYGroups_PHYGrpID = null;
                              }
-                            if (db.FvPLists.Find(masterPos.FvPList_FvPID).FvPName == "PHY" && posNameStoredInDb.FACInfo_FACInfoID != null)
+                            if (db.FvPLists.Find(masterPos.FvPList_FvPID).FvPName != "FAC" && posNameStoredInDb.FACInfo_FACInfoID != null)
                             {
                                 posNameStoredInDb.FACInfo_FACInfoID = null;
                             }

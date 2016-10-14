@@ -131,17 +131,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CorporateMasterLists">
-      <EntityTypeMapping TypeName="MedProDBEntities.CorporateMasterList">
-        <MappingFragment StoreEntitySet="CorporateMasterList">
-          <ScalarProperty Name="W9" ColumnName="W9" />
-          <ScalarProperty Name="TaxID" ColumnName="TaxID" />
-          <ScalarProperty Name="active" ColumnName="active" />
-          <ScalarProperty Name="CorporateName" ColumnName="CorporateName" />
-          <ScalarProperty Name="corpID" ColumnName="corpID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="MasterPOS">
       <EntityTypeMapping TypeName="MedProDBEntities.MasterPOS">
         <MappingFragment StoreEntitySet="MasterPOS">
@@ -451,6 +440,17 @@
           <ScalarProperty Name="Fax_Number" ColumnName="Fax_Number" />
           <ScalarProperty Name="Phone_Number" ColumnName="Phone_Number" />
           <ScalarProperty Name="POSExtraDataID" ColumnName="POSExtraDataID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CorporateMasterLists">
+      <EntityTypeMapping TypeName="MedProDBEntities.CorporateMasterList">
+        <MappingFragment StoreEntitySet="CorporateMasterList">
+          <ScalarProperty Name="W9" ColumnName="W9" />
+          <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+          <ScalarProperty Name="active" ColumnName="active" />
+          <ScalarProperty Name="CorporateName" ColumnName="CorporateName" />
+          <ScalarProperty Name="corpID" ColumnName="corpID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -310,7 +310,7 @@ a.social:active {
   font-size: 35px;
   line-height: 1.2em;
   text-indent: 10px;
-  font-weight: regular;
+  font-weight: normal;
   color: white;
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.2);
   /*Background*/

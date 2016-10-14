@@ -9,11 +9,16 @@ using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    [SetPermissions]
     public class FacilityDataController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -22,12 +27,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (MasterPOSID == null)
             {
-                return RedirectToAction("Error", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var pos = await db.MasterPOS.FindAsync(MasterPOSID);
             if (pos == null)
             {
-                return RedirectToAction("Error", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var facInfo = pos.FACInfo;
             var toView = new List<VMFacilityData>();
@@ -66,13 +71,43 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         db.FACInfoes.Add(toStore);
                         await db.SaveChangesAsync();
                         facility.FACInfoID = toStore.FACInfoID;
+                        facility.MasterPOSID = ParentID.Value;
 
                         var pos = await db.MasterPOS.FindAsync(ParentID);
                         pos.FACInfo_FACInfoID = toStore.FACInfoID;
                         db.MasterPOS.Attach(pos);
                         db.Entry(pos).State = EntityState.Modified;
                         await db.SaveChangesAsync();
-                        facility.MasterPOSID = ParentID.Value;
+
+                        List<AuditToStore> auditLogs = new List<AuditToStore>
+                        {
+                            new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                AuditAction = "I",
+                                ModelPKey = toStore.FACInfoID,
+                                TableName = "FACInfo",
+                                tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "NPI_Number", NewValue = toStore.NPI_Number}
+                                }
+                            },
+                            new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                AuditAction = "U",
+                                ModelPKey = pos.MasterPOSID,
+                                TableName = "MasterPOS",
+                                tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "FACInfo_FACInfoID", NewValue = toStore.FACInfoID.ToString()}
+                                }
+                            }
+                        };
+
+                        new AuditLogRepository().SaveLogs(auditLogs);
 
                         dbTransaction.Commit();
                     }
@@ -91,21 +126,41 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    var storedInDb = await db.FACInfoes.FindAsync(facility.FACInfoID);
+                    try
+                    {
+                        var storedInDb = await db.FACInfoes.FindAsync(facility.FACInfoID);
 
-                    storedInDb.NPI_Number = facility.NPI_Number;
+                        storedInDb.NPI_Number = facility.NPI_Number;
 
-                    db.FACInfoes.Attach(storedInDb);
-                    db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
+                        db.FACInfoes.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditDateTime = DateTime.Now,
+                            TableName = "FACInfo",
+                            ModelPKey = storedInDb.FACInfoID,
+                            AuditAction = "U",
+                            tableInfos = new List<TableInfo>
+                            {
+                                new TableInfo{Field_ColumName = "NPI_Number", OldValue = storedInDb.NPI_Number, NewValue = facility.NPI_Number}
+                            }
+                        };
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { facility }.ToDataSourceResult(request, ModelState));
+                    }
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { facility }.ToDataSourceResult(request, ModelState));
-                }
+                
             }
             return Json(new[] { facility }.ToDataSourceResult(request, ModelState));
         }

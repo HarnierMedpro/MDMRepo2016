@@ -13,12 +13,14 @@ using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Hubs;
 using MDM.WebPortal.Models.FromDB;
 using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    [SetPermissions]
     public class CorporateMasterListsController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -41,7 +43,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 corpID = x.corpID,
                 CorporateName = x.CorporateName,
                 TaxID = x.TaxID,
-                W9 = x.W9,
+               
                 active = x.active,
                 DBs = x.Corp_DBs.Select(y => new VMDBList{DB_ID = y.DB_ID, databaseName = y.DBList.databaseName, DB = y.DBList.DB, active = y.DBList.active}).ToList(),
                 Owners = x.Corp_Owner.Select(y => y.Contact).Intersect(ownersContacts).Select(z => new VMContact{ContactID = z.ContactID, FName = z.FName, LName = z.LName, active = z.active, Email = z.Email, PhoneNumber = z.PhoneNumber})
@@ -129,7 +131,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             if (corpID != null)
             {
                 var dbsOfThisCorp = db.Corp_DBs.Include(d => d.DBList).Include(c => c.CorporateMasterList)
-                                               .Where(c => c.corpID == corpID).Select(d => d.DBList);
+                                               .Where(c => c.corpID == corpID).Select(d => d.DBList).ToList();
                 foreach (var item in dbsOfThisCorp)
                 {
                     posOfThisCorp.AddRange(item.MasterPOS);
@@ -145,7 +147,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
 
         public async Task<ActionResult> Create_Corporation([DataSourceRequest]DataSourceRequest request,
-            [Bind(Include = "corpID,CorporateName,TaxID,W9,active,Owners, DBs")] VMCorporateMasterList corpMasterList)
+            [Bind(Include = "corpID,CorporateName,TaxID,active,Owners, DBs")] VMCorporateMasterList corpMasterList)
         {
             if (ModelState.IsValid)
             {
@@ -154,12 +156,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     ModelState.AddModelError("", "Duplicate Data. Please try again!");
                     return Json(new[] { corpMasterList }.ToDataSourceResult(request, ModelState));
                 }
+
                 var toStore = new CorporateMasterList
                 {
                     CorporateName = corpMasterList.CorporateName,
                     active = corpMasterList.active,
-                    TaxID = corpMasterList.TaxID,
-                    W9 = corpMasterList.W9
+                    TaxID = corpMasterList.TaxID
                 };
 
                 if (corpMasterList.Owners.Any() || corpMasterList.DBs.Any())
@@ -172,11 +174,28 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                             await db.SaveChangesAsync();
                             corpMasterList.corpID = toStore.corpID;
 
-                            if (corpMasterList.Owners.Any())
+                            List<AuditToStore> auditLogs = new List<AuditToStore>
                             {
-                                var corpOwner = corpMasterList.Owners.Select(x => new Corp_Owner{corpID = toStore.corpID, Contact_ContactID = x.ContactID});
-                                db.Corp_Owner.AddRange(corpOwner);
-                            }
+                                new AuditToStore
+                                {
+                                    UserLogons = User.Identity.GetUserName(),
+                                    AuditDateTime = DateTime.Now,
+                                    AuditAction = "I",
+                                    TableName = "CorporateMasterLists",
+                                    ModelPKey = toStore.corpID,
+                                    tableInfos = new List<TableInfo>
+                                    {
+                                        new TableInfo{Field_ColumName = "CorporateName", NewValue = toStore.CorporateName},
+                                        new TableInfo{Field_ColumName = "TaxID", NewValue = toStore.TaxID},
+                                        new TableInfo{Field_ColumName = "active", NewValue = toStore.active.ToString()}
+                                    }
+                                }
+                            };
+
+                            //if (corpMasterList.Owners.Any())
+                            var corpOwner = corpMasterList.Owners.Select(x => new Corp_Owner{corpID = toStore.corpID, Contact_ContactID = x.ContactID}).ToList();
+                            db.Corp_Owner.AddRange(corpOwner);
+
                             /*Aqui tengo que verificar que ninguna de las bases de datos seleccionadas ya esten asociadas a una corporacion, si sucede este escenario,
                              hay que notificarle al usuario cual(es) ya estan asociadas y almacenar las restantes si existen*/
                             var corpDb = new List<Corp_DBs>();
@@ -197,11 +216,53 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
                             if (error != "")
                             {
-                                CorporateMasterListHub.DoIfDBDuplicated(error + " " + "is/are asociated with other Corporation.");
+                                CorporateMasterListHub.DoIfDBDuplicated(error + " " + "is/are already asociated with a Corporation.");
                             }
 
                             await db.SaveChangesAsync();
+
+                            if (corpOwner.Any())
+                            {
+                                var corpOwnerLog = corpOwner.Select(x => new AuditToStore
+                                {
+                                    UserLogons = User.Identity.GetUserName(),
+                                    AuditDateTime = DateTime.Now,
+                                    TableName = "Corp_Owner",
+                                    AuditAction = "I",
+                                    ModelPKey = x.corpOwnerID,
+                                    tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "corpID", NewValue = x.corpID.ToString()},
+                                    new TableInfo{Field_ColumName = "Contact_ContactID", NewValue = x.Contact_ContactID.ToString()},
+                                }
+                                }).ToList();
+
+                                auditLogs.AddRange(corpOwnerLog);
+                            }
+
+                            if (corpDb.Any())
+                            {
+                                var corpDbLog = corpDb.Select(x => new AuditToStore
+                                {
+                                    UserLogons = User.Identity.GetUserName(),
+                                    AuditDateTime = DateTime.Now,
+                                    TableName = "Corp_DBs",
+                                    AuditAction = "I",
+                                    ModelPKey = x.ID_PK,
+                                    tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "corpID", NewValue = x.corpID.ToString()},
+                                    new TableInfo{Field_ColumName = "DB_ID", NewValue = x.DB_ID.ToString()},
+                                }
+                                }).ToList();
+
+                                auditLogs.AddRange(corpDbLog);
+                            }
+
+                            new AuditLogRepository().SaveLogs(auditLogs);
+
                             dbTransaction.Commit();
+
                         }
                         catch (Exception)
                         {
@@ -218,6 +279,23 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         db.CorporateMasterLists.Add(toStore);
                         await db.SaveChangesAsync();
                         corpMasterList.corpID = toStore.corpID;
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditDateTime = DateTime.Now,
+                            TableName = "CorporateMasterLists",
+                            ModelPKey = toStore.corpID,
+                            AuditAction = "I",
+                            tableInfos = new List<TableInfo>
+                            {
+                                new TableInfo{Field_ColumName = "CorporateName", NewValue = toStore.CorporateName},
+                                new TableInfo{Field_ColumName = "TaxID", NewValue = toStore.TaxID},
+                                new TableInfo{Field_ColumName = "active", NewValue = toStore.active.ToString()},
+                            }
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
                     }
                     catch (Exception)
                     {
@@ -231,7 +309,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
         /*This method is riched only when one or more columns of the entity is modified.*/
         public async Task<ActionResult> Update_Corporation([DataSourceRequest]DataSourceRequest request,
-           [Bind(Include = "corpID,CorporateName,TaxID,W9,active,Owners, DBs")] VMCorporateMasterList corpMasterList)
+           [Bind(Include = "corpID,CorporateName,TaxID,active,Owners, DBs")] VMCorporateMasterList corpMasterList)
         {
             if (ModelState.IsValid)
             {
@@ -245,6 +323,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     try
                     {
                         var storedInDB = await db.CorporateMasterLists.FindAsync(corpMasterList.corpID);
+                        List<AuditToStore> auditLogs = new List<AuditToStore>();
 
                         var currentOwners = storedInDB.Corp_Owner.Select(x => x.Contact_ContactID).ToList();
                         var ownersByParam = corpMasterList.Owners.Select(x => x.ContactID).ToList();
@@ -253,11 +332,17 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         var dbByParam = corpMasterList.DBs.Select(x => x.DB_ID).ToList();
 
 
-                        var newOwners = ownersByParam.Except(currentOwners).ToList();
-                        foreach (var owner in newOwners)
+                        var newOwnerIDs = ownersByParam.Except(currentOwners).ToList();
+                        var newCorpOwner = newOwnerIDs.Select(x => new Corp_Owner
                         {
-                            storedInDB.Corp_Owner.Add(new Corp_Owner { Contact_ContactID = owner, corpID = storedInDB.corpID });
+                            Contact_ContactID = x,
+                            corpID = storedInDB.corpID
+                        }).ToList();
+                        if (newCorpOwner.Any())
+                        {
+                            db.Corp_Owner.AddRange(newCorpOwner);
                         }
+                        
                         var deleteOwners = currentOwners.Except(ownersByParam).ToList();
                         foreach (var ow in deleteOwners)
                         {
@@ -265,26 +350,47 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                             if (corpOwner != null)
                             {
                                 db.Corp_Owner.Remove(corpOwner);
+
+                                auditLogs.Add(new AuditToStore
+                                {
+                                    UserLogons = User.Identity.GetUserName(),
+                                    AuditDateTime = DateTime.Now,
+                                    TableName = "Corp_Owner",
+                                    AuditAction = "D",
+                                    ModelPKey = corpOwner.corpOwnerID,
+                                    tableInfos = new List<TableInfo>
+                                    {
+                                        new TableInfo{Field_ColumName = "Contact_ContactID", OldValue = corpOwner.Contact_ContactID.ToString()},
+                                        new TableInfo{Field_ColumName = "corpID", OldValue = corpOwner.corpID.ToString()},
+                                    }
+                                });
                             }
                         }
 
                         var newDbs = dbByParam.Except(currentDbs).ToList();
+                        var newCorpDbs = new List<Corp_DBs>();
                         string error = "";
                         foreach (var datab in newDbs)
                         {
                             if (!await db.Corp_DBs.AnyAsync(x => x.DB_ID == datab))
                             {
-                                storedInDB.Corp_DBs.Add(new Corp_DBs { corpID = storedInDB.corpID, DB_ID = datab });
+                                newCorpDbs.Add(new Corp_DBs { corpID = storedInDB.corpID, DB_ID = datab });
                             }
                             else
                             {
                                 error = error + " " + datab;
                             }
                         }
+                        if (newCorpDbs.Any())
+                        {
+                            db.Corp_DBs.AddRange(newCorpDbs);
+                        }
+                       
                         if (error != "")
                         {
                             CorporateMasterListHub.DoIfDBDuplicated(error + " " + "is/are asociated with other Corporation.");
                         }
+
                         var deleteDbs = currentDbs.Except(dbByParam).ToList();
                         foreach (var datb in deleteDbs)
                         {
@@ -292,6 +398,20 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                             if (corpDb != null)
                             {
                                 db.Corp_DBs.Remove(corpDb);
+
+                                auditLogs.Add(new AuditToStore
+                                {
+                                    UserLogons = User.Identity.GetUserName(),
+                                    AuditDateTime = DateTime.Now,
+                                    TableName = "Corp_DBs",
+                                    AuditAction = "D",
+                                    ModelPKey = corpDb.ID_PK,
+                                    tableInfos = new List<TableInfo>
+                                    {
+                                        new TableInfo{Field_ColumName = "DB_ID", OldValue = corpDb.DB_ID.ToString()},
+                                        new TableInfo{Field_ColumName = "corpID", OldValue = corpDb.corpID.ToString()},
+                                    }
+                                });
                             }
                         }
 
@@ -312,27 +432,65 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                             tableColumnInfo.Add(new TableInfo { Field_ColumName = "TaxID", OldValue = storedInDB.TaxID, NewValue = corpMasterList.TaxID });
                             storedInDB.TaxID = corpMasterList.TaxID;
                         }
-                        if (storedInDB.W9 != corpMasterList.W9)
-                        {
-                            tableColumnInfo.Add(new TableInfo { Field_ColumName = "W9", OldValue = storedInDB.W9, NewValue = corpMasterList.W9 });
-                            storedInDB.W9 = corpMasterList.W9;
-                        }
+                       
                         db.CorporateMasterLists.Attach(storedInDB);
                         db.Entry(storedInDB).State = EntityState.Modified;
                         await db.SaveChangesAsync();
-                        dbTransaction.Commit();
 
-                        AuditToStore auditLog = new AuditToStore
+                        if (newCorpOwner.Any())
                         {
-                            AuditAction = "U",
-                            AuditDateTime = DateTime.Now,
-                            ModelPKey = storedInDB.corpID,
-                            TableName = "CorporateMasterList",
-                            UserLogons = User.Identity.GetUserName(),
-                            tableInfos = tableColumnInfo
-                        };
-                        var respository = new AuditLogRepository();
-                        respository.AddAuditLogs(auditLog);
+                            var corpOwnerLog = newCorpOwner.Select(x => new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                TableName = "Corp_Owner",
+                                AuditAction = "I",
+                                ModelPKey = x.corpOwnerID,
+                                tableInfos = new List<TableInfo>
+                            {
+                                new TableInfo{Field_ColumName = "Contact_ContactID", NewValue = x.Contact_ContactID.ToString()},
+                                new TableInfo{Field_ColumName = "corpID", NewValue = x.corpID.ToString()},
+                            }
+                            }).ToList();
+                            auditLogs.AddRange(corpOwnerLog);
+                        }
+
+                        if (newCorpDbs.Any())
+                        {
+                            var corpDbLog = newCorpDbs.Select(x => new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                TableName = "Corp_DBs",
+                                AuditAction = "I",
+                                ModelPKey = x.ID_PK,
+                                tableInfos = new List<TableInfo>
+                            {
+                                new TableInfo{Field_ColumName = "DB_ID", NewValue = x.DB_ID.ToString()},
+                                new TableInfo{Field_ColumName = "corpID", NewValue = x.corpID.ToString()}
+                            }
+                            }).ToList();
+                            auditLogs.AddRange(corpDbLog);
+                        }
+
+                        if (tableColumnInfo.Any())
+                        {
+                            AuditToStore auditLog = new AuditToStore
+                            {
+                                AuditAction = "U",
+                                AuditDateTime = DateTime.Now,
+                                ModelPKey = storedInDB.corpID,
+                                TableName = "CorporateMasterList",
+                                UserLogons = User.Identity.GetUserName(),
+                                tableInfos = tableColumnInfo
+                            };
+                            auditLogs.Add(auditLog);
+                        }
+
+                        new AuditLogRepository().SaveLogs(auditLogs);
+
+                        dbTransaction.Commit();
+                       
                     }
                     catch (Exception)
                     {
@@ -341,8 +499,6 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         return Json(new[] { corpMasterList }.ToDataSourceResult(request, ModelState));
                     }
                 }
-
-               
             }
             return Json(new[] { corpMasterList }.ToDataSourceResult(request, ModelState));
         }

@@ -1182,6 +1182,7 @@
     <Content Include="Content\themes\jquery-ui.structure.min.css" />
     <Content Include="Content\themes\jquery-ui.theme.css" />
     <Content Include="Content\themes\jquery-ui.theme.min.css" />
+    <Content Include="Content\web\Notifications\error-icon.png" />
     <Content Include="Content\web\upload\default.png" />
     <Content Include="Content\web\upload\doc.png" />
     <Content Include="Content\web\upload\jpg.png" />
@@ -1458,6 +1459,7 @@
     <Content Include="Areas\BadRequest\Views\web.config" />
     <Content Include="Areas\BadRequest\Views\Error\Index.cshtml" />
     <Content Include="Areas\BadRequest\Views\Error\Forbbiden.cshtml" />
+    <Content Include="Views\Shared\UnothorizedRequest.cshtml" />
     <None Include="Properties\PublishProfiles\TEST_QASite.pubxml" />
     <None Include="Properties\PublishProfiles\Site02.pubxml" />
     <None Include="Properties\PublishProfiles\TestQA.pubxml" />
@@ -2833,6 +2835,7 @@
     <Content Include="Views\Shared\EditorTemplates\ACCodeEditor.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ActionCodeViewModelEditor.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\BIDBFvpViewModelEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CorpOwnerViewModelEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

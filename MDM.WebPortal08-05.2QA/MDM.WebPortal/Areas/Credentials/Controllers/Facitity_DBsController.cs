@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -7,12 +7,13 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
-using MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
 using MDM.WebPortal.Tools.IQuetable;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    //[SetPermissions]
     public class Facitity_DBsController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();

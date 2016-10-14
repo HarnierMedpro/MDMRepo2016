@@ -10,11 +10,13 @@ using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
 using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    [SetPermissions]
     public class FACInfoDatasController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -91,13 +93,52 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         infoData.InfoDataID = licenseToStore.InfoDataID;
                         infoData.MasterPOSID = ParentID;
 
-                        var masterPOS = await db.MasterPOS.FindAsync(ParentID);
-                        masterPOS.InfoData_InfoDataID = infoData.InfoDataID;
-                        db.MasterPOS.Attach(masterPOS);
-                        db.Entry(masterPOS).State = EntityState.Modified;
+                        var masterPos = await db.MasterPOS.FindAsync(ParentID);
+                        masterPos.InfoData_InfoDataID = infoData.InfoDataID;
+                        db.MasterPOS.Attach(masterPos);
+                        db.Entry(masterPos).State = EntityState.Modified;
                         await db.SaveChangesAsync();
 
+                        List<AuditToStore> auditLogs = new List<AuditToStore>
+                        {
+                            new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                TableName = "InfoData",
+                                AuditAction = "I",
+                                ModelPKey = licenseToStore.InfoDataID,
+                                tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "LicType", NewValue = licenseToStore.LicType},
+                                    new TableInfo{Field_ColumName = "LicNumber", NewValue = licenseToStore.LicNumber},
+                                    new TableInfo{Field_ColumName = "StateLic", NewValue = licenseToStore.StateLic},
+                                    new TableInfo{Field_ColumName = "LicEffectiveDate", NewValue = licenseToStore.LicEffectiveDate.ToString()},
+                                    new TableInfo{Field_ColumName = "LicExpireDate", NewValue = licenseToStore.LicExpireDate.ToString()},
+                                    new TableInfo{Field_ColumName = "LicNumCLIA_waiver", NewValue = licenseToStore.LicNumCLIA_waiver},
+                                    new TableInfo{Field_ColumName = "CLIA_EffectiveDate", NewValue = licenseToStore.CLIA_EffectiveDate.ToString()},
+                                    new TableInfo{Field_ColumName = "CLIA_EffectiveDate", NewValue = licenseToStore.CLIA_EffectiveDate.ToString()},
+                                    new TableInfo{Field_ColumName = "CLIA_ExpireDate", NewValue = licenseToStore.CLIA_ExpireDate.ToString()},
+                                }
+                            },
+                            new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                TableName = "MasterPOS",
+                                AuditAction = "U",
+                                ModelPKey = masterPos.MasterPOSID,
+                                tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "InfoData_InfoDataID", NewValue = masterPos.InfoData_InfoDataID.ToString()}
+                                }
+                            }
+                        };
+
+                        new AuditLogRepository().SaveLogs(auditLogs);
+
                         dbtTransaction.Commit();
+
                     }
                     catch (Exception)
                     {
@@ -121,74 +162,81 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     ModelState.AddModelError("","Invalid Dates. Please try again!");
                     return Json(new[] { infoData }.ToDataSourceResult(request, ModelState));
                 }
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    var storedInDb = await db.InfoDatas.FindAsync(infoData.InfoDataID);
+                    try
+                    {
+                        var storedInDb = await db.InfoDatas.FindAsync(infoData.InfoDataID);
 
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>();
 
-                    if (storedInDb.LicType != infoData.LicType)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicType", OldValue = storedInDb.LicType, NewValue = infoData.LicType });
-                        storedInDb.LicType = infoData.LicType;
-                    }
-                    if (storedInDb.StateLic != infoData.StateLic)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "StateLic", OldValue = storedInDb.StateLic, NewValue = infoData.StateLic });
-                        storedInDb.StateLic = infoData.StateLic;
-                    }
-                    if (storedInDb.LicNumCLIA_waiver != infoData.LicNumCLIA_waiver)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicNumCLIA_waiver", OldValue = storedInDb.LicNumCLIA_waiver, NewValue = infoData.LicNumCLIA_waiver });
-                        storedInDb.LicNumCLIA_waiver = infoData.LicNumCLIA_waiver;
-                    }
-                    if (storedInDb.LicEffectiveDate != infoData.LicEffectiveDate)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicEffectiveDate", OldValue = storedInDb.LicEffectiveDate.ToShortDateString(), NewValue = infoData.LicEffectiveDate.ToShortDateString() });
-                        storedInDb.LicEffectiveDate = infoData.LicEffectiveDate;
-                    }
-                    if (storedInDb.LicExpireDate != infoData.LicExpireDate)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicExpireDate", OldValue = storedInDb.LicExpireDate.ToShortDateString(), NewValue = infoData.LicExpireDate.ToShortDateString() });
-                        storedInDb.LicExpireDate = infoData.LicExpireDate;
-                    }
-                    if (storedInDb.Taxonomy != infoData.Taxonomy)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Taxonomy", OldValue = storedInDb.Taxonomy, NewValue = infoData.Taxonomy });
-                        storedInDb.Taxonomy = infoData.Taxonomy;
-                    }
-                    if (storedInDb.CLIA_EffectiveDate != infoData.CLIA_EffectiveDate)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "CLIA_EffectiveDate", OldValue = storedInDb.CLIA_EffectiveDate.ToString(), NewValue = infoData.CLIA_EffectiveDate.ToString() });
-                        storedInDb.CLIA_EffectiveDate = infoData.CLIA_EffectiveDate;
-                    }
-                    if (storedInDb.CLIA_ExpireDate != infoData.CLIA_ExpireDate)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "CLIA_ExpireDate", OldValue = storedInDb.CLIA_ExpireDate.ToString(), NewValue = infoData.CLIA_ExpireDate.ToString() });
-                        storedInDb.CLIA_ExpireDate = infoData.CLIA_ExpireDate;
-                    }
+                        if (storedInDb.LicType != infoData.LicType)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicType", OldValue = storedInDb.LicType, NewValue = infoData.LicType });
+                            storedInDb.LicType = infoData.LicType;
+                        }
+                        if (storedInDb.StateLic != infoData.StateLic)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "StateLic", OldValue = storedInDb.StateLic, NewValue = infoData.StateLic });
+                            storedInDb.StateLic = infoData.StateLic;
+                        }
+                        if (storedInDb.LicNumCLIA_waiver != infoData.LicNumCLIA_waiver)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicNumCLIA_waiver", OldValue = storedInDb.LicNumCLIA_waiver, NewValue = infoData.LicNumCLIA_waiver });
+                            storedInDb.LicNumCLIA_waiver = infoData.LicNumCLIA_waiver;
+                        }
+                        if (storedInDb.LicEffectiveDate != infoData.LicEffectiveDate)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicEffectiveDate", OldValue = storedInDb.LicEffectiveDate.ToShortDateString(), NewValue = infoData.LicEffectiveDate.ToShortDateString() });
+                            storedInDb.LicEffectiveDate = infoData.LicEffectiveDate;
+                        }
+                        if (storedInDb.LicExpireDate != infoData.LicExpireDate)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "LicExpireDate", OldValue = storedInDb.LicExpireDate.ToShortDateString(), NewValue = infoData.LicExpireDate.ToShortDateString() });
+                            storedInDb.LicExpireDate = infoData.LicExpireDate;
+                        }
+                        if (storedInDb.Taxonomy != infoData.Taxonomy)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Taxonomy", OldValue = storedInDb.Taxonomy, NewValue = infoData.Taxonomy });
+                            storedInDb.Taxonomy = infoData.Taxonomy;
+                        }
+                        if (storedInDb.CLIA_EffectiveDate != infoData.CLIA_EffectiveDate)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "CLIA_EffectiveDate", OldValue = storedInDb.CLIA_EffectiveDate.ToString(), NewValue = infoData.CLIA_EffectiveDate.ToString() });
+                            storedInDb.CLIA_EffectiveDate = infoData.CLIA_EffectiveDate;
+                        }
+                        if (storedInDb.CLIA_ExpireDate != infoData.CLIA_ExpireDate)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "CLIA_ExpireDate", OldValue = storedInDb.CLIA_ExpireDate.ToString(), NewValue = infoData.CLIA_ExpireDate.ToString() });
+                            storedInDb.CLIA_ExpireDate = infoData.CLIA_ExpireDate;
+                        }
 
-                    db.InfoDatas.Attach(storedInDb);
-                    db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
+                        db.InfoDatas.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
 
-                    AuditToStore auditLog = new AuditToStore
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditDateTime = DateTime.Now,
+                            TableName = "InfoData",
+                            AuditAction = "U",
+                            ModelPKey = storedInDb.InfoDataID,
+                            tableInfos = tableColumnInfos
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
                     {
-                        UserLogons = User.Identity.GetUserName(),
-                        AuditDateTime = DateTime.Now,
-                        TableName = "InfoData",
-                        AuditAction = "U",
-                        ModelPKey = storedInDb.InfoDataID,
-                        tableInfos = tableColumnInfos
-                    };
-
-                    new AuditLogRepository().AddAuditLogs(auditLog);
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { infoData }.ToDataSourceResult(request, ModelState));
+                    } 
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("","Something failed. Please try again!");
-                    return Json(new[] { infoData }.ToDataSourceResult(request, ModelState));
-                }
+               
             }
             return Json(new[] { infoData }.ToDataSourceResult(request, ModelState));
         }
@@ -245,10 +293,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             TempData["Error"] = "Something failed. Please try again!";
             return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
         }
-
-        // POST: PlaceOfServices/FACInfoDatas/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "MasterPOSID,InfoDataID,LicExpireDate,LicEffectiveDate,Taxonomy,LicNumCLIA_waiver,LicType,StateLic")]
@@ -374,10 +419,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             ViewBag.StateLic = allStates;
             return View(toView);
         }
-
-        // POST: PlaceOfServices/FACInfoDatas/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "MasterPOSID,InfoDataID,LicExpireDate,LicEffectiveDate,Taxonomy,LicNumCLIA_waiver,LicType,StateLic")] VMFACInfoData toUpdate)

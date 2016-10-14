@@ -9,11 +9,13 @@ using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
 using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    [SetPermissions]
     public class POSExtraDatasController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -103,47 +105,47 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 {
                     MasterPOSID = MasterPOSID.Value,
                     POSExtraDataID = extraData.POSExtraDataID,
-                    Phone_Number = extraData.Phone_Number,
-                    AdmissionPhone = extraData.AdmissionPhone,
-                    Fax_Number = extraData.Fax_Number,
-                    Website = extraData.Website,
-                    ScholarshipRate = extraData.ScholarshipRate,
-                    AverageLenOfStay = extraData.AverageLenOfStay,
-                    HowManyUAPanels = extraData.HowManyUAPanels,
-                    PaidToPatientState= extraData.PaidToPatientState,
-                    MedicareNumber = extraData.MedicareNumber,
-                    Number_of_beds = extraData.Number_of_beds,
-                    how_many_days_week_open = extraData.how_many_days_week_open,
-                    Ancillary_outpatient_services = extraData.Ancillary_outpatient_services,
-                    Out_of_Network_In_Network = extraData.Out_of_Network_In_Network,
-                    Lab_Name = extraData.Lab_Name,
-                    BCBS_ID_Number = extraData.BCBS_ID_Number, 
-                    UPIN_Number = extraData.UPIN_Number,
-                    Medicaid_Number = extraData.Medicaid_Number,
-                    State_of_MD_or_PhyGrp = extraData.State_of_MD_or_PhyGrp,
-                    JACHO_CARF = extraData.JACHO_CARF,
+                    Phone_Number = extraData.Phone_Number ?? "",
+                    AdmissionPhone = extraData.AdmissionPhone ?? "",
+                    Fax_Number = extraData.Fax_Number ?? "",
+                    Website = extraData.Website ?? "",
+                    ScholarshipRate = extraData.ScholarshipRate ?? "",
+                    AverageLenOfStay = extraData.AverageLenOfStay ?? "",
+                    HowManyUAPanels = extraData.HowManyUAPanels ?? "",
+                    PaidToPatientState = extraData.PaidToPatientState ?? "",
+                    MedicareNumber = extraData.MedicareNumber ?? "",
+                    Number_of_beds = extraData.Number_of_beds ?? "",
+                    how_many_days_week_open = extraData.how_many_days_week_open ?? "",
+                    Ancillary_outpatient_services = extraData.Ancillary_outpatient_services ?? "",
+                    Out_of_Network_In_Network = extraData.Out_of_Network_In_Network ?? "",
+                    Lab_Name = extraData.Lab_Name ?? "",
+                    BCBS_ID_Number = extraData.BCBS_ID_Number ?? "",
+                    UPIN_Number = extraData.UPIN_Number ?? "",
+                    Medicaid_Number = extraData.Medicaid_Number ?? "",
+                    State_of_MD_or_PhyGrp = extraData.State_of_MD_or_PhyGrp ?? "",
+                    JACHO_CARF = extraData.JACHO_CARF ?? "",
                     In_Service_date_time = extraData.In_Service_date_time,
-                    Manage_care_contracts = extraData.Manage_care_contracts,
+                    Manage_care_contracts = extraData.Manage_care_contracts ?? "",
                     //booleans
-                    W_9_on_File = extraData.W_9_on_File,
-                    Have_24hrs_nursing = extraData.Have_24hrs_nursing,
-                    Licensure_on_File = extraData.Licensure_on_File,
-                    Mental_License = extraData.Mental_License,
-                    Regulations_on_File = extraData.Regulations_on_File,
-                    Has_facility_billed_ins_before = extraData.Has_facility_billed_ins_before,
-                    Copies_of_all_managed_care_contracts_on_file = extraData.Copies_of_all_managed_care_contracts_on_file,
-                    Forms_created = extraData.Forms_created,
-                    In_Service_scheduled = extraData.In_Service_scheduled,
-                    Portal_training_setup = extraData.Portal_training_setup,
-                    email_regarding_conference_set_up = extraData.email_regarding_conference_set_up,
-                    Database_set_up = extraData.Database_set_up,
-                    Availavility_request_sent_out = extraData.Availavility_request_sent_out,
-                    Availavility_completed = extraData.Availavility_completed,
-                    Navinet_request_completed = extraData.Navinet_request_completed,
-                    Fee_schedule_in_binder = extraData.Fee_schedule_in_binder,
-                    AcreditationOnFile = extraData.AcreditationOnFile,
-                    HighComplexityCLIA = extraData.HighComplexityCLIA,
-                    RegistrationAnalyzer = extraData.RegistrationAnalyzer
+                    W_9_on_File = extraData.W_9_on_File ?? false,
+                    Have_24hrs_nursing = extraData.Have_24hrs_nursing ?? false,
+                    Licensure_on_File = extraData.Licensure_on_File ?? false,
+                    Mental_License = extraData.Mental_License ?? false,
+                    Regulations_on_File = extraData.Regulations_on_File ?? false,
+                    Has_facility_billed_ins_before = extraData.Has_facility_billed_ins_before ?? false,
+                    Copies_of_all_managed_care_contracts_on_file = extraData.Copies_of_all_managed_care_contracts_on_file ?? false,
+                    Forms_created = extraData.Forms_created ?? false,
+                    In_Service_scheduled = extraData.In_Service_scheduled ?? false,
+                    Portal_training_setup = extraData.Portal_training_setup ?? false,
+                    email_regarding_conference_set_up = extraData.email_regarding_conference_set_up ?? false,
+                    Database_set_up = extraData.Database_set_up ?? false,
+                    Availavility_request_sent_out = extraData.Availavility_request_sent_out ?? false,
+                    Availavility_completed = extraData.Availavility_completed ?? false,
+                    Navinet_request_completed = extraData.Navinet_request_completed ?? false,
+                    Fee_schedule_in_binder = extraData.Fee_schedule_in_binder ?? false,
+                    AcreditationOnFile = extraData.AcreditationOnFile ?? false,
+                    HighComplexityCLIA = extraData.HighComplexityCLIA ?? false,
+                    RegistrationAnalyzer = extraData.RegistrationAnalyzer ?? false
                     
 
                 });
@@ -171,47 +173,47 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 {
                     MasterPOSID = MasterPOSID.Value,
                     POSExtraDataID = extraData.POSExtraDataID,
-                    W_9_on_File = extraData.W_9_on_File,
-                    Have_24hrs_nursing = extraData.Have_24hrs_nursing,
-                    Licensure_on_File = extraData.Licensure_on_File,
-                    Mental_License = extraData.Mental_License,
-                    Regulations_on_File = extraData.Regulations_on_File,
-                    Has_facility_billed_ins_before = extraData.Has_facility_billed_ins_before,
-                    Copies_of_all_managed_care_contracts_on_file = extraData.Copies_of_all_managed_care_contracts_on_file,
-                    Forms_created = extraData.Forms_created,
-                    In_Service_scheduled = extraData.In_Service_scheduled,
-                    Portal_training_setup = extraData.Portal_training_setup,
-                    email_regarding_conference_set_up = extraData.email_regarding_conference_set_up,
-                    Database_set_up = extraData.Database_set_up,
-                    Availavility_request_sent_out = extraData.Availavility_request_sent_out,
-                    Availavility_completed = extraData.Availavility_completed,
-                    Navinet_request_completed = extraData.Navinet_request_completed,
-                    Fee_schedule_in_binder = extraData.Fee_schedule_in_binder,
-                    AcreditationOnFile = extraData.AcreditationOnFile,
-                    HighComplexityCLIA = extraData.HighComplexityCLIA,
-                    RegistrationAnalyzer = extraData.RegistrationAnalyzer,
+                    W_9_on_File = extraData.W_9_on_File ?? false,
+                    Have_24hrs_nursing = extraData.Have_24hrs_nursing ?? false,
+                    Licensure_on_File = extraData.Licensure_on_File ?? false,
+                    Mental_License = extraData.Mental_License ?? false,
+                    Regulations_on_File = extraData.Regulations_on_File ?? false,
+                    Has_facility_billed_ins_before = extraData.Has_facility_billed_ins_before ?? false,
+                    Copies_of_all_managed_care_contracts_on_file = extraData.Copies_of_all_managed_care_contracts_on_file ?? false,
+                    Forms_created = extraData.Forms_created ?? false,
+                    In_Service_scheduled = extraData.In_Service_scheduled ?? false,
+                    Portal_training_setup = extraData.Portal_training_setup ?? false,
+                    email_regarding_conference_set_up = extraData.email_regarding_conference_set_up ?? false,
+                    Database_set_up = extraData.Database_set_up ?? false,
+                    Availavility_request_sent_out = extraData.Availavility_request_sent_out ?? false,
+                    Availavility_completed = extraData.Availavility_completed ?? false,
+                    Navinet_request_completed = extraData.Navinet_request_completed ?? false,
+                    Fee_schedule_in_binder = extraData.Fee_schedule_in_binder ?? false,
+                    AcreditationOnFile = extraData.AcreditationOnFile ?? false,
+                    HighComplexityCLIA = extraData.HighComplexityCLIA ?? false,
+                    RegistrationAnalyzer = extraData.RegistrationAnalyzer ?? false,
                     //freetext
-                    Phone_Number = extraData.Phone_Number,
-                    AdmissionPhone = extraData.AdmissionPhone,
-                    Fax_Number = extraData.Fax_Number,
-                    Website = extraData.Website,
-                    ScholarshipRate = extraData.ScholarshipRate,
-                    AverageLenOfStay = extraData.AverageLenOfStay,
-                    HowManyUAPanels = extraData.HowManyUAPanels,
-                    PaidToPatientState = extraData.PaidToPatientState,
-                    MedicareNumber = extraData.MedicareNumber,
-                    Number_of_beds = extraData.Number_of_beds,
-                    how_many_days_week_open = extraData.how_many_days_week_open,
-                    Ancillary_outpatient_services = extraData.Ancillary_outpatient_services,
-                    Out_of_Network_In_Network = extraData.Out_of_Network_In_Network,
-                    Lab_Name = extraData.Lab_Name,
-                    BCBS_ID_Number = extraData.BCBS_ID_Number,
-                    UPIN_Number = extraData.UPIN_Number,
-                    Medicaid_Number = extraData.Medicaid_Number,
-                    State_of_MD_or_PhyGrp = extraData.State_of_MD_or_PhyGrp,
-                    JACHO_CARF = extraData.JACHO_CARF,
+                    Phone_Number = extraData.Phone_Number ?? "",
+                    AdmissionPhone = extraData.AdmissionPhone ?? "",
+                    Fax_Number = extraData.Fax_Number ?? "",
+                    Website = extraData.Website ?? "",
+                    ScholarshipRate = extraData.ScholarshipRate ?? "",
+                    AverageLenOfStay = extraData.AverageLenOfStay ?? "",
+                    HowManyUAPanels = extraData.HowManyUAPanels ?? "",
+                    PaidToPatientState = extraData.PaidToPatientState ?? "",
+                    MedicareNumber = extraData.MedicareNumber ?? "",
+                    Number_of_beds = extraData.Number_of_beds ?? "",
+                    how_many_days_week_open = extraData.how_many_days_week_open ?? "",
+                    Ancillary_outpatient_services = extraData.Ancillary_outpatient_services ?? "",
+                    Out_of_Network_In_Network = extraData.Out_of_Network_In_Network ?? "",
+                    Lab_Name = extraData.Lab_Name ?? "",
+                    BCBS_ID_Number = extraData.BCBS_ID_Number ?? "",
+                    UPIN_Number = extraData.UPIN_Number ?? "",
+                    Medicaid_Number = extraData.Medicaid_Number ?? "",
+                    State_of_MD_or_PhyGrp = extraData.State_of_MD_or_PhyGrp ?? "",
+                    JACHO_CARF = extraData.JACHO_CARF ?? "",
                     In_Service_date_time = extraData.In_Service_date_time,
-                    Manage_care_contracts = extraData.Manage_care_contracts
+                    Manage_care_contracts = extraData.Manage_care_contracts ?? "",
                 });
             }
             ViewBag.MasterPOS = MasterPOSID;
@@ -230,23 +232,27 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     {
                         var toStore = new POSExtraData
                         {
-                            Availavility_completed = pOSExtraData.Availavility_completed,
-                            Portal_training_setup = pOSExtraData.Portal_training_setup,
-                            In_Service_scheduled = pOSExtraData.In_Service_scheduled,
-                            Mental_License = pOSExtraData.Mental_License,
-                            Out_of_Network_In_Network = pOSExtraData.Out_of_Network_In_Network,
-                            Have_24hrs_nursing = pOSExtraData.Have_24hrs_nursing,
-                            Licensure_on_File = pOSExtraData.Licensure_on_File,
-                            Regulations_on_File = pOSExtraData.Regulations_on_File,
-                            Has_facility_billed_ins_before = pOSExtraData.Has_facility_billed_ins_before,
-                            Fee_schedule_in_binder = pOSExtraData.Fee_schedule_in_binder,
-                            Navinet_request_completed = pOSExtraData.Navinet_request_completed,
-                            Copies_of_all_managed_care_contracts_on_file = pOSExtraData.Copies_of_all_managed_care_contracts_on_file,
-                            Database_set_up = pOSExtraData.Database_set_up,
-                            email_regarding_conference_set_up = pOSExtraData.email_regarding_conference_set_up,
-                            Forms_created = pOSExtraData.Forms_created,
-                            W_9_on_File = pOSExtraData.W_9_on_File,
-                            Availavility_request_sent_out = pOSExtraData.Availavility_completed,
+                            W_9_on_File = pOSExtraData.W_9_on_File ?? false,
+                            Have_24hrs_nursing = pOSExtraData.Have_24hrs_nursing ?? false,
+                            Licensure_on_File = pOSExtraData.Licensure_on_File ?? false,
+                            Mental_License = pOSExtraData.Mental_License ?? false,
+                            Regulations_on_File = pOSExtraData.Regulations_on_File ?? false,
+                            Has_facility_billed_ins_before = pOSExtraData.Has_facility_billed_ins_before ?? false,
+                            Copies_of_all_managed_care_contracts_on_file = pOSExtraData.Copies_of_all_managed_care_contracts_on_file ?? false,
+                            Forms_created = pOSExtraData.Forms_created ?? false,
+                            In_Service_scheduled = pOSExtraData.In_Service_scheduled ?? false,
+                            Portal_training_setup = pOSExtraData.Portal_training_setup ?? false,
+                            email_regarding_conference_set_up = pOSExtraData.email_regarding_conference_set_up ?? false,
+                            Database_set_up = pOSExtraData.Database_set_up ?? false,
+                            Availavility_request_sent_out = pOSExtraData.Availavility_request_sent_out ?? false,
+                            Availavility_completed = pOSExtraData.Availavility_completed ?? false,
+                            Navinet_request_completed = pOSExtraData.Navinet_request_completed ?? false,
+                            Fee_schedule_in_binder = pOSExtraData.Fee_schedule_in_binder ?? false,
+                            AcreditationOnFile = pOSExtraData.AcreditationOnFile ?? false,
+                            HighComplexityCLIA = pOSExtraData.HighComplexityCLIA ?? false,
+                            RegistrationAnalyzer = pOSExtraData.RegistrationAnalyzer ?? false,
+
+                           
                             JACHO_CARF = pOSExtraData.JACHO_CARF,
                             State_of_MD_or_PhyGrp = pOSExtraData.State_of_MD_or_PhyGrp,
                             Lab_Name = pOSExtraData.Lab_Name,
@@ -261,16 +267,14 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                             Medicaid_Number = pOSExtraData.Medicaid_Number,
                             Phone_Number = pOSExtraData.Phone_Number,
                             Ancillary_outpatient_services = pOSExtraData.Ancillary_outpatient_services,
-                            AcreditationOnFile = pOSExtraData.AcreditationOnFile,
                             AdmissionPhone = pOSExtraData.AdmissionPhone,
                             AverageLenOfStay = pOSExtraData.AverageLenOfStay,
-                            HighComplexityCLIA = pOSExtraData.HighComplexityCLIA,
                             HowManyUAPanels = pOSExtraData.HowManyUAPanels,
                             MedicareNumber = pOSExtraData.MedicareNumber,
-                            POSExtraDataID = pOSExtraData.POSExtraDataID,
                             PaidToPatientState = pOSExtraData.PaidToPatientState,
-                            RegistrationAnalyzer = pOSExtraData.RegistrationAnalyzer,
-                            ScholarshipRate = pOSExtraData.ScholarshipRate
+                            ScholarshipRate = pOSExtraData.ScholarshipRate,
+                            Out_of_Network_In_Network = pOSExtraData.Out_of_Network_In_Network
+
                         };
 
                         db.POSExtraDatas.Add(toStore);
@@ -286,6 +290,28 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         await db.SaveChangesAsync();
 
                         dbTransaction.Commit();
+
+                        pOSExtraData.JACHO_CARF = pOSExtraData.JACHO_CARF ?? "";
+                        pOSExtraData.State_of_MD_or_PhyGrp = pOSExtraData.State_of_MD_or_PhyGrp ?? "";
+                        pOSExtraData.Lab_Name = pOSExtraData.Lab_Name ?? "";
+                        pOSExtraData.Manage_care_contracts = pOSExtraData.Manage_care_contracts ?? "";
+                        //pOSExtraData.In_Service_date_time = pOSExtraData.In_Service_date_time,
+                        pOSExtraData.how_many_days_week_open = pOSExtraData.how_many_days_week_open ?? "";
+                        pOSExtraData.UPIN_Number = pOSExtraData.UPIN_Number ?? "";
+                        pOSExtraData.Fax_Number = pOSExtraData.Fax_Number ?? "";
+                        pOSExtraData.BCBS_ID_Number = pOSExtraData.BCBS_ID_Number ?? "";
+                        pOSExtraData.Number_of_beds = pOSExtraData.Number_of_beds ?? "";
+                        pOSExtraData.Website = pOSExtraData.Website ?? "";
+                        pOSExtraData.Medicaid_Number = pOSExtraData.Medicaid_Number ?? "";
+                        pOSExtraData.Phone_Number = pOSExtraData.Phone_Number ?? "";
+                        pOSExtraData.Ancillary_outpatient_services = pOSExtraData.Ancillary_outpatient_services ?? "";
+                        pOSExtraData.AdmissionPhone = pOSExtraData.AdmissionPhone ?? "";
+                        pOSExtraData.AverageLenOfStay = pOSExtraData.AverageLenOfStay ?? "";
+                        pOSExtraData.HowManyUAPanels = pOSExtraData.HowManyUAPanels ?? "";
+                        pOSExtraData.MedicareNumber = pOSExtraData.MedicareNumber ?? "";
+                        pOSExtraData.PaidToPatientState = pOSExtraData.PaidToPatientState ?? "";
+                        pOSExtraData.ScholarshipRate = pOSExtraData.ScholarshipRate ?? "";
+                        pOSExtraData.Out_of_Network_In_Network = pOSExtraData.Out_of_Network_In_Network ?? "";
                     }
                     catch (Exception)
                     {
@@ -463,12 +489,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                    
                      if (storedInDb.AdmissionPhone != toStore.AdmissionPhone)
                      {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "AdmissionPhone", OldValue = storedInDb.AdmissionPhone.ToString(), NewValue = toStore.AdmissionPhone.ToString() });
+                         tableColumInfos.Add(new TableInfo { Field_ColumName = "AdmissionPhone", OldValue = storedInDb.AdmissionPhone, NewValue = toStore.AdmissionPhone });
                          storedInDb.AdmissionPhone = toStore.AdmissionPhone;
                      }
                      if (storedInDb.ScholarshipRate != toStore.ScholarshipRate)
                      {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "ScholarshipRate", OldValue = storedInDb.ScholarshipRate.ToString(), NewValue = toStore.ScholarshipRate.ToString() });
+                         tableColumInfos.Add(new TableInfo { Field_ColumName = "ScholarshipRate", OldValue = storedInDb.ScholarshipRate, NewValue = toStore.ScholarshipRate });
                          storedInDb.ScholarshipRate = toStore.ScholarshipRate;
                      }
                      if (storedInDb.AcreditationOnFile != toStore.AcreditationOnFile)
@@ -478,12 +504,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                      }
                      if (storedInDb.AverageLenOfStay != toStore.AverageLenOfStay)
                      {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "AverageLenOfStay", OldValue = storedInDb.AverageLenOfStay.ToString(), NewValue = toStore.AverageLenOfStay.ToString() });
+                         tableColumInfos.Add(new TableInfo { Field_ColumName = "AverageLenOfStay", OldValue = storedInDb.AverageLenOfStay, NewValue = toStore.AverageLenOfStay });
                          storedInDb.AverageLenOfStay = toStore.AverageLenOfStay;
                      }
                      if (storedInDb.HowManyUAPanels != toStore.HowManyUAPanels)
                      {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "HowManyUAPanels", OldValue = storedInDb.HowManyUAPanels.ToString(), NewValue = toStore.HowManyUAPanels.ToString() });
+                         tableColumInfos.Add(new TableInfo { Field_ColumName = "HowManyUAPanels", OldValue = storedInDb.HowManyUAPanels, NewValue = toStore.HowManyUAPanels });
                          storedInDb.HowManyUAPanels = toStore.HowManyUAPanels;
                      }
                      if (storedInDb.HighComplexityCLIA != toStore.HighComplexityCLIA)
@@ -498,17 +524,17 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                      }
                      if (storedInDb.PaidToPatientState != toStore.PaidToPatientState)
                      {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "PaidToPatientState", OldValue = storedInDb.PaidToPatientState.ToString(), NewValue = toStore.PaidToPatientState.ToString() });
+                         tableColumInfos.Add(new TableInfo { Field_ColumName = "PaidToPatientState", OldValue = storedInDb.PaidToPatientState, NewValue = toStore.PaidToPatientState });
                          storedInDb.PaidToPatientState = toStore.PaidToPatientState;
                      }
                      if (storedInDb.MedicareNumber != toStore.MedicareNumber)
                      {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "MedicareNumber", OldValue = storedInDb.MedicareNumber.ToString(), NewValue = toStore.MedicareNumber.ToString() });
+                         tableColumInfos.Add(new TableInfo { Field_ColumName = "MedicareNumber", OldValue = storedInDb.MedicareNumber, NewValue = toStore.MedicareNumber });
                          storedInDb.MedicareNumber = toStore.MedicareNumber;
                      }
                      if (storedInDb.Ancillary_outpatient_services != toStore.Ancillary_outpatient_services)
                      {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Ancillary_outpatient_services", OldValue = storedInDb.Ancillary_outpatient_services.ToString(), NewValue = toStore.Ancillary_outpatient_services.ToString() });
+                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Ancillary_outpatient_services", OldValue = storedInDb.Ancillary_outpatient_services, NewValue = toStore.Ancillary_outpatient_services });
                          storedInDb.Ancillary_outpatient_services = toStore.Ancillary_outpatient_services;
                      }
 
@@ -634,43 +660,43 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
                     if (storedInDb.AdmissionPhone != toStore.AdmissionPhone)
                     {
-                        tableColumInfos.Add(new TableInfo { Field_ColumName = "AdmissionPhone", OldValue = storedInDb.AdmissionPhone.ToString(), NewValue = toStore.AdmissionPhone.ToString() });
+                        tableColumInfos.Add(new TableInfo { Field_ColumName = "AdmissionPhone", OldValue = storedInDb.AdmissionPhone, NewValue = toStore.AdmissionPhone });
                         storedInDb.AdmissionPhone = toStore.AdmissionPhone;
                     }
 
                     if (storedInDb.ScholarshipRate != toStore.ScholarshipRate)
                     {
-                        tableColumInfos.Add(new TableInfo { Field_ColumName = "ScholarshipRate", OldValue = storedInDb.ScholarshipRate.ToString(), NewValue = toStore.ScholarshipRate.ToString() });
+                        tableColumInfos.Add(new TableInfo { Field_ColumName = "ScholarshipRate", OldValue = storedInDb.ScholarshipRate, NewValue = toStore.ScholarshipRate });
                         storedInDb.ScholarshipRate = toStore.ScholarshipRate;
                     }
 
                     if (storedInDb.AverageLenOfStay != toStore.AverageLenOfStay)
                     {
-                        tableColumInfos.Add(new TableInfo { Field_ColumName = "AverageLenOfStay", OldValue = storedInDb.AverageLenOfStay.ToString(), NewValue = toStore.AverageLenOfStay.ToString() });
+                        tableColumInfos.Add(new TableInfo { Field_ColumName = "AverageLenOfStay", OldValue = storedInDb.AverageLenOfStay, NewValue = toStore.AverageLenOfStay });
                         storedInDb.AverageLenOfStay = toStore.AverageLenOfStay;
                     }
 
                     if (storedInDb.HowManyUAPanels != toStore.HowManyUAPanels)
                     {
-                        tableColumInfos.Add(new TableInfo { Field_ColumName = "HowManyUAPanels", OldValue = storedInDb.HowManyUAPanels.ToString(), NewValue = toStore.HowManyUAPanels.ToString() });
+                        tableColumInfos.Add(new TableInfo { Field_ColumName = "HowManyUAPanels", OldValue = storedInDb.HowManyUAPanels, NewValue = toStore.HowManyUAPanels });
                         storedInDb.HowManyUAPanels = toStore.HowManyUAPanels;
                     }
 
                     if (storedInDb.PaidToPatientState != toStore.PaidToPatientState)
                     {
-                        tableColumInfos.Add(new TableInfo { Field_ColumName = "PaidToPatientState", OldValue = storedInDb.PaidToPatientState.ToString(), NewValue = toStore.PaidToPatientState.ToString() });
+                        tableColumInfos.Add(new TableInfo { Field_ColumName = "PaidToPatientState", OldValue = storedInDb.PaidToPatientState, NewValue = toStore.PaidToPatientState });
                         storedInDb.PaidToPatientState = toStore.PaidToPatientState;
                     }
 
                     if (storedInDb.MedicareNumber != toStore.MedicareNumber)
                     {
-                        tableColumInfos.Add(new TableInfo { Field_ColumName = "MedicareNumber", OldValue = storedInDb.MedicareNumber.ToString(), NewValue = toStore.MedicareNumber.ToString() });
+                        tableColumInfos.Add(new TableInfo { Field_ColumName = "MedicareNumber", OldValue = storedInDb.MedicareNumber, NewValue = toStore.MedicareNumber });
                         storedInDb.MedicareNumber = toStore.MedicareNumber;
                     }
 
                     if (storedInDb.Ancillary_outpatient_services != toStore.Ancillary_outpatient_services)
                     {
-                        tableColumInfos.Add(new TableInfo { Field_ColumName = "Ancillary_outpatient_services", OldValue = storedInDb.Ancillary_outpatient_services.ToString(), NewValue = toStore.Ancillary_outpatient_services.ToString() });
+                        tableColumInfos.Add(new TableInfo { Field_ColumName = "Ancillary_outpatient_services", OldValue = storedInDb.Ancillary_outpatient_services, NewValue = toStore.Ancillary_outpatient_services });
                         storedInDb.Ancillary_outpatient_services = toStore.Ancillary_outpatient_services;
                     }
 

@@ -1,6 +1,7 @@
 ﻿@*@model int*@
 
 @(Html.Kendo().DropDownList()
+          .AutoBind(false) 
           .Name("ProvID")
           .DataTextField("ProviderName")
           .DataValueField("ProvID")

@@ -10,11 +10,16 @@ using System.Web;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MDM.WebPortal.Areas.AudiTrails.Controllers;
+using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
+using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    [SetPermissions]
     public class ContactsController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -48,12 +53,18 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return Json(result.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Read_Owners([DataSourceRequest] DataSourceRequest request)
+        public ActionResult Read_Owners([DataSourceRequest] DataSourceRequest request, int? corpID)
         {
-            var result =
-                db.ContactType_Contact.Include(cnt => cnt.Contact).Include(ty => ty.ContactType)
+            var result = db.ContactType_Contact.Include(cnt => cnt.Contact).Include(ty => ty.ContactType)
                     .Where(ty => ty.ContactType.ContactType_Name.Equals("owner", StringComparison.InvariantCultureIgnoreCase))
                     .Select(tv => tv.Contact);
+            
+            if (corpID != null && corpID > 0)
+            {
+                var allContactsOfThisCorp = db.Corp_Owner.Include(x => x.Contact).Include(y => y.CorporateMasterList).Where(z => z.corpID == corpID).Select(f => f.Contact);
+                var currentCorpOwners = result.Intersect(allContactsOfThisCorp);
+                result = result.Except(currentCorpOwners);
+            }
 
             return Json(result.ToDataSourceResult(request, x => new VMContact
             {
@@ -73,6 +84,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                            .Where(ty => ty.ContactType.ContactLevel.Equals("corporation", StringComparison.InvariantCultureIgnoreCase) && 
                                   ty.ContactType.ContactType_Name.Equals("owner", StringComparison.InvariantCultureIgnoreCase) == false)
                            .Select(tv => tv.Contact).Distinct();
+
             if (corpID != null && corpID > 0)
             {
                 var allContactsOfThisCorp = db.Corp_Owner.Include(x => x.Contact).Where(x => x.corpID == corpID).Select(x => x.Contact);
@@ -162,6 +174,54 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         await db.SaveChangesAsync();
 
                         dbTransaction.Commit();
+
+                        /*------------------AUDIT LOG SCENARIO------------------*/
+                       
+                        List<AuditToStore> toStore = new List<AuditToStore>{
+                            new AuditToStore
+                                {
+                                    UserLogons = User.Identity.GetUserName(),
+                                    AuditDateTime = DateTime.Now,
+                                    AuditAction = "I",
+                                    TableName = "Contacts",
+                                    ModelPKey = contactToStore.ContactID,
+                                    tableInfos = new List<TableInfo>
+                                    {
+                                        new TableInfo{Field_ColumName = "FName", NewValue = contactToStore.FName},
+                                        new TableInfo{Field_ColumName = "LName", NewValue = contactToStore.LName},
+                                        new TableInfo{Field_ColumName = "Email", NewValue = contactToStore.Email},
+                                        new TableInfo{Field_ColumName = "PhoneNumber", NewValue = contactToStore.PhoneNumber},
+                                        new TableInfo{Field_ColumName = "active", NewValue = contactToStore.active.ToString()}
+                                    }
+                                }
+                        };
+
+                        var auditToStore = contactTypeContact.Select(x => new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                AuditAction = "I",
+                                TableName = "ContactType_Contact",
+                                ModelPKey = x.ContactTypeContactID,
+                                tableInfos = new List<TableInfo>
+                                    {
+                                        new TableInfo
+                                        {
+                                            Field_ColumName = "Contact_ContactID",
+                                            NewValue = x.Contact_ContactID.ToString()
+                                        },
+                                        new TableInfo
+                                        {
+                                            Field_ColumName = "ContactType_ContactTypeID",
+                                            NewValue = x.ContactType_ContactTypeID.ToString()
+                                        }
+                                    }
+                            }).ToList();
+
+                            toStore.AddRange(auditToStore);
+
+                            new AuditLogRepository().SaveLogs(toStore);
+                        /*------------------AUDIT LOG SCENARIO------------------*/
                     }
                     catch (Exception)
                     {
@@ -189,57 +249,147 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     try
                     {
                         var contactStoredInDb = await db.Contacts.FindAsync(contact.ContactID);
+
+                        List<AuditToStore> auditToStores = new List<AuditToStore>();
+                        List<TableInfo> cnTableInfos = new List<TableInfo>();
+
                         if (!contactStoredInDb.FName.Equals(contact.FName, StringComparison.InvariantCultureIgnoreCase))
                         {
                             contactStoredInDb.FName = contact.FName;
+                            cnTableInfos.Add(new TableInfo { Field_ColumName = "FName", OldValue = contactStoredInDb.FName, NewValue = contact.FName});
                         }
-                        if (!contactStoredInDb.FName.Equals(contact.FName, StringComparison.InvariantCultureIgnoreCase))
+                        if (!contactStoredInDb.LName.Equals(contact.LName, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            contactStoredInDb.FName = contact.FName;
+                            contactStoredInDb.LName = contact.LName;
+                            cnTableInfos.Add(new TableInfo { Field_ColumName = "LName", OldValue = contactStoredInDb.LName, NewValue = contact.LName });
                         }
-                        if (!contactStoredInDb.FName.Equals(contact.FName, StringComparison.InvariantCultureIgnoreCase))
+                        if (!contactStoredInDb.Email.Equals(contact.Email, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            contactStoredInDb.FName = contact.FName;
+                            contactStoredInDb.Email = contact.Email;
+                            cnTableInfos.Add(new TableInfo { Field_ColumName = "Email", OldValue = contactStoredInDb.Email, NewValue = contact.Email });
                         }
-                        if (!contactStoredInDb.FName.Equals(contact.FName, StringComparison.InvariantCultureIgnoreCase))
+                        if (!contactStoredInDb.PhoneNumber.Equals(contact.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            contactStoredInDb.FName = contact.FName;
+                            contactStoredInDb.PhoneNumber = contact.PhoneNumber;
+                            cnTableInfos.Add(new TableInfo { Field_ColumName = "PhoneNumber", OldValue = contactStoredInDb.PhoneNumber, NewValue = contact.PhoneNumber });
                         }
-                        if (!contactStoredInDb.FName.Equals(contact.FName, StringComparison.InvariantCultureIgnoreCase))
+                        if (contactStoredInDb.active != contact.active)
                         {
-                            contactStoredInDb.FName = contact.FName;
+                            contactStoredInDb.active = contact.active;
+                            cnTableInfos.Add(new TableInfo { Field_ColumName = "active", OldValue = contactStoredInDb.active.ToString(), NewValue = contact.active.ToString() });
                         }
+
+                        if (cnTableInfos.Any())
+                        {
+                           auditToStores.Add(new AuditToStore
+                           {
+                               UserLogons = User.Identity.GetUserName(),
+                               AuditDateTime = DateTime.Now,
+                               AuditAction = "U",
+                               TableName = "Contacts",
+                               ModelPKey = contactStoredInDb.ContactID,
+                               tableInfos = cnTableInfos
+                           }); 
+                        }
+
                         var currentTypesOfThisContact = contactStoredInDb.ContactType_Contact.Select(y => y.ContactType_ContactTypeID).ToList();
                         var byParamContactType = contact.ContactTypes.Select(x => x.ContactTypeID).ToList();
-
-                        if (!byParamContactType.Equals(currentTypesOfThisContact))
+                       
+                        var newTypesToStore = byParamContactType.Except(currentTypesOfThisContact).ToList();
+                        foreach (var type in newTypesToStore)
                         {
-                            var newTypesToStore = byParamContactType.Except(currentTypesOfThisContact).ToList();
-                            foreach (var type in newTypesToStore)
-                            {
-                                contactStoredInDb.ContactType_Contact.Add(new ContactType_Contact{ContactType_ContactTypeID = type, Contact_ContactID = contact.ContactID});
-                            }
+                            contactStoredInDb.ContactType_Contact.Add(new ContactType_Contact{ContactType_ContactTypeID = type, Contact_ContactID = contact.ContactID});
+                        }
 
-                            var typesToDelete = currentTypesOfThisContact.Except(byParamContactType).ToList();
-                            foreach (var cntType in typesToDelete)
+                        var typesToDelete = currentTypesOfThisContact.Except(byParamContactType).ToList();
+                        foreach (var cntType in typesToDelete)
+                        {
+                            if (db.ContactTypes.Find(cntType).ContactType_Name.Equals("owner", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                if (db.ContactTypes.Find(cntType).ContactType_Name.Equals("owner", StringComparison.InvariantCultureIgnoreCase))
+                                var removeCorpOwners = db.Corp_Owner.Where(x => x.Contact_ContactID == contact.ContactID).ToList();
+                                db.Corp_Owner.RemoveRange(removeCorpOwners);
+
+
+                                var dcorpOwnerAudit = removeCorpOwners.Select(x => new AuditToStore
                                 {
-                                    var removeCorpOwners = db.Corp_Owner.Where(x => x.Contact_ContactID == contact.ContactID).ToList();
-                                    db.Corp_Owner.RemoveRange(removeCorpOwners);
-                                }
-                                var deleteContactTypeContact = await db.ContactType_Contact.FirstOrDefaultAsync(x => x.ContactType_ContactTypeID == cntType && x.Contact_ContactID == contact.ContactID);
-                                if (deleteContactTypeContact != null)
+                                    UserLogons = User.Identity.GetUserName(),
+                                    AuditDateTime = DateTime.Now,
+                                    TableName = "Corp_Owner",
+                                    AuditAction = "D",
+                                    ModelPKey = x.corpOwnerID,
+                                    tableInfos = new List<TableInfo>
+                                    {
+                                        new TableInfo
+                                        {
+                                            Field_ColumName = "Contact_ContactID",
+                                            OldValue = x.Contact_ContactID.ToString()
+                                        },
+                                        new TableInfo
+                                        {
+                                            Field_ColumName = "corpID", 
+                                            OldValue = x.corpID.ToString()
+                                        }
+                                    }
+                                });
+                                auditToStores.AddRange(dcorpOwnerAudit);
+
+
+                            }
+                            var deleteContactTypeContact = await db.ContactType_Contact.FirstOrDefaultAsync(x => x.ContactType_ContactTypeID == cntType && x.Contact_ContactID == contact.ContactID);
+                            if (deleteContactTypeContact != null)
+                            {
+                                db.ContactType_Contact.Remove(deleteContactTypeContact);
+
+                                var delCntType_Cnt = new AuditToStore
                                 {
-                                    db.ContactType_Contact.Remove(deleteContactTypeContact);
-                                }
+                                    UserLogons = User.Identity.GetUserName(),
+                                    AuditDateTime = DateTime.Now,
+                                    AuditAction = "D",
+                                    TableName = "ContactType_Contact",
+                                    ModelPKey = deleteContactTypeContact.ContactTypeContactID,
+                                    tableInfos = new List<TableInfo>
+                                    {
+                                        new TableInfo{Field_ColumName = "Contact_ContactID", OldValue = deleteContactTypeContact.ContactType_ContactTypeID.ToString()},
+                                        new TableInfo{Field_ColumName = "Contact_ContactID", OldValue = deleteContactTypeContact.Contact_ContactID.ToString()},
+                                    }
+                                };
+
+                                auditToStores.Add(delCntType_Cnt);
                             }
                         }
+                        
+
                         db.Contacts.Attach(contactStoredInDb);
                         db.Entry(contactStoredInDb).State = EntityState.Modified;
                         await db.SaveChangesAsync();
 
+                        var currentContact = await db.ContactType_Contact.Include(x => x.Contact).Include(x => x.ContactType).Where(c => c.Contact_ContactID == contact.ContactID).Select(x => x.ContactType.ContactLevel).ToListAsync();
+                        if (currentContact.TrueForAll(x => x.Equals("corporation", StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            /*Quiere decir que tengo que ver si este contacto esta relacionado con algun pos y eliminar esa relacion*/
+                            var posCntToDelete = db.MasterPOS_Contact.Include(x => x.Contact).Include(d => d.MasterPOS).Where(f => f.ContactID == contact.ContactID).ToList();
+                            if (posCntToDelete.Any())
+                            {
+                                db.MasterPOS_Contact.RemoveRange(posCntToDelete);
+                            }
+
+                        }
+                        if (currentContact.TrueForAll(x => x.Equals("pos", StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            /*Quiere decir que tengo que ver si este contacto esta relacionado con alguna corporacion y eliminar esa relacion*/
+                            var corpCntToDelete = db.Corp_Owner.Include(d => d.Contact).Include(f => f.CorporateMasterList).Where(g => g.Contact_ContactID == contact.ContactID).ToList();
+                            if (corpCntToDelete.Any())
+                            {
+                                db.Corp_Owner.RemoveRange(corpCntToDelete);
+                            }
+                        }
+                        if (db.ChangeTracker.HasChanges())
+                        {
+                            await db.SaveChangesAsync();
+                        }
+
                         dbTransaction.Commit();
+                      
                     }
                     catch (Exception)
                     {

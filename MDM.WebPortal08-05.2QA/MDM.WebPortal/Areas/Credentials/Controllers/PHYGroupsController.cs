@@ -9,11 +9,13 @@ using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
 using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    [SetPermissions]
     public class PHYGroupsController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -78,12 +80,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (MasterPOSID == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             MasterPOS pos = await db.MasterPOS.FindAsync(MasterPOSID);
             if (pos == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var phyG = pos.PHYGroup;
             var toView = new List<VMPHYGrp>();
@@ -284,12 +286,11 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Assign_PhyGrpToPos(int? PHYGrpID, int? MasterPOSID)
+        public async Task<ActionResult> Assign_PhyGrpToPos([DataSourceRequest] DataSourceRequest request, int? PHYGrpID, int? MasterPOSID)
         {
             if (PHYGrpID == null || MasterPOSID == null)
             {
-                string error = "Something failed. Please try again!";
-                return Json(error, JsonRequestBehavior.AllowGet);
+                return Json(new List<VMPHYGrp>().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
             }
             try
             {
@@ -301,11 +302,28 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             }
             catch (Exception)
             {
-                string error = "Something failed. Please try again!";
-                return Json(error, JsonRequestBehavior.AllowGet);
+                return Json(new List<VMPHYGrp>().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
             }
-            string success = "Success.";
-            return Json(success, JsonRequestBehavior.AllowGet);
+            var storedInDb = await db.PHYGroups.FindAsync(PHYGrpID);
+            List<VMPHYGrp> toView = new List<VMPHYGrp>
+            {
+                new VMPHYGrp
+                {
+                    MasterPOSID = MasterPOSID.Value,
+                    PHYGrpID = PHYGrpID.Value,
+                    PHYGroupName = storedInDb.PHYGroupName,
+                    PHYGrpNPI_Num = storedInDb.PHYGrpNPI_Num,
+                    Physicians = from pInG in storedInDb.ProvidersInGrps
+                                 join prov in db.Providers on pInG.Providers_ProvID equals prov.ProvID
+                                 select new VMProvider
+                                    {
+                                        ProvID = prov.ProvID,
+                                        ProviderName = prov.ProviderName,
+                                        NPI_Num = prov.NPI_Num
+                                    }
+                }
+            };
+            return Json(toView.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
         /*-----------------------------------KENDO UI FOR ASP.NET MVC 5 FUNCTIONS------------------------------*/
@@ -316,12 +334,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (locationPOSID == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             MasterPOS pos = await db.MasterPOS.FindAsync(locationPOSID);
             if (pos == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             if (pos.FvPList.FvPName == "FAC")
             {
@@ -421,12 +439,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (locationPOSID == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             MasterPOS pos = await db.MasterPOS.FindAsync(locationPOSID);
             if (pos == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             ViewBag.Facitity_DBs_IDPK = locationPOSID;
 

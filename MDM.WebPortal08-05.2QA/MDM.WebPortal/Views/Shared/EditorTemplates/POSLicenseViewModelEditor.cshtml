@@ -2,20 +2,21 @@
            @{
                int pos = ViewBag.MasterPOS;
            }
-    <div class="container-fluid">
-        <div class="panel panel-primary">
-            <div class="panel-heading text-uppercase"><i class="fa fa-info-circle"></i> license info</div>
-            <div class="panel-body">
-                <fieldset class="scheduler-border">
-                    <legend class="scheduler-border text-uppercase text-bold">license:</legend>
-                    <div class="row">
-                        <div class="col-md-5">
-                            <dl>
-                                <dd>
-                                    <label class="text-uppercase">type<sup class="text-danger">*</sup></label>
-                                </dd>
-                                <dt>
-                                    @Html.EditorFor(model => model.LicType, new {htmlAttributes = new {@class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;"}})
+<div class="container-fluid">
+    <div class="panel panel-primary">
+        <div class="panel-heading text-uppercase"><i class="fa fa-info-circle"></i> license info
+        </div>
+        <div class="panel-body">
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border text-uppercase text-bold">license:</legend>
+                <div class="row">
+                    <div class="col-md-5">
+                        <dl>
+                            <dd>
+                                <label class="text-uppercase">type<sup class="text-danger">*</sup></label>
+                            </dd>
+                            <dt>
+                                @Html.EditorFor(model => model.LicType, new {htmlAttributes = new {@class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;"}})
                             </dt>
                         </dl>
                     </div>
@@ -25,7 +26,7 @@
                                 <label class="text-uppercase">number<sup class="text-danger">*</sup></label>
                             </dd>
                             <dt>
-                                @Html.EditorFor(model => model.LicNumber, new {htmlAttributes = new {@class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" }})
+                                @Html.EditorFor(model => model.LicNumber, new {htmlAttributes = new {@class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;"}})
                             </dt>
                         </dl>
                     </div>
@@ -45,7 +46,7 @@
                                       .ParseFormats(new string[] {"MM/dd/yyyy"})
                                       //.Events(e => e.Change("startChange"))
                                       .HtmlAttributes(new {style = "width:100%; "})
-                                 )
+                                      )
                                 @Html.ValidationMessageFor(model => model.LicEffectiveDate, "", new {@class = "text-danger"})
                             </dt>
                         </dl>
@@ -64,7 +65,7 @@
                                       //.Events(e => e.Change("endChange"))
                                       .HtmlAttributes(new {style = "width:100%; "})
                                       .ToClientTemplate()
-                                 )
+                                      )
                                 @Html.ValidationMessageFor(model => model.LicExpireDate, "", new {@class = "text-danger"})
                             </dt>
                         </dl>
@@ -99,7 +100,7 @@
                                                       .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
                                               });
                                       })
-                                 )
+                                      )
                             </dt>
                         </dl>
                     </div>
@@ -162,17 +163,17 @@
                 <legend class="scheduler-border text-bold text-uppercase">taxonomy:</legend>
                 <dl>
                     <dt>
-                        @Html.EditorFor(model => model.Taxonomy, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;"} })
+                        @Html.EditorFor(model => model.Taxonomy, new {htmlAttributes = new {@class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;"}})
                     </dt>
                 </dl>
             </fieldset>
 
         </div>
-            <div class="text-center">
-                <a class="k-button k-update-button btn btn-sm btn-primary" href="\\#"><span class="fa fa-cloud-upload"></span> SAVE</a>
-                <a class="k-button k-cancel-button btn btn-sm btn-danger" href="\\#"><span class="fa fa-ban"></span> CANCEL</a>
-            </div>
-            <br/>
+        <div class="text-center">
+            <a class="k-button k-update-button btn btn-sm btn-primary" href="\\#"><span class="fa fa-cloud-upload"></span> SAVE</a>
+            <a class="k-button k-cancel-button btn btn-sm btn-danger" href="\\#"><span class="fa fa-ban"></span> CANCEL</a>
+        </div>
+        <br/>
     </div>
 
 

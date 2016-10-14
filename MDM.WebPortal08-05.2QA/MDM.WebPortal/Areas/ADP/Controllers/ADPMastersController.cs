@@ -18,8 +18,7 @@ using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.ADP.Controllers
 {
-    //[SetPermissions]
-    [AuthorizeAttribute]
+    [SetPermissions]
     public class ADPMastersController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();

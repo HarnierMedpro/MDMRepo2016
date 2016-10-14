@@ -9,11 +9,13 @@ using Kendo.Mvc.UI;
 using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
 using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    [SetPermissions]
     public class LevelOfCareController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
@@ -39,42 +41,49 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.Lev_of_Care.AnyAsync(x => x.LevOfCareName.Equals(levOfCare.LevOfCareName, StringComparison.InvariantCultureIgnoreCase)))
+                    try
                     {
-                        ModelState.AddModelError("","Duplicate Data. Please try again!");
-                        return Json(new[] {levOfCare}.ToDataSourceResult(request, ModelState));
-                    }
+                        if (await db.Lev_of_Care.AnyAsync(x => x.LevOfCareName.Equals(levOfCare.LevOfCareName, StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { levOfCare }.ToDataSourceResult(request, ModelState));
+                        }
 
-                    var toStore = new Lev_of_Care
-                    {
-                        LevOfCareName = levOfCare.LevOfCareName
-                    };
+                        var toStore = new Lev_of_Care
+                        {
+                            LevOfCareName = levOfCare.LevOfCareName
+                        };
 
-                    db.Lev_of_Care.Add(toStore);
-                    await db.SaveChangesAsync();
-                    levOfCare.LevOfCareID = toStore.LevOfCareID;
+                        db.Lev_of_Care.Add(toStore);
+                        await db.SaveChangesAsync();
+                        levOfCare.LevOfCareID = toStore.LevOfCareID;
 
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        AuditAction = "I",
-                        TableName = "Lev_of_Care",
-                        ModelPKey = toStore.LevOfCareID,
-                        tableInfos = new List<TableInfo>
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditAction = "I",
+                            TableName = "Lev_of_Care",
+                            ModelPKey = toStore.LevOfCareID,
+                            tableInfos = new List<TableInfo>
                         {
                             new TableInfo { Field_ColumName = "LevOfCareName", NewValue = toStore.LevOfCareName }
                         }
-                    };
-                    new AuditLogRepository().AddAuditLogs(auditLog);
+                        };
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { levOfCare }.ToDataSourceResult(request, ModelState));
+                    }
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { levOfCare }.ToDataSourceResult(request, ModelState));
-                }
+                
             }
             return Json(new[] { levOfCare }.ToDataSourceResult(request, ModelState));
         }
@@ -84,42 +93,48 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.Lev_of_Care.AnyAsync(x => x.LevOfCareName.Equals(levOfCare.LevOfCareName, StringComparison.InvariantCultureIgnoreCase) && x.LevOfCareID != levOfCare.LevOfCareID))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
-                        return Json(new[] { levOfCare }.ToDataSourceResult(request, ModelState));
+                        if (await db.Lev_of_Care.AnyAsync(x => x.LevOfCareName.Equals(levOfCare.LevOfCareName, StringComparison.InvariantCultureIgnoreCase) && x.LevOfCareID != levOfCare.LevOfCareID))
+                        {
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { levOfCare }.ToDataSourceResult(request, ModelState));
+                        }
+
+                        var storedInDb = await db.Lev_of_Care.FindAsync(levOfCare.LevOfCareID);
+
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>
+                        {
+                            new TableInfo{Field_ColumName = "LevOfCareName", OldValue = storedInDb.LevOfCareName, NewValue = levOfCare.LevOfCareName}
+                        };
+
+                        storedInDb.LevOfCareName = levOfCare.LevOfCareName;
+                        db.Lev_of_Care.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditAction = "U",
+                            TableName = "Lev_of_Care",
+                            ModelPKey = levOfCare.LevOfCareID,
+                            tableInfos = tableColumnInfos
+                        };
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
                     }
-
-                    var storedInDb = await db.Lev_of_Care.FindAsync(levOfCare.LevOfCareID);
-
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>
+                    catch (Exception)
                     {
-                        new TableInfo{Field_ColumName = "LevOfCareName", OldValue = storedInDb.LevOfCareName, NewValue = levOfCare.LevOfCareName}
-                    };
-
-                    storedInDb.LevOfCareName = levOfCare.LevOfCareName;
-                    db.Lev_of_Care.Attach(storedInDb);
-                    db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-                    
-
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        AuditAction = "U",
-                        TableName = "Lev_of_Care",
-                        ModelPKey = levOfCare.LevOfCareID,
-                        tableInfos = tableColumnInfos
-                    };
-                    new AuditLogRepository().AddAuditLogs(auditLog);
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { levOfCare }.ToDataSourceResult(request, ModelState));
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { levOfCare }.ToDataSourceResult(request, ModelState));
+                    }  
                 }
             }
             return Json(new[] { levOfCare }.ToDataSourceResult(request, ModelState));

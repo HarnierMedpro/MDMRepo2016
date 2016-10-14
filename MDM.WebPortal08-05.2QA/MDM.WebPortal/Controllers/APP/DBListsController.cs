@@ -41,6 +41,20 @@ namespace MDM.WebPortal.Controllers.APP
             }), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Read_AvailablesCorpDbs()
+        {
+            var taken = db.Corp_DBs.Include(x => x.DBList).Include(y => y.CorporateMasterList).Select(d => d.DBList);
+            var all = db.DBLists;
+            var availables = all.Except(taken).Select(x => new VMDBList
+            {
+                DB_ID = x.DB_ID,
+                DB = x.DB,
+                databaseName = x.databaseName,
+                active = x.active
+            });
+
+            return Json(availables,JsonRequestBehavior.AllowGet);
+        }
        
 
         public async Task<ActionResult> Update_DB([DataSourceRequest]DataSourceRequest request, 
@@ -148,7 +162,7 @@ namespace MDM.WebPortal.Controllers.APP
                 }
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
-            return RedirectToAction("Index", "Error", new { area = "Error" });
+            return RedirectToAction("Index", "Error", new { area = "BadRequest" });
         }
 
         public JsonResult GetDbName(string DB)

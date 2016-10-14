@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,25 +25,6 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
     {
         private MedProDBEntities db = new MedProDBEntities();
 
-        //public ActionResult Index()
-        //{
-        //    var dbsTaken = db.Corp_DBs.Select(x => x.DBList);
-        //    var dbsNoTaken = db.DBLists.Except(dbsTaken).Select(x => new { x.DB_ID, x.DB }).ToList();
-        //    /*If use dbsNoTaken excluyo la BD del elemento por lo que no se muestra*/
-        //    //ViewData["DBs"] = dbsNoTaken;
-        //    ViewData["DBs"] = db.DBLists.Select(x => new { x.DB_ID, x.DB }).ToList();
-        //    return View();
-        //}
-
-        //public ActionResult Details()
-        //{
-        //    ViewData["DBs"] = db.DBLists.Select(x => new { x.DB_ID, x.DB }).ToList();
-        //    return View();
-        //}
-
-
-     
-
         public ActionResult HierarchyBinding_DBs(int? corpID, [DataSourceRequest] DataSourceRequest request)
         {
             var result = db.Corp_DBs.Include(x => x.CorporateMasterList).Include(x => x.DBList).Select(x => new VMCorp_DB
@@ -65,60 +47,69 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         public async Task<ActionResult> Create_CorpDbs([DataSourceRequest] DataSourceRequest request,
             [Bind(Include = "ID_PK,corpID,DB_ID")] VMCorp_DB corp_DBs, int ParentID)
         {
-            if (ModelState.IsValid && ParentID > 0)
+            if (ModelState.IsValid)
             {
-                var currentCorp = await db.CorporateMasterLists.FindAsync(ParentID);
-                var currentDB = await db.DBLists.FindAsync(corp_DBs.DB_ID);
-                corp_DBs.corpID = ParentID;
-
-                if (currentCorp == null || currentDB == null)
+                if (ParentID == 0)
                 {
-                    ModelState.AddModelError("", "Duplicate data. Please try again!");
+                    ModelState.AddModelError("", "Something failed. Please try again!");
                     return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
                 }
-                corp_DBs.databaseName = currentDB.databaseName;
-                corp_DBs.active = currentDB.active;
+                corp_DBs.corpID = ParentID;
+                var currentCorp = await db.CorporateMasterLists.FindAsync(ParentID);
+                var currentDb = await db.DBLists.FindAsync(corp_DBs.DB_ID);
 
-                try
+                if (currentCorp == null || currentDb == null)
                 {
-                    if (await db.Corp_DBs.AnyAsync(x => x.DB_ID == corp_DBs.DB_ID))
-                    {
-                        ModelState.AddModelError("", "Duplicate data. Please try again!");
-                        return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
-                    }
-                    var toStore = new Corp_DBs
-                    {
-                        DB_ID = corp_DBs.DB_ID,
-                        corpID = ParentID
-                    };
+                    ModelState.AddModelError("", "Something failed. Please try again!");
+                    return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
+                }
+                corp_DBs.databaseName = currentDb.databaseName;
+                corp_DBs.active = currentDb.active;
 
-                    db.Corp_DBs.Add(toStore);
-                    await db.SaveChangesAsync();
-                    corp_DBs.ID_PK = toStore.ID_PK;
-
-                    /*--------------- AUDIT LOG SCENARIO ----------------*/
-
-                    AuditToStore auditLog = new AuditToStore
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
+                {
+                    try
                     {
-                        ModelPKey = corp_DBs.ID_PK,
-                        TableName = "Corp_DBs",
-                        AuditAction = "I",
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        tableInfos = new List<TableInfo>
+                        if (await db.Corp_DBs.AnyAsync(x => x.DB_ID == corp_DBs.DB_ID))
+                        {
+                            ModelState.AddModelError("", "Duplicate data. Please try again!");
+                            return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
+                        }
+                        var toStore = new Corp_DBs
+                        {
+                            DB_ID = corp_DBs.DB_ID,
+                            corpID = ParentID
+                        };
+
+                        db.Corp_DBs.Add(toStore);
+                        await db.SaveChangesAsync();
+                        corp_DBs.ID_PK = toStore.ID_PK;
+
+                        /*--------------- AUDIT LOG SCENARIO ----------------*/
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            ModelPKey = corp_DBs.ID_PK,
+                            TableName = "Corp_DBs",
+                            AuditAction = "I",
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            tableInfos = new List<TableInfo>
                         {
                             new TableInfo { NewValue = corp_DBs.DB_ID.ToString(), Field_ColumName = "DB_ID" }, 
                             new TableInfo { NewValue = corp_DBs.corpID.ToString(), Field_ColumName = "corpID" }
                         }
-                    };
-                    new AuditLogRepository().AddAuditLogs(auditLog);
+                        };
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+                        /*--------------- AUDIT LOG SCENARIO ----------------*/
 
-                    /*--------------- AUDIT LOG SCENARIO ----------------*/
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
+                    }
                 }
             }
             return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
@@ -133,65 +124,72 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 var currentDB = await db.DBLists.FindAsync(corp_DBs.DB_ID);
                 if (currentCorp == null || currentDB == null)
                 {
-                    ModelState.AddModelError("", "Duplicate data. Please try again!");
+                    ModelState.AddModelError("", "Something Failed. Please try again!");
                     return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
                 }
                 corp_DBs.databaseName = currentDB.databaseName;
                 corp_DBs.active = currentDB.active;
 
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.Corp_DBs.AnyAsync(x => x.DB_ID == corp_DBs.DB_ID && x.ID_PK != corp_DBs.ID_PK))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate data. Please try again!");
+                        if (await db.Corp_DBs.AnyAsync(x => x.DB_ID == corp_DBs.DB_ID && x.ID_PK != corp_DBs.ID_PK))
+                        {
+                            ModelState.AddModelError("", "Duplicate data. Please try again!");
+                            return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
+                        }
+
+                        var storedInDb = await db.Corp_DBs.FindAsync(corp_DBs.ID_PK);
+
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>();
+                        if (storedInDb.DB_ID != corp_DBs.DB_ID)
+                        {
+                            tableColumnInfos.Add(new TableInfo
+                            {
+                                NewValue = corp_DBs.DB_ID.ToString(),
+                                OldValue = storedInDb.DB_ID.ToString(),
+                                Field_ColumName = "DB_ID"
+                            });
+                            storedInDb.DB_ID = corp_DBs.DB_ID;
+                        }
+                        if (storedInDb.corpID != corp_DBs.corpID)
+                        {
+                            tableColumnInfos.Add(new TableInfo
+                            {
+                                NewValue = corp_DBs.corpID.ToString(),
+                                OldValue = storedInDb.corpID.ToString(),
+                                Field_ColumName = "corpID"
+                            });
+                            storedInDb.DB_ID = corp_DBs.DB_ID;
+                        }
+
+                        db.Corp_DBs.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            ModelPKey = corp_DBs.ID_PK,
+                            TableName = "Corp_DBs",
+                            AuditAction = "U",
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            tableInfos = tableColumnInfos
+                        };
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
                         return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
-                    }
-                    //var storedInDb = new Corp_DBs { ID_PK = corp_DBs.ID_PK, DB_ID = corp_DBs.DB_ID, corpID = corp_DBs.corpID};
-                    var storedInDb = await db.Corp_DBs.FindAsync(corp_DBs.ID_PK);
 
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
-                    if (storedInDb.DB_ID != corp_DBs.DB_ID)
-                    {
-                        tableColumnInfos.Add(new TableInfo
-                        {
-                            NewValue = corp_DBs.DB_ID.ToString(),
-                            OldValue = storedInDb.DB_ID.ToString(),
-                            Field_ColumName = "DB_ID"
-                        });
-                        storedInDb.DB_ID = corp_DBs.DB_ID;
                     }
-                    if (storedInDb.corpID != corp_DBs.corpID)
-                    {
-                        tableColumnInfos.Add(new TableInfo
-                        {
-                            NewValue = corp_DBs.corpID.ToString(),
-                            OldValue = storedInDb.corpID.ToString(),
-                            Field_ColumName = "corpID"
-                        });
-                        storedInDb.DB_ID = corp_DBs.DB_ID;
-                    }
-
-                    db.Corp_DBs.Attach(storedInDb);
-                    db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        ModelPKey = corp_DBs.ID_PK,
-                        TableName = "Corp_DBs",
-                        AuditAction = "U",
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        tableInfos = tableColumnInfos
-                    };
-                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
-
-                }
+                
             }
             return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
         }
@@ -202,36 +200,40 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    var toRelease = new Corp_DBs { ID_PK = corp_DBs.ID_PK, corpID = corp_DBs.corpID, DB_ID = corp_DBs.DB_ID };
-                    db.Corp_DBs.Attach(toRelease);
-                    db.Corp_DBs.Remove(toRelease);
-                    await db.SaveChangesAsync();
-
-                    /*------------------ AUDIT LOG SCENARIO ----------------------*/
-                    AuditToStore auditLog = new AuditToStore
+                    try
                     {
-                        AuditAction = "D",
-                        AuditDateTime = DateTime.Now,
-                        ModelPKey = toRelease.ID_PK,
-                        TableName = "Corp_DBs",
-                        UserLogons = User.Identity.GetUserName(),
-                        tableInfos = new List<TableInfo>
+                        var toRelease = new Corp_DBs { ID_PK = corp_DBs.ID_PK, corpID = corp_DBs.corpID, DB_ID = corp_DBs.DB_ID };
+                        db.Corp_DBs.Attach(toRelease);
+                        db.Corp_DBs.Remove(toRelease);
+                        await db.SaveChangesAsync();
+
+                        /*------------------ AUDIT LOG SCENARIO ----------------------*/
+                        AuditToStore auditLog = new AuditToStore
                         {
-                            new TableInfo{OldValue = toRelease.DB_ID.ToString(), Field_ColumName = "DB_ID"},
-                            new TableInfo{OldValue = toRelease.corpID.ToString(), Field_ColumName = "corpID"},
-                        }
-                    };
+                            AuditAction = "D",
+                            AuditDateTime = DateTime.Now,
+                            ModelPKey = toRelease.ID_PK,
+                            TableName = "Corp_DBs",
+                            UserLogons = User.Identity.GetUserName(),
+                            tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{OldValue = toRelease.DB_ID.ToString(), Field_ColumName = "DB_ID"},
+                                    new TableInfo{OldValue = toRelease.corpID.ToString(), Field_ColumName = "corpID"},
+                                }
+                        };
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+                        /*------------------ AUDIT LOG SCENARIO ----------------------*/
 
-                    new AuditLogRepository().AddAuditLogs(auditLog);
-
-                    /*------------------ AUDIT LOG SCENARIO ----------------------*/
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
+                    }
                 }
 
             }

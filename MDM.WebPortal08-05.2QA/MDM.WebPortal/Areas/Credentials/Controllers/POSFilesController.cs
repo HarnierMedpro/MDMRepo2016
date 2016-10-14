@@ -15,27 +15,31 @@ using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
 using MDM.WebPortal.Areas.PlaceOfServices.Tools;
+using MDM.WebPortal.Data_Annotations;
 using MDM.WebPortal.Models.FromDB;
 using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.Credentials.Controllers
 {
+    [SetPermissions]
     public class POSFilesController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
-        private const string ServerLocation = @"\\fl-nas02\MDMFiles\";
+        //private const string ServerLocation = @"\\fl-nas02\MDMFiles\";
+        private const string ServerLocation = @"\\fl-nas02\TestShares\";
+        
         private string[] MediaExtensions = { ".jpeg", ".jpg", ".png", ".pdf", ".rtf", ".xls", ".xsls", ".doc" };
 
         public async Task<ActionResult> PosFiles(int? masterPOSID)
         {
             if (masterPOSID == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var currentLocationPos = await db.MasterPOS.FindAsync(masterPOSID);
             if (currentLocationPos == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var result = new List<VMPOSFile>();
             if (currentLocationPos.MasterFiles.Any())
@@ -173,12 +177,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (locationPOSID == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var currentLocationPos = await db.MasterPOS.FindAsync(locationPOSID);
             if (currentLocationPos == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "Error" });
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             /*Se pasa a la vista el ID del POS al cual se le quiere adjuntar ficheros*/
             ViewBag.Facitity_DBs_IDPK = locationPOSID;
@@ -190,91 +194,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return View(filesOfThisPos.ToList());
         }
 
-        //// GET: PlaceOfServices/POSFiles/Details/5
-        //public async Task<ActionResult> Details(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    MasterFile pOSFile = await db.MasterFiles.FindAsync(id);
-        //    if (pOSFile == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(pOSFile);
-        //}
-
-        //// GET: PlaceOfServices/POSFiles/Create
-        //public ActionResult Create()
-        //{
-        //    ViewBag.Facitity_DBs_IDPK = new SelectList(db.LocationsPOS, "Facitity_DBs_IDPK", "PosName");
-        //    return View();
-        //}
-
-        // POST: PlaceOfServices/POSFiles/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-
-
-        //// GET: PlaceOfServices/POSFiles/Edit/5
-        //public async Task<ActionResult> Edit(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    POSFile pOSFile = await db.POSFiles.FindAsync(id);
-        //    if (pOSFile == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.Facitity_DBs_IDPK = new SelectList(db.LocationsPOS, "Facitity_DBs_IDPK", "PosName", pOSFile.Facitity_DBs_IDPK);
-        //    return View(pOSFile);
-        //}
-
-        //// POST: PlaceOfServices/POSFiles/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Edit([Bind(Include = "FileID,ServerLocation,FileName,FileExtension,Facitity_DBs_IDPK,Description,UploadTime")] POSFile pOSFile)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(pOSFile).State = EntityState.Modified;
-        //        await db.SaveChangesAsync();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.Facitity_DBs_IDPK = new SelectList(db.LocationsPOS, "Facitity_DBs_IDPK", "PosName", pOSFile.Facitity_DBs_IDPK);
-        //    return View(pOSFile);
-        //}
-
-        //// GET: PlaceOfServices/POSFiles/Delete/5
-        //public async Task<ActionResult> Delete(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    POSFile pOSFile = await db.POSFiles.FindAsync(id);
-        //    if (pOSFile == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(pOSFile);
-        //}
-
-        //// POST: PlaceOfServices/POSFiles/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> DeleteConfirmed(Guid id)
-        //{
-        //    POSFile pOSFile = await db.POSFiles.FindAsync(id);
-        //    db.POSFiles.Remove(pOSFile);
-        //    await db.SaveChangesAsync();
-        //    return RedirectToAction("Index");
-        //}
+       
 
         public ActionResult SaveFile()
         {
@@ -341,8 +261,8 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     //IntPtr logonToken = LogonUser();
 
                     // Retrieve the Windows account token for specific user.
-                    IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("hsuarez", "Medpro705!", "MEDPROBILL");
-                    //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MDMTest", "Medpro1", "MEDPROBILL");
+                    //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MMDFiles", "Medpro123!", "MEDPROBILL");
+                    IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
 
                     WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
                     WindowsImpersonationContext wic = null;
@@ -414,64 +334,85 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return View(items);
         }
 
+       
+        //public ActionResult Download(string ImageName)
+        //{
+           
+        //    //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MMDFiles", "Medpro123!", "MEDPROBILL"); //Have permissions
+        //    IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
+
+        //    WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
+        //    WindowsImpersonationContext wic = null;
+        //    try
+        //    {
+        //        wic = wi.Impersonate();
+               
+                 
+
+        //            MasterFile currentStoredInDb = db.MasterFiles.FirstOrDefault(x => x.FileName == ImageName);
+        //            if (currentStoredInDb != null)
+        //            {
+        //                AuditToStore auditLog = new AuditToStore
+        //                {
+        //                    UserLogons = User.Identity.GetUserName(),
+        //                    AuditDateTime = DateTime.Now,
+        //                    AuditAction = "D",
+        //                    TableName = "POSFile",
+        //                    ModelPKey = currentStoredInDb.FileID,
+        //                    tableInfos = new List<TableInfo>
+        //                         {
+        //                             new TableInfo{Field_ColumName = "FileName", OldValue = ImageName, NewValue = ImageName}
+        //                         }
+        //                };
+
+        //                new AuditLogRepository().AddAuditLogs(auditLog);
+        //            }
+                   
+        //            try
+        //            {
+        //                return File(ServerLocation + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet, ImageName);
+        //            }
+        //            catch (Exception)
+        //            {
+        //                TempData["Error"] = "Downloading.......";
+        //                return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
+        //            }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        TempData["Access"] = "Something failed. You need to have permissions to read/write in this directory.";
+        //        return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
+        //    }
+        //    finally
+        //    {
+        //        if (wic != null)
+        //        {
+        //            wic.Undo();
+        //        }
+        //    }
+        //}
+
+
         public ActionResult Download(string ImageName)
         {
-            // Retrieve the Windows account token for specific user.
-            IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("hsuarez", "Medpro705!", "MEDPROBILL"); //Have permissions
-            //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MDMTest", "Medpro1", "MEDPROBILL");  //Doesn't have permissions
+            IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
 
             WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
-            WindowsImpersonationContext wic = null;
+            WindowsImpersonationContext ctx = null;
+
             try
             {
-                wic = wi.Impersonate();
-
-                var dir = new System.IO.DirectoryInfo(ServerLocation);
-                System.IO.FileInfo[] fileNames = dir.GetFiles("*.*");
-
-                if (fileNames.Any(x => x.Name == ImageName))
-                {
-                    /*-------------------Audit Log------------------------*/
-
-                    MasterFile currentStoredInDb = db.MasterFiles.FirstOrDefault(x => x.FileName == ImageName);
-                    if (currentStoredInDb != null)
-                    {
-                        AuditToStore auditLog = new AuditToStore
-                        {
-                            UserLogons = User.Identity.GetUserName(),
-                            AuditDateTime = DateTime.Now,
-                            AuditAction = "D",
-                            TableName = "POSFile",
-                            ModelPKey = currentStoredInDb.FileID,
-                            tableInfos = new List<TableInfo>
-                                 {
-                                     new TableInfo{Field_ColumName = "FileName", OldValue = ImageName, NewValue = ImageName}
-                                 }
-                        };
-
-                        new AuditLogRepository().AddAuditLogs(auditLog);
-                    }
-                    /*-------------------Audit Log------------------------*/
-                    return File(ServerLocation + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet, ImageName);
-                }
-                else
-                {
-                    TempData["Error"] = "The file that you are trying to download doesn't exist in the directory.";
-                    return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
-                }
-
+                ctx = wi.Impersonate();
+                return File(ServerLocation + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet, ImageName);
             }
-            catch (Exception)
+            catch
             {
                 TempData["Access"] = "Something failed. You need to have permissions to read/write in this directory.";
                 return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
             }
             finally
             {
-                if (wic != null)
-                {
-                    wic.Undo();
-                }
+                ctx.Undo();
             }
         }
 

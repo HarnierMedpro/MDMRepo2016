@@ -32,7 +32,7 @@
     .DataValueField("ZoomPos_ID")
     .Placeholder("Select POS_ID...")
     .Filter(FilterType.Contains)
-    .ItemTemplate("#= ZoomPos_ID #--- #= ZoomPos_Name #")
+    .ItemTemplate("#=ZoomPos_ID#--- #=ZoomPos_Name#")
     .DataSource(source =>
        {
           source.Read(read =>

@@ -175,3 +175,4 @@ C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPort
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.csproj.GenerateResource.Cache
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.dll
 C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.pdb
+C:\Users\hsuarez\Documents\GitHub\MDMRepo2016\MDM.WebPortal08-05.2QA\MDM.WebPortal\obj\Release\MDM.WebPortal.csprojResolveAssemblyReference.cache

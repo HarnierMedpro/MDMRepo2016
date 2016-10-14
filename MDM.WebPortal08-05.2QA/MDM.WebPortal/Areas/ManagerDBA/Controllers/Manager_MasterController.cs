@@ -18,7 +18,7 @@ using Microsoft.AspNet.Identity;
 
 namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
 {
-    //[SetPermissions]
+    [SetPermissions]
     public class Manager_MasterController : Controller
     {
         private MedProDBEntities db = new MedProDBEntities();
