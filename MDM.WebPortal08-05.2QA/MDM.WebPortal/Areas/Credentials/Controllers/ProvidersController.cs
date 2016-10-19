@@ -45,42 +45,49 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.Providers.AnyAsync(x => x.NPI_Num.Equals(provider.NPI_Num, StringComparison.InvariantCultureIgnoreCase)))
+                    try
                     {
-                        ModelState.AddModelError("","Duplicate Data. Please try again!");
-                        return Json(new[] {provider}.ToDataSourceResult(request, ModelState));
-                    }
-                    var toStore = new Provider
-                    {
-                        NPI_Num = provider.NPI_Num,
-                        ProviderName = provider.ProviderName
-                    };
-                    db.Providers.Add(toStore);
-                    await db.SaveChangesAsync();
-                    provider.ProvID = toStore.ProvID;
-
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        TableName = "Providers",
-                        AuditAction = "I",
-                        ModelPKey = toStore.ProvID,
-                        tableInfos = new List<TableInfo>
+                        if (await db.Providers.AnyAsync(x => x.NPI_Num.Equals(provider.NPI_Num, StringComparison.InvariantCultureIgnoreCase)))
                         {
-                            new TableInfo{Field_ColumName = "NPI_Num", NewValue = provider.NPI_Num},
-                            new TableInfo{Field_ColumName = "ProviderName", NewValue = provider.ProviderName}
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { provider }.ToDataSourceResult(request, ModelState));
                         }
-                    };
-                    new AuditLogRepository().AddAuditLogs(auditLog);
+                        var toStore = new Provider
+                        {
+                            NPI_Num = provider.NPI_Num,
+                            ProviderName = provider.ProviderName
+                        };
+                        db.Providers.Add(toStore);
+                        await db.SaveChangesAsync();
+                        provider.ProvID = toStore.ProvID;
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            TableName = "Providers",
+                            AuditAction = "I",
+                            ModelPKey = toStore.ProvID,
+                            tableInfos = new List<TableInfo>
+                            {
+                                new TableInfo{Field_ColumName = "NPI_Num", NewValue = provider.NPI_Num},
+                                new TableInfo{Field_ColumName = "ProviderName", NewValue = provider.ProviderName}
+                            }
+                        };
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { provider }.ToDataSourceResult(request, ModelState));
+                    } 
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { provider }.ToDataSourceResult(request, ModelState));
-                }
+                
             }
             return Json(new[] { provider }.ToDataSourceResult(request, ModelState));
         }
@@ -91,48 +98,53 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.Providers.AnyAsync(x => x.NPI_Num.Equals(provider.NPI_Num, StringComparison.InvariantCultureIgnoreCase) && x.ProvID != provider.ProvID))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                        if (await db.Providers.AnyAsync(x => x.NPI_Num.Equals(provider.NPI_Num, StringComparison.InvariantCultureIgnoreCase) && x.ProvID != provider.ProvID))
+                        {
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { provider }.ToDataSourceResult(request, ModelState));
+                        }
+
+                        var storedInDb = await db.Providers.FindAsync(provider.ProvID);
+
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                        if (storedInDb.NPI_Num != provider.NPI_Num)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "NPI_Num", OldValue = storedInDb.NPI_Num, NewValue = provider.NPI_Num });
+                            storedInDb.NPI_Num = provider.NPI_Num;
+                        }
+                        if (!storedInDb.ProviderName.Equals(provider.ProviderName, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "ProviderName", OldValue = storedInDb.ProviderName, NewValue = provider.ProviderName });
+                            storedInDb.ProviderName = provider.ProviderName;
+                        }
+
+                        db.Providers.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            TableName = "Providers",
+                            AuditAction = "U",
+                            ModelPKey = storedInDb.ProvID,
+                            tableInfos = tableColumnInfos
+                        };
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
                         return Json(new[] { provider }.ToDataSourceResult(request, ModelState));
                     }
-
-                    var storedInDb = await db.Providers.FindAsync(provider.ProvID);
-
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
-
-                    if (storedInDb.NPI_Num != provider.NPI_Num)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "NPI_Num", OldValue = storedInDb.NPI_Num, NewValue = provider.NPI_Num});
-                        storedInDb.NPI_Num = provider.NPI_Num;
-                    }
-                    if (!storedInDb.ProviderName.Equals(provider.ProviderName, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "ProviderName", OldValue = storedInDb.ProviderName, NewValue = provider.ProviderName});
-                        storedInDb.ProviderName = provider.ProviderName;
-                    }
-
-                    db.Providers.Attach(storedInDb);
-                    db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        TableName = "Providers",
-                        AuditAction = "U",
-                        ModelPKey = storedInDb.ProvID,
-                        tableInfos = tableColumnInfos
-                    };
-                    new AuditLogRepository().AddAuditLogs(auditLog);
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { provider }.ToDataSourceResult(request, ModelState));
                 }
             }
             return Json(new[] { provider }.ToDataSourceResult(request, ModelState));

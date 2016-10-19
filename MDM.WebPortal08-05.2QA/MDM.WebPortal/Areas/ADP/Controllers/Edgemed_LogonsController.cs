@@ -68,92 +68,64 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
         {
             if (ModelState.IsValid)
             {
-                //var toStore = new Edgemed_Logons
-                //{
-                //    Edgemed_LogID = edgemed_Logons.Edgemed_LogID,
-                //    Edgemed_UserName = edgemed_Logons.Edgemed_UserName,
-                //    Zno = edgemed_Logons.Zno,
-                //    EdgeMed_ID = edgemed_Logons.EdgeMed_ID,
-                //    Active = edgemed_Logons.Active,
-                //    ADPMasterID = edgemed_Logons.ADPMasterID
-                //};
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    var toStore = await db.Edgemed_Logons.FindAsync(edgemed_Logons.Edgemed_LogID);
+                    try
+                    {
+                        var toStore = await db.Edgemed_Logons.FindAsync(edgemed_Logons.Edgemed_LogID);
 
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>();
 
-                    if (toStore.Edgemed_UserName != edgemed_Logons.Edgemed_UserName)
-                    {
-                        tableColumnInfos.Add(new TableInfo
+                        if (toStore.Edgemed_UserName != edgemed_Logons.Edgemed_UserName)
                         {
-                            Field_ColumName = "Edgemed_UserName", 
-                            NewValue = edgemed_Logons.Edgemed_UserName, 
-                            OldValue = toStore.Edgemed_UserName
-                        });
-                        toStore.Edgemed_UserName = edgemed_Logons.Edgemed_UserName;
-                    }
-                    if (toStore.Zno != edgemed_Logons.Zno)
-                    {
-                        tableColumnInfos.Add(new TableInfo
+                            tableColumnInfos.Add(new TableInfo{Field_ColumName = "Edgemed_UserName",NewValue = edgemed_Logons.Edgemed_UserName,OldValue = toStore.Edgemed_UserName});
+                            toStore.Edgemed_UserName = edgemed_Logons.Edgemed_UserName;
+                        }
+                        if (toStore.Zno != edgemed_Logons.Zno)
                         {
-                            Field_ColumName = "Zno", 
-                            NewValue = edgemed_Logons.Zno.ToString(), 
-                            OldValue = toStore.Zno.ToString()
-                        });
-                        toStore.Zno = edgemed_Logons.Zno;
-                    }
-                    if (toStore.EdgeMed_ID != edgemed_Logons.EdgeMed_ID)
-                    {
-                        tableColumnInfos.Add(new TableInfo
+                            tableColumnInfos.Add(new TableInfo{Field_ColumName = "Zno",NewValue = edgemed_Logons.Zno.ToString(),OldValue = toStore.Zno.ToString()});
+                            toStore.Zno = edgemed_Logons.Zno;
+                        }
+                        if (toStore.EdgeMed_ID != edgemed_Logons.EdgeMed_ID)
                         {
-                            Field_ColumName = "EdgeMed_ID", 
-                            NewValue = edgemed_Logons.EdgeMed_ID.ToString(), 
-                            OldValue = toStore.EdgeMed_ID.ToString()
-                        });
-                        toStore.EdgeMed_ID = edgemed_Logons.EdgeMed_ID;
-                    }
-                    if (toStore.Active != edgemed_Logons.Active)
-                    {
-                        tableColumnInfos.Add(new TableInfo
+                            tableColumnInfos.Add(new TableInfo{Field_ColumName = "EdgeMed_ID",NewValue = edgemed_Logons.EdgeMed_ID.ToString(),OldValue = toStore.EdgeMed_ID.ToString()});
+                            toStore.EdgeMed_ID = edgemed_Logons.EdgeMed_ID;
+                        }
+                        if (toStore.Active != edgemed_Logons.Active)
                         {
-                            Field_ColumName = "Active", 
-                            NewValue = edgemed_Logons.Active.ToString(), 
-                            OldValue = toStore.Active.ToString()
-                        });
-                        toStore.Active = edgemed_Logons.Active;
-                    }
-                    if (toStore.ADPMasterID != edgemed_Logons.ADPMasterID)
-                    {
-                        tableColumnInfos.Add(new TableInfo
+                            tableColumnInfos.Add(new TableInfo{Field_ColumName = "Active",NewValue = edgemed_Logons.Active.ToString(),OldValue = toStore.Active.ToString()});
+                            toStore.Active = edgemed_Logons.Active;
+                        }
+                        if (toStore.ADPMasterID != edgemed_Logons.ADPMasterID)
                         {
-                            Field_ColumName = "ADPMasterID", 
-                            NewValue = edgemed_Logons.ADPMasterID.ToString(),
-                            OldValue = toStore.ADPMasterID.ToString()
-                        });
-                        toStore.ADPMasterID = edgemed_Logons.ADPMasterID;
-                    }
+                            tableColumnInfos.Add(new TableInfo{Field_ColumName = "ADPMasterID",NewValue = edgemed_Logons.ADPMasterID.ToString(),OldValue = toStore.ADPMasterID.ToString()});
+                            toStore.ADPMasterID = edgemed_Logons.ADPMasterID;
+                        }
 
-                    db.Edgemed_Logons.Attach(toStore);
-                    db.Entry(toStore).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
+                        db.Edgemed_Logons.Attach(toStore);
+                        db.Entry(toStore).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
 
-                    AuditToStore auditLog = new AuditToStore
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            tableInfos = tableColumnInfos,
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            ModelPKey = toStore.Edgemed_LogID,
+                            AuditAction = "U",
+                            TableName = "Edgemed_Logons"
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
                     {
-                        tableInfos = tableColumnInfos,
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        ModelPKey = toStore.Edgemed_LogID,
-                        AuditAction = "U",
-                        TableName = "Edgemed_Logons"
-                    };
-
-                    new AuditLogRepository().AddAuditLogs(auditLog);
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("","Something failed. Please try again!");
-                    return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
+                    }
                 }
             }
             return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
@@ -164,24 +136,32 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
         {
             if (ModelState.IsValid)
             {
-                var toStore = new Edgemed_Logons
+                if (ParentID == 0)
                 {
-                    Edgemed_UserName = edgemed_Logons.Edgemed_UserName,
-                    Zno = edgemed_Logons.Zno,
-                    EdgeMed_ID = edgemed_Logons.EdgeMed_ID,
-                    Active = edgemed_Logons.Active,
-                    ADPMasterID = ParentID
-                };
-                try
+                    ModelState.AddModelError("", "Something failed. Please try again!");
+                    return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
+                }
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    db.Edgemed_Logons.Add(toStore);
-                    await db.SaveChangesAsync();
-                    edgemed_Logons.Edgemed_LogID = toStore.Edgemed_LogID;
-                    edgemed_Logons.ADPMasterID = toStore.ADPMasterID;
-
-                    AuditToStore auditLog = new AuditToStore
+                    try
                     {
-                        tableInfos = new List<TableInfo>
+                        var toStore = new Edgemed_Logons
+                        {
+                            Edgemed_UserName = edgemed_Logons.Edgemed_UserName,
+                            Zno = edgemed_Logons.Zno,
+                            EdgeMed_ID = edgemed_Logons.EdgeMed_ID,
+                            Active = edgemed_Logons.Active,
+                            ADPMasterID = ParentID
+                        };
+
+                        db.Edgemed_Logons.Add(toStore);
+                        await db.SaveChangesAsync();
+                        edgemed_Logons.Edgemed_LogID = toStore.Edgemed_LogID;
+                        edgemed_Logons.ADPMasterID = toStore.ADPMasterID;
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            tableInfos = new List<TableInfo>
                         {
                             new TableInfo { Field_ColumName = "Edgemed_UserName", NewValue = edgemed_Logons.Edgemed_UserName },
                             new TableInfo { Field_ColumName = "Zno", NewValue = edgemed_Logons.Zno.ToString() },
@@ -189,19 +169,22 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
                             new TableInfo { Field_ColumName = "Active", NewValue = edgemed_Logons.Active.ToString() },
                             new TableInfo { Field_ColumName = "ADPMasterID", NewValue = toStore.ADPMasterID.ToString() }
                         },
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        ModelPKey = toStore.Edgemed_LogID,
-                        AuditAction = "U",
-                        TableName = "Edgemed_Logons"
-                    };
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            ModelPKey = toStore.Edgemed_LogID,
+                            AuditAction = "U",
+                            TableName = "Edgemed_Logons"
+                        };
 
-                    new AuditLogRepository().AddAuditLogs(auditLog);
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("","Something failed. Please try again!");
-                    return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
+                    }
                 }
             }
             return Json(new[] { edgemed_Logons }.ToDataSourceResult(request, ModelState));
@@ -279,40 +262,6 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
             });
         }
         /*------------------------------------AUTOCOMPLETE ------------------------------------------------*/
-
-       
-
-        // GET: ADP/Edgemed_Logons/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ADP/Edgemed_Logons/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Edgemed_LogID,id,Edgemed_UserName,Zno,EdgeMed_ID,Active")] Edgemed_Logons edgemed_Logons)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    db.Edgemed_Logons.Add(edgemed_Logons);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
-                }
-                catch (Exception)
-                {
-                    ViewBag.Error = "Something failed. Please try again!";
-                    return View(edgemed_Logons);
-                }
-               
-            }
-            //ViewBag.id = new SelectList(db.ADPMasters, "id", "ADP_ID", edgemed_Logons.id);
-            return View(edgemed_Logons);
-        }
 
         protected override void Dispose(bool disposing)
         {

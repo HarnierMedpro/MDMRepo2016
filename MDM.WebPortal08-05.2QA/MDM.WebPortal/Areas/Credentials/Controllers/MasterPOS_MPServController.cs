@@ -28,45 +28,52 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid && ParentID > 0)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.MasterPOS_MPServ.AnyAsync(x => x.MPServices_MPServID == masterPosMpServ.MPServices_MPServID && x.MasterPOS_MasterPOSID == ParentID))
+                    try
                     {
-                        masterPosMpServ.MasterPOS_MasterPOSID = ParentID;
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
-                        return Json(new[] { masterPosMpServ }.ToDataSourceResult(request, ModelState));
-                    }
-                    var toStore = new MasterPOS_MPServ
-                    {
-                        MPServices_MPServID = masterPosMpServ.MPServices_MPServID,
-                        MasterPOS_MasterPOSID  = ParentID
-                    };
+                        if (await db.MasterPOS_MPServ.AnyAsync(x => x.MPServices_MPServID == masterPosMpServ.MPServices_MPServID && x.MasterPOS_MasterPOSID == ParentID))
+                        {
+                            masterPosMpServ.MasterPOS_MasterPOSID = ParentID;
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { masterPosMpServ }.ToDataSourceResult(request, ModelState));
+                        }
+                        var toStore = new MasterPOS_MPServ
+                        {
+                            MPServices_MPServID = masterPosMpServ.MPServices_MPServID,
+                            MasterPOS_MasterPOSID = ParentID
+                        };
 
-                    db.MasterPOS_MPServ.Add(toStore);
-                    await db.SaveChangesAsync();
-                    masterPosMpServ.MasterPosMPServID = toStore.MasterPosMPServID;
+                        db.MasterPOS_MPServ.Add(toStore);
+                        await db.SaveChangesAsync();
+                        masterPosMpServ.MasterPosMPServID = toStore.MasterPosMPServID;
 
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        UserLogons = User.Identity.GetUserName(),
-                        AuditDateTime = DateTime.Now,
-                        AuditAction = "I",
-                        ModelPKey = toStore.MasterPosMPServID,
-                        TableName = "MasterPOS_MPServ",
-                        tableInfos = new List<TableInfo>
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditDateTime = DateTime.Now,
+                            AuditAction = "I",
+                            ModelPKey = toStore.MasterPosMPServID,
+                            TableName = "MasterPOS_MPServ",
+                            tableInfos = new List<TableInfo>
                         {
                             new TableInfo{Field_ColumName = "MPServices_MPServID", NewValue = masterPosMpServ.MPServices_MPServID.ToString()},
                             new TableInfo{Field_ColumName = "MasterPOS_MasterPOSID", NewValue = ParentID.ToString()}
                         }
-                    };
+                        };
 
-                    new AuditLogRepository().AddAuditLogs(auditLog);
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { masterPosMpServ }.ToDataSourceResult(request, ModelState));
+                    }
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { masterPosMpServ }.ToDataSourceResult(request, ModelState));
-                }
+                
             }
             return Json(new[] { masterPosMpServ }.ToDataSourceResult(request, ModelState));
         }
@@ -77,48 +84,55 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.MasterPOS_MPServ.AnyAsync(x => x.MPServices_MPServID == masterPosMpServ.MPServices_MPServID && x.MasterPOS_MasterPOSID == masterPosMpServ.MasterPOS_MasterPOSID
-                        && x.MasterPosMPServID != masterPosMpServ.MasterPosMPServID))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                        if (await db.MasterPOS_MPServ.AnyAsync(x => x.MPServices_MPServID == masterPosMpServ.MPServices_MPServID && x.MasterPOS_MasterPOSID == masterPosMpServ.MasterPOS_MasterPOSID
+                            && x.MasterPosMPServID != masterPosMpServ.MasterPosMPServID))
+                        {
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { masterPosMpServ }.ToDataSourceResult(request, ModelState));
+                        }
+
+                        var storedInDb = await db.MasterPOS_MPServ.FindAsync(masterPosMpServ.MasterPosMPServID);
+
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                        if (storedInDb.MPServices_MPServID != masterPosMpServ.MPServices_MPServID)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "MPServices_MPServID", NewValue = masterPosMpServ.MPServices_MPServID.ToString(), OldValue = storedInDb.MPServices_MPServID.ToString() });
+                            storedInDb.MPServices_MPServID = masterPosMpServ.MPServices_MPServID;
+                        }
+
+
+                        db.MasterPOS_MPServ.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditDateTime = DateTime.Now,
+                            AuditAction = "U",
+                            ModelPKey = masterPosMpServ.MasterPosMPServID,
+                            TableName = "MasterPOS_MPServ",
+                            tableInfos = tableColumnInfos
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
                         return Json(new[] { masterPosMpServ }.ToDataSourceResult(request, ModelState));
                     }
-
-                    var storedInDb = await db.MasterPOS_MPServ.FindAsync(masterPosMpServ.MasterPosMPServID);
-
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
-
-                    if (storedInDb.MPServices_MPServID != masterPosMpServ.MPServices_MPServID)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "MPServices_MPServID", NewValue = masterPosMpServ.MPServices_MPServID.ToString(), OldValue = storedInDb.MPServices_MPServID.ToString() });
-                        storedInDb.MPServices_MPServID = masterPosMpServ.MPServices_MPServID;
-                    }
-
-
-                    db.MasterPOS_MPServ.Attach(storedInDb);
-                    db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-
-
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        UserLogons = User.Identity.GetUserName(),
-                        AuditDateTime = DateTime.Now,
-                        AuditAction = "U",
-                        ModelPKey = masterPosMpServ.MasterPosMPServID,
-                        TableName = "MasterPOS_MPServ",
-                        tableInfos = tableColumnInfos
-                    };
-
-                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { masterPosMpServ }.ToDataSourceResult(request, ModelState));
-                }
+                
             }
             return Json(new[] { masterPosMpServ }.ToDataSourceResult(request, ModelState));
         }

@@ -23,12 +23,6 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
     {
         private MedProDBEntities db = new MedProDBEntities();
 
-        // GET: ActionCode/ACtypes
-        //public async Task<ActionResult> Index()
-        //{
-        //    return View(await db.ACtypes.ToListAsync());
-        //}
-
         public ActionResult Index()
         {
             return View();
@@ -48,40 +42,44 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.ACtypes.AnyAsync(x => x.ACTypeName.Equals(aCtype.ACTypeName, StringComparison.CurrentCultureIgnoreCase)))
+                    try
                     {
-                        ModelState.AddModelError("","Duplicate Data. Please try again!");
-                        return Json(new[] {aCtype}.ToDataSourceResult(request, ModelState));
-                    }
-                    var toStore = new ACtype
-                    {
-                        ACTypeName = aCtype.ACTypeName
-                    };
-                    db.ACtypes.Add(toStore);
-                    await db.SaveChangesAsync();
-                    aCtype.ACTypeID = toStore.ACTypeID;
+                        if (await db.ACtypes.AnyAsync(x => x.ACTypeName.Equals(aCtype.ACTypeName, StringComparison.CurrentCultureIgnoreCase)))
+                        {
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { aCtype }.ToDataSourceResult(request, ModelState));
+                        }
+                        var toStore = new ACtype
+                        {
+                            ACTypeName = aCtype.ACTypeName
+                        };
+                        db.ACtypes.Add(toStore);
+                        await db.SaveChangesAsync();
+                        aCtype.ACTypeID = toStore.ACTypeID;
 
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        AuditAction = "I",
-                        TableName = "ACType",
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        ModelPKey = toStore.ACTypeID,
-                        tableInfos = new List<TableInfo>
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            AuditAction = "I",
+                            TableName = "ACType",
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            ModelPKey = toStore.ACTypeID,
+                            tableInfos = new List<TableInfo>
                         {
                             new TableInfo { Field_ColumName = "ACTypeName", NewValue = toStore.ACTypeName }
                         }
-                    };
-                    new AuditLogRepository().AddAuditLogs(auditLog);
-
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { aCtype }.ToDataSourceResult(request, ModelState));
+                        };
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { aCtype }.ToDataSourceResult(request, ModelState));
+                    }
                 }
             }
             return Json(new[] { aCtype }.ToDataSourceResult(request, ModelState));
@@ -92,50 +90,52 @@ namespace MDM.WebPortal.Areas.ActionCode.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.ACtypes.AnyAsync(x => x.ACTypeName.Equals(aCtype.ACTypeName, StringComparison.CurrentCultureIgnoreCase) && x.ACTypeID != aCtype.ACTypeID))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                        if (await db.ACtypes.AnyAsync(x => x.ACTypeName.Equals(aCtype.ACTypeName, StringComparison.CurrentCultureIgnoreCase) && x.ACTypeID != aCtype.ACTypeID))
+                        {
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { aCtype }.ToDataSourceResult(request, ModelState));
+                        }
+                        var toStore = await db.ACtypes.FindAsync(aCtype.ACTypeID);
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>
+                        {
+                            new TableInfo
+                            {
+                                Field_ColumName = "ACTypeName",
+                                NewValue = aCtype.ACTypeName,
+                                OldValue = toStore.ACTypeName
+                            }
+                        };
+                        toStore.ACTypeName = aCtype.ACTypeName;
+
+                        db.ACtypes.Attach(toStore);
+                        db.Entry(toStore).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            AuditAction = "U",
+                            TableName = "ACType",
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            ModelPKey = toStore.ACTypeID,
+                            tableInfos = tableColumnInfos
+                        };
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
                         return Json(new[] { aCtype }.ToDataSourceResult(request, ModelState));
                     }
-                    //var toStore = new ACtype
-                    //{
-                    //    ACTypeID = aCtype.ACTypeID,
-                    //    ACTypeName = aCtype.ACTypeName
-                    //};
-                    var toStore = await db.ACtypes.FindAsync(aCtype.ACTypeID);
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>
-                    {
-                        new TableInfo
-                        {
-                            Field_ColumName = "ACTypeName",
-                            NewValue = aCtype.ACTypeName,
-                            OldValue = toStore.ACTypeName
-                        }
-                    };
-                    toStore.ACTypeName = aCtype.ACTypeName;
-                    
-                    db.ACtypes.Attach(toStore);
-                    db.Entry(toStore).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        AuditAction = "U",
-                        TableName = "ACType",
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        ModelPKey = toStore.ACTypeID,
-                        tableInfos = tableColumnInfos
-                    };
-                    new AuditLogRepository().AddAuditLogs(auditLog);
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { aCtype }.ToDataSourceResult(request, ModelState));
-                }
+                
             }
             return Json(new[] { aCtype }.ToDataSourceResult(request, ModelState));
         }

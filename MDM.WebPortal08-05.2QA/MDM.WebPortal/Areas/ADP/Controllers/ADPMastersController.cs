@@ -70,102 +70,71 @@ namespace MDM.WebPortal.Areas.ADP.Controllers
         {
             if (aDPMaster != null && ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    var storedInDb = await db.ADPMasters.FindAsync(aDPMaster.ADPMaster_ID);
-                    //var storedInDb = new ADPMaster {ADPMasterID = aDPMaster.ADPMaster_ID};//Avoid call to DB to get the object stored.
-                    //storedInDb.ADP_ID = aDPMaster.ADP;
-                    //storedInDb.Title = aDPMaster.Title;
-                    //storedInDb.Active = aDPMaster.Active;
-                    //storedInDb.FName = aDPMaster.FName;
-                    //storedInDb.LName = aDPMaster.LName;
-                    //storedInDb.Manager = aDPMaster.Manager;
+                    try
+                    {
+                        var storedInDb = await db.ADPMasters.FindAsync(aDPMaster.ADPMaster_ID);
 
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>();
 
-                    if (storedInDb.ADP_ID != aDPMaster.ADP)
-                    {
-                        tableColumnInfos.Add(new TableInfo
+                        if (storedInDb.ADP_ID != aDPMaster.ADP)
                         {
-                            Field_ColumName = "ADP_ID", 
-                            NewValue = aDPMaster.ADP, 
-                            OldValue = storedInDb.ADP_ID
-                        });
-                        storedInDb.ADP_ID = aDPMaster.ADP;
-                    }
-                    if (storedInDb.Title != aDPMaster.Title)
-                    {
-                        tableColumnInfos.Add(new TableInfo
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "ADP_ID", NewValue = aDPMaster.ADP, OldValue = storedInDb.ADP_ID });
+                            storedInDb.ADP_ID = aDPMaster.ADP;
+                        }
+                        if (storedInDb.Title != aDPMaster.Title)
                         {
-                            Field_ColumName = "Title",
-                            NewValue = aDPMaster.Title, 
-                            OldValue = storedInDb.Title
-                        });
-                        storedInDb.Title = aDPMaster.Title;
-                    }
-                    if (storedInDb.Active != aDPMaster.Active)
-                    {
-                        
-                        tableColumnInfos.Add(new TableInfo
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Title", NewValue = aDPMaster.Title, OldValue = storedInDb.Title });
+                            storedInDb.Title = aDPMaster.Title;
+                        }
+                        if (storedInDb.Active != aDPMaster.Active)
                         {
-                            Field_ColumName = "Active", 
-                            NewValue = aDPMaster.Active.ToString(), 
-                            OldValue = storedInDb.Active.ToString()
-                        });
-                        storedInDb.Active = aDPMaster.Active;
-                    }
-                    if (storedInDb.FName != aDPMaster.FName)
-                    {
-                        tableColumnInfos.Add(new TableInfo
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Active", NewValue = aDPMaster.Active.ToString(), OldValue = storedInDb.Active.ToString() });
+                            storedInDb.Active = aDPMaster.Active;
+                        }
+                        if (storedInDb.FName != aDPMaster.FName)
                         {
-                            Field_ColumName = "FName", 
-                            NewValue = aDPMaster.FName, 
-                            OldValue = storedInDb.FName
-                        });
-                        storedInDb.FName = aDPMaster.FName;
-                    }
-                    if (storedInDb.LName != aDPMaster.LName)
-                    {
-                        tableColumnInfos.Add(new TableInfo
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "FName", NewValue = aDPMaster.FName, OldValue = storedInDb.FName });
+                            storedInDb.FName = aDPMaster.FName;
+                        }
+                        if (storedInDb.LName != aDPMaster.LName)
                         {
-                            Field_ColumName = "LName", 
-                            NewValue = aDPMaster.LName, 
-                            OldValue = storedInDb.LName
-                        });
-                        storedInDb.LName = aDPMaster.LName;
-                    }
-                    if (storedInDb.Manager != aDPMaster.Manager)
-                    {
-                        tableColumnInfos.Add(new TableInfo
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "LName", NewValue = aDPMaster.LName, OldValue = storedInDb.LName });
+                            storedInDb.LName = aDPMaster.LName;
+                        }
+                        if (storedInDb.Manager != aDPMaster.Manager)
                         {
-                            Field_ColumName = "Manager", 
-                            NewValue = aDPMaster.Manager, 
-                            OldValue = storedInDb.Manager
-                        });
-                        storedInDb.Manager = aDPMaster.Manager;
-                    }
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Manager", NewValue = aDPMaster.Manager, OldValue = storedInDb.Manager });
+                            storedInDb.Manager = aDPMaster.Manager;
+                        }
 
-                    db.ADPMasters.Attach(storedInDb);
-                    db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
+                        db.ADPMasters.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
 
-                    AuditToStore auditLog = new AuditToStore
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            AuditAction = "U",
+                            tableInfos = tableColumnInfos,
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            ModelPKey = storedInDb.ADPMasterID,
+                            TableName = "ADPMaster"
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
                     {
-                        AuditAction = "U",
-                        tableInfos = tableColumnInfos,
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        ModelPKey = storedInDb.ADPMasterID,
-                        TableName = "ADPMaster"
-                    };
-
-                    new AuditLogRepository().AddAuditLogs(auditLog);
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something Failed. Please try again!");
+                        return Json(new[] { aDPMaster }.ToDataSourceResult(request, ModelState));
+                    }
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("","Something Failed. Please try again!");
-                    return Json(new[] { aDPMaster }.ToDataSourceResult(request, ModelState));
-                }
+                
             }
             return Json(new[] { aDPMaster }.ToDataSourceResult(request, ModelState));
         }

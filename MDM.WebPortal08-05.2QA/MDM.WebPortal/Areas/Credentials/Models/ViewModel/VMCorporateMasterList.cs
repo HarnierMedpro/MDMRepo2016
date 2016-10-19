@@ -30,6 +30,7 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
         //[UIHint("CorpContactEditor")]
         //public IEnumerable<VMContact> Contacts { get; set; }
 
+        [Required]
         [Display(Name = "DBs")]
         [UIHint("CorpDBEditor")]
         public IEnumerable<VMDBList> DBs { get; set; }

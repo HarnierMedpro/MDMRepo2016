@@ -117,11 +117,11 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                //if (!toStore.Physicians.Any())
-                //{
-                //    ModelState.AddModelError("", "You have to select at least one Physician. Please try again!");
-                //    return Json(new[] { toStore }.ToDataSourceResult(request, ModelState));
-                //}
+                if (ParentID == null || ParentID == 0)
+                {
+                    ModelState.AddModelError("", "Something Failed. Please try again!");
+                    return Json(new[] { toStore }.ToDataSourceResult(request, ModelState));
+                }
                 using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
                     try
@@ -141,15 +141,13 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         db.PHYGroups.Add(newGrp);
                         await db.SaveChangesAsync();
                         toStore.PHYGrpID = newGrp.PHYGrpID;
+                        toStore.MasterPOSID = ParentID.Value;
 
-                        if (ParentID != null && ParentID > 0)
-                        {
-                            toStore.MasterPOSID = ParentID.Value;
-                            var pos = await db.MasterPOS.FindAsync(ParentID);
-                            pos.PHYGroups_PHYGrpID = toStore.PHYGrpID;
-                            db.MasterPOS.Attach(pos);
-                            db.Entry(pos).State = EntityState.Modified;
-                        }
+                        var pos = await db.MasterPOS.FindAsync(ParentID);
+                        pos.PHYGroups_PHYGrpID = toStore.PHYGrpID;
+                        db.MasterPOS.Attach(pos);
+                        db.Entry(pos).State = EntityState.Modified;
+                      
 
                         var providersInGrp = toStore.Physicians.Select(doc => new ProvidersInGrp { PHYGroups_PHYGrpID = newGrp.PHYGrpID, Providers_ProvID = doc.ProvID }).ToList();
                         db.ProvidersInGrps.AddRange(providersInGrp);
@@ -157,40 +155,52 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         //saves all above operations within one transaction
                         await db.SaveChangesAsync();
 
-                        //commit transaction
-                        dbTransaction.Commit();
-
-                        AuditLogRepository repository = new AuditLogRepository();
-
-                        AuditToStore auditLog = new AuditToStore
+                        List<AuditToStore> auditLogs = new List<AuditToStore>
+                        {
+                            new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                TableName = "PHYGroups",
+                                AuditAction = "I",
+                                ModelPKey = newGrp.PHYGrpID,
+                                tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "PHYGroupName", NewValue = newGrp.PHYGroupName},
+                                    new TableInfo{Field_ColumName = "PHYGrpNPI_Num", NewValue = newGrp.PHYGrpNPI_Num},
+                                }
+                            },
+                            new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                TableName = "MasterPOS",
+                                AuditAction = "U",
+                                ModelPKey = pos.MasterPOSID,
+                                tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "PHYGroups_PHYGrpID", NewValue = pos.PHYGroups_PHYGrpID.ToString()}
+                                }
+                            }
+                        };
+                        auditLogs.AddRange(providersInGrp.Select(x => new AuditToStore
                         {
                             UserLogons = User.Identity.GetUserName(),
                             AuditDateTime = DateTime.Now,
-                            ModelPKey = newGrp.PHYGrpID,
-                            TableName = "PHYGroups",
+                            TableName = "ProvidersInGrp",
+                            ModelPKey = x.ProvInGrpID,
                             AuditAction = "I",
                             tableInfos = new List<TableInfo>
                             {
-                                new TableInfo{Field_ColumName = "PHYGroupName", NewValue = newGrp.PHYGroupName},
-                                new TableInfo{Field_ColumName = "PHYGrpNPI_Num", NewValue = newGrp.PHYGrpNPI_Num}
+                                new TableInfo{Field_ColumName = "PHYGroups_PHYGrpID", NewValue = x.PHYGroups_PHYGrpID.ToString()},
+                                new TableInfo{Field_ColumName = "Providers_ProvID", NewValue = x.Providers_ProvID.ToString()},
                             }
-                        };
+                        }));
 
-                        repository.AddAuditLogs(auditLog);
+                        new AuditLogRepository().SaveLogs(auditLogs);
 
-                        foreach (var item in providersInGrp)
-                        {
-                            auditLog.ModelPKey = item.ProvInGrpID;
-                            auditLog.TableName = "ProvidersInGrps";
-                            auditLog.AuditAction = "I";
-                            auditLog.tableInfos = new List<TableInfo>
-                            {
-                                new TableInfo{Field_ColumName = "PHYGroups_PHYGrpID", NewValue = item.PHYGroups_PHYGrpID.ToString()},
-                                new TableInfo{Field_ColumName = "Providers_ProvID", NewValue = item.Providers_ProvID.ToString()}
-                            };
-
-                            repository.AddAuditLogs(auditLog);
-                        }
+                        //commit transaction
+                        dbTransaction.Commit();
                     }
                     catch (Exception)
                     {
@@ -210,77 +220,107 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.PHYGroups.AnyAsync(grp => (grp.PHYGroupName.Equals(toStore.PHYGroupName, StringComparison.InvariantCultureIgnoreCase)
-                                        || grp.PHYGrpNPI_Num.Equals(toStore.PHYGrpNPI_Num, StringComparison.InvariantCultureIgnoreCase)) && grp.PHYGrpID != toStore.PHYGrpID))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
-                        return Json(new[] { toStore }.ToDataSourceResult(request, ModelState));
-                    }
-
-                    var storedInDb = await db.PHYGroups.FindAsync(toStore.PHYGrpID);
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
-
-                    var physiciansByParam = toStore.Physicians.Select(x => x.ProvID).ToArray();
-
-                    var currentPhysicians = storedInDb.ProvidersInGrps.Select(x => x.Providers_ProvID).ToArray();
-
-                    if (!currentPhysicians.Equals(physiciansByParam))
-                    {
-                        var physicianToStore = physiciansByParam.Except(currentPhysicians).ToList();
-
-                        foreach (var item in physicianToStore)
+                        if (await db.PHYGroups.AnyAsync(grp => (grp.PHYGroupName.Equals(toStore.PHYGroupName, StringComparison.InvariantCultureIgnoreCase)
+                                            || grp.PHYGrpNPI_Num.Equals(toStore.PHYGrpNPI_Num, StringComparison.InvariantCultureIgnoreCase)) && grp.PHYGrpID != toStore.PHYGrpID))
                         {
-                            storedInDb.ProvidersInGrps.Add(new ProvidersInGrp { Providers_ProvID = item, PHYGroups_PHYGrpID = storedInDb.PHYGrpID });
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { toStore }.ToDataSourceResult(request, ModelState));
                         }
 
-                        var physicianToDelete = currentPhysicians.Except(physiciansByParam).ToList();
+                        var storedInDb = await db.PHYGroups.FindAsync(toStore.PHYGrpID);
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>();
+                        var auditLogs = new List<AuditToStore>();
 
+                        var physiciansByParam = toStore.Physicians.Select(x => x.ProvID).ToArray();
+                        var currentPhysicians = storedInDb.ProvidersInGrps.Select(x => x.Providers_ProvID).ToArray();
+
+                        var physicianIds = physiciansByParam.Except(currentPhysicians).ToList();
+                        var physicianToStore = physicianIds.Select(x => new ProvidersInGrp { Providers_ProvID = x, PHYGroups_PHYGrpID = storedInDb.PHYGrpID }).ToList();
+                        db.ProvidersInGrps.AddRange(physicianToStore);
+
+                        var physicianToDelete = currentPhysicians.Except(physiciansByParam).ToList();
                         foreach (var provId in physicianToDelete)
                         {
                             var proInGrpToDelete = await db.ProvidersInGrps.FirstOrDefaultAsync(x => x.Providers_ProvID == provId && x.PHYGroups_PHYGrpID == storedInDb.PHYGrpID);
                             if (proInGrpToDelete != null)
                             {
                                 db.ProvidersInGrps.Remove(proInGrpToDelete);
+                                auditLogs.Add(new AuditToStore
+                                {
+                                    UserLogons = User.Identity.GetUserName(),
+                                    AuditDateTime = DateTime.Now,
+                                    TableName = "ProvidersInGrps",
+                                    AuditAction = "D",
+                                    ModelPKey = proInGrpToDelete.ProvInGrpID,
+                                    tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "PHYGroups_PHYGrpID", OldValue = proInGrpToDelete.PHYGroups_PHYGrpID.ToString()},
+                                     new TableInfo{Field_ColumName = "Providers_ProvID", OldValue = proInGrpToDelete.Providers_ProvID.ToString()},
+                                }
+                                });
                             }
                         }
 
-                        var oldValue = string.Join(",", currentPhysicians); //C# convert array of integers to comma-separated string
-                        var newValue = string.Join(",", storedInDb.ProvidersInGrps.Select(x => x.Providers_ProvID).ToArray()); //C# convert array of integers to comma-separated string
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Providers", OldValue = oldValue, NewValue = newValue });
-                    }
-                    if (storedInDb.PHYGroupName != toStore.PHYGroupName)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "PHYGroupName", OldValue = storedInDb.PHYGroupName, NewValue = toStore.PHYGroupName });
-                        storedInDb.PHYGroupName = toStore.PHYGroupName;
-                    }
-                    if (storedInDb.PHYGrpNPI_Num != toStore.PHYGrpNPI_Num)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "PHYGrpNPI_Num", OldValue = storedInDb.PHYGrpNPI_Num, NewValue = toStore.PHYGrpNPI_Num });
-                        storedInDb.PHYGrpNPI_Num = toStore.PHYGrpNPI_Num;
-                    }
-                    db.PHYGroups.Attach(storedInDb);
-                    db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
+                        if (storedInDb.PHYGroupName != toStore.PHYGroupName)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "PHYGroupName", OldValue = storedInDb.PHYGroupName, NewValue = toStore.PHYGroupName });
+                            storedInDb.PHYGroupName = toStore.PHYGroupName;
+                        }
+                        if (storedInDb.PHYGrpNPI_Num != toStore.PHYGrpNPI_Num)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "PHYGrpNPI_Num", OldValue = storedInDb.PHYGrpNPI_Num, NewValue = toStore.PHYGrpNPI_Num });
+                            storedInDb.PHYGrpNPI_Num = toStore.PHYGrpNPI_Num;
+                        }
+                        db.PHYGroups.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
 
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        UserLogons = User.Identity.GetUserName(),
-                        AuditDateTime = DateTime.Now,
-                        TableName = "PHYGroups",
-                        AuditAction = "U",
-                        ModelPKey = toStore.PHYGrpID,
-                        tableInfos = tableColumnInfos
-                    };
+                        if (tableColumnInfos.Any())
+                        {
+                            auditLogs.Add(new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                TableName = "PHYGroupName",
+                                AuditAction = "U",
+                                ModelPKey = storedInDb.PHYGrpID,
+                                tableInfos = tableColumnInfos
+                            });
+                        }
 
-                    new AuditLogRepository().AddAuditLogs(auditLog);
+                        if (physicianToStore.Any())
+                        {
+                            auditLogs.AddRange(physicianToStore.Select(x => new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                AuditAction = "I",
+                                TableName = "ProvidersInGrp",
+                                ModelPKey = x.ProvInGrpID,
+                                tableInfos = new List<TableInfo>
+                            {
+                                new TableInfo{Field_ColumName = "PHYGroups_PHYGrpID", NewValue = x.PHYGroups_PHYGrpID.ToString()},
+                                new TableInfo{Field_ColumName = "Providers_ProvID", NewValue = x.Providers_ProvID.ToString()},
+                            }
+                            }));
+                        }
+
+                        new AuditLogRepository().SaveLogs(auditLogs);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { toStore }.ToDataSourceResult(request, ModelState));
+                    }
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { toStore }.ToDataSourceResult(request, ModelState));
-                }
+                
             }
             return Json(new[] { toStore }.ToDataSourceResult(request, ModelState));
         }
@@ -292,18 +332,46 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             {
                 return Json(new List<VMPHYGrp>().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
             }
-            try
+            using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
             {
-                var pos = await db.MasterPOS.FindAsync(MasterPOSID);
-                pos.PHYGroups_PHYGrpID = PHYGrpID;
-                db.MasterPOS.Attach(pos);
-                db.Entry(pos).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                try
+                {
+                    var pos = await db.MasterPOS.FindAsync(MasterPOSID);
+                    var tableColumnInfo = new List<TableInfo>
+                    {
+                        new TableInfo
+                        {
+                            Field_ColumName = "PHYGroups_PHYGrpID",
+                            OldValue = pos.PHYGroups_PHYGrpID.ToString(),
+                            NewValue = PHYGrpID.ToString()
+                        }
+                    };
+                    pos.PHYGroups_PHYGrpID = PHYGrpID;
+                    db.MasterPOS.Attach(pos);
+                    db.Entry(pos).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        UserLogons = User.Identity.GetUserName(),
+                        AuditDateTime = DateTime.Now,
+                        TableName = "MasterPOS",
+                        ModelPKey = pos.MasterPOSID,
+                        AuditAction = "U",
+                        tableInfos = tableColumnInfo
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
+
+                    dbTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbTransaction.Rollback();
+                    return Json(new List<VMPHYGrp>().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+                }
             }
-            catch (Exception)
-            {
-                return Json(new List<VMPHYGrp>().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
-            }
+            
             var storedInDb = await db.PHYGroups.FindAsync(PHYGrpID);
             List<VMPHYGrp> toView = new List<VMPHYGrp>
             {

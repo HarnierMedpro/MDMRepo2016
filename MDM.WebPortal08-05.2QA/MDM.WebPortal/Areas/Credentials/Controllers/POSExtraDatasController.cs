@@ -226,6 +226,11 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (ParentID == 0)
+                {
+                    ModelState.AddModelError("", "The POS doesn't exist in our system anymore. Please try again!");
+                    return Json(new[] { pOSExtraData }.ToDataSourceResult(request, ModelState));
+                }
                 using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
                     try
@@ -283,11 +288,120 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         pOSExtraData.POSExtraDataID = toStore.POSExtraDataID;
 
                         var pos = await db.MasterPOS.FindAsync(ParentID);
+                        var tableColumnInfo = new List<TableInfo>
+                        {
+                            new TableInfo{Field_ColumName = "", OldValue = pos.POSExtraData_POSExtraDataID.ToString(), NewValue = toStore.POSExtraDataID.ToString()}
+                        };
                         pos.POSExtraData_POSExtraDataID = toStore.POSExtraDataID;
 
                         db.MasterPOS.Attach(pos);
                         db.Entry(pos).State = EntityState.Modified;
                         await db.SaveChangesAsync();
+
+                        var auditLogs = new List<AuditToStore>
+                        {
+                            new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                TableName = "POSExtraDatas",
+                                AuditAction = "I",
+                                ModelPKey = toStore.POSExtraDataID,
+                                tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "AdmissionPhone", NewValue = toStore.AdmissionPhone},
+
+                                    new TableInfo{Field_ColumName = "Ancillary_outpatient_services", NewValue = toStore.Ancillary_outpatient_services},
+
+                                    new TableInfo{Field_ColumName = "AverageLenOfStay", NewValue = toStore.AverageLenOfStay},
+
+                                    new TableInfo{Field_ColumName = "BCBS_ID_Number", NewValue = toStore.BCBS_ID_Number},
+
+                                    new TableInfo{Field_ColumName = "Fax_Number", NewValue = toStore.Fax_Number},
+
+                                    new TableInfo{Field_ColumName = "HowManyUAPanels", NewValue = toStore.HowManyUAPanels},
+
+                                    new TableInfo{Field_ColumName = "JACHO_CARF", NewValue = toStore.JACHO_CARF},
+
+                                    new TableInfo{Field_ColumName = "Lab_Name", NewValue = toStore.Lab_Name},
+
+                                    new TableInfo{Field_ColumName = "Manage_care_contracts", NewValue = toStore.Manage_care_contracts},
+
+                                    new TableInfo{Field_ColumName = "Medicaid_Number", NewValue = toStore.Medicaid_Number},
+
+                                    new TableInfo{Field_ColumName = "MedicareNumber", NewValue = toStore.MedicareNumber},
+
+                                    new TableInfo{Field_ColumName = "Number_of_beds", NewValue = toStore.Number_of_beds},
+
+                                    new TableInfo{Field_ColumName = "Out_of_Network_In_Network", NewValue = toStore.Out_of_Network_In_Network},
+
+                                    new TableInfo{Field_ColumName = "PaidToPatientState", NewValue = toStore.PaidToPatientState},
+
+                                    new TableInfo{Field_ColumName = "Phone_Number", NewValue = toStore.Phone_Number},
+
+                                    new TableInfo{Field_ColumName = "ScholarshipRate", NewValue = toStore.ScholarshipRate},
+
+                                    new TableInfo{Field_ColumName = "State_of_MD_or_PhyGrp", NewValue = toStore.State_of_MD_or_PhyGrp},
+
+                                    new TableInfo{Field_ColumName = "UPIN_Number", NewValue = toStore.UPIN_Number},
+
+                                    new TableInfo{Field_ColumName = "Website", NewValue = toStore.Website},
+
+                                    new TableInfo{Field_ColumName = "how_many_days_week_open", NewValue = toStore.how_many_days_week_open},
+
+                                    new TableInfo{Field_ColumName = "AcreditationOnFile", NewValue = toStore.AcreditationOnFile.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Availavility_completed", NewValue = toStore.Availavility_completed.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Availavility_request_sent_out", NewValue = toStore.Availavility_request_sent_out.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Copies_of_all_managed_care_contracts_on_file", NewValue = toStore.Copies_of_all_managed_care_contracts_on_file.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Database_set_up", NewValue = toStore.Database_set_up.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Fee_schedule_in_binder", NewValue = toStore.Fee_schedule_in_binder.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Forms_created", NewValue = toStore.Forms_created.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Has_facility_billed_ins_before", NewValue = toStore.Has_facility_billed_ins_before.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Have_24hrs_nursing", NewValue = toStore.Have_24hrs_nursing.ToString()},
+
+                                    new TableInfo{Field_ColumName = "HighComplexityCLIA", NewValue = toStore.HighComplexityCLIA.ToString()},
+
+                                    new TableInfo{Field_ColumName = "RegistrationAnalyzer", NewValue = toStore.RegistrationAnalyzer.ToString()},
+
+                                    new TableInfo{Field_ColumName = "In_Service_date_time", NewValue = toStore.In_Service_date_time.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Navinet_request_completed", NewValue = toStore.Navinet_request_completed.ToString()},
+
+                                    new TableInfo{Field_ColumName = "W_9_on_File", NewValue = toStore.W_9_on_File.ToString()},
+
+                                    new TableInfo{Field_ColumName = "email_regarding_conference_set_up", NewValue = toStore.email_regarding_conference_set_up.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Licensure_on_File", NewValue = toStore.Licensure_on_File.ToString()},
+
+                                    new TableInfo{Field_ColumName = "In_Service_scheduled", NewValue = toStore.In_Service_scheduled.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Mental_License", NewValue = toStore.Mental_License.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Regulations_on_File", NewValue = toStore.Regulations_on_File.ToString()},
+
+                                    new TableInfo{Field_ColumName = "Portal_training_setup", NewValue = toStore.Portal_training_setup.ToString()},
+                                }
+                            },
+                            new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                TableName = "MasterPOS",
+                                AuditAction = "U",
+                                ModelPKey = pos.MasterPOSID,
+                                tableInfos = tableColumnInfo
+                            }
+                        };
+
+                        new AuditLogRepository().SaveLogs(auditLogs);
 
                         dbTransaction.Commit();
 
@@ -319,7 +433,6 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         ModelState.AddModelError("","Something failed. Please try again!");
                         return Json(new[] { pOSExtraData }.ToDataSourceResult(request, ModelState));
                     }
-                    
                 }
             }
             return Json(new[] { pOSExtraData }.ToDataSourceResult(request, ModelState));
@@ -331,237 +444,239 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                     var storedInDb = await db.POSExtraDatas.FindAsync(toStore.POSExtraDataID);
-                     List<TableInfo> tableColumInfos = new List<TableInfo>();
+                    try
+                    {
+                        var storedInDb = await db.POSExtraDatas.FindAsync(toStore.POSExtraDataID);
+                        List<TableInfo> tableColumInfos = new List<TableInfo>();
 
-                     if (storedInDb.Phone_Number != toStore.Phone_Number)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Phone_Number", OldValue = storedInDb.Phone_Number, NewValue = toStore.Phone_Number });
-                         storedInDb.Phone_Number = toStore.Phone_Number;
-                     }
-                     if (storedInDb.Fax_Number != toStore.Fax_Number)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Fax_Number", OldValue = storedInDb.Fax_Number, NewValue = toStore.Fax_Number });
-                         storedInDb.Fax_Number = toStore.Fax_Number;
-                     }
-                     if (storedInDb.Website != toStore.Website)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Website", OldValue = storedInDb.Website, NewValue = toStore.Website });
-                         storedInDb.Website = toStore.Website;
-                     }
-                     if (storedInDb.W_9_on_File != toStore.W_9_on_File)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "W_9_on_File", OldValue = storedInDb.W_9_on_File.ToString(), NewValue = toStore.W_9_on_File.ToString() });
-                         storedInDb.W_9_on_File = toStore.W_9_on_File;
-                     }
-                     if (storedInDb.Number_of_beds != toStore.Number_of_beds)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Number_of_beds", OldValue = storedInDb.Number_of_beds, NewValue = toStore.Number_of_beds });
-                         storedInDb.Number_of_beds = toStore.Number_of_beds;
-                     }
-                     if (storedInDb.Have_24hrs_nursing != toStore.Have_24hrs_nursing)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Have_24hrs_nursing", OldValue = storedInDb.Have_24hrs_nursing.ToString(), NewValue = toStore.Have_24hrs_nursing.ToString() });
-                         storedInDb.Have_24hrs_nursing = toStore.Have_24hrs_nursing;
-                     }
-                     if (storedInDb.how_many_days_week_open != toStore.how_many_days_week_open)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "how_many_days_week_open", OldValue = storedInDb.how_many_days_week_open, NewValue = toStore.how_many_days_week_open });
-                         storedInDb.how_many_days_week_open = toStore.how_many_days_week_open;
-                     }
-                     if (storedInDb.Lab_Name != toStore.Lab_Name)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Lab_Name", OldValue = storedInDb.Lab_Name, NewValue = toStore.Lab_Name });
-                         storedInDb.Lab_Name = toStore.Lab_Name;
-                     }
-                     if (storedInDb.Out_of_Network_In_Network != toStore.Out_of_Network_In_Network)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Out_of_Network_In_Network", OldValue = storedInDb.Out_of_Network_In_Network, NewValue = toStore.Out_of_Network_In_Network });
-                         storedInDb.Out_of_Network_In_Network = toStore.Out_of_Network_In_Network;
-                     }
-                     if (storedInDb.Licensure_on_File != toStore.Licensure_on_File)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Licensure_on_File", OldValue = storedInDb.Licensure_on_File.ToString(), NewValue = toStore.Licensure_on_File.ToString() });
-                         storedInDb.Licensure_on_File = toStore.Licensure_on_File;
-                     }
-                     if (storedInDb.Mental_License != toStore.Mental_License)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Mental_License", OldValue = storedInDb.Mental_License.ToString(), NewValue = toStore.Mental_License.ToString() });
-                         storedInDb.Mental_License = toStore.Mental_License;
-                     }
-                     if (storedInDb.BCBS_ID_Number != toStore.BCBS_ID_Number)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "BCBS_ID_Number", OldValue = storedInDb.BCBS_ID_Number, NewValue = toStore.BCBS_ID_Number });
-                         storedInDb.BCBS_ID_Number = toStore.BCBS_ID_Number;
-                     }
-                     if (storedInDb.UPIN_Number != toStore.UPIN_Number)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "UPIN_Number", OldValue = storedInDb.UPIN_Number, NewValue = toStore.UPIN_Number });
-                         storedInDb.UPIN_Number = toStore.UPIN_Number;
-                     }
-                     if (storedInDb.Medicaid_Number != toStore.Medicaid_Number)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Medicaid_Number", OldValue = storedInDb.Medicaid_Number, NewValue = toStore.Medicaid_Number });
-                         storedInDb.Medicaid_Number = toStore.Medicaid_Number;
-                     }
-                     if (storedInDb.State_of_MD_or_PhyGrp != toStore.State_of_MD_or_PhyGrp)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "State_of_MD_or_PhyGrp", OldValue = storedInDb.State_of_MD_or_PhyGrp, NewValue = toStore.State_of_MD_or_PhyGrp });
-                         storedInDb.State_of_MD_or_PhyGrp = toStore.State_of_MD_or_PhyGrp;
-                     }
-                     if (storedInDb.Regulations_on_File != toStore.Regulations_on_File)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Regulations_on_File", OldValue = storedInDb.Regulations_on_File.ToString(), NewValue = toStore.Regulations_on_File.ToString() });
-                         storedInDb.Regulations_on_File = toStore.Regulations_on_File;
-                     }
-                     if (storedInDb.JACHO_CARF != toStore.JACHO_CARF)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "JACHO_CARF", OldValue = storedInDb.JACHO_CARF, NewValue = toStore.JACHO_CARF });
-                         storedInDb.JACHO_CARF = toStore.JACHO_CARF;
-                     }
-                     if (storedInDb.Has_facility_billed_ins_before != toStore.Has_facility_billed_ins_before)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Has_facility_billed_ins_before", OldValue = storedInDb.Has_facility_billed_ins_before.ToString(), NewValue = toStore.Has_facility_billed_ins_before.ToString() });
-                         storedInDb.Has_facility_billed_ins_before = toStore.Has_facility_billed_ins_before;
-                     }
-                     if (storedInDb.Manage_care_contracts != toStore.Manage_care_contracts)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Manage_care_contracts", OldValue = storedInDb.Manage_care_contracts, NewValue = toStore.Manage_care_contracts });
-                         storedInDb.Manage_care_contracts = toStore.Manage_care_contracts;
-                     }
-                     if (storedInDb.Copies_of_all_managed_care_contracts_on_file != toStore.Copies_of_all_managed_care_contracts_on_file)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Copies_of_all_managed_care_contracts_on_file", OldValue = storedInDb.Copies_of_all_managed_care_contracts_on_file.ToString(), NewValue = toStore.Copies_of_all_managed_care_contracts_on_file.ToString() });
-                         storedInDb.Manage_care_contracts = toStore.Manage_care_contracts;
-                     }
-                     if (storedInDb.Forms_created != toStore.Forms_created)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Forms_created", OldValue = storedInDb.Forms_created.ToString(), NewValue = toStore.Forms_created.ToString() });
-                         storedInDb.Forms_created = toStore.Forms_created;
-                     }
-                     if (storedInDb.In_Service_scheduled != toStore.In_Service_scheduled)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "In_Service_scheduled", OldValue = storedInDb.In_Service_scheduled.ToString(), NewValue = toStore.In_Service_scheduled.ToString() });
-                         storedInDb.In_Service_scheduled = toStore.In_Service_scheduled;
-                     }
-                     if (storedInDb.In_Service_date_time != toStore.In_Service_date_time)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "In_Service_date_time", OldValue = storedInDb.In_Service_date_time.ToString(), NewValue = toStore.In_Service_date_time.ToString() });
-                         storedInDb.In_Service_date_time = toStore.In_Service_date_time;
-                     }
-                     if (storedInDb.Portal_training_setup != toStore.Portal_training_setup)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Portal_training_setup", OldValue = storedInDb.Portal_training_setup.ToString(), NewValue = toStore.Portal_training_setup.ToString() });
-                         storedInDb.Portal_training_setup = toStore.Portal_training_setup;
-                     }
-                     if (storedInDb.email_regarding_conference_set_up != toStore.email_regarding_conference_set_up)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "email_regarding_conference_set_up", OldValue = storedInDb.email_regarding_conference_set_up.ToString(), NewValue = toStore.email_regarding_conference_set_up.ToString() });
-                         storedInDb.email_regarding_conference_set_up = toStore.email_regarding_conference_set_up;
-                     }
-                     if (storedInDb.Database_set_up != toStore.Database_set_up)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Database_set_up", OldValue = storedInDb.Database_set_up.ToString(), NewValue = toStore.Database_set_up.ToString() });
-                         storedInDb.Database_set_up = toStore.Database_set_up;
-                     }
-                     if (storedInDb.Availavility_request_sent_out != toStore.Availavility_request_sent_out)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Availavility_request_sent_out", OldValue = storedInDb.Availavility_request_sent_out.ToString(), NewValue = toStore.Availavility_request_sent_out.ToString() });
-                         storedInDb.Availavility_request_sent_out = toStore.Availavility_request_sent_out;
-                     }
-                     if (storedInDb.Availavility_completed != toStore.Availavility_completed)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Availavility_completed", OldValue = storedInDb.Availavility_completed.ToString(), NewValue = toStore.Availavility_completed.ToString() });
-                         storedInDb.Availavility_completed = toStore.Availavility_completed;
-                     }
-                     if (storedInDb.Navinet_request_completed != toStore.Navinet_request_completed)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Navinet_request_completed", OldValue = storedInDb.Navinet_request_completed.ToString(), NewValue = toStore.Navinet_request_completed.ToString() });
-                         storedInDb.Navinet_request_completed = toStore.Navinet_request_completed;
-                     }
-                     if (storedInDb.Fee_schedule_in_binder != toStore.Fee_schedule_in_binder)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Fee_schedule_in_binder", OldValue = storedInDb.Fee_schedule_in_binder.ToString(), NewValue = toStore.Fee_schedule_in_binder.ToString() });
-                         storedInDb.Fee_schedule_in_binder = toStore.Fee_schedule_in_binder;
-                     }
-                   
-                     if (storedInDb.AdmissionPhone != toStore.AdmissionPhone)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "AdmissionPhone", OldValue = storedInDb.AdmissionPhone, NewValue = toStore.AdmissionPhone });
-                         storedInDb.AdmissionPhone = toStore.AdmissionPhone;
-                     }
-                     if (storedInDb.ScholarshipRate != toStore.ScholarshipRate)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "ScholarshipRate", OldValue = storedInDb.ScholarshipRate, NewValue = toStore.ScholarshipRate });
-                         storedInDb.ScholarshipRate = toStore.ScholarshipRate;
-                     }
-                     if (storedInDb.AcreditationOnFile != toStore.AcreditationOnFile)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "AcreditationOnFile", OldValue = storedInDb.AcreditationOnFile.ToString(), NewValue = toStore.AcreditationOnFile.ToString() });
-                         storedInDb.AcreditationOnFile = toStore.AcreditationOnFile;
-                     }
-                     if (storedInDb.AverageLenOfStay != toStore.AverageLenOfStay)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "AverageLenOfStay", OldValue = storedInDb.AverageLenOfStay, NewValue = toStore.AverageLenOfStay });
-                         storedInDb.AverageLenOfStay = toStore.AverageLenOfStay;
-                     }
-                     if (storedInDb.HowManyUAPanels != toStore.HowManyUAPanels)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "HowManyUAPanels", OldValue = storedInDb.HowManyUAPanels, NewValue = toStore.HowManyUAPanels });
-                         storedInDb.HowManyUAPanels = toStore.HowManyUAPanels;
-                     }
-                     if (storedInDb.HighComplexityCLIA != toStore.HighComplexityCLIA)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "HighComplexityCLIA", OldValue = storedInDb.HighComplexityCLIA.ToString(), NewValue = toStore.HighComplexityCLIA.ToString() });
-                         storedInDb.HighComplexityCLIA = toStore.HighComplexityCLIA;
-                     }
-                     if (storedInDb.RegistrationAnalyzer != toStore.RegistrationAnalyzer)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "RegistrationAnalyzer", OldValue = storedInDb.RegistrationAnalyzer.ToString(), NewValue = toStore.RegistrationAnalyzer.ToString() });
-                         storedInDb.RegistrationAnalyzer = toStore.RegistrationAnalyzer;
-                     }
-                     if (storedInDb.PaidToPatientState != toStore.PaidToPatientState)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "PaidToPatientState", OldValue = storedInDb.PaidToPatientState, NewValue = toStore.PaidToPatientState });
-                         storedInDb.PaidToPatientState = toStore.PaidToPatientState;
-                     }
-                     if (storedInDb.MedicareNumber != toStore.MedicareNumber)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "MedicareNumber", OldValue = storedInDb.MedicareNumber, NewValue = toStore.MedicareNumber });
-                         storedInDb.MedicareNumber = toStore.MedicareNumber;
-                     }
-                     if (storedInDb.Ancillary_outpatient_services != toStore.Ancillary_outpatient_services)
-                     {
-                         tableColumInfos.Add(new TableInfo { Field_ColumName = "Ancillary_outpatient_services", OldValue = storedInDb.Ancillary_outpatient_services, NewValue = toStore.Ancillary_outpatient_services });
-                         storedInDb.Ancillary_outpatient_services = toStore.Ancillary_outpatient_services;
-                     }
+                        if (storedInDb.Phone_Number != toStore.Phone_Number)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Phone_Number", OldValue = storedInDb.Phone_Number, NewValue = toStore.Phone_Number });
+                            storedInDb.Phone_Number = toStore.Phone_Number;
+                        }
+                        if (storedInDb.Fax_Number != toStore.Fax_Number)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Fax_Number", OldValue = storedInDb.Fax_Number, NewValue = toStore.Fax_Number });
+                            storedInDb.Fax_Number = toStore.Fax_Number;
+                        }
+                        if (storedInDb.Website != toStore.Website)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Website", OldValue = storedInDb.Website, NewValue = toStore.Website });
+                            storedInDb.Website = toStore.Website;
+                        }
+                        if (storedInDb.W_9_on_File != toStore.W_9_on_File)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "W_9_on_File", OldValue = storedInDb.W_9_on_File.ToString(), NewValue = toStore.W_9_on_File.ToString() });
+                            storedInDb.W_9_on_File = toStore.W_9_on_File;
+                        }
+                        if (storedInDb.Number_of_beds != toStore.Number_of_beds)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Number_of_beds", OldValue = storedInDb.Number_of_beds, NewValue = toStore.Number_of_beds });
+                            storedInDb.Number_of_beds = toStore.Number_of_beds;
+                        }
+                        if (storedInDb.Have_24hrs_nursing != toStore.Have_24hrs_nursing)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Have_24hrs_nursing", OldValue = storedInDb.Have_24hrs_nursing.ToString(), NewValue = toStore.Have_24hrs_nursing.ToString() });
+                            storedInDb.Have_24hrs_nursing = toStore.Have_24hrs_nursing;
+                        }
+                        if (storedInDb.how_many_days_week_open != toStore.how_many_days_week_open)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "how_many_days_week_open", OldValue = storedInDb.how_many_days_week_open, NewValue = toStore.how_many_days_week_open });
+                            storedInDb.how_many_days_week_open = toStore.how_many_days_week_open;
+                        }
+                        if (storedInDb.Lab_Name != toStore.Lab_Name)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Lab_Name", OldValue = storedInDb.Lab_Name, NewValue = toStore.Lab_Name });
+                            storedInDb.Lab_Name = toStore.Lab_Name;
+                        }
+                        if (storedInDb.Out_of_Network_In_Network != toStore.Out_of_Network_In_Network)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Out_of_Network_In_Network", OldValue = storedInDb.Out_of_Network_In_Network, NewValue = toStore.Out_of_Network_In_Network });
+                            storedInDb.Out_of_Network_In_Network = toStore.Out_of_Network_In_Network;
+                        }
+                        if (storedInDb.Licensure_on_File != toStore.Licensure_on_File)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Licensure_on_File", OldValue = storedInDb.Licensure_on_File.ToString(), NewValue = toStore.Licensure_on_File.ToString() });
+                            storedInDb.Licensure_on_File = toStore.Licensure_on_File;
+                        }
+                        if (storedInDb.Mental_License != toStore.Mental_License)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Mental_License", OldValue = storedInDb.Mental_License.ToString(), NewValue = toStore.Mental_License.ToString() });
+                            storedInDb.Mental_License = toStore.Mental_License;
+                        }
+                        if (storedInDb.BCBS_ID_Number != toStore.BCBS_ID_Number)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "BCBS_ID_Number", OldValue = storedInDb.BCBS_ID_Number, NewValue = toStore.BCBS_ID_Number });
+                            storedInDb.BCBS_ID_Number = toStore.BCBS_ID_Number;
+                        }
+                        if (storedInDb.UPIN_Number != toStore.UPIN_Number)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "UPIN_Number", OldValue = storedInDb.UPIN_Number, NewValue = toStore.UPIN_Number });
+                            storedInDb.UPIN_Number = toStore.UPIN_Number;
+                        }
+                        if (storedInDb.Medicaid_Number != toStore.Medicaid_Number)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Medicaid_Number", OldValue = storedInDb.Medicaid_Number, NewValue = toStore.Medicaid_Number });
+                            storedInDb.Medicaid_Number = toStore.Medicaid_Number;
+                        }
+                        if (storedInDb.State_of_MD_or_PhyGrp != toStore.State_of_MD_or_PhyGrp)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "State_of_MD_or_PhyGrp", OldValue = storedInDb.State_of_MD_or_PhyGrp, NewValue = toStore.State_of_MD_or_PhyGrp });
+                            storedInDb.State_of_MD_or_PhyGrp = toStore.State_of_MD_or_PhyGrp;
+                        }
+                        if (storedInDb.Regulations_on_File != toStore.Regulations_on_File)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Regulations_on_File", OldValue = storedInDb.Regulations_on_File.ToString(), NewValue = toStore.Regulations_on_File.ToString() });
+                            storedInDb.Regulations_on_File = toStore.Regulations_on_File;
+                        }
+                        if (storedInDb.JACHO_CARF != toStore.JACHO_CARF)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "JACHO_CARF", OldValue = storedInDb.JACHO_CARF, NewValue = toStore.JACHO_CARF });
+                            storedInDb.JACHO_CARF = toStore.JACHO_CARF;
+                        }
+                        if (storedInDb.Has_facility_billed_ins_before != toStore.Has_facility_billed_ins_before)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Has_facility_billed_ins_before", OldValue = storedInDb.Has_facility_billed_ins_before.ToString(), NewValue = toStore.Has_facility_billed_ins_before.ToString() });
+                            storedInDb.Has_facility_billed_ins_before = toStore.Has_facility_billed_ins_before;
+                        }
+                        if (storedInDb.Manage_care_contracts != toStore.Manage_care_contracts)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Manage_care_contracts", OldValue = storedInDb.Manage_care_contracts, NewValue = toStore.Manage_care_contracts });
+                            storedInDb.Manage_care_contracts = toStore.Manage_care_contracts;
+                        }
+                        if (storedInDb.Copies_of_all_managed_care_contracts_on_file != toStore.Copies_of_all_managed_care_contracts_on_file)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Copies_of_all_managed_care_contracts_on_file", OldValue = storedInDb.Copies_of_all_managed_care_contracts_on_file.ToString(), NewValue = toStore.Copies_of_all_managed_care_contracts_on_file.ToString() });
+                            storedInDb.Manage_care_contracts = toStore.Manage_care_contracts;
+                        }
+                        if (storedInDb.Forms_created != toStore.Forms_created)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Forms_created", OldValue = storedInDb.Forms_created.ToString(), NewValue = toStore.Forms_created.ToString() });
+                            storedInDb.Forms_created = toStore.Forms_created;
+                        }
+                        if (storedInDb.In_Service_scheduled != toStore.In_Service_scheduled)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "In_Service_scheduled", OldValue = storedInDb.In_Service_scheduled.ToString(), NewValue = toStore.In_Service_scheduled.ToString() });
+                            storedInDb.In_Service_scheduled = toStore.In_Service_scheduled;
+                        }
+                        if (storedInDb.In_Service_date_time != toStore.In_Service_date_time)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "In_Service_date_time", OldValue = storedInDb.In_Service_date_time.ToString(), NewValue = toStore.In_Service_date_time.ToString() });
+                            storedInDb.In_Service_date_time = toStore.In_Service_date_time;
+                        }
+                        if (storedInDb.Portal_training_setup != toStore.Portal_training_setup)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Portal_training_setup", OldValue = storedInDb.Portal_training_setup.ToString(), NewValue = toStore.Portal_training_setup.ToString() });
+                            storedInDb.Portal_training_setup = toStore.Portal_training_setup;
+                        }
+                        if (storedInDb.email_regarding_conference_set_up != toStore.email_regarding_conference_set_up)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "email_regarding_conference_set_up", OldValue = storedInDb.email_regarding_conference_set_up.ToString(), NewValue = toStore.email_regarding_conference_set_up.ToString() });
+                            storedInDb.email_regarding_conference_set_up = toStore.email_regarding_conference_set_up;
+                        }
+                        if (storedInDb.Database_set_up != toStore.Database_set_up)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Database_set_up", OldValue = storedInDb.Database_set_up.ToString(), NewValue = toStore.Database_set_up.ToString() });
+                            storedInDb.Database_set_up = toStore.Database_set_up;
+                        }
+                        if (storedInDb.Availavility_request_sent_out != toStore.Availavility_request_sent_out)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Availavility_request_sent_out", OldValue = storedInDb.Availavility_request_sent_out.ToString(), NewValue = toStore.Availavility_request_sent_out.ToString() });
+                            storedInDb.Availavility_request_sent_out = toStore.Availavility_request_sent_out;
+                        }
+                        if (storedInDb.Availavility_completed != toStore.Availavility_completed)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Availavility_completed", OldValue = storedInDb.Availavility_completed.ToString(), NewValue = toStore.Availavility_completed.ToString() });
+                            storedInDb.Availavility_completed = toStore.Availavility_completed;
+                        }
+                        if (storedInDb.Navinet_request_completed != toStore.Navinet_request_completed)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Navinet_request_completed", OldValue = storedInDb.Navinet_request_completed.ToString(), NewValue = toStore.Navinet_request_completed.ToString() });
+                            storedInDb.Navinet_request_completed = toStore.Navinet_request_completed;
+                        }
+                        if (storedInDb.Fee_schedule_in_binder != toStore.Fee_schedule_in_binder)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Fee_schedule_in_binder", OldValue = storedInDb.Fee_schedule_in_binder.ToString(), NewValue = toStore.Fee_schedule_in_binder.ToString() });
+                            storedInDb.Fee_schedule_in_binder = toStore.Fee_schedule_in_binder;
+                        }
 
-                     db.POSExtraDatas.Attach(storedInDb);
-                     db.Entry(storedInDb).State = EntityState.Modified;
-                     await db.SaveChangesAsync();
+                        if (storedInDb.AdmissionPhone != toStore.AdmissionPhone)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "AdmissionPhone", OldValue = storedInDb.AdmissionPhone, NewValue = toStore.AdmissionPhone });
+                            storedInDb.AdmissionPhone = toStore.AdmissionPhone;
+                        }
+                        if (storedInDb.ScholarshipRate != toStore.ScholarshipRate)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "ScholarshipRate", OldValue = storedInDb.ScholarshipRate, NewValue = toStore.ScholarshipRate });
+                            storedInDb.ScholarshipRate = toStore.ScholarshipRate;
+                        }
+                        if (storedInDb.AcreditationOnFile != toStore.AcreditationOnFile)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "AcreditationOnFile", OldValue = storedInDb.AcreditationOnFile.ToString(), NewValue = toStore.AcreditationOnFile.ToString() });
+                            storedInDb.AcreditationOnFile = toStore.AcreditationOnFile;
+                        }
+                        if (storedInDb.AverageLenOfStay != toStore.AverageLenOfStay)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "AverageLenOfStay", OldValue = storedInDb.AverageLenOfStay, NewValue = toStore.AverageLenOfStay });
+                            storedInDb.AverageLenOfStay = toStore.AverageLenOfStay;
+                        }
+                        if (storedInDb.HowManyUAPanels != toStore.HowManyUAPanels)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "HowManyUAPanels", OldValue = storedInDb.HowManyUAPanels, NewValue = toStore.HowManyUAPanels });
+                            storedInDb.HowManyUAPanels = toStore.HowManyUAPanels;
+                        }
+                        if (storedInDb.HighComplexityCLIA != toStore.HighComplexityCLIA)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "HighComplexityCLIA", OldValue = storedInDb.HighComplexityCLIA.ToString(), NewValue = toStore.HighComplexityCLIA.ToString() });
+                            storedInDb.HighComplexityCLIA = toStore.HighComplexityCLIA;
+                        }
+                        if (storedInDb.RegistrationAnalyzer != toStore.RegistrationAnalyzer)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "RegistrationAnalyzer", OldValue = storedInDb.RegistrationAnalyzer.ToString(), NewValue = toStore.RegistrationAnalyzer.ToString() });
+                            storedInDb.RegistrationAnalyzer = toStore.RegistrationAnalyzer;
+                        }
+                        if (storedInDb.PaidToPatientState != toStore.PaidToPatientState)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "PaidToPatientState", OldValue = storedInDb.PaidToPatientState, NewValue = toStore.PaidToPatientState });
+                            storedInDb.PaidToPatientState = toStore.PaidToPatientState;
+                        }
+                        if (storedInDb.MedicareNumber != toStore.MedicareNumber)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "MedicareNumber", OldValue = storedInDb.MedicareNumber, NewValue = toStore.MedicareNumber });
+                            storedInDb.MedicareNumber = toStore.MedicareNumber;
+                        }
+                        if (storedInDb.Ancillary_outpatient_services != toStore.Ancillary_outpatient_services)
+                        {
+                            tableColumInfos.Add(new TableInfo { Field_ColumName = "Ancillary_outpatient_services", OldValue = storedInDb.Ancillary_outpatient_services, NewValue = toStore.Ancillary_outpatient_services });
+                            storedInDb.Ancillary_outpatient_services = toStore.Ancillary_outpatient_services;
+                        }
 
-                     if (tableColumInfos.Any())
-                     {
-                         AuditToStore auditLog = new AuditToStore
-                         {
-                             UserLogons = User.Identity.GetUserName(),
-                             AuditDateTime = DateTime.Now,
-                             TableName = "POSExtraDatas",
-                             AuditAction = "U",
-                             ModelPKey = storedInDb.POSExtraDataID,
-                             tableInfos = tableColumInfos
-                         };
-                         new AuditLogRepository().AddAuditLogs(auditLog);
-                     }
+                        db.POSExtraDatas.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+                     
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditDateTime = DateTime.Now,
+                            TableName = "POSExtraDatas",
+                            AuditAction = "U",
+                            ModelPKey = storedInDb.POSExtraDataID,
+                            tableInfos = tableColumInfos
+                        };
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+                      
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { toStore }.ToDataSourceResult(request, ModelState));
+                    } 
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("","Something failed. Please try again!");
-                    return Json(new[] { toStore }.ToDataSourceResult(request, ModelState));
-                }
-               
             }
             return Json(new[] { toStore }.ToDataSourceResult(request, ModelState));
         }

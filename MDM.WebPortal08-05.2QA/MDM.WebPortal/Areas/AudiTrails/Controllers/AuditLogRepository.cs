@@ -38,6 +38,28 @@ namespace MDM.WebPortal.Areas.AudiTrails.Controllers
             }
         }
 
+        public void InsertLogs(AuditToStore auditToStore, MedProDBEntities db)
+        {
+            if (auditToStore != null && auditToStore.tableInfos.Any())
+            {
+               
+                    IList<AuditLog> auditLogS = new List<AuditLog>();
+                    auditLogS = auditToStore.tableInfos.Select(tableinfo => new AuditLog
+                    {
+                        TableName = auditToStore.TableName,
+                        UserLogons = auditToStore.UserLogons,
+                        AuditDateTime = auditToStore.AuditDateTime,
+                        Field_ColumName = tableinfo.Field_ColumName,
+                        OldValue = tableinfo.OldValue,
+                        NewValue = tableinfo.NewValue,
+                        AuditAction = auditToStore.AuditAction,
+                        ModelPKey = auditToStore.ModelPKey
+                    }).ToList();
+                    db.AuditLogs.AddRange(auditLogS);
+                    db.SaveChanges();
+            }
+        }
+
         public void SaveLogs(List<AuditToStore> toStore)
         {
             if (toStore.Any())

@@ -48,8 +48,7 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
 
         public ActionResult Read_BI_DB_FvPByManager([DataSourceRequest] DataSourceRequest request, int? ManagerID)
         {
-            var result =
-                db.BI_DB_FvP_Access.Include(manager => manager.Manager_Master)
+            var result = db.BI_DB_FvP_Access.Include(manager => manager.Manager_Master)
                     .Include(dB => dB.DBList)
                     .Include(fvp => fvp.FvPList);
 
@@ -73,86 +72,64 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.BI_DB_FvP_Access.AnyAsync(x => x.DB_ID == bI_DB_FvP_Access.DB_ID && x.FvPID == bI_DB_FvP_Access.FvPID && x.BIDbFvPID != bI_DB_FvP_Access.BIDbFvPID))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                        if (await db.BI_DB_FvP_Access.AnyAsync(x => x.DB_ID == bI_DB_FvP_Access.DB_ID && x.FvPID == bI_DB_FvP_Access.FvPID && x.BIDbFvPID != bI_DB_FvP_Access.BIDbFvPID))
+                        {
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request, ModelState));
+                        }
+
+                        var storedInDb = await db.BI_DB_FvP_Access.FindAsync(bI_DB_FvP_Access.BIDbFvPID);
+
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                        if (storedInDb.ManagerID != bI_DB_FvP_Access.ManagerID)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "ManagerID", NewValue = bI_DB_FvP_Access.ManagerID.ToString(), OldValue = storedInDb.ManagerID.ToString() });
+                            storedInDb.ManagerID = bI_DB_FvP_Access.ManagerID;
+                        }
+                        if (storedInDb.DB_ID != bI_DB_FvP_Access.DB_ID)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "DB_ID", NewValue = bI_DB_FvP_Access.DB_ID.ToString(), OldValue = storedInDb.DB_ID.ToString() });
+                            storedInDb.DB_ID = bI_DB_FvP_Access.DB_ID;
+                        }
+                        if (storedInDb.FvPID != bI_DB_FvP_Access.FvPID)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "FvPID", NewValue = bI_DB_FvP_Access.FvPID.ToString(), OldValue = storedInDb.FvPID.ToString() });
+                            storedInDb.FvPID = bI_DB_FvP_Access.FvPID;
+                        }
+                        if (storedInDb.Active != bI_DB_FvP_Access.Active)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Active", NewValue = bI_DB_FvP_Access.Active.ToString(), OldValue = storedInDb.Active.ToString() });
+                            storedInDb.Active = bI_DB_FvP_Access.Active;
+                        }
+
+                        db.BI_DB_FvP_Access.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditAction = "U",
+                            tableInfos = tableColumnInfos,
+                            AuditDateTime = DateTime.Now,
+                            ModelPKey = storedInDb.BIDbFvPID,
+                            TableName = "BI_DB_Fvp_Access"
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
                         return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request, ModelState));
                     }
-                    //var storedInDb =  new BI_DB_FvP_Access
-                    //{
-                    //    BIDbFvPID = bI_DB_FvP_Access.BIDbFvPID,
-                    //    ManagerID = bI_DB_FvP_Access.ManagerID,
-                    //    DB_ID = bI_DB_FvP_Access.DB_ID,
-                    //    FvPID = bI_DB_FvP_Access.FvPID,
-                    //    Active = bI_DB_FvP_Access.Active,
-                    //};
-                    var storedInDb = await db.BI_DB_FvP_Access.FindAsync(bI_DB_FvP_Access.BIDbFvPID);
-
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
-
-                    if (storedInDb.ManagerID != bI_DB_FvP_Access.ManagerID)
-                    {
-                        tableColumnInfos.Add(new TableInfo
-                        {
-                            Field_ColumName = "ManagerID",
-                            NewValue = bI_DB_FvP_Access.ManagerID.ToString(),
-                            OldValue = storedInDb.ManagerID.ToString()
-                        });
-                        storedInDb.ManagerID = bI_DB_FvP_Access.ManagerID;
-                    }
-                    if (storedInDb.DB_ID != bI_DB_FvP_Access.DB_ID)
-                    {
-                        tableColumnInfos.Add(new TableInfo
-                        {
-                            Field_ColumName = "DB_ID",
-                            NewValue = bI_DB_FvP_Access.DB_ID.ToString(), 
-                            OldValue = storedInDb.DB_ID.ToString()
-                        });
-                        storedInDb.DB_ID = bI_DB_FvP_Access.DB_ID;
-                    }
-                    if (storedInDb.FvPID != bI_DB_FvP_Access.FvPID)
-                    {
-                        tableColumnInfos.Add(new TableInfo
-                        {
-                            Field_ColumName = "FvPID",
-                            NewValue = bI_DB_FvP_Access.FvPID.ToString(),
-                            OldValue = storedInDb.FvPID.ToString()
-                        });
-                        storedInDb.FvPID = bI_DB_FvP_Access.FvPID;
-                    }
-                    if (storedInDb.Active != bI_DB_FvP_Access.Active)
-                    {
-                        tableColumnInfos.Add(new TableInfo
-                        {
-                            Field_ColumName = "Active", 
-                            NewValue = bI_DB_FvP_Access.Active.ToString(), 
-                            OldValue = storedInDb.Active.ToString()
-                        });
-                        storedInDb.Active = bI_DB_FvP_Access.Active;
-                    }
-
-                    db.BI_DB_FvP_Access.Attach(storedInDb);
-                    db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        UserLogons = User.Identity.GetUserName(),
-                        AuditAction = "U",
-                        tableInfos = tableColumnInfos,
-                        AuditDateTime = DateTime.Now,
-                        ModelPKey = storedInDb.BIDbFvPID,
-                        TableName = "BI_DB_Fvp_Access"
-                    };
-
-                    new AuditLogRepository().AddAuditLogs(auditLog);
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request, ModelState));
                 }
             }
             return Json(new[] {bI_DB_FvP_Access}.ToDataSourceResult(request, ModelState));
@@ -162,46 +139,52 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
         {
             if (ModelState.IsValid && ParentID > 0)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.BI_DB_FvP_Access.AnyAsync(x => x.DB_ID == bI_DB_FvP_Access.DB_ID && x.FvPID == bI_DB_FvP_Access.FvPID))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                        if (await db.BI_DB_FvP_Access.AnyAsync(x => x.DB_ID == bI_DB_FvP_Access.DB_ID && x.FvPID == bI_DB_FvP_Access.FvPID))
+                        {
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request, ModelState));
+                        }
+                        var newOb = new BI_DB_FvP_Access
+                        {
+                            FvPID = bI_DB_FvP_Access.FvPID,
+                            DB_ID = bI_DB_FvP_Access.DB_ID,
+                            Active = bI_DB_FvP_Access.Active,
+                            ManagerID = ParentID
+                        };
+                        db.BI_DB_FvP_Access.Add(newOb);
+                        await db.SaveChangesAsync();
+                        bI_DB_FvP_Access.BIDbFvPID = newOb.BIDbFvPID;
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditAction = "U",
+                            tableInfos = new List<TableInfo>
+                            {
+                                new TableInfo{Field_ColumName = "FvPID", NewValue = newOb.FvPID.ToString()},
+                                new TableInfo{Field_ColumName = "DB_ID", NewValue = newOb.DB_ID.ToString()},
+                                new TableInfo{Field_ColumName = "Active", NewValue = newOb.Active.ToString()},
+                                new TableInfo{Field_ColumName = "ManagerID", NewValue = newOb.ManagerID.ToString()},
+                            },
+                            AuditDateTime = DateTime.Now,
+                            ModelPKey = newOb.BIDbFvPID,
+                            TableName = "BI_DB_Fvp_Access"
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
                         return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request, ModelState));
                     }
-                    var newOb = new BI_DB_FvP_Access
-                    {
-                        FvPID = bI_DB_FvP_Access.FvPID,
-                        DB_ID = bI_DB_FvP_Access.DB_ID, 
-                        Active = bI_DB_FvP_Access.Active, 
-                        ManagerID = ParentID
-                    };
-                    db.BI_DB_FvP_Access.Add(newOb);
-                    await db.SaveChangesAsync();
-                    bI_DB_FvP_Access.BIDbFvPID = newOb.BIDbFvPID;
-
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        UserLogons = User.Identity.GetUserName(),
-                        AuditAction = "U",
-                        tableInfos = new List<TableInfo>
-                        {
-                            new TableInfo{Field_ColumName = "FvPID", NewValue = newOb.FvPID.ToString()},
-                            new TableInfo{Field_ColumName = "DB_ID", NewValue = newOb.DB_ID.ToString()},
-                            new TableInfo{Field_ColumName = "Active", NewValue = newOb.Active.ToString()},
-                            new TableInfo{Field_ColumName = "ManagerID", NewValue = newOb.ManagerID.ToString()},
-                        },
-                        AuditDateTime = DateTime.Now,
-                        ModelPKey = newOb.BIDbFvPID,
-                        TableName = "BI_DB_Fvp_Access"
-                    };
-
-                    new AuditLogRepository().AddAuditLogs(auditLog);
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request, ModelState));
                 }
             }
             return Json(new[] { bI_DB_FvP_Access }.ToDataSourceResult(request, ModelState));

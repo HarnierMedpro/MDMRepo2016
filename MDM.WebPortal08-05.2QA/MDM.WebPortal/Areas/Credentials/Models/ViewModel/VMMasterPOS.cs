@@ -67,6 +67,7 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
             LevelOfCares = new List<VMLevelOfCare>();
             Services = new List<VMMPService>();
             PosIDs = new List<VMZoomDB_POSID>();
+            Forms_Sents = new List<VMFormsDict>();
         }
     }
 }

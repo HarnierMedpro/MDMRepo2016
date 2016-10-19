@@ -54,10 +54,10 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                             ModelPKey = toStore.MasterPosLocID,
                             TableName = "MasterPOS_LevOfCare",
                             tableInfos = new List<TableInfo>
-                        {
-                            new TableInfo{Field_ColumName = "Lev_of_Care_LevOfCareID", NewValue = mpLevOfCare.Lev_of_Care_LevOfCareID.ToString()},
-                            new TableInfo{Field_ColumName = "MasterPOS_MasterPOSID", NewValue = ParentID.ToString()}
-                        }
+                            {
+                                new TableInfo{Field_ColumName = "Lev_of_Care_LevOfCareID", NewValue = mpLevOfCare.Lev_of_Care_LevOfCareID.ToString()},
+                                new TableInfo{Field_ColumName = "MasterPOS_MasterPOSID", NewValue = ParentID.ToString()}
+                            }
                         };
 
                         new AuditLogRepository().AddAuditLogs(auditLog);

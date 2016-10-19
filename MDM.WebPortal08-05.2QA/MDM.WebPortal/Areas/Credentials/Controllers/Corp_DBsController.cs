@@ -242,7 +242,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
         public ActionResult Read_DbsWithCorp([DataSourceRequest] DataSourceRequest request)
         {
-           var result = db.Corp_DBs.Include(c => c.CorporateMasterList).Include(d => d.DBList).Select(d => d.DBList).Distinct();
+           var result = db.Corp_DBs.Include(c => c.CorporateMasterList).Include(d => d.DBList).Select(d => d.DBList).Distinct().ToList();
             return Json(result.ToDataSourceResult(request, x => new VMDBList
             {
                 DB_ID = x.DB_ID,

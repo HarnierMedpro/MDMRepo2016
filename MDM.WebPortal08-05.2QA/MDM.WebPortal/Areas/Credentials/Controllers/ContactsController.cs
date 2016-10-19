@@ -66,7 +66,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 result = result.Except(currentCorpOwners);
             }
 
-            return Json(result.ToDataSourceResult(request, x => new VMContact
+            return Json(result.ToList().ToDataSourceResult(request, x => new VMContact
             {
                 ContactID = x.ContactID,
                 FName = x.FName,
@@ -110,7 +110,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             {
                 result = db.MasterPOS_Contact.Include(c => c.Contact).Include(p => p.MasterPOS).Where(p => p.MasterPOS_MasterPOSID == masterPOSID).Select(c => c.Contact).ToList();
             }
-            return Json(result.ToDataSourceResult(request, x => new VMPosContact
+            return Json(result.Where(x => x.active).ToDataSourceResult(request, x => new VMPosContact
             {
                 ContactID = x.ContactID,
                 FName = x.FName,

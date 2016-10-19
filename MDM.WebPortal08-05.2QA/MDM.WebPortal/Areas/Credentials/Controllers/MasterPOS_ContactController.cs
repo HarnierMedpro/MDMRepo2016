@@ -95,7 +95,9 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             {
                 try
                 {
-                    var toStore = Contacts.Select(x => new MasterPOS_Contact
+                    var currentContacts = db.MasterPOS_Contact.Where(x => x.MasterPOS_MasterPOSID == MasterPOSID).Select(x => x.ContactID).ToArray();
+                    var newCnt = Contacts.Except(currentContacts).ToList();
+                    var toStore = newCnt.Select(x => new MasterPOS_Contact
                     {
                         MasterPOS_MasterPOSID = MasterPOSID, 
                         ContactID = x

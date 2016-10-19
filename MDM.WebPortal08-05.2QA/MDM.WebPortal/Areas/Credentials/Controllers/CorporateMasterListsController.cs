@@ -53,21 +53,21 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         public ActionResult Read_CorpContacts([DataSourceRequest] DataSourceRequest request, int? corpID)
         {
             /*Obtener todos los contactos a nivel de corporacion excepto los de tipo Owner*/
-            var allCorpContacts =
-                db.ContactType_Contact.Include(cnt => cnt.Contact).Include(ty => ty.ContactType)
+            var allCorpContacts = db.ContactType_Contact.Include(cnt => cnt.Contact).Include(ty => ty.ContactType)
                                       .Where(ty => ty.ContactType.ContactLevel.Equals("corporation", StringComparison.InvariantCultureIgnoreCase) &&
                                              ty.ContactType.ContactType_Name.Equals("owner", StringComparison.InvariantCultureIgnoreCase) == false)
-                                             .Select(tv => tv.Contact).ToList();
+                                      .Select(tv => tv.Contact).ToList();
+
             var allCorpOwners = db.ContactType_Contact.Include(cnt => cnt.Contact).Include(ty => ty.ContactType)
                                       .Where(ty => ty.ContactType.ContactLevel.Equals("corporation", StringComparison.InvariantCultureIgnoreCase) &&
                                              ty.ContactType.ContactType_Name.Equals("owner", StringComparison.InvariantCultureIgnoreCase))
-                                             .Select(tv => tv.Contact).ToList();
+                                      .Select(tv => tv.Contact).ToList();
 
             var allCorpCntExceptOwners = allCorpContacts.Except(allCorpOwners).ToList();
 
             var contactsOfThisCorp = db.Corp_Owner.Include(corp => corp.CorporateMasterList).Include(cnt => cnt.Contact).Where(x => x.corpID == corpID).Select(cnt => cnt.Contact).ToList();
 
-            var result = allCorpContacts.Intersect(contactsOfThisCorp).ToList();
+            var result = allCorpContacts.Intersect(contactsOfThisCorp).Where(x => x.active).ToList();
             
             return Json(result.ToDataSourceResult(request, x => new VMCorpContact
             {
@@ -97,6 +97,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
             var result = from owner in ownersContacts
                 join corp in corpContacts on owner.ContactID equals corp.ContactID
+                where owner.active
                 select new VMContact
                 {
                     ContactID = corp.ContactID,
@@ -212,13 +213,18 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                                     error = error + " " + database.DB;
                                 }
                             }
-                            db.Corp_DBs.AddRange(corpDb);
-
                             if (error != "")
                             {
                                 CorporateMasterListHub.DoIfDBDuplicated(error + " " + "is/are already asociated with a Corporation.");
                             }
 
+                            if (!corpDb.Any())
+                            {
+                                ModelState.AddModelError("", "All Databases are taken. Please try again!");
+                                return Json(new[] { corpMasterList }.ToDataSourceResult(request, ModelState));
+                            }
+
+                            db.Corp_DBs.AddRange(corpDb);
                             await db.SaveChangesAsync();
 
                             if (corpOwner.Any())
@@ -231,10 +237,10 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                                     AuditAction = "I",
                                     ModelPKey = x.corpOwnerID,
                                     tableInfos = new List<TableInfo>
-                                {
-                                    new TableInfo{Field_ColumName = "corpID", NewValue = x.corpID.ToString()},
-                                    new TableInfo{Field_ColumName = "Contact_ContactID", NewValue = x.Contact_ContactID.ToString()},
-                                }
+                                    {
+                                        new TableInfo{Field_ColumName = "corpID", NewValue = x.corpID.ToString()},
+                                        new TableInfo{Field_ColumName = "Contact_ContactID", NewValue = x.Contact_ContactID.ToString()},
+                                    }
                                 }).ToList();
 
                                 auditLogs.AddRange(corpOwnerLog);

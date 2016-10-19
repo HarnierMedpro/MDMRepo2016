@@ -43,54 +43,54 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.Manager_Type.AnyAsync(x => x.Name.Equals(manager_Type.Name, StringComparison.CurrentCultureIgnoreCase) && x.ManagerTypeID != manager_Type.ManagerTypeID))
+                    try
                     {
-                        ModelState.AddModelError("","Duplicate Data. Please try again!");
-                        return Json(new[] {manager_Type}.ToDataSourceResult(request, ModelState));
-                    }
-                    //var storedInDb = new Manager_Type{ ManagerTypeID = manager_Type.ManagerTypeID, Name = manager_Type.Name, Active = manager_Type.Active };
-                    var storedInDb = await db.Manager_Type.FindAsync(manager_Type.ManagerTypeID);
-
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
-
-                    if (storedInDb.Name != manager_Type.Name)
-                    {
-                        tableColumnInfos.Add(new TableInfo
+                        if (await db.Manager_Type.AnyAsync(x => x.Name.Equals(manager_Type.Name, StringComparison.CurrentCultureIgnoreCase) && x.ManagerTypeID != manager_Type.ManagerTypeID))
                         {
-                            Field_ColumName = "Name",
-                            NewValue = manager_Type.Name,
-                            OldValue = storedInDb.Name
-                        });
-                        storedInDb.Name = manager_Type.Name;
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { manager_Type }.ToDataSourceResult(request, ModelState));
+                        }
+
+                        var storedInDb = await db.Manager_Type.FindAsync(manager_Type.ManagerTypeID);
+
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>();
+
+                        if (storedInDb.Name != manager_Type.Name)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Name", NewValue = manager_Type.Name, OldValue = storedInDb.Name });
+                            storedInDb.Name = manager_Type.Name;
+                        }
+                        if (storedInDb.Active != manager_Type.Active)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Active", NewValue = manager_Type.Active.ToString(), OldValue = storedInDb.Active.ToString() });
+                            storedInDb.Active = manager_Type.Active;
+                        }
+
+                        db.Manager_Type.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            AuditAction = "U",
+                            tableInfos = tableColumnInfos,
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            ModelPKey = storedInDb.ManagerTypeID,
+                            TableName = "Manager_Type"
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+                        dbTransaction.Commit();
                     }
-                    if (storedInDb.Active != manager_Type.Active)
+                    catch (Exception)
                     {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Active", NewValue = manager_Type.Active.ToString(), OldValue = storedInDb.Active.ToString()});
-                        storedInDb.Active = manager_Type.Active;
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { manager_Type }.ToDataSourceResult(request, ModelState));
                     }
-
-                    db.Manager_Type.Attach(storedInDb);
-                    db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        AuditAction = "U",
-                        tableInfos = tableColumnInfos,
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        ModelPKey = storedInDb.ManagerTypeID,
-                        TableName = "Manager_Type"
-                    };
-
-                    new AuditLogRepository().AddAuditLogs(auditLog);
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("","Something failed. Please try again!");
-                    return Json(new[] { manager_Type }.ToDataSourceResult(request, ModelState));
                 }
             }
             return Json(new[] { manager_Type }.ToDataSourceResult(request, ModelState));
@@ -101,38 +101,44 @@ namespace MDM.WebPortal.Areas.ManagerDBA.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.Manager_Type.AnyAsync(x => x.Name.Equals(manager_Type.Name, StringComparison.CurrentCultureIgnoreCase)))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
-                        return Json(new[] { manager_Type }.ToDataSourceResult(request, ModelState));
-                    }
-                    var storedInDb = new Manager_Type { Name = manager_Type.Name, Active = manager_Type.Active };
-                    db.Manager_Type.Add(storedInDb);
-                    await db.SaveChangesAsync();
-                    manager_Type.ManagerTypeID = storedInDb.ManagerTypeID;
+                        if (await db.Manager_Type.AnyAsync(x => x.Name.Equals(manager_Type.Name, StringComparison.CurrentCultureIgnoreCase)))
+                        {
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { manager_Type }.ToDataSourceResult(request, ModelState));
+                        }
+                        var storedInDb = new Manager_Type { Name = manager_Type.Name, Active = manager_Type.Active };
+                        db.Manager_Type.Add(storedInDb);
+                        await db.SaveChangesAsync();
+                        manager_Type.ManagerTypeID = storedInDb.ManagerTypeID;
 
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        AuditAction = "I",
-                        tableInfos = new List<TableInfo>
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            AuditAction = "I",
+                            tableInfos = new List<TableInfo>
                         {
                             new TableInfo{Field_ColumName = "Name", NewValue = storedInDb.Name },
                             new TableInfo{Field_ColumName = "Active", NewValue = storedInDb.Active.ToString() }
                         },
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        ModelPKey = storedInDb.ManagerTypeID,
-                        TableName = "Manager_Type"
-                    };
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            ModelPKey = storedInDb.ManagerTypeID,
+                            TableName = "Manager_Type"
+                        };
 
-                    new AuditLogRepository().AddAuditLogs(auditLog);
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("","Somthing fail. Please try again!");
-                    return Json(new[] { manager_Type }.ToDataSourceResult(request, ModelState));
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Somthing fail. Please try again!");
+                        return Json(new[] { manager_Type }.ToDataSourceResult(request, ModelState));
+                    }
                 }
             }
             return Json(new[] { manager_Type }.ToDataSourceResult(request, ModelState));

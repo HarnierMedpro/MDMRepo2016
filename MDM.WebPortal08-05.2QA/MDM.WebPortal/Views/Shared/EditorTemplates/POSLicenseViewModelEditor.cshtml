@@ -1,7 +1,7 @@
 ﻿@model MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMFACInfoData
-           @{
-               int pos = ViewBag.MasterPOS;
-           }
+@{
+    int pos = ViewBag.MasterPOS;
+}
 <div class="container-fluid">
     <div class="panel panel-primary">
         <div class="panel-heading text-uppercase"><i class="fa fa-info-circle"></i> license info
@@ -40,8 +40,6 @@
                             </dd>
                             <dt>
                                 @(Html.Kendo().DatePickerFor(x => x.LicEffectiveDate)
-                                      //.Name("LicEffectiveDate")
-                                      //.Name("effD_"+pos)
                                       .Max(DateTime.Today)
                                       .ParseFormats(new string[] {"MM/dd/yyyy"})
                                       //.Events(e => e.Change("startChange"))
@@ -58,8 +56,6 @@
                             </dd>
                             <dt>
                                 @(Html.Kendo().DatePickerFor(x => x.LicExpireDate)
-                                      //.Name("expD_"+pos)
-                                      //.Name("LicExpireDate")
                                       .Min(DateTime.Today)
                                       .ParseFormats(new string[] {"MM/dd/yyyy"})
                                       //.Events(e => e.Change("endChange"))
@@ -127,7 +123,7 @@
                             <dt>
                                 @(Html.Kendo().DatePicker()
                                       .Name("CLIA_EffectiveDate")
-                                      //.Value(DateTime.Today)
+                                      .Value(DateTime.Today)
                                       .Max(DateTime.Today)
                                       .ParseFormats(new string[] {"MM/dd/yyyy"})
                                       //.Events(e => e.Change("startChange"))
@@ -145,7 +141,7 @@
                             <dt>
                                 @(Html.Kendo().DatePicker()
                                       .Name("CLIA_ExpireDate")
-                                      //.Value(DateTime.Today)
+                                      .Value(DateTime.Today)
                                       .Min(DateTime.Today)
                                       .ParseFormats(new string[] {"MM/dd/yyyy"})
                                       //.Events(e => e.Change("endChange"))
@@ -166,6 +162,7 @@
                         @Html.EditorFor(model => model.Taxonomy, new {htmlAttributes = new {@class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;"}})
                     </dt>
                 </dl>
+                
             </fieldset>
 
         </div>
@@ -175,33 +172,4 @@
         </div>
         <br/>
     </div>
-
-
 </div>
-@*<script>
-    /*----------Selecting dates with Kendo Date Picker--------------------*/
-    function startChange() {
-        var endPicker = $("#LicExpireDate").data("kendoDateTimePicker"),
-            startDate = this.value();
-
-        if (startDate) {
-            startDate = new Date(startDate);
-            startDate.setDate(startDate.getDate() + 1);
-            endPicker.min(startDate);
-        }
-    }
-
-    function endChange() {
-        var startPicker = $("#LicEffectiveDate").data("kendoDateTimePicker"),
-            endDate = this.value();
-
-        if (endDate) {
-            endDate = new Date(endDate);
-            endDate.setDate(endDate.getDate() - 1);
-            startPicker.max(endDate);
-        }
-    }
-
-    /*----------Selecting dates with Kendo Date Picker--------------------*/
-</script>*@
- 

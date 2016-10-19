@@ -32,7 +32,8 @@ namespace MDM.WebPortal.Controllers.APP
 
         public ActionResult Read_DB([DataSourceRequest]DataSourceRequest request)
         {
-            return Json(db.DBLists.ToDataSourceResult(request, x => new VMDBList
+            var result = db.DBLists.ToList();
+            return Json(result.ToDataSourceResult(request, x => new VMDBList
             {
                 DB_ID = x.DB_ID,
                 DB = x.DB,

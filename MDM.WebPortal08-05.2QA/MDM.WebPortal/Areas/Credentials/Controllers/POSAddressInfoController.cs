@@ -210,12 +210,60 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         addressInfo.POSAddrID = toStore.POSAddrID;
                         addressInfo.MasterPOSID = ParentID;
 
-                        var masterPOS = db.MasterPOS.Find(ParentID);
-                        masterPOS.POSAddr_POSAddrID = toStore.POSAddrID;
+                        var masterPos = await db.MasterPOS.FindAsync(ParentID);
+                        var tableColumnInfo = new List<TableInfo>
+                        {
+                            new TableInfo
+                            {
+                                Field_ColumName = "POSAddr_POSAddrID",
+                                OldValue = masterPos.POSAddr_POSAddrID.ToString(),
+                                NewValue = toStore.POSAddrID.ToString()
+                            }
+                        };
+                        masterPos.POSAddr_POSAddrID = toStore.POSAddrID;
 
-                        db.MasterPOS.Attach(masterPOS);
-                        db.Entry(masterPOS).State = EntityState.Modified;
+                        db.MasterPOS.Attach(masterPos);
+                        db.Entry(masterPos).State = EntityState.Modified;
                         await db.SaveChangesAsync();
+
+                        var auditLogs = new List<AuditToStore>
+                        {
+                            new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                TableName = "POSAddrs",
+                                AuditAction = "I",
+                                ModelPKey = toStore.POSAddrID,
+                                tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "DBA_Name", NewValue = toStore.DBA_Name},
+                                    new TableInfo{Field_ColumName = "Notes", NewValue = toStore.Notes},
+                                    new TableInfo{Field_ColumName = "Payment_Addr1", NewValue = toStore.Payment_Addr1},
+                                    new TableInfo{Field_ColumName = "Payment_Addr2", NewValue = toStore.Payment_Addr2},
+                                    new TableInfo{Field_ColumName = "Payment_City", NewValue = toStore.Payment_City},
+                                    new TableInfo{Field_ColumName = "Payment_Zip", NewValue = toStore.Payment_Zip},
+                                    new TableInfo{Field_ColumName = "Payment_state", NewValue = toStore.Payment_state},
+                                    new TableInfo{Field_ColumName = "Physical_Addr1", NewValue = toStore.Physical_Addr1},
+                                    new TableInfo{Field_ColumName = "Physical_Addr2", NewValue = toStore.Physical_Addr2},
+                                    new TableInfo{Field_ColumName = "Physical_City", NewValue = toStore.Physical_City},
+                                    new TableInfo{Field_ColumName = "Physical_Zip", NewValue = toStore.Physical_Zip},
+                                    new TableInfo{Field_ColumName = "Physical_state", NewValue = toStore.Physical_state},
+                                    new TableInfo{Field_ColumName = "Time_Zone", NewValue = toStore.Time_Zone}
+                                }
+                            },
+                            new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                TableName = "MasterPOS",
+                                AuditAction = "U",
+                                ModelPKey = masterPos.MasterPOSID,
+                                tableInfos = tableColumnInfo
+                            }
+                        };
+
+                        new AuditLogRepository().SaveLogs(auditLogs);
 
                         dbtTransaction.Commit();
                     }
@@ -236,99 +284,106 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    var storeInDb = await db.POSAddrs.FindAsync(addressInfo.POSAddrID);
+                    try
+                    {
+                        var storeInDb = await db.POSAddrs.FindAsync(addressInfo.POSAddrID);
 
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>();
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>();
 
-                    if (storeInDb.Payment_Addr1 != addressInfo.Payment_Addr1)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Payment_Addr1", OldValue = storeInDb.Payment_Addr1, NewValue = addressInfo.Payment_Addr1 });
-                        storeInDb.Payment_Addr1 = addressInfo.Payment_Addr1;
-                    }
-                    if (storeInDb.Payment_Addr2 != addressInfo.Payment_Addr2)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Payment_Addr2", OldValue = storeInDb.Payment_Addr2, NewValue = addressInfo.Payment_Addr2 });
-                        storeInDb.Payment_Addr2 = addressInfo.Payment_Addr2;
-                    }
-                    if (storeInDb.Payment_City != addressInfo.Payment_City)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Payment_City", OldValue = storeInDb.Payment_City, NewValue = addressInfo.Payment_City });
-                        storeInDb.Payment_City = addressInfo.Payment_City;
-                    }
-                    if (storeInDb.Payment_state != addressInfo.Payment_state)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Payment_state", OldValue = storeInDb.Payment_state, NewValue = addressInfo.Payment_state });
-                        storeInDb.Payment_state = addressInfo.Payment_state;
-                    }
-                    if (storeInDb.Payment_Zip != addressInfo.Payment_Zip)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Payment_Zip", OldValue = storeInDb.Payment_Zip, NewValue = addressInfo.Payment_Zip });
-                        storeInDb.Payment_Zip = addressInfo.Payment_Zip;
-                    }
-                    if (storeInDb.Physical_Addr1 != addressInfo.Physical_Addr1)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Physical_Addr1", OldValue = storeInDb.Physical_Addr1, NewValue = addressInfo.Physical_Addr1 });
-                        storeInDb.Physical_Addr1 = addressInfo.Physical_Addr1;
-                    }
-                    if (storeInDb.Physical_Addr2 != addressInfo.Physical_Addr2)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Physical_Addr2", OldValue = storeInDb.Physical_Addr2, NewValue = addressInfo.Physical_Addr2 });
-                        storeInDb.Physical_Addr2 = addressInfo.Physical_Addr2;
-                    }
-                    if (storeInDb.Physical_City != addressInfo.Physical_City)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Physical_City", OldValue = storeInDb.Physical_City, NewValue = addressInfo.Physical_City });
-                        storeInDb.Physical_City = addressInfo.Physical_City;
-                    }
-                    if (storeInDb.Physical_state != addressInfo.Physical_state)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Physical_state", OldValue = storeInDb.Physical_state, NewValue = addressInfo.Physical_state });
-                        storeInDb.Physical_state = addressInfo.Physical_state;
-                    }
-                    if (storeInDb.Physical_Zip != addressInfo.Physical_Zip)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Physical_Zip", OldValue = storeInDb.Physical_Zip, NewValue = addressInfo.Physical_Zip });
-                        storeInDb.Physical_Zip = addressInfo.Physical_Zip;
-                    }
-                    if (storeInDb.Time_Zone != addressInfo.Time_Zone)
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Time_Zone", OldValue = storeInDb.Time_Zone, NewValue = addressInfo.Time_Zone });
-                        storeInDb.Time_Zone = addressInfo.Time_Zone;
-                    }
-                    if (!storeInDb.Notes.Equals(addressInfo.Notes, StringComparison.CurrentCulture))
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "Notes", OldValue = storeInDb.Notes, NewValue = addressInfo.Notes });
-                        storeInDb.Notes = addressInfo.Notes;
-                    }
-                    if (!storeInDb.DBA_Name.Equals(addressInfo.DBA_Name, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        tableColumnInfos.Add(new TableInfo { Field_ColumName = "DBA_Name", OldValue = storeInDb.DBA_Name, NewValue = addressInfo.DBA_Name });
-                        storeInDb.DBA_Name = addressInfo.DBA_Name;
-                    }
+                        if (storeInDb.Payment_Addr1 != addressInfo.Payment_Addr1)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Payment_Addr1", OldValue = storeInDb.Payment_Addr1, NewValue = addressInfo.Payment_Addr1 });
+                            storeInDb.Payment_Addr1 = addressInfo.Payment_Addr1;
+                        }
+                        if (storeInDb.Payment_Addr2 != addressInfo.Payment_Addr2)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Payment_Addr2", OldValue = storeInDb.Payment_Addr2, NewValue = addressInfo.Payment_Addr2 });
+                            storeInDb.Payment_Addr2 = addressInfo.Payment_Addr2;
+                        }
+                        if (storeInDb.Payment_City != addressInfo.Payment_City)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Payment_City", OldValue = storeInDb.Payment_City, NewValue = addressInfo.Payment_City });
+                            storeInDb.Payment_City = addressInfo.Payment_City;
+                        }
+                        if (storeInDb.Payment_state != addressInfo.Payment_state)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Payment_state", OldValue = storeInDb.Payment_state, NewValue = addressInfo.Payment_state });
+                            storeInDb.Payment_state = addressInfo.Payment_state;
+                        }
+                        if (storeInDb.Payment_Zip != addressInfo.Payment_Zip)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Payment_Zip", OldValue = storeInDb.Payment_Zip, NewValue = addressInfo.Payment_Zip });
+                            storeInDb.Payment_Zip = addressInfo.Payment_Zip;
+                        }
+                        if (storeInDb.Physical_Addr1 != addressInfo.Physical_Addr1)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Physical_Addr1", OldValue = storeInDb.Physical_Addr1, NewValue = addressInfo.Physical_Addr1 });
+                            storeInDb.Physical_Addr1 = addressInfo.Physical_Addr1;
+                        }
+                        if (storeInDb.Physical_Addr2 != addressInfo.Physical_Addr2)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Physical_Addr2", OldValue = storeInDb.Physical_Addr2, NewValue = addressInfo.Physical_Addr2 });
+                            storeInDb.Physical_Addr2 = addressInfo.Physical_Addr2;
+                        }
+                        if (storeInDb.Physical_City != addressInfo.Physical_City)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Physical_City", OldValue = storeInDb.Physical_City, NewValue = addressInfo.Physical_City });
+                            storeInDb.Physical_City = addressInfo.Physical_City;
+                        }
+                        if (storeInDb.Physical_state != addressInfo.Physical_state)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Physical_state", OldValue = storeInDb.Physical_state, NewValue = addressInfo.Physical_state });
+                            storeInDb.Physical_state = addressInfo.Physical_state;
+                        }
+                        if (storeInDb.Physical_Zip != addressInfo.Physical_Zip)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Physical_Zip", OldValue = storeInDb.Physical_Zip, NewValue = addressInfo.Physical_Zip });
+                            storeInDb.Physical_Zip = addressInfo.Physical_Zip;
+                        }
+                        if (storeInDb.Time_Zone != addressInfo.Time_Zone)
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Time_Zone", OldValue = storeInDb.Time_Zone, NewValue = addressInfo.Time_Zone });
+                            storeInDb.Time_Zone = addressInfo.Time_Zone;
+                        }
+                        if (!storeInDb.Notes.Equals(addressInfo.Notes, StringComparison.CurrentCulture))
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "Notes", OldValue = storeInDb.Notes, NewValue = addressInfo.Notes });
+                            storeInDb.Notes = addressInfo.Notes;
+                        }
+                        if (!storeInDb.DBA_Name.Equals(addressInfo.DBA_Name, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            tableColumnInfos.Add(new TableInfo { Field_ColumName = "DBA_Name", OldValue = storeInDb.DBA_Name, NewValue = addressInfo.DBA_Name });
+                            storeInDb.DBA_Name = addressInfo.DBA_Name;
+                        }
 
-                    db.POSAddrs.Attach(storeInDb);
-                    db.Entry(storeInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
+                        db.POSAddrs.Attach(storeInDb);
+                        db.Entry(storeInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
 
-                    AuditToStore auditLog = new AuditToStore
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditDateTime = DateTime.Now,
+                            TableName = "POSAddrs",
+                            AuditAction = "U",
+                            ModelPKey = storeInDb.POSAddrID,
+                            tableInfos = tableColumnInfos
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
                     {
-                        UserLogons = User.Identity.GetUserName(),
-                        AuditDateTime = DateTime.Now,
-                        TableName = "POSAddrs",
-                        AuditAction = "U",
-                        ModelPKey = storeInDb.POSAddrID,
-                        tableInfos = tableColumnInfos
-                    };
-
-                    new AuditLogRepository().AddAuditLogs(auditLog);
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { addressInfo }.ToDataSourceResult(request, ModelState));
+                    }
                 }
-                catch (Exception)
-                {
-                   ModelState.AddModelError("","Something failed. Please try again!");
-                   return Json(new[] { addressInfo }.ToDataSourceResult(request, ModelState));
-                }
+                
             }
             return Json(new[] { addressInfo }.ToDataSourceResult(request, ModelState));
         }

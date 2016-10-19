@@ -41,43 +41,50 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.MPServices.AnyAsync(x => x.ServName.Equals(mPService.ServName, StringComparison.InvariantCultureIgnoreCase)))
+                    try
                     {
-                        ModelState.AddModelError("","Duplicate Data. Please try again!");
-                        return Json(new[] {mPService}.ToDataSourceResult(request, ModelState));
-                    }
-
-                    var toStore = new MPService
-                    {
-                        ServName = mPService.ServName
-                    };
-
-                    db.MPServices.Add(toStore);
-                    await db.SaveChangesAsync();
-                    mPService.MPServID = toStore.MPServID;
-
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        ModelPKey = toStore.MPServID,
-                        TableName = "MPServices",
-                        AuditAction = "I",
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        tableInfos = new List<TableInfo>
+                        if (await db.MPServices.AnyAsync(x => x.ServName.Equals(mPService.ServName, StringComparison.InvariantCultureIgnoreCase)))
                         {
-                            new TableInfo{Field_ColumName = "ServName", NewValue = toStore.ServName}
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { mPService }.ToDataSourceResult(request, ModelState));
                         }
-                    };
 
-                   new AuditLogRepository().AddAuditLogs(auditLog);
+                        var toStore = new MPService
+                        {
+                            ServName = mPService.ServName
+                        };
+
+                        db.MPServices.Add(toStore);
+                        await db.SaveChangesAsync();
+                        mPService.MPServID = toStore.MPServID;
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            ModelPKey = toStore.MPServID,
+                            TableName = "MPServices",
+                            AuditAction = "I",
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            tableInfos = new List<TableInfo>
+                            {
+                                new TableInfo{Field_ColumName = "ServName", NewValue = toStore.ServName}
+                            }
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { mPService }.ToDataSourceResult(request, ModelState));
+                    }
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { mPService }.ToDataSourceResult(request, ModelState));
-                }
+               
             }
             return Json(new[] { mPService }.ToDataSourceResult(request, ModelState));
         }
@@ -87,17 +94,19 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
-                    if (await db.MPServices.AnyAsync(x => x.ServName.Equals(mPService.ServName, StringComparison.InvariantCultureIgnoreCase) && x.MPServID != mPService.MPServID))
+                    try
                     {
-                        ModelState.AddModelError("", "Duplicate Data. Please try again!");
-                        return Json(new[] { mPService }.ToDataSourceResult(request, ModelState));
-                    }
-                    /*If this function is called is because the user change the only property that he/she can change: it's service name*/
-                    var storedInDb = await db.MPServices.FindAsync(mPService.MPServID);
+                        if (await db.MPServices.AnyAsync(x => x.ServName.Equals(mPService.ServName, StringComparison.InvariantCultureIgnoreCase) && x.MPServID != mPService.MPServID))
+                        {
+                            ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                            return Json(new[] { mPService }.ToDataSourceResult(request, ModelState));
+                        }
+                        /*If this function is called is because the user change the only property that he/she can change: it's service name*/
+                        var storedInDb = await db.MPServices.FindAsync(mPService.MPServID);
 
-                    List<TableInfo> tableColumnInfos = new List<TableInfo>
+                        List<TableInfo> tableColumnInfos = new List<TableInfo>
                     {
                         new TableInfo
                         {
@@ -107,27 +116,31 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         }
                     };
 
-                    storedInDb.ServName = mPService.ServName;
-                    db.MPServices.Attach(storedInDb);
-                    db.Entry(storedInDb).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
+                        storedInDb.ServName = mPService.ServName;
+                        db.MPServices.Attach(storedInDb);
+                        db.Entry(storedInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
 
-                    AuditToStore auditLog = new AuditToStore
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            TableName = "MPServices",
+                            AuditAction = "U",
+                            AuditDateTime = DateTime.Now,
+                            UserLogons = User.Identity.GetUserName(),
+                            ModelPKey = mPService.MPServID,
+                            tableInfos = tableColumnInfos
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
                     {
-                        TableName = "MPServices",
-                        AuditAction = "U",
-                        AuditDateTime = DateTime.Now,
-                        UserLogons = User.Identity.GetUserName(),
-                        ModelPKey = mPService.MPServID,
-                        tableInfos = tableColumnInfos
-                    };
-
-                    new AuditLogRepository().AddAuditLogs(auditLog);
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Something failed. Please try again!");
-                    return Json(new[] { mPService }.ToDataSourceResult(request, ModelState));
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { mPService }.ToDataSourceResult(request, ModelState));
+                    }
                 }
             }
             return Json(new[] { mPService }.ToDataSourceResult(request, ModelState));

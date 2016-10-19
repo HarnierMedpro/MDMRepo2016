@@ -153,8 +153,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
                 db.Corp_Owner.AddRange(toStore);
                 await db.SaveChangesAsync();
-
-                var url = Request.RawUrl;
+               
                 var auditLog = toStore.Select(x => new AuditToStore
                 {
                     UserLogons = User.Identity.GetUserName(),
@@ -406,18 +405,18 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         }
 
         public async Task<ActionResult> Update_CorpOwner([DataSourceRequest] DataSourceRequest request,
-             [Bind(Include = "ContactID,FName,LName,Email,PhoneNumber,active")] VMContact contact, int ParentID)
+             [Bind(Include = "ContactID,FName,LName,Email,PhoneNumber,active")] VMContact contact, int corpID)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (await db.CorporateMasterLists.FindAsync(ParentID) == null)
+                    if (await db.CorporateMasterLists.FindAsync(corpID) == null)
                     {
                         ModelState.AddModelError("", "You are trying to edit the Owner Info of a Corporation that does not exist anymore. Please try again!");
                         return Json(new[] { contact }.ToDataSourceResult(request, ModelState));
                     }
-                    if (await db.Contacts.AnyAsync(x => x.Email.Equals(contact.Email, StringComparison.InvariantCultureIgnoreCase)))
+                    if (await db.Contacts.AnyAsync(x => x.Email.Equals(contact.Email, StringComparison.InvariantCultureIgnoreCase) && x.ContactID != contact.ContactID))
                     {
                         ModelState.AddModelError("", "Duplicate Data. Please try again!");
                         return Json(new[] { contact }.ToDataSourceResult(request, ModelState));
