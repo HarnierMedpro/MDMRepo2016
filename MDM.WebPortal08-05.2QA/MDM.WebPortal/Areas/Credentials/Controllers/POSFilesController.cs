@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
@@ -59,7 +60,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         }
 
         public async Task<ActionResult> Upload_File([DataSourceRequest] DataSourceRequest request,
-            HttpPostedFileBase files, [Bind(Include = "FileID, MasterPOSID, FileTypeID, Description")] VMPOSFile posFile, int ParentID)
+            HttpPostedFileBase files, [Bind(Include = "FileID, MasterPOSID, FileTypeID, Description")] VMPOSFile posFile, int? ParentID)
         {
             if (ModelState.IsValid)
             {
@@ -135,7 +136,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
         public ActionResult Read_POSFiles([DataSourceRequest] DataSourceRequest request, int? MasterPOSID)
         {
-            var result = db.MasterFiles.OrderBy(x => x.FileName).ToList();
+            var result = db.MasterFiles.Where(x => x.Active).OrderBy(x => x.FileName).ToList();
             if (MasterPOSID != null)
             {
                 result = result.Where(x => x.MasterPOS_MasterPOSID == MasterPOSID.Value).ToList();
@@ -150,7 +151,6 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 FileName = x.FileName
             }), JsonRequestBehavior.AllowGet);
         }
-
         
         public async Task<ActionResult> Index(int? locationPOSID)
         {
@@ -169,7 +169,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             /*Se pasan los Tipos de los ficheros que estan almacenados en la base de datos*/
             ViewBag.FileTypeID = new SelectList(db.FileTypeIs.OrderBy(x => x.FileType_Name).Where(x => x.FileLevel.Equals("pos",StringComparison.InvariantCultureIgnoreCase)), "FileTypeID", "FileType_Name");
 
-            var filesOfThisPos = currentLocationPos.MasterFiles.OrderBy(x => x.Description).Where(x => x.FileTypeI.FileLevel.Equals("pos", StringComparison.InvariantCultureIgnoreCase));
+            var filesOfThisPos = currentLocationPos.MasterFiles.OrderBy(x => x.Description).Where(x => x.FileTypeI.FileLevel.Equals("pos", StringComparison.InvariantCultureIgnoreCase) && x.Active);
             return View(filesOfThisPos.ToList());
         }
 
@@ -199,7 +199,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             }
             /*For convenience we go to upload the corporation's files to the first MasterPOS related with this corporation*/
             var firstMasterPos = corpMasterPos.First().First();
-            var filesOfThisCorp = firstMasterPos.MasterFiles.OrderBy(x => x.Description).Where(x => x.FileTypeI.FileLevel.Equals("corporation", StringComparison.InvariantCultureIgnoreCase));
+            var filesOfThisCorp = firstMasterPos.MasterFiles.OrderBy(x => x.Description).Where(x => x.FileTypeI.FileLevel.Equals("corporation", StringComparison.InvariantCultureIgnoreCase) && x.Active);
             ViewBag.MasterPOS = firstMasterPos.MasterPOSID;
             return View(filesOfThisCorp.ToList());
 
@@ -249,7 +249,8 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                             FileExtension = fileExtension,
                             FileName = primaryKey + fileExtension,
                             ServerLocation = ServerLocation,
-                            UploadTime = DateTime.Now
+                            UploadTime = DateTime.Now,
+                            Active = true
                         };
                         db.MasterFiles.Add(toStore);
                         await db.SaveChangesAsync();
@@ -275,8 +276,8 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         };
                         new AuditLogRepository().InsertLogs(auditLog, db);
 
-                        //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MMDFiles", "Medpro123!", "MEDPROBILL");
-                        IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
+                        IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MMDFiles", "Medpro123!", "MEDPROBILL");
+                        //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
                         WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
 
                         wic = wi.Impersonate();
@@ -336,7 +337,8 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                             FileExtension = fileExtension,
                             FileName = primaryKey + fileExtension,
                             ServerLocation = ServerLocation,
-                            UploadTime = DateTime.Now
+                            UploadTime = DateTime.Now,
+                            Active = true
                         };
                         db.MasterFiles.Add(toStore);
                         await db.SaveChangesAsync();
@@ -362,8 +364,8 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         };
                         new AuditLogRepository().InsertLogs(auditLog,db);
 
-                        //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MMDFiles", "Medpro123!", "MEDPROBILL");
-                        IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
+                        IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MMDFiles", "Medpro123!", "MEDPROBILL");
+                        //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
                         WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
 
                         wic = wi.Impersonate();
@@ -545,10 +547,150 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         //    }
         //}
 
+        public async Task<ActionResult> DisablePosFile(int? FileID)
+        {
+            if (FileID == null)
+            {
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+            }
+            var file = await db.MasterFiles.FindAsync(FileID);
+            if (file == null)
+            {
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+            }
+            using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    file.Active = false;
+                    db.MasterFiles.Attach(file);
+                    db.Entry(file).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        UserLogons = User.Identity.GetUserName(),
+                        AuditDateTime = DateTime.Now,
+                        TableName = "MasterFiles",
+                        AuditAction = "U",
+                        ModelPKey = file.FileID,
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo{Field_ColumName = "Active", OldValue = true.ToString(), NewValue = false.ToString()}
+                        }
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
+
+                    dbTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbTransaction.Rollback();
+                    TempData["Error"] = "Something failed. Please try again!";
+                    return RedirectToAction("Index_MasterPOS", "MasterPOS", new {area = "Credentials"});
+                }
+            }
+            return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
+        }
+
+        public async Task<ActionResult> DisableCorpFile(int? FileID)
+        {
+            if (FileID == null)
+            {
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+            }
+            var file = await db.MasterFiles.FindAsync(FileID);
+            if (file == null)
+            {
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+            }
+            using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    file.Active = false;
+                    db.MasterFiles.Attach(file);
+                    db.Entry(file).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        UserLogons = User.Identity.GetUserName(),
+                        AuditDateTime = DateTime.Now,
+                        TableName = "MasterFiles",
+                        AuditAction = "U",
+                        ModelPKey = file.FileID,
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo{Field_ColumName = "Active", OldValue = true.ToString(), NewValue = false.ToString()}
+                        }
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
+
+                    dbTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbTransaction.Rollback();
+                    TempData["Error"] = "Something failed. Please try again!";
+                    return RedirectToAction("Index", "CorporateMasterLists", new { area = "Credentials" });
+                }
+            }
+            return RedirectToAction("Index", "CorporateMasterLists", new { area = "Credentials" });
+        }
+
+        public async Task<ActionResult> DisableFiles(int? FileID)
+        {
+            if (FileID == null)
+            {
+                return Json("You need to choose a file.");
+            }
+            var file = await db.MasterFiles.FindAsync(FileID);
+            if (file == null)
+            {
+                return Json("This file is no longer exist in our system.");
+            }
+            using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    file.Active = false;
+                    db.MasterFiles.Attach(file);
+                    db.Entry(file).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        UserLogons = User.Identity.GetUserName(),
+                        AuditDateTime = DateTime.Now,
+                        TableName = "MasterFiles",
+                        AuditAction = "U",
+                        ModelPKey = file.FileID,
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo{Field_ColumName = "Active", OldValue = true.ToString(), NewValue = false.ToString()}
+                        }
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
+
+                    dbTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbTransaction.Rollback();
+                    return Json("Something failed. Please try again!");
+                }
+            }
+            return Json("File Inactive");
+        } 
 
         public ActionResult Download(string ImageName)
         {
-            IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
+            //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
+            IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MMDFiles", "Medpro123!", "MEDPROBILL");
 
             WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
             WindowsImpersonationContext ctx = null;
@@ -570,6 +712,50 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     ctx.Undo();
                 }
             }
+        }
+
+        [HttpPost]
+        public ActionResult Upload()
+        {
+            string display = Request.Files.Count.ToString();
+            try
+            {
+                //foreach (string file in Request.Files)
+                //{
+                //    var fileContent = Request.Files[file];
+                //    if (fileContent != null && fileContent.ContentLength > 0)
+                //    {
+                //        // get a stream
+                //        var stream = fileContent.InputStream;
+                //        // and optionally write the file to disk
+                //        var fileName = Path.GetFileName(file);
+                //        var physicalPath = Path.Combine(ServerLocation, fileName);
+                //        fileContent.SaveAs(physicalPath);
+
+                //    }
+                //}
+
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    HttpPostedFileBase file = Request.Files[i]; //Uploaded file
+                    //Use the following properties to get file's name, size and MIMEType
+                    int fileSize = file.ContentLength;
+                    string fileName = file.FileName;
+                    string mimeType = file.ContentType;
+                    System.IO.Stream fileContent = file.InputStream;
+                    //To save file, use SaveAs method
+                    var physicalPath = Path.Combine(ServerLocation, fileName);
+                    file.SaveAs(physicalPath); //File will be saved in application root
+
+                }
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json("Upload failed");
+            }
+
+            return Json(display);
         }
 
         protected override void Dispose(bool disposing)

@@ -237,11 +237,6 @@
     <EntitySet Name="FileTypeIs" EntityType="MedProDBEntities.FileTypeI" />
     <EntitySet Name="Forms_sent" EntityType="MedProDBEntities.Forms_sent" />
     <EntitySet Name="FormsDicts" EntityType="MedProDBEntities.FormsDict" />
-    <EntitySet Name="MasterFiles" EntityType="MedProDBEntities.MasterFile" />
-    <AssociationSet Name="FK_POSFiles_FileTypeI" Association="MedProDBEntities.FK_POSFiles_FileTypeI">
-      <End Role="FileTypeI" EntitySet="FileTypeIs" />
-      <End Role="MasterFile" EntitySet="MasterFiles" />
-    </AssociationSet>
     <AssociationSet Name="FK__Forms_sen__Forms__0371755F" Association="MedProDBEntities.FK__Forms_sen__Forms__0371755F">
       <End Role="FormsDict" EntitySet="FormsDicts" />
       <End Role="Forms_sent" EntitySet="Forms_sent" />
@@ -249,10 +244,6 @@
     <AssociationSet Name="FK__Forms_sen__Maste__778AC167" Association="MedProDBEntities.FK__Forms_sen__Maste__778AC167">
       <End Role="MasterPOS" EntitySet="MasterPOS" />
       <End Role="Forms_sent" EntitySet="Forms_sent" />
-    </AssociationSet>
-    <AssociationSet Name="FK__MasterFil__Maste__7C4F7684" Association="MedProDBEntities.FK__MasterFil__Maste__7C4F7684">
-      <End Role="MasterPOS" EntitySet="MasterPOS" />
-      <End Role="MasterFile" EntitySet="MasterFiles" />
     </AssociationSet>
     <EntitySet Name="Contacts" EntityType="MedProDBEntities.Contact" />
     <EntitySet Name="ContactTypes" EntityType="MedProDBEntities.ContactType" />
@@ -314,6 +305,15 @@
     <AssociationSet Name="FK_Corp_Owner_CorporateMasterList" Association="MedProDBEntities.FK_Corp_Owner_CorporateMasterList">
       <End Role="CorporateMasterList" EntitySet="CorporateMasterLists" />
       <End Role="Corp_Owner" EntitySet="Corp_Owner" />
+    </AssociationSet>
+    <EntitySet Name="MasterFiles" EntityType="MedProDBEntities.MasterFile" />
+    <AssociationSet Name="FK_POSFiles_FileTypeI" Association="MedProDBEntities.FK_POSFiles_FileTypeI">
+      <End Role="FileTypeI" EntitySet="FileTypeIs" />
+      <End Role="MasterFile" EntitySet="MasterFiles" />
+    </AssociationSet>
+    <AssociationSet Name="Constr_MasterFiles" Association="MedProDBEntities.Constr_MasterFiles">
+      <End Role="MasterPOS" EntitySet="MasterPOS" />
+      <End Role="MasterFile" EntitySet="MasterFiles" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="ACCategory">
@@ -475,12 +475,12 @@
     <NavigationProperty Name="FACInfo" Relationship="MedProDBEntities.FK__MasterPOS__FACIn__45F365D3" FromRole="MasterPOS" ToRole="FACInfo" />
     <NavigationProperty Name="PHYGroup" Relationship="MedProDBEntities.FK__MasterPOS__PHYGr__4316F928" FromRole="MasterPOS" ToRole="PHYGroup" />
     <NavigationProperty Name="Forms_sent" Relationship="MedProDBEntities.FK__Forms_sen__Maste__778AC167" FromRole="MasterPOS" ToRole="Forms_sent" />
-    <NavigationProperty Name="MasterFiles" Relationship="MedProDBEntities.FK__MasterFil__Maste__7C4F7684" FromRole="MasterPOS" ToRole="MasterFile" />
     <NavigationProperty Name="MasterPOS_Contact" Relationship="MedProDBEntities.Relation_104" FromRole="MasterPOS" ToRole="MasterPOS_Contact" />
     <NavigationProperty Name="ZoomDB_POSID_grp" Relationship="MedProDBEntities.FK_MDM_POS_Name_DBPOS_grp_MDM_POS_ListName" FromRole="MasterPOS" ToRole="ZoomDB_POSID_grp" />
     <NavigationProperty Name="Provider" Relationship="MedProDBEntities.ConstMasterPOS6" FromRole="MasterPOS" ToRole="Provider" />
     <NavigationProperty Name="InfoData" Relationship="MedProDBEntities.ConstMasterPOS2" FromRole="MasterPOS" ToRole="InfoData" />
     <NavigationProperty Name="POSExtraData" Relationship="MedProDBEntities.FK__MasterPOS__POSEx__178D7CA5" FromRole="MasterPOS" ToRole="POSExtraData" />
+    <NavigationProperty Name="MasterFiles" Relationship="MedProDBEntities.Constr_MasterFiles" FromRole="MasterPOS" ToRole="MasterFile" />
   </EntityType>
   <Association Name="FK__MasterPOS__DBLis__46E78A0C">
     <End Type="MedProDBEntities.DBList" Role="DBList" Multiplicity="1" />
@@ -725,33 +725,6 @@
     <Property Name="FormName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Forms_sent" Relationship="MedProDBEntities.FK__Forms_sen__Forms__0371755F" FromRole="FormsDict" ToRole="Forms_sent" />
   </EntityType>
-  <EntityType Name="MasterFile">
-    <Key>
-      <PropertyRef Name="FileID" />
-    </Key>
-    <Property Name="FileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ServerLocation" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="FileName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="FileExtension" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="UploadTime" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="FileTypeID" Type="Int32" Nullable="false" />
-    <Property Name="MasterPOS_MasterPOSID" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="FileTypeI" Relationship="MedProDBEntities.FK_POSFiles_FileTypeI" FromRole="MasterFile" ToRole="FileTypeI" />
-    <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.FK__MasterFil__Maste__7C4F7684" FromRole="MasterFile" ToRole="MasterPOS" />
-  </EntityType>
-  <Association Name="FK_POSFiles_FileTypeI">
-    <End Type="MedProDBEntities.FileTypeI" Role="FileTypeI" Multiplicity="1" />
-    <End Type="MedProDBEntities.MasterFile" Role="MasterFile" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="FileTypeI">
-        <PropertyRef Name="FileTypeID" />
-      </Principal>
-      <Dependent Role="MasterFile">
-        <PropertyRef Name="FileTypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK__Forms_sen__Forms__0371755F">
     <End Type="MedProDBEntities.FormsDict" Role="FormsDict" Multiplicity="1" />
     <End Type="MedProDBEntities.Forms_sent" Role="Forms_sent" Multiplicity="*" />
@@ -772,18 +745,6 @@
         <PropertyRef Name="MasterPOSID" />
       </Principal>
       <Dependent Role="Forms_sent">
-        <PropertyRef Name="MasterPOS_MasterPOSID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__MasterFil__Maste__7C4F7684">
-    <End Type="MedProDBEntities.MasterPOS" Role="MasterPOS" Multiplicity="1" />
-    <End Type="MedProDBEntities.MasterFile" Role="MasterFile" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="MasterPOS">
-        <PropertyRef Name="MasterPOSID" />
-      </Principal>
-      <Dependent Role="MasterFile">
         <PropertyRef Name="MasterPOS_MasterPOSID" />
       </Dependent>
     </ReferentialConstraint>
@@ -1118,6 +1079,46 @@
       </Principal>
       <Dependent Role="Corp_Owner">
         <PropertyRef Name="corpID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="MasterFile">
+    <Key>
+      <PropertyRef Name="FileID" />
+    </Key>
+    <Property Name="FileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ServerLocation" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FileName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FileExtension" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UploadTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="FileTypeID" Type="Int32" Nullable="false" />
+    <Property Name="MasterPOS_MasterPOSID" Type="Int32" Nullable="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="FileTypeI" Relationship="MedProDBEntities.FK_POSFiles_FileTypeI" FromRole="MasterFile" ToRole="FileTypeI" />
+    <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.Constr_MasterFiles" FromRole="MasterFile" ToRole="MasterPOS" />
+  </EntityType>
+  <Association Name="FK_POSFiles_FileTypeI">
+    <End Type="MedProDBEntities.FileTypeI" Role="FileTypeI" Multiplicity="1" />
+    <End Type="MedProDBEntities.MasterFile" Role="MasterFile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileTypeI">
+        <PropertyRef Name="FileTypeID" />
+      </Principal>
+      <Dependent Role="MasterFile">
+        <PropertyRef Name="FileTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Constr_MasterFiles">
+    <End Type="MedProDBEntities.MasterPOS" Role="MasterPOS" Multiplicity="1" />
+    <End Type="MedProDBEntities.MasterFile" Role="MasterFile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MasterPOS">
+        <PropertyRef Name="MasterPOSID" />
+      </Principal>
+      <Dependent Role="MasterFile">
+        <PropertyRef Name="MasterPOS_MasterPOSID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

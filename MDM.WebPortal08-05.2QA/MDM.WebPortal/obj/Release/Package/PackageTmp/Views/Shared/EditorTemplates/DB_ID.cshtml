@@ -1,0 +1,14 @@
+﻿@model int
+@(Html.Kendo().DropDownListFor(m => m)
+                  .ValuePrimitive(true)
+                  .Name("DBs")
+                  .OptionLabel("Select DB...")
+                  .DataTextField("DB")
+                  .DataValueField("DB_ID")
+                  .DataSource(dataSource =>
+                  {
+                      dataSource.Read(read => read.Action("GetCascadeDbs", "MDM_POS_Name_DBPOS_grp"))
+                                .ServerFiltering(true);
+                  })
+)
+@Html.ValidationMessageFor(m => m)

@@ -255,20 +255,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="MasterFiles">
-      <EntityTypeMapping TypeName="MedProDBEntities.MasterFile">
-        <MappingFragment StoreEntitySet="MasterFiles">
-          <ScalarProperty Name="MasterPOS_MasterPOSID" ColumnName="MasterPOS_MasterPOSID" />
-          <ScalarProperty Name="FileTypeID" ColumnName="FileTypeID" />
-          <ScalarProperty Name="UploadTime" ColumnName="UploadTime" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="FileExtension" ColumnName="FileExtension" />
-          <ScalarProperty Name="FileName" ColumnName="FileName" />
-          <ScalarProperty Name="ServerLocation" ColumnName="ServerLocation" />
-          <ScalarProperty Name="FileID" ColumnName="FileID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Contacts">
       <EntityTypeMapping TypeName="MedProDBEntities.Contact">
         <MappingFragment StoreEntitySet="Contact">
@@ -451,6 +437,21 @@
           <ScalarProperty Name="active" ColumnName="active" />
           <ScalarProperty Name="CorporateName" ColumnName="CorporateName" />
           <ScalarProperty Name="corpID" ColumnName="corpID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MasterFiles">
+      <EntityTypeMapping TypeName="MedProDBEntities.MasterFile">
+        <MappingFragment StoreEntitySet="MasterFiles">
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="MasterPOS_MasterPOSID" ColumnName="MasterPOS_MasterPOSID" />
+          <ScalarProperty Name="FileTypeID" ColumnName="FileTypeID" />
+          <ScalarProperty Name="UploadTime" ColumnName="UploadTime" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="FileExtension" ColumnName="FileExtension" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="ServerLocation" ColumnName="ServerLocation" />
+          <ScalarProperty Name="FileID" ColumnName="FileID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

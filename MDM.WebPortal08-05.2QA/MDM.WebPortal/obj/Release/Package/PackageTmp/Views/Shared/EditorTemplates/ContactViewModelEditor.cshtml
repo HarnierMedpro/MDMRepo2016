@@ -1,0 +1,66 @@
+﻿@model MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMContact
+@{
+    //required in order to render validation attributes
+    ViewContext.FormContext = new FormContext();
+}
+
+
+
+<div class="container-fluid">
+   
+            <fieldset class="scheduler-border">
+              <legend class="scheduler-border text-bold text-uppercase">contact:</legend>
+                <dl>
+                    <dd>
+                        @Html.LabelFor(x => x.FName)
+                    </dd>
+                    <dt>
+                        @Html.EditorFor(model => model.FName, new {htmlAttributes = new {@style = "width:100%; border-radius:3px !important; height:26px;"}})
+                    </dt>
+                </dl>
+
+                <dl>
+                    <dd>
+                        @Html.LabelFor(x => x.LName)
+                    </dd>
+                    <dt>
+                        @Html.EditorFor(model => model.LName, new {htmlAttributes = new {@style = "width:100%; border-radius:3px !important; height:26px;"}})
+                    </dt>
+                </dl>
+
+                <dl>
+                    <dd>
+                        @Html.LabelFor(x => x.PhoneNumber)
+                    </dd>
+                    <dt>
+                        @(Html.Kendo().MaskedTextBoxFor(x => x.PhoneNumber)
+                              .Mask("(999) 000-0000")
+                              .HtmlAttributes(new { @style = "width:100%; border-radius:3px !important; height:32px;" })
+                         )
+                    </dt>
+                </dl>
+
+                <dl>
+                    <dd>
+                        @Html.LabelFor(x => x.Email)
+                    </dd>
+                    <dt>
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { type ="email", @style = "width:100%; border-radius:3px !important; height:26px;" } })
+                    </dt>
+                </dl>
+                <dl>
+                    <dd>
+                        @(Html.Kendo().CheckBoxFor(x => x.active))
+                    </dd>
+                </dl>
+                <dl>
+                    <dd>
+                        @Html.LabelFor(x => x.ContactTypes)
+                    </dd>
+                    <dt>
+                        @Html.EditorFor(x => x.ContactTypes)
+                        @Html.ValidationMessageFor(m => m.ContactTypes)
+                    </dt>
+                </dl>
+            </fieldset>
+</div>

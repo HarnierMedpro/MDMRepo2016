@@ -1,0 +1,30 @@
+﻿@*@model int*@
+
+@(Html.Kendo().DropDownList()
+          .Name("DB_ID")
+          .DataTextField("databaseName")
+          .DataValueField("DB_ID")
+          .MinLength(3)
+          .HtmlAttributes(new { style = "width:100%" })
+          .Template("#= DB #  #= databaseName #")
+          .Height(290)
+          .Filter(FilterType.Contains)
+          .DataSource(source =>
+          {
+              source.Custom()
+                  .ServerFiltering(true)
+                  .ServerPaging(true)
+                  .PageSize(80)
+                  .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                  .Transport(transport =>
+                  {
+                      transport.Read("Read_DbsWithCorp", "Corp_DBs", new { area = "Credentials" });
+                  })
+                  .Schema(schema =>
+                  {
+                      schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                            .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                  });
+          })
+          .Events(e => e.Change("onChange"))
+      )

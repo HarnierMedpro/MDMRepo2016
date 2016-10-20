@@ -1,0 +1,322 @@
+﻿@model MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMPOSLOCExtraData
+
+@{
+    Layout = null;
+}
+
+<div class="container-fluid">
+    @(Html.Kendo().PanelBar()
+          .Name("pbExtQ")
+          .ExpandMode(PanelBarExpandMode.Single)
+          .Items(pb =>
+          {
+              pb.Add().Text("Is the W9 on file?").Content(@<text>
+                   
+                    @*@Html.EditorFor(model => model.W_9_on_File, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+                  
+                    @switch (Model.W_9_on_File)
+                    {
+                        case true:
+                            @(Html.Kendo().RadioButtonFor(x => x.W_9_on_File).Name("W_9_on_File").Label("YES").Checked(true).Value(true))
+                            @(Html.Kendo().RadioButtonFor(x => x.W_9_on_File).Name("W_9_on_File").Label("NO").Value(false))
+                            break;
+                        default:
+                            @(Html.Kendo().RadioButtonFor(x => x.W_9_on_File).Name("W_9_on_File").Label("YES").Value(true))
+                            @(Html.Kendo().RadioButtonFor(x => x.W_9_on_File).Name("W_9_on_File").Label("NO").Checked(true).Value(false))
+                        break;
+                        
+                    } 
+              </text>);
+              pb.Add().Text("Do you have 24hrs nursing?").Content(@<text>
+                @switch (Model.Have_24hrs_nursing)
+                {
+                    case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.Have_24hrs_nursing).Name("Have_24hrs_nursing").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Have_24hrs_nursing).Name("Have_24hrs_nursing").Label("NO").Value(false))
+                        break;
+                    default:
+                        @(Html.Kendo().RadioButtonFor(x => x.Have_24hrs_nursing).Name("Have_24hrs_nursing").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Have_24hrs_nursing).Name("Have_24hrs_nursing").Label("NO").Checked(true).Value(false))
+                        break;
+                    
+                }
+    
+                @*@Html.EditorFor(model => model.Have_24hrs_nursing, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+              pb.Add().Text("Do you have licenses on file?").Content(@<text>
+                @switch (Model.Licensure_on_File)
+                {
+                    case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.Licensure_on_File).Name("Licensure_on_File").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Licensure_on_File).Name("Licensure_on_File").Label("NO").Value(false))
+                        break;
+                    default:
+                        @(Html.Kendo().RadioButtonFor(x => x.Licensure_on_File).Name("Licensure_on_File").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Licensure_on_File).Name("Licensure_on_File").Label("NO").Checked(true).Value(false))
+                        break;
+                    
+                }
+                @*@Html.EditorFor(model => model.Licensure_on_File, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Do you have Mental License?").Content(@<text>
+                @switch (Model.Mental_License)
+                {
+                    case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.Mental_License).Name("Mental_License").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Mental_License).Name("Mental_License").Label("NO").Value(false))
+                        break;
+                    default:
+                        @(Html.Kendo().RadioButtonFor(x => x.Mental_License).Name("Mental_License").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Mental_License).Name("Mental_License").Label("NO").Checked(true).Value(false))
+                        break;
+                    
+                }
+                @*@Html.EditorFor(model => model.Mental_License, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Do you have Regulations on File?").Content(@<text>
+               @switch (Model.Regulations_on_File)
+               {
+                   case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.Regulations_on_File).Name("Regulations_on_File").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Regulations_on_File).Name("Regulations_on_File").Label("NO").Value(false))
+                       break;
+                   default:
+                        @(Html.Kendo().RadioButtonFor(x => x.Regulations_on_File).Name("Regulations_on_File").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Regulations_on_File).Name("Regulations_on_File").Label("NO").Checked(true).Value(false))
+                       break;
+                   
+               }
+                @*@Html.EditorFor(model => model.Regulations_on_File, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Has facility billed insurance before?").Content(@<text>
+                @switch (Model.Has_facility_billed_ins_before)
+                {
+                    case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.Has_facility_billed_ins_before).Name("Has_facility_billed_ins_before").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Has_facility_billed_ins_before).Name("Has_facility_billed_ins_before").Label("NO").Value(false))
+                        break;
+                    default:
+                        @(Html.Kendo().RadioButtonFor(x => x.Has_facility_billed_ins_before).Name("Has_facility_billed_ins_before").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Has_facility_billed_ins_before).Name("Has_facility_billed_ins_before").Label("NO").Checked(true).Value(false))
+                        break;
+                    
+                }
+                @*@Html.EditorFor(model => model.Has_facility_billed_ins_before, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Do you have Copies of all managed care contracts on file?").Content(@<text>
+                @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+                {
+                    case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.Copies_of_all_managed_care_contracts_on_file).Name("Copies_of_all_managed_care_contracts_on_file").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Copies_of_all_managed_care_contracts_on_file).Name("Copies_of_all_managed_care_contracts_on_file").Label("NO").Value(false))
+                        break;
+                    default:
+                        @(Html.Kendo().RadioButtonFor(x => x.Copies_of_all_managed_care_contracts_on_file).Name("Copies_of_all_managed_care_contracts_on_file").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Copies_of_all_managed_care_contracts_on_file).Name("Copies_of_all_managed_care_contracts_on_file").Label("NO").Checked(true).Value(false))
+                        break;
+                    
+                }
+                @*@Html.EditorFor(model => model.Copies_of_all_managed_care_contracts_on_file, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Do you have Forms created?").Content(@<text>
+                @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+                {
+                    case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.Forms_created).Name("Forms_created").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Forms_created).Name("Forms_created").Label("NO").Value(false))
+                        break;
+                    default:
+                        @(Html.Kendo().RadioButtonFor(x => x.Forms_created).Name("Forms_created").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Forms_created).Name("Forms_created").Label("NO").Checked(true).Value(false))
+                        break;
+                    
+                }
+                @*@Html.EditorFor(model => model.Forms_created, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Do you have In Service scheduled?").Content(@<text>
+                @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+                {
+                    case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.In_Service_scheduled).Name("In_Service_scheduled").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.In_Service_scheduled).Name("In_Service_scheduled").Label("NO").Value(false))
+                        break;
+                    default:
+                        @(Html.Kendo().RadioButtonFor(x => x.In_Service_scheduled).Name("In_Service_scheduled").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.In_Service_scheduled).Name("In_Service_scheduled").Label("NO").Checked(true).Value(false))
+                        break;
+                    
+                }
+                @*@Html.EditorFor(model => model.In_Service_scheduled, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Do you have Portal training setup?").Content(@<text>
+              @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+              {
+                  case true:
+                    @(Html.Kendo().RadioButtonFor(x => x.Portal_training_setup).Name("Portal_training_setup").Label("YES").Checked(true).Value(true))
+                    @(Html.Kendo().RadioButtonFor(x => x.Portal_training_setup).Name("Portal_training_setup").Label("NO").Value(false))
+                      break;
+                  default:
+                    @(Html.Kendo().RadioButtonFor(x => x.Portal_training_setup).Name("Portal_training_setup").Label("YES").Value(true))
+                    @(Html.Kendo().RadioButtonFor(x => x.Portal_training_setup).Name("Portal_training_setup").Label("NO").Checked(true).Value(false))
+                      break;
+              }
+                @*@Html.EditorFor(model => model.Portal_training_setup, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Do you have email_regarding_conference_set_up?").Content(@<text>
+                @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+                {
+                    case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.email_regarding_conference_set_up).Name("email_regarding_conference_set_up").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.email_regarding_conference_set_up).Name("email_regarding_conference_set_up").Label("NO").Value(false))
+                        break;
+                    default:
+                        @(Html.Kendo().RadioButtonFor(x => x.email_regarding_conference_set_up).Name("email_regarding_conference_set_up").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.email_regarding_conference_set_up).Name("email_regarding_conference_set_up").Label("NO").Checked(true).Value(false))
+                        break;
+                    
+                }
+                @*@Html.EditorFor(model => model.email_regarding_conference_set_up, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Do you set up the database?").Content(@<text>
+               @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+               {
+                   case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.Database_set_up).Name("Database_set_up").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Database_set_up).Name("Database_set_up").Label("NO").Value(false))
+                       break;
+                   default:
+                        @(Html.Kendo().RadioButtonFor(x => x.Database_set_up).Name("Database_set_up").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Database_set_up).Name("Database_set_up").Label("NO").Checked(true).Value(false))
+                       break;
+                   
+               }
+                @*@Html.EditorFor(model => model.Database_set_up, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+        
+              pb.Add().Text("Is the Availavility request sent out?").Content(@<text>
+                @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+                {
+                    case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.Availavility_request_sent_out).Name("Availavility_request_sent_out").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Availavility_request_sent_out).Name("Availavility_request_sent_out").Label("NO").Value(false))
+                        break;
+                    default:
+                        @(Html.Kendo().RadioButtonFor(x => x.Availavility_request_sent_out).Name("Availavility_request_sent_out").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Availavility_request_sent_out).Name("Availavility_request_sent_out").Label("NO").Checked(true).Value(false))
+                        break;
+                }
+                @*@Html.EditorFor(model => model.Availavility_request_sent_out, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Availavility completed?").Content(@<text>
+               @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+               {
+                   case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.Availavility_completed).Name("Availavility_completed").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Availavility_completed).Name("Availavility_completed").Label("NO").Value(false))
+                       break;
+                   default:
+                        @(Html.Kendo().RadioButtonFor(x => x.Availavility_completed).Name("Availavility_completed").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Availavility_completed).Name("Availavility_completed").Label("NO").Checked(true).Value(false))
+                       break;
+               }
+                @*@Html.EditorFor(model => model.Availavility_completed, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Navinet request completed?").Content(@<text>
+                    @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+                    {
+                        case true:
+                            @(Html.Kendo().RadioButtonFor(x => x.Navinet_request_completed).Name("Navinet_request_completed").Label("YES").Checked(true).Value(true))
+                            @(Html.Kendo().RadioButtonFor(x => x.Navinet_request_completed).Name("Navinet_request_completed").Label("NO").Value(false))
+                            break;
+                        default:
+                            @(Html.Kendo().RadioButtonFor(x => x.Navinet_request_completed).Name("Navinet_request_completed").Label("YES").Value(true))
+                            @(Html.Kendo().RadioButtonFor(x => x.Navinet_request_completed).Name("Navinet_request_completed").Label("NO").Checked(true).Value(false))
+                            break;
+                        
+                    }
+                @*@Html.EditorFor(model => model.Navinet_request_completed, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Fee schedule in binder?").Content(@<text>
+               @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+               {
+                   case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.Fee_schedule_in_binder).Name("Fee_schedule_in_binder").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Fee_schedule_in_binder).Name("Fee_schedule_in_binder").Label("NO").Value(false))
+                       break;
+                   default:
+                        @(Html.Kendo().RadioButtonFor(x => x.Fee_schedule_in_binder).Name("Fee_schedule_in_binder").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.Fee_schedule_in_binder).Name("Fee_schedule_in_binder").Label("NO").Checked(true).Value(false))
+                       break;
+                  
+               }
+                @*@Html.EditorFor(model => model.Fee_schedule_in_binder, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Acreditation On File?").Content(@<text>
+                @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+                {
+                    case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.AcreditationOnFile).Name("AcreditationOnFile").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.AcreditationOnFile).Name("AcreditationOnFile").Label("NO").Value(false))
+                        break;
+                    default:
+                        @(Html.Kendo().RadioButtonFor(x => x.AcreditationOnFile).Name("AcreditationOnFile").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.AcreditationOnFile).Name("AcreditationOnFile").Label("NO").Checked(true).Value(false))
+                        break;
+                    
+                }
+                @*@Html.EditorFor(model => model.AcreditationOnFile, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("High Complexity CLIA?").Content(@<text>
+               @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+               {
+                   case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.HighComplexityCLIA).Name("HighComplexityCLIA").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.HighComplexityCLIA).Name("HighComplexityCLIA").Label("NO").Value(false))
+                       break;
+                   default:
+                        @(Html.Kendo().RadioButtonFor(x => x.HighComplexityCLIA).Name("HighComplexityCLIA").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.HighComplexityCLIA).Name("HighComplexityCLIA").Label("NO").Checked(true).Value(false))
+                       break;
+               }
+                @*@Html.EditorFor(model => model.HighComplexityCLIA, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+        
+              pb.Add().Text("Registration Analyzer?").Content(@<text>
+                @switch (Model.Copies_of_all_managed_care_contracts_on_file)
+                {
+                    case true:
+                        @(Html.Kendo().RadioButtonFor(x => x.RegistrationAnalyzer).Name("RegistrationAnalyzer").Label("YES").Checked(true).Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.RegistrationAnalyzer).Name("RegistrationAnalyzer").Label("NO").Value(false))
+                        break;
+                    default:
+                        @(Html.Kendo().RadioButtonFor(x => x.RegistrationAnalyzer).Name("RegistrationAnalyzer").Label("YES").Value(true))
+                        @(Html.Kendo().RadioButtonFor(x => x.RegistrationAnalyzer).Name("RegistrationAnalyzer").Label("NO").Checked(true).Value(false))
+                        break;
+                }
+                @*@Html.EditorFor(model => model.RegistrationAnalyzer, new { htmlAttributes = new { @class = " form-control form-control1", @style = "width:98% !important; height:20.15px !important;" } })*@
+            </text>);
+          })
+      .ToClientTemplate()
+          )
+    <br/>
+    <div class="edit-buttons text-center">
+        <a class="k-button k-button-icontext k-update-button" href="\\#"><span class="k-icon k-update"></span>Save</a>
+        <a class="k-button k-button-icontext k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span>Cancel</a>
+    </div>
+    <br />
+</div>

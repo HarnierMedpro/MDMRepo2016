@@ -107,6 +107,65 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return Json(result.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<ActionResult> Update_POSFromCorp([DataSourceRequest] DataSourceRequest request,
+            [Bind(Include = "MasterPOSID,PosMasterName,active")] VMMasterPOSPartial masterPos)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await db.MasterPOS.AnyAsync(x => x.PosMasterName.Equals(masterPos.PosMasterName, StringComparison.InvariantCultureIgnoreCase) && x.MasterPOSID != masterPos.MasterPOSID))
+                {
+                    ModelState.AddModelError("", "Duplicate Data. Please try again!");
+                    return Json(new[] { masterPos }.ToDataSourceResult(request, ModelState));
+                }
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var posNameStoredInDb = await db.MasterPOS.FindAsync(masterPos.MasterPOSID);
+                        var tableColumnInfo = new List<TableInfo>();
+
+                        if (!posNameStoredInDb.PosMasterName.Equals(masterPos.PosMasterName, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            tableColumnInfo.Add(new TableInfo { Field_ColumName = "PosMasterName", OldValue = posNameStoredInDb.PosMasterName, NewValue = masterPos.PosMasterName });
+                            posNameStoredInDb.PosMasterName = masterPos.PosMasterName;
+                        }
+
+                        if (posNameStoredInDb.active != masterPos.active)
+                        {
+                            tableColumnInfo.Add(new TableInfo { Field_ColumName = "active", OldValue = posNameStoredInDb.active.ToString(), NewValue = masterPos.active.ToString() });
+                            posNameStoredInDb.active = masterPos.active;
+                        }
+
+                        db.MasterPOS.Attach(posNameStoredInDb);
+                        db.Entry(posNameStoredInDb).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditDateTime = DateTime.Now,
+                            TableName = "MasterPOS",
+                            AuditAction = "U",
+                            ModelPKey = posNameStoredInDb.MasterPOSID,
+                            tableInfos = tableColumnInfo
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        ModelState.AddModelError("", "Something failed. Please try again!");
+                        return Json(new[] { masterPos }.ToDataSourceResult(request, ModelState));
+                    }
+                }
+            }
+            return Json(new[] { masterPos }.ToDataSourceResult(request, ModelState));
+        }
+
         public async Task<ActionResult> Update_MasterPOS([DataSourceRequest] DataSourceRequest request,
             [Bind(Include = "MasterPOSID,PosMasterName,active,FvPList_FvPID,ManagerID,ProvID,DB_ID,LevelOfCares,Services,PosIDs,Forms_Sents")] VMMasterPOS masterPos)
         {
@@ -661,7 +720,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
                             if (corporation != null)
                             {
-                                UpdatePosInCorHub.DoIfCreateNewPos(corporation.corpID);
+                                UpdatePosInCorHub.DoIfCreateNewPos(corporation.corpID, toStore.MasterPOSID, toStore.PosMasterName, toStore.active);
                             }
                         }
                         catch (Exception)
@@ -732,7 +791,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
                             if (corporation != null)
                             {
-                                UpdatePosInCorHub.DoIfCreateNewPos(corporation.corpID);
+                                UpdatePosInCorHub.DoIfCreateNewPos(corporation.corpID, toStore.MasterPOSID, toStore.PosMasterName, toStore.active);
                             }
                         }
                         catch (Exception)

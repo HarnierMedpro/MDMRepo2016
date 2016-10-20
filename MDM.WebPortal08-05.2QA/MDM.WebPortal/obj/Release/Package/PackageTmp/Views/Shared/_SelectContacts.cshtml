@@ -1,0 +1,41 @@
+﻿@model MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMContactID
+@using (Html.BeginForm("Save_PosContacts", "Contacts", FormMethod.Post, new { MasterPOS = "#=MasterPOSID#", area = "Credentials" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+
+        @(Html.Kendo().MultiSelectFor(x => x.Contacts)
+            .Name("Contacts")
+            .DataTextField("LName")
+            .DataValueField("ContactID")
+            .Placeholder("Select contacts...")
+//.ItemTemplate("#=LName#, #=FName#  (#=Email#)") //Me esta dando un problema
+            .DataSource(source =>
+            {
+                source.Custom()
+                    .ServerFiltering(true)
+                    .ServerPaging(true)
+                    .PageSize(80)
+                    .Type("aspnetmvc-ajax")
+                    .Transport(transport =>
+                    {
+                        transport.Read("Read_AvailablePOSContacts", "Contacts", new { masterPOSID = "#=MasterPOSID#" });
+                    })
+                    .Schema(schema =>
+                    {
+                        schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                            .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                    });
+            })
+
+            .ToClientTemplate()
+        )
+
+
+        <button type="submit">Send</button>
+
+    </div>
+
+
+}
+   

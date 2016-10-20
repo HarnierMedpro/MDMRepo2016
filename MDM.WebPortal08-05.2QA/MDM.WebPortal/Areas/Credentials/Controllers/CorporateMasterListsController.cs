@@ -138,7 +138,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     posOfThisCorp.AddRange(item.MasterPOS);
                 }
             }
-            return Json(posOfThisCorp.OrderBy(p => p.PosMasterName).ToDataSourceResult(request, x => new VMMasterPOS
+            return Json(posOfThisCorp.OrderBy(p => p.PosMasterName).ToDataSourceResult(request, x => new VMMasterPOSPartial
             {
                 MasterPOSID = x.MasterPOSID,
                 PosMasterName = x.PosMasterName,
@@ -337,13 +337,13 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         var currentDbs = storedInDB.Corp_DBs.Select(x => x.DB_ID).ToList();
                         var dbByParam = corpMasterList.DBs.Select(x => x.DB_ID).ToList();
 
-
                         var newOwnerIDs = ownersByParam.Except(currentOwners).ToList();
                         var newCorpOwner = newOwnerIDs.Select(x => new Corp_Owner
                         {
                             Contact_ContactID = x,
                             corpID = storedInDB.corpID
                         }).ToList();
+
                         if (newCorpOwner.Any())
                         {
                             db.Corp_Owner.AddRange(newCorpOwner);
@@ -420,7 +420,6 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                                 });
                             }
                         }
-
 
                         var tableColumnInfo = new List<TableInfo>();
                         if (storedInDB.CorporateName != corpMasterList.CorporateName)

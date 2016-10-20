@@ -50,7 +50,6 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual DbSet<FileTypeI> FileTypeIs { get; set; }
         public virtual DbSet<Forms_sent> Forms_sent { get; set; }
         public virtual DbSet<FormsDict> FormsDicts { get; set; }
-        public virtual DbSet<MasterFile> MasterFiles { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<ContactType> ContactTypes { get; set; }
         public virtual DbSet<MasterPOS_Contact> MasterPOS_Contact { get; set; }
@@ -64,5 +63,6 @@ namespace MDM.WebPortal.Models.FromDB
         public virtual DbSet<InfoData> InfoDatas { get; set; }
         public virtual DbSet<POSExtraData> POSExtraDatas { get; set; }
         public virtual DbSet<CorporateMasterList> CorporateMasterLists { get; set; }
+        public virtual DbSet<MasterFile> MasterFiles { get; set; }
     }
 }

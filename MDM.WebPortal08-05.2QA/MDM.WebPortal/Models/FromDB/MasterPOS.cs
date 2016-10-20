@@ -20,9 +20,9 @@ namespace MDM.WebPortal.Models.FromDB
             this.MasterPOS_LevOfCare = new HashSet<MasterPOS_LevOfCare>();
             this.MasterPOS_MPServ = new HashSet<MasterPOS_MPServ>();
             this.Forms_sent = new HashSet<Forms_sent>();
-            this.MasterFiles = new HashSet<MasterFile>();
             this.MasterPOS_Contact = new HashSet<MasterPOS_Contact>();
             this.ZoomDB_POSID_grp = new HashSet<ZoomDB_POSID_grp>();
+            this.MasterFiles = new HashSet<MasterFile>();
         }
     
         public int MasterPOSID { get; set; }
@@ -51,13 +51,13 @@ namespace MDM.WebPortal.Models.FromDB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Forms_sent> Forms_sent { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MasterFile> MasterFiles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MasterPOS_Contact> MasterPOS_Contact { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ZoomDB_POSID_grp> ZoomDB_POSID_grp { get; set; }
         public virtual Provider Provider { get; set; }
         public virtual InfoData InfoData { get; set; }
         public virtual POSExtraData POSExtraData { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MasterFile> MasterFiles { get; set; }
     }
 }

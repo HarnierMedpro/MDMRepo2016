@@ -10,10 +10,10 @@ namespace MDM.WebPortal.Hubs
     [HubName("UpdatePOS")]
     public class UpdatePosInCorHub : Hub
     {
-        public static void DoIfCreateNewPos(int corpID)
+        public static void DoIfCreateNewPos(int corpID, int masterPosId, string posName, bool posActive)
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<Hubs.UpdatePosInCorHub>();
-            context.Clients.All.NotifyIfCreateNewPOS(corpID);
+            context.Clients.All.NotifyIfCreateNewPOS(corpID, masterPosId, posName, posActive);
         }
     }
 }

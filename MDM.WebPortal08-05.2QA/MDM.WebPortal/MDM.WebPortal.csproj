@@ -226,6 +226,7 @@
     <Compile Include="Areas\Credentials\Controllers\MasterPOSController.cs" />
     <Compile Include="Areas\Credentials\Controllers\MasterPOS_ContactController.cs" />
     <Compile Include="Areas\Credentials\Models\ViewModel\VMCorpFiles.cs" />
+    <Compile Include="Areas\Credentials\Models\ViewModel\VMMasterPOSPartial.cs" />
     <Compile Include="Areas\Credentials\Models\ViewModel\VMPosIds.cs" />
     <Compile Include="Areas\Credentials\Controllers\ZoomDB_POSID_grpController.cs" />
     <Compile Include="Areas\Credentials\CredentialsAreaRegistration.cs" />
@@ -1429,7 +1430,7 @@
     <Content Include="Areas\Credentials\Views\MasterPOS\Index_MasterPOS.cshtml" />
     <Content Include="Areas\Credentials\Views\POSAddressInfo\Details.cshtml" />
     <Content Include="Areas\Credentials\Views\MasterPOS_Contact\Create.cshtml" />
-    <Content Include="Areas\Credentials\Views\POSFiles\PosFiles.cshtml" />
+    <Content Include="Areas\Credentials\Views\POSFiles\PosFilesold.cshtml" />
     <Content Include="Areas\Credentials\Views\POSAddressInfo\Create.cshtml" />
     <Content Include="Areas\Credentials\Views\POSAddressInfo\AddressInfo.cshtml" />
     <Content Include="Areas\Credentials\Views\FACInfoDatas\LicenseInfo.cshtml" />
@@ -1463,6 +1464,7 @@
     <Content Include="Areas\PlaceOfServices\Views\POSLOCExtraDatas\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\web.config" />
     <Content Include="Areas\Credentials\Views\POSFiles\Corp_Files.cshtml" />
+    <Content Include="Areas\Credentials\Views\POSFiles\PosFiles.cshtml" />
     <None Include="Properties\PublishProfiles\TEST_QASite.pubxml" />
     <None Include="Properties\PublishProfiles\Site02.pubxml" />
     <None Include="Properties\PublishProfiles\TestQA.pubxml" />

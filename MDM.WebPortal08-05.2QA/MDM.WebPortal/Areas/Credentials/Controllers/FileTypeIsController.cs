@@ -114,7 +114,60 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 }
                 
             }
-            return Json(new[] { fileType }.ToDataSourceResult(request, ModelState));
+            return Json(new[] { fileType }.ToDataSourceResult(request, ModelState),JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<ActionResult> Save_FileType(
+            [Bind(Include = "FileTypeID, FileType_Name,FileLevel")] VMFileType fileType)
+        {
+            if (ModelState.IsValid)
+            {
+                using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        if (await db.FileTypeIs.AnyAsync(x => x.FileType_Name.Equals(fileType.FileType_Name, StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            return Json(new List<VMFileType>(), JsonRequestBehavior.AllowGet);
+                        }
+
+                        var toStore = new FileTypeI
+                        {
+                            FileType_Name = fileType.FileType_Name,
+                            FileLevel = fileType.FileLevel
+                        };
+
+                        db.FileTypeIs.Add(toStore);
+                        await db.SaveChangesAsync();
+                        fileType.FileTypeID = toStore.FileTypeID;
+
+                        AuditToStore auditLog = new AuditToStore
+                        {
+                            UserLogons = User.Identity.GetUserName(),
+                            AuditDateTime = DateTime.Now,
+                            AuditAction = "I",
+                            ModelPKey = toStore.FileTypeID,
+                            TableName = "FileTypeI",
+                            tableInfos = new List<TableInfo>
+                            {
+                                new TableInfo{Field_ColumName = "FileType_Name", NewValue = fileType.FileType_Name},
+                                new TableInfo{Field_ColumName = "FileLevel", NewValue = fileType.FileLevel},
+                            }
+                        };
+
+                        new AuditLogRepository().AddAuditLogs(auditLog);
+
+                        dbTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbTransaction.Rollback();
+                        return Json(new List<VMFileType>(), JsonRequestBehavior.AllowGet);
+                    }
+                }
+
+            }
+            return Json(new List<VMFileType>{fileType}, JsonRequestBehavior.AllowGet); 
         }
 
         public async Task<ActionResult> Update_FileType([DataSourceRequest] DataSourceRequest request,
@@ -233,7 +286,6 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
         }
 
-        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

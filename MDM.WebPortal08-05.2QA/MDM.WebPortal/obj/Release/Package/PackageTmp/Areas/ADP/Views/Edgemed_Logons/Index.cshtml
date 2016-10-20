@@ -1,0 +1,85 @@
+﻿@using Kendo.Mvc.UI
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<header class="main-header">
+    <div class="container">
+        <h1 class="page-title"></h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="@Url.Action("Index", "Home", new {area = ""})"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active">Edgemed_Logons</li>
+        </ol>
+    </div>
+</header>
+
+<div class="container-fluid">
+    @(Html.Kendo().Grid<MDM.WebPortal.Areas.ADP.Models.VMEdgemed_Logons>()
+    .Name("EdgemedLog")
+    .ToolBar(tools => tools.Excel())
+    .Excel(e =>
+    {
+        e.AllPages(true);
+        e.FileName("Edgemed_Logons");
+    })
+    .Columns(columns =>
+     {
+         //FK from dbo.ADPMaster table
+         columns.ForeignKey(o => o.ADPMasterID, (System.Collections.IEnumerable)ViewData["ADP"], "ADPMasterID", "INFO").Width(110);
+         
+         columns.Bound(o => o.Edgemed_UserName).Width(110);
+
+         columns.Bound(o => o.Zno).Width(70);
+
+         columns.Bound(o => o.EdgeMed_ID).Width(110);
+
+         columns.Bound(o => o.Active).Width(110);
+
+         //columns.Command(commands =>
+         //{
+         //    commands.Edit();
+         //}).Title("COMMANDS").Width(110);
+     })
+     .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Model(model =>
+          {
+              model.Id(x => x.Edgemed_LogID);
+              model.Field(x => x.Edgemed_LogID).Editable(false);
+          })
+        .Events(events => events.Error("error_handler"))
+        .Group(grp => grp.Add(property => property.ADPMasterID))
+        .Read(read => read.Action("EdgeMedLogonsforAdp", "Edgemed_Logons"))
+        //.Update(update => update.Action("UpdateEdgemed", "Edgemed_Logons"))       
+    )
+  .Sortable()
+  .Filterable()
+  .Pageable(ps => ps.Refresh(true)
+  .PreviousNext(true).PageSizes(true))
+  .Groupable()
+  .Reorderable(r => r.Columns(true))
+   .Resizable(r => r.Columns(true))
+   .Selectable(s => s.Enabled(true)
+   .Type(GridSelectionType.Row)
+   .Mode(GridSelectionMode.Single))
+    )
+</div>
+<script src="~/Scripts/kendo/jszip.min.js"></script>
+<script>
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+ </script>

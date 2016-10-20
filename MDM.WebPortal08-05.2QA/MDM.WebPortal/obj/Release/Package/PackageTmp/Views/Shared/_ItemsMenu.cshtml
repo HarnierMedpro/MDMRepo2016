@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MDM.WebPortal.Models.Identity.Menu>
+
+@*<link href="~/Content/kendo/kendo.common-bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/kendo/kendo.bootstrap.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery-2.2.4.min.js"></script>
+<script src="~/Scripts/kendo/kendo.all.min.js"></script>
+<script src="~/Scripts/kendo/kendo.aspnetmvc.min.js"></script>
+@(Html.Kendo().Menu()
+      .Name("Menu")
+      .BindTo(Model, mappings =>
+      {
+          mappings.For<MDM.WebPortal.Models.Identity.Menu>(binding => binding
+                  .ItemDataBound((item, menuParent) =>
+                  {
+                      item.Text = menuParent.Title;
+                  })
+                  .Children(submenu => submenu.ChildMenus));
+          mappings.For<MDM.WebPortal.Models.Identity.Menu>(binding => binding
+                  .ItemDataBound((item, menuChild) =>
+                  {
+                      item.Text = menuChild.Title;
+                      item.ActionName = menuChild.actionSystem.Act_Name;
+                      item.ControllerName = menuChild.actionSystem.ControllerSystem.Cont_Name;
+                      item.Action("Index", "OwnerLists", routeValues: new { Area = "" });
+                  }));
+      })
+)*@
+
+<ul id="menu">
+    @foreach (var level1 in Model)
+    {
+        <li>
+            @level1.Title
+            @if (level1.ChildMenus.Count > 0)
+            {
+                <ul>
+                    @foreach (var level2 in level1.ChildMenus)
+                    {
+                        <li>
+                            @level2.Title
+                            @if (level2.ChildMenus.Count > 0)
+                            {
+                                <ul>
+                                    @foreach (var level3 in level2.ChildMenus)
+                                    {
+                                        <li>
+                                            @level3.Title
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+        </li>
+    }
+</ul>

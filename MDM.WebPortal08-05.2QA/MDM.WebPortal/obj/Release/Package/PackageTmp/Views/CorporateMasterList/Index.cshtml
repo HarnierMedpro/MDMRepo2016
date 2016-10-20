@@ -1,0 +1,324 @@
+﻿@*@using MDM.WebPortal.Areas.Credentials.Models.ViewModel
+@{
+    ViewBag.Title = "Index";
+    
+}
+
+<header class="main-header">
+    <div class="container">
+        <h1 class="page-title"></h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="@Url.Action("Index","Home", new {area=""})"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active">Corporate</li>
+        </ol>
+    </div>
+</header>
+
+<div class="container-fluid"> 
+    @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMCorporateMasterLists>()
+      .Name("gridCorporate")
+      .ToolBar(tool => {
+          tool.Create().Text("NEW CORPORATE");
+          tool.Excel(); 
+         })
+      .Excel(e => e.AllPages(true))
+      
+      .Columns(columns =>
+      {
+          columns.Bound(c => c.CorporateName).Title("NAME").Width(300);
+          
+          columns.Bound(c => c.active).Title("ACTIVE").Width(300);
+
+          columns.Command(commands => commands.Edit()).Title("COMMANDS").Width(200);
+      })
+
+      .Filterable()      
+      .Pageable(ps => ps.Refresh(true)
+      .PreviousNext(true).PageSizes(true))
+      .Sortable()
+      .Groupable()
+      .ClientDetailTemplateId("template")
+      .Reorderable(r => r.Columns(true))
+      .Resizable(r => r.Columns(true))
+      .Events(e => e.ExcelExport("corporate_excelExport"))//ADDED
+      .DataSource(dataSource => dataSource
+          .Ajax()         
+          .ServerOperation(true)
+          .PageSize(10)
+          .Model(model =>
+            {
+                model.Id(x => x.corpID); 
+                model.Field(x => x.corpID).Editable(false); 
+            })
+          .Events(events => events.Error("error_handler")) 
+          .Read(read => read.Action("CorporateMasterLists_Read", "CorporateMasterList"))
+          .Update(update => update.Action("CorporateMasterLists_Update", "CorporateMasterList"))
+          .Create(create => create.Action("CorporateMasterLists_Create", "CorporateMasterList"))
+        )
+       .Events(events => events.DataBound("dataBound"))
+    )
+</div>
+
+<script src="~/Scripts/kendo/jszip.min.js"></script>
+
+<script id="template" type="text/kendo-tmpl">
+    @(Html.Kendo().TabStrip()
+          .Name("tabStrip_#=corpID#")
+          .SelectedIndex(0)
+          .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+          .Items(items =>
+          {
+              items.Add().Text("DATABASE").Content(@<text>                       
+                       @(Html.Kendo().Grid<VMCorp_DB>()
+                            .Name("gridCorpDB_#=corpID#")
+                            .ToolBar(tools =>
+                            {
+                                tools.Create().Text("ASSIGN NEW DB");
+                            })
+                                    .Columns(columns =>
+                                    {
+                                        columns.Bound(o => o.ID_PK).Hidden(true);
+                                        columns.ForeignKey(p => p.DB_ID, (System.Collections.IEnumerable)ViewData["DBs"], "DB_ID", "DB").Title("DB").Width(110);
+                                        columns.Bound(o => o.databaseName).Title("NAME");
+                                        columns.Bound(o => o.active).Width(300).Title("ACTIVE");
+
+                                        columns.Command(commands =>
+                                          {
+                                              commands.Edit();
+                                              commands.Destroy().Text("Release");
+                                          }).Title("COMMANDS");
+                                    })
+                                    .DataSource(dataSource => dataSource
+                                        .Ajax()
+                                        .PageSize(5)
+                                        .Events(events => events.Error("error_CorpDBHandler"))
+                                        .Model(model =>
+                                          {
+                                              model.Id(x => x.ID_PK);
+                                              model.Field(x => x.ID_PK).Editable(false);
+                                              model.Field(x => x.databaseName).Editable(false);
+                                              model.Field(x => x.active).Editable(false);
+                                          })
+                                        .Read(read => read.Action("HierarchyBinding_DBs", "Corp_DBs", new { corpID = "#=corpID#" }))
+                                        .Update(x => x.Action("Update", "Corp_DBs", new { corpID = "#=corpID#" }))
+                                        .Destroy(destroy => destroy.Action("Corp_DBs_Release", "Corp_DBs", new { corpID = "#=corpID#" }))
+                                        .Create(create => create.Action("Create_CorpDbs", "Corp_DBs", new { ParentID = "#=corpID#" }))
+                                    )
+                                    
+                                    .Events(e => e.ExcelExport("dbs_excelExport")) //ADDED
+                                    
+                                    .Pageable(ps => ps.Refresh(true)
+                                        .PreviousNext(true).PageSizes(true))   
+                                    .Sortable()
+                                    .Filterable()
+                                    .ToClientTemplate()
+                    )
+            </text>); 
+
+              items.Add().Text("OWNERS").Content(@<text>
+                    @(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMCorp_Owner>()
+                          .Name("gridCorpOwner_#=corpID#") 
+                          .ToolBar(tool => tool.Create().Text("ASSIGN OWNER"))
+                          .Columns(columns =>
+                          {
+                              columns.Bound(o => o.corpOwnerID).Hidden(true);
+                              columns.Bound(o => o.LastName).Title("LAST NAME").Width(110);
+                              columns.Bound(o => o.FirstName).Title("FIRST NAME").Width(110);
+                              columns.Bound(o => o.active).Width(110).Title("ACTIVE").Width(110);
+
+                              columns.Command(cmd =>
+                              {
+                                  cmd.Edit();
+                              }).Title("ACTIONS").Width(110);
+                          })
+                          .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("Corp_DBViewModelEditor"))
+                          .DataSource(dataSource => dataSource
+                              .Ajax()
+                              .PageSize(5)
+                              .ServerOperation(true)
+                              .Model(model =>
+                              {
+                                  model.Id(x => x.corpOwnerID);
+                                  model.Field(x => x.corpOwnerID).Editable(false);
+                              })
+                              .Events(events => events.Error("error_CorpOwnerHandler"))
+                              .Read(read => read.Action("Read_OwnersOfCorp", "Corp_Owner", new { corpID = "#=corpID#" }))
+                              .Update(x => x.Action("Update", "Corp_Owner", new { corpID = "#=corpID#" }))
+                              .Create(create => create.Action("Create_CorpOwner", "Corp_Owner", new { ParentID = "#=corpID#" }))
+                          )
+                          
+                          .Pageable(ps => ps.Refresh(true)
+                             .PreviousNext(true).PageSizes(true))
+                          .Sortable()
+                          .Filterable()
+                          .ToClientTemplate()
+                    )
+            </text>);
+          })
+    .ToClientTemplate()
+    ) 
+</script>
+
+<script>
+    var detailExportPromises = [];//ADDED
+  
+    //ADDED
+    var dataSource = new kendo.data.DataSource({
+        type: "aspnetmvc-ajax",
+        transport: {
+            read: "@Url.Action("HierarchyBinding_DBs", "Corp_DBs")",
+        type: "POST"
+    },
+        schema: {
+        data: "Data",
+        total: "Total",
+    error: "Errors"
+    }
+    });
+
+    dataSource.read();
+
+    function dataBound() {
+        detailExportPromises = [];//ADDED
+        //this.expandRow(this.tbody.find("tr.k-master-row").first());
+    }
+
+    function owner_excelExport(e) {
+        e.preventDefault();
+    }
+
+    function dbs_excelExport(e) {
+        e.preventDefault();
+    }
+
+    function corporate_excelExport(e) {
+        e.preventDefault();
+
+        var workbook = e.workbook;
+
+        detailExportPromises = [];
+
+        var masterData = e.data;
+
+        for (var rowIndex = 0; rowIndex < masterData.length; rowIndex++) {
+            exportChildData(masterData[rowIndex].corpID, rowIndex);
+        }
+
+        // wait for all detail grids to finish exporting
+        $.when.apply(null, detailExportPromises)
+        .then(function () {
+            // get the export results
+            var detailExports = $.makeArray(arguments);
+
+            // sort by masterRowIndex
+            detailExports.sort(function (a, b) {
+                return a.masterRowIndex - b.masterRowIndex;
+            });
+
+            // add an empty column
+            workbook.sheets[0].columns.unshift({ width: 30 });
+
+            // prepend an empty cell to each row
+            for (var i = 0; i < workbook.sheets[0].rows.length; i++) {
+                workbook.sheets[0].rows[i].cells.unshift({});
+            }
+
+            // merge the detail export sheet rows with the master sheet rows
+            // loop backwards so the masterRowIndex doesn't need to be updated
+            for (var i = detailExports.length - 1; i >= 0; i--) {
+                var masterRowIndex = detailExports[i].masterRowIndex + 1;
+
+                var sheet = detailExports[i].sheet;
+
+                // prepend an empty cell to each row
+                for (var ci = 0; ci < sheet.rows.length; ci++) {
+                    if (sheet.rows[ci].cells[0].value) {
+                        sheet.rows[ci].cells.unshift({});
+                    }
+                }
+
+                // insert the detail sheet rows after the master row
+                [].splice.apply(workbook.sheets[0].rows, [masterRowIndex + 1, 0].concat(sheet.rows));
+            }
+
+            // save the workbook
+            kendo.saveAs({
+                dataURI: new kendo.ooxml.Workbook(workbook).toDataURL(),
+                fileName: "ExportCorporateMasterList.xlsx"
+            });
+        });
+    }
+
+
+    function exportChildData(corpID, rowIndex) {
+        var deferred = $.Deferred();
+
+        detailExportPromises.push(deferred);
+
+        var rows = [{
+            cells: [{ value: "DB_ID" }, { value: "databaseName" }, { value: "active" }]
+        }];
+
+        dataSource.filter({ field: "corpID", operator: "eq", value: corpID });
+
+        var exporter = new kendo.ExcelExporter({
+            columns: [ { field: "DB_ID" }, { field: "databaseName" }, { field: "active" } ],
+            dataSource: dataSource
+        });
+        exporter.workbook().then(function (book, data) {
+            deferred.resolve({
+                masterRowIndex: rowIndex,
+                sheet: book.sheets[0]
+            });
+        });
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+            var grid = $("#gridCorporate").data("kendoGrid");
+            grid.cancelChanges();
+        }
+    }
+
+    function error_CorpDBHandler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+            var grid = jQuery("[id^='gridCorpDB']").data("kendoGrid");
+            grid.cancelChanges();
+        }
+    }
+
+    function error_CorpOwnerHandler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+            var grid = jQuery("[id^='gridCorpOwner']").data("kendoGrid");
+            grid.cancelChanges();
+        }
+    }
+
+</script>*@

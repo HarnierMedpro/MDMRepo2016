@@ -1,0 +1,115 @@
+﻿@using System.Collections
+@model MDM.WebPortal.Areas.ActionCode.Models.ViewModels.VMActionCode
+@{
+    //required in order to render validation attributes
+    ViewContext.FormContext = new FormContext();
+}
+
+
+
+<div class="container-fluid">
+
+    <fieldset class="scheduler-border">
+        <legend class="scheduler-border text-bold text-uppercase">action code:</legend>
+        <dl>
+            <dd>
+                @Html.LabelFor(x => x.CollNoteType)
+            </dd>
+            <dt>
+                @Html.EditorFor(model => model.CollNoteType, new {htmlAttributes = new {@style = "width:100%; border-radius:3px !important; height:26px;"}})
+            </dt>
+        </dl>
+
+        <dl>
+            <dd>
+                @Html.LabelFor(x => x.CodeID)
+            </dd>
+            <dt>
+                @(Html.Kendo().DropDownListFor(x => x.CodeID)
+                      .AutoBind(false)
+                      .DataTextField("Code")
+                      .DataValueField("CodeID")
+                      .MinLength(3)
+                      .HtmlAttributes(new {style = "width:100%"})
+                      .Filter(FilterType.Contains)
+                      .DataSource(source =>
+                      {
+                          source.Custom()
+                              .ServerFiltering(true)
+                              .ServerPaging(true)
+                              .PageSize(80)
+                              .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                              .Transport(transport =>
+                              {
+                                  transport.Read("Read_Code", "CodeMasterLists");
+                              })
+                              .Schema(schema =>
+                              {
+                                  schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                                      .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                              });
+                      })
+                      )
+            </dt>
+        </dl>
+
+        <dl>
+            <dd>
+                @Html.LabelFor(x => x.CategoryID)
+            </dd>
+            <dt>
+                @(Html.Kendo().DropDownListFor(x => x.CategoryID)
+                      .DataValueField("CatogoryID")
+                      .DataTextField("CategoryName")
+                      .HtmlAttributes(new { style = "width:100%" })
+                      .BindTo((IEnumerable)ViewData["Category"])
+                 )
+            </dt>
+        </dl>
+
+        <dl>
+            <dd>
+                @Html.LabelFor(x => x.PriorityID)
+            </dd>
+            <dt>
+                @(Html.Kendo().DropDownListFor(x => x.PriorityID)
+                      .DataValueField("PriorityID")
+                      .DataTextField("PriorityName")
+                      .HtmlAttributes(new { style = "width:100%" })
+                      .BindTo((IEnumerable)ViewData["Priority"])
+                )
+            </dt>
+        </dl>
+        <dl>
+            <dd>
+                @(Html.Kendo().CheckBoxFor(x => x.Active))
+            </dd>
+        </dl>
+        <dl>
+            <dd>
+                @Html.LabelFor(x => x.ParsingYN)
+            </dd>
+            <dt>
+                @(Html.Kendo().DropDownListFor(x => x.ParsingYN)
+                      .DataValueField("Value")
+                      .DataTextField("Text")
+                      .HtmlAttributes(new { style = "width:100%" })
+                      .BindTo((IEnumerable)ViewData["Parsing"])
+                )
+            </dt>
+        </dl>
+        <dl>
+            <dd>
+                @Html.LabelFor(x => x.ACTypeID)
+            </dd>
+            <dt>
+                @(Html.Kendo().DropDownListFor(x => x.ACTypeID)
+                      .DataValueField("ACTypeID")
+                      .DataTextField("ACTypeName")
+                      .HtmlAttributes(new { style = "width:100%" })
+                      .BindTo((IEnumerable)ViewData["ACType"])
+                )
+            </dt>
+        </dl>
+    </fieldset>
+</div>
