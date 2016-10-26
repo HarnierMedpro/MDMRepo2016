@@ -12,13 +12,13 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
 
         [Required]
         [Display(Name = "FIRST NAME")]
-        [RegularExpression(@"^([a-zA-Z \\&\'\-]+)$", ErrorMessage = "Invalid Provider Name.")]
+        [RegularExpression(@"^([a-zA-Z \\&\'\-]+)$", ErrorMessage = "Invalid First Name.")]
         [StringLength(50)]
         public string FName { get; set; }
 
         [Required]
         [Display(Name = "LAST NAME")]
-        [RegularExpression(@"^([a-zA-Z \\&\'\-]+)$", ErrorMessage = "Invalid Provider Name.")]
+        [RegularExpression(@"^([a-zA-Z \\&\'\-]+)$", ErrorMessage = "Invalid Last Name.")]
         [StringLength(50)]
         public string LName { get; set; }
 

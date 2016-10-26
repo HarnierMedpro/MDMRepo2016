@@ -154,6 +154,8 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
                         dbTransaction.Commit();
 
+                        //UpdatePosInCorHub.DoIfUpdatePosFromCorp(posNameStoredInDb.MasterPOSID, posNameStoredInDb.PosMasterName, posNameStoredInDb.active);
+
                     }
                     catch (Exception)
                     {
@@ -180,7 +182,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 {
                     try
                     {
+                        bool signalRUpdates = false;
+
                         var posNameStoredInDb = await db.MasterPOS.FindAsync(masterPos.MasterPOSID);
+                        var corporation = db.Corp_DBs.FirstOrDefault(d => d.DB_ID == masterPos.DB_ID);
+                        masterPos.Corporation = corporation != null ? corporation.CorporateMasterList.CorporateName : "";
+
                         var audiLogs = new List<AuditToStore>();
                         var tableColumnInfo = new List<TableInfo>();
 
@@ -351,6 +358,8 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
                         if (!posNameStoredInDb.PosMasterName.Equals(masterPos.PosMasterName, StringComparison.CurrentCultureIgnoreCase))
                         {
+                            signalRUpdates = true;
+
                             tableColumnInfo.Add(new TableInfo { Field_ColumName = "PosMasterName", OldValue = posNameStoredInDb.PosMasterName, NewValue = masterPos.PosMasterName });
                             posNameStoredInDb.PosMasterName = masterPos.PosMasterName;
                         }
@@ -426,6 +435,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                        
                         if (posNameStoredInDb.active != masterPos.active)
                         {
+                            signalRUpdates = true;
                             tableColumnInfo.Add(new TableInfo { Field_ColumName = "active", OldValue = posNameStoredInDb.active.ToString(), NewValue = masterPos.active.ToString() });
                             posNameStoredInDb.active = masterPos.active;
                         }
@@ -524,10 +534,15 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
                             audiLogs.AddRange(zoomLog);
                         }
-
                         new AuditLogRepository().SaveLogs(audiLogs);
 
                         dbTransaction.Commit();
+
+                        //if (signalRUpdates && corporation != null)
+                        //{
+                        //    UpdatePosInCorHub.DoIfUpdatePos(corporation.corpID, posNameStoredInDb.MasterPOSID, posNameStoredInDb.PosMasterName, posNameStoredInDb.active);
+                        //}
+
                     }
                     catch (Exception)
                     {

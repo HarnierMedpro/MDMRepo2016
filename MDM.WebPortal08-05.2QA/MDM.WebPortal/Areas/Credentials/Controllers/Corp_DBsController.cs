@@ -15,6 +15,7 @@ using MDM.WebPortal.Areas.AudiTrails.Controllers;
 using MDM.WebPortal.Areas.AudiTrails.Models;
 using MDM.WebPortal.Areas.Credentials.Models.ViewModel;
 using MDM.WebPortal.Data_Annotations;
+using MDM.WebPortal.Hubs;
 using MDM.WebPortal.Models.ViewModel;
 using Microsoft.AspNet.Identity;
 
@@ -121,14 +122,14 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             if (ModelState.IsValid)
             {
                 var currentCorp = await db.CorporateMasterLists.FindAsync(corp_DBs.corpID);
-                var currentDB = await db.DBLists.FindAsync(corp_DBs.DB_ID);
-                if (currentCorp == null || currentDB == null)
+                var currentDb = await db.DBLists.FindAsync(corp_DBs.DB_ID);
+                if (currentCorp == null || currentDb == null)
                 {
                     ModelState.AddModelError("", "Something Failed. Please try again!");
                     return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
                 }
-                corp_DBs.databaseName = currentDB.databaseName;
-                corp_DBs.active = currentDB.active;
+                corp_DBs.databaseName = currentDb.databaseName;
+                corp_DBs.active = currentDb.active;
 
                 using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
                 {
@@ -141,26 +142,39 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         }
 
                         var storedInDb = await db.Corp_DBs.FindAsync(corp_DBs.ID_PK);
-
                         List<TableInfo> tableColumnInfos = new List<TableInfo>();
+                        List<AuditToStore> auditLogs = new List<AuditToStore>();
+                        bool changeMasterPosDb = false;
+
                         if (storedInDb.DB_ID != corp_DBs.DB_ID)
                         {
-                            tableColumnInfos.Add(new TableInfo
+                            if (storedInDb.DBList.MasterPOS.Any())
                             {
-                                NewValue = corp_DBs.DB_ID.ToString(),
-                                OldValue = storedInDb.DB_ID.ToString(),
-                                Field_ColumName = "DB_ID"
-                            });
+                                changeMasterPosDb = true;
+                                foreach (var pos in storedInDb.DBList.MasterPOS.ToList())
+                                {
+                                    auditLogs.Add(new AuditToStore
+                                    {
+                                        UserLogons = User.Identity.GetUserName(),
+                                        AuditDateTime = DateTime.Now,
+                                        TableName = "MasterPOS",
+                                        AuditAction = "U",
+                                        ModelPKey = pos.MasterPOSID,
+                                        tableInfos = new List<TableInfo>
+                                        {
+                                            new TableInfo{Field_ColumName = "DBList_DB_ID", OldValue = pos.DBList_DB_ID.ToString(), NewValue = corp_DBs.DB_ID.ToString()}
+                                        }
+                                    });
+                                    pos.DBList_DB_ID = corp_DBs.DB_ID;
+                                }
+                            }
+
+                            tableColumnInfos.Add(new TableInfo { NewValue = corp_DBs.DB_ID.ToString(),OldValue = storedInDb.DB_ID.ToString(),Field_ColumName = "DB_ID" });
                             storedInDb.DB_ID = corp_DBs.DB_ID;
                         }
                         if (storedInDb.corpID != corp_DBs.corpID)
                         {
-                            tableColumnInfos.Add(new TableInfo
-                            {
-                                NewValue = corp_DBs.corpID.ToString(),
-                                OldValue = storedInDb.corpID.ToString(),
-                                Field_ColumName = "corpID"
-                            });
+                            tableColumnInfos.Add(new TableInfo { NewValue = corp_DBs.corpID.ToString(),OldValue = storedInDb.corpID.ToString(),Field_ColumName = "corpID" });
                             storedInDb.DB_ID = corp_DBs.DB_ID;
                         }
 
@@ -168,7 +182,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         db.Entry(storedInDb).State = EntityState.Modified;
                         await db.SaveChangesAsync();
 
-                        AuditToStore auditLog = new AuditToStore
+                        auditLogs.Add(new AuditToStore
                         {
                             ModelPKey = corp_DBs.ID_PK,
                             TableName = "Corp_DBs",
@@ -176,20 +190,23 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                             AuditDateTime = DateTime.Now,
                             UserLogons = User.Identity.GetUserName(),
                             tableInfos = tableColumnInfos
-                        };
-                        new AuditLogRepository().AddAuditLogs(auditLog);
+                        });
+                        new AuditLogRepository().SaveLogs(auditLogs);
 
                         dbTransaction.Commit();
+
+                        if (changeMasterPosDb)
+                        {
+                            UpdatePosInCorHub.DoIfReleaseDB();
+                        }
                     }
                     catch (Exception)
                     {
                         dbTransaction.Rollback();
                         ModelState.AddModelError("", "Something failed. Please try again!");
                         return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
-
                     }
                 }
-                
             }
             return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
         }
@@ -204,13 +221,40 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                 {
                     try
                     {
-                        var toRelease = new Corp_DBs { ID_PK = corp_DBs.ID_PK, corpID = corp_DBs.corpID, DB_ID = corp_DBs.DB_ID };
+                        List<AuditToStore> auditLogs = new List<AuditToStore>();
+                        bool inactivePos = false;
+                        var currentDb = await db.DBLists.FindAsync(corp_DBs.DB_ID);
+                        if (currentDb.MasterPOS.Any())
+                        {
+                            inactivePos = true;
+                            var dbForInactiveMasterPos = await db.DBLists.FirstOrDefaultAsync(x => x.DB == "998");
+                            foreach (var pos in currentDb.MasterPOS.ToList())
+                            {
+                                auditLogs.Add(new AuditToStore
+                                {
+                                    UserLogons = User.Identity.GetUserName(),
+                                    AuditDateTime = DateTime.Now,
+                                    AuditAction = "U",
+                                    TableName = "MasterPOS",
+                                    ModelPKey = pos.MasterPOSID,
+                                    tableInfos = new List<TableInfo>
+                                    {
+                                        new TableInfo{Field_ColumName = "active", OldValue = pos.active.ToString(), NewValue = false.ToString()},
+                                        new TableInfo{Field_ColumName = "DBList_DB_ID", OldValue = pos.DBList_DB_ID.ToString(), NewValue = dbForInactiveMasterPos.DB_ID.ToString()}
+                                    }
+                                });
+                                pos.active = false;
+                                pos.DBList_DB_ID = dbForInactiveMasterPos.DB_ID;
+                            }
+                        }
+                       
+                        var toRelease = await db.Corp_DBs.FindAsync(corp_DBs.ID_PK);
                         db.Corp_DBs.Attach(toRelease);
                         db.Corp_DBs.Remove(toRelease);
                         await db.SaveChangesAsync();
 
-                        /*------------------ AUDIT LOG SCENARIO ----------------------*/
-                        AuditToStore auditLog = new AuditToStore
+                       
+                        auditLogs.Add(new AuditToStore
                         {
                             AuditAction = "D",
                             AuditDateTime = DateTime.Now,
@@ -222,11 +266,15 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                                     new TableInfo{OldValue = toRelease.DB_ID.ToString(), Field_ColumName = "DB_ID"},
                                     new TableInfo{OldValue = toRelease.corpID.ToString(), Field_ColumName = "corpID"},
                                 }
-                        };
-                        new AuditLogRepository().AddAuditLogs(auditLog);
-                        /*------------------ AUDIT LOG SCENARIO ----------------------*/
+                        });
+                        new AuditLogRepository().SaveLogs(auditLogs);
 
                         dbTransaction.Commit();
+
+                        if (inactivePos)
+                        {
+                            UpdatePosInCorHub.DoIfReleaseDB();
+                        }
                     }
                     catch (Exception)
                     {
@@ -234,6 +282,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         ModelState.AddModelError("", "Something failed. Please try again!");
                         return Json(new[] { corp_DBs }.ToDataSourceResult(request, ModelState));
                     }
+
                 }
 
             }

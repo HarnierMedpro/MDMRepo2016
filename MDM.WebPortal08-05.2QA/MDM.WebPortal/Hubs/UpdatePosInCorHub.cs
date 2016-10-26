@@ -15,5 +15,25 @@ namespace MDM.WebPortal.Hubs
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<Hubs.UpdatePosInCorHub>();
             context.Clients.All.NotifyIfCreateNewPOS(corpID, masterPosId, posName, posActive);
         }
+
+        public static void DoIfReleaseDB()
+        {
+            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<Hubs.UpdatePosInCorHub>();
+            context.Clients.All.NotifyIfRelease();
+        }
+
+        //public static void DoIfUpdatePos(int corpID, int masterPosId, string posName, bool posActive)
+        //{
+        //    IHubContext context = GlobalHost.ConnectionManager.GetHubContext<Hubs.UpdatePosInCorHub>();
+        //    context.Clients.All.NotifyIfUpdatePOS(corpID, masterPosId, posName, posActive);
+        //}
+
+        //public static void DoIfUpdatePosFromCorp(int masterPosId, string posName, bool posActive)
+        //{
+        //    IHubContext context = GlobalHost.ConnectionManager.GetHubContext<Hubs.UpdatePosInCorHub>();
+        //    context.Clients.All.NotifyIfChangePos(masterPosId, posName, posActive);
+        //}
+
+       
     }
 }
