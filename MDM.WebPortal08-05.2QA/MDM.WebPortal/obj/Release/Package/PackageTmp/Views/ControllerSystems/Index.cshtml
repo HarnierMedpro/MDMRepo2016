@@ -1,0 +1,151 @@
+﻿@using System.Collections
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+<header class="main-header">
+    <div class="container">
+        <h1 class="page-title"></h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="@Url.Action("Index", "Home", new{area =""})"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active">Controllers</li>
+        </ol>
+    </div>
+</header>
+
+<div class="container-fluid">
+@(Html.Kendo().Grid<MDM.WebPortal.Models.ViewModel.VMControllerSystem>()
+.Name("ControllerSystem")
+.ToolBar(tools =>
+{
+    tools.Create().Text("NEW CONTROLLER");
+    tools.Excel();
+    tools.Custom().Text("NEW AREA").Url("javascript:showAreaWdw()");
+})
+.Columns(columns =>
+{
+    columns.Bound(x => x.ControllerID).Hidden(true);
+
+    columns.Bound(x => x.Cont_Name).Width(110);
+
+    columns.ForeignKey(x => x.AreaID, (IEnumerable)ViewData["Area"], "AreaID", "AreaName").Width(110);
+
+    columns.Command(commands =>
+    {
+        commands.Edit();
+    }).Title("COMMANDS").Width(110);
+})
+.Sortable()
+.Filterable()
+.Pageable(ps => ps.Refresh(true)
+   .PreviousNext(true).PageSizes(true))
+.Groupable()
+.Reorderable(r => r.Columns(true))
+.Resizable(r => r.Columns(true))
+//.Selectable(s => s.Enabled(true)
+//.Type(GridSelectionType.Row)
+//.Mode(GridSelectionMode.Single))
+.DataSource(dataSource => dataSource
+  .Ajax()
+  .PageSize(10)
+    .Model(model =>
+      {
+          model.Id(e => e.ControllerID);
+          model.Field(e => e.ControllerID).Editable(false);
+      })
+      .Events(events => events.Error("error_handler"))
+      .Read(read => read.Action("Read_ControllerSystem", "ControllerSystems"))
+      .Update(update => update.Action("Update_ControllerSystem", "ControllerSystems"))
+      .Create(create => create.Action("Create_ControllerSystem", "ControllerSystems"))
+ )
+      )
+
+    <div style="display:none">
+        @(Html.Kendo().Window()
+           .Name("areaWdw")
+           .Width(630)
+           .Height(315)
+           .Actions(actions => actions.Minimize().Maximize().Close())
+           .AutoFocus(true)
+           .Visible(false)
+           .Title("AREA")
+           .Draggable()
+           .Resizable()
+           .Content(@<text>
+                <fieldset class="scheduler-border">
+                    <legend class="scheduler-border text-uppercase text-bold">area:</legend>
+                    <dl>
+                        <dt>
+                            <label class="control-label">NAME <sup class="text-danger">*</sup></label>
+                        </dt>
+                        <dd>
+                            @Html.Editor("AreaName", new {htmlAttributes = new {id="tb_Area", @style = "width:100%; border-radius:3px !important; height:26px;"}})
+                        </dd>
+                    </dl>
+                    <br/>
+                    <div class="text-center">
+                        <a id="btnSave" class="btn btn-ar btn-primary"><i class="fa fa-cloud-upload"></i> Save</a>
+                    </div>
+                </fieldset> 
+          </text>)
+        )
+    </div>
+</div>
+
+<script src="~/Scripts/kendo/jszip.min.js"></script>
+<script src="~/Scripts/lib/Notify/notify.min.js"></script>
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function(key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function() {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+            var grid = $("#ControllerSystem").data("kendoGrid");
+            grid.cancelChanges();
+        }
+    }
+
+    function showAreaWdw() {
+        $("#areaWdw").data("kendoWindow").open().center();
+    }
+
+    $("#btnSave").click(function() {
+        if ($.trim($('#tb_Area').val()).length === 0) {
+            $("#tb_Area").notify("This field is required. Try again!",
+               {
+                   position: "bottom left",
+                   className: 'error'
+               }
+           );
+            $("#tb_Area").focus();
+        } else {
+            var domainName = "http://" + window.location.host.toString();
+            var area = $("#tb_Area").val();
+            $.ajax({
+                type: "POST",
+                url: domainName + '/AreaSystems/Create_Area',
+                data: {
+                    AreaName: area
+                },
+                success: function (msg) {
+                    $("#areaWdw").data("kendoWindow").close();
+                    var grid = $("#ControllerSystem").data("kendoGrid");
+                    grid.dataSource.read();
+                },
+                complete: function (xhr, success) { },
+                error: function (xhr, ajaxOptions, thrwnError) {
+                    alert('Something failed. Please try again!');
+                }
+            });
+        }
+    });
+</script>
+
+ 

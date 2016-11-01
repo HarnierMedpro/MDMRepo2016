@@ -1,0 +1,562 @@
+﻿@*@model MDM.WebPortal.Models.FromDB.POSLOCExtraData
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<header class="main-header">
+    <div class="container">
+        <h1 class="page-title"></h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="@Url.Action("Index", "Home", new {area = ""})"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})"> LocationsPOS</a></li>
+            <li class="active">Info</li>
+        </ol>
+    </div>
+</header>
+
+<div class="container-fluid">
+    <div class="row">
+    <div class="col-md-offset-2 col-md-8">
+        <ul class="nav nav-pills nav-justified ar-nav-pills center-block margin-bottom">
+            <li class="active"><a href="#freetext" data-toggle="tab" aria-expanded="true"><i class="fa fa-clone"></i> Info</a></li>
+            <li class=""><a href="#booleans" data-toggle="tab" aria-expanded="false"><i class="fa fa-question-circle"></i> Questions</a></li>
+        </ul>
+        <div class="tab-content margin-top">
+            <div class="tab-pane active" id="freetext">
+                <div class="pricign-box pricign-box-pro">
+                    <div class="pricing-box-header">
+                        <h2></h2>
+                        
+                    </div>
+                    <div class="pricing-box-price">
+                        <h3> </h3>
+                    </div>
+                    <div class="pricing-box-content">
+                        <ul>
+                            <li><i class="fa fa-phone-square" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.Phone_Number):</strong> @Html.DisplayFor(model => model.Phone_Number).</li>
+                            <li><i class="fa fa-fax" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.Fax_Number):</strong> @Html.DisplayFor(model => model.Fax_Number).</li>
+                            <li><i class="fa fa-globe" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.Website):</strong> @Html.DisplayFor(model => model.Website).</li>
+                            <li><i class="fa fa-bed" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.Number_of_beds):</strong> @Html.DisplayFor(model => model.Number_of_beds).</li>
+                            <li><i class="fa fa-calendar" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.how_many_days_week_open):</strong> @Html.DisplayFor(model => model.how_many_days_week_open).</li>
+                            <li><i class="fa fa-building" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.Lab_Name):</strong> @Html.DisplayFor(model => model.Lab_Name).</li>
+                            <li><i class="fa fa-hashtag" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.BCBS_ID_Number):</strong> @Html.DisplayFor(model => model.BCBS_ID_Number).</li>
+                            <li><i class="fa fa-hashtag" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.UPIN_Number):</strong> @Html.DisplayFor(model => model.UPIN_Number).</li>
+                            <li><i class="fa fa-hashtag" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.Medicaid_Number):</strong> @Html.DisplayFor(model => model.Medicaid_Number).</li>
+                            <li><i class="fa fa-map-marker" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.State_of_MD_or_PhyGrp):</strong> @Html.DisplayFor(model => model.State_of_MD_or_PhyGrp).</li>
+                            <li><i class="fa fa-info-circle" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.JACHO_CARF):</strong> @Html.DisplayFor(model => model.JACHO_CARF).</li>
+                            <li><i class="fa fa-user" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.Manage_care_contracts):</strong> @Html.DisplayFor(model => model.Manage_care_contracts).</li>
+                            <li><i class="fa fa-calendar-check-o" style="color: #0099da"></i> <strong class="text-uppercase">@Html.DisplayNameFor(model => model.In_Service_date_time):</strong> @Html.DisplayFor(model => model.In_Service_date_time).</li>
+                           @if (ViewBag.FormSent != null)
+                           {
+                            <li><i class="fa fa-paper-plane" style="color: #0099da"></i> <strong class="text-uppercase">forms sent:</strong> @ViewBag.FormSent</li>
+                           }
+                        </ul>
+                    </div>
+                    <div class="pricing-box-footer">
+                        
+                    </div>
+                </div>
+            </div>
+
+        <div class="tab-pane" id="booleans">
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">is the W9 on file?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.W_9_on_File == null)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>NO</strong>
+                }
+                else if (Model.W_9_on_File.Value == false)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/><strong>NO</strong>
+                }
+                else if (Model.W_9_on_File.Value == true)
+                {
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>NO</strong>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">do you have 24 hrs nursing?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.Have_24hrs_nursing == null)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.Have_24hrs_nursing.Value == false)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio" checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio" checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+            </div>
+        </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="text-bold text-uppercase text-info">Out of Network or In Network?</label>
+                </div>
+                <div class="col-md-4">
+                    @if (Model.Out_of_Network_In_Network == null)
+                    {
+                        <input type="radio" class="radio-inline" disabled="disabled" /><strong>OUT</strong>
+                        <input type="radio" class="radio-inline" disabled="disabled" /><strong>IN</strong>
+
+                    }
+                    else if (Model.Out_of_Network_In_Network == "Out")
+                    {
+                        <input type="radio" checked="checked" class="radio-inline" disabled="disabled" /><strong>OUT</strong>
+                        <input type="radio" class="radio-inline" disabled="disabled" /><strong>IN</strong>
+
+                    }
+                    else
+                    {
+                        <input type="radio" class="radio-inline" disabled="disabled" /><strong>OUT</strong>
+                        <input type="radio" checked="checked" class="radio-inline" disabled="disabled" /><strong>IN</strong>
+                    }
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="text-bold text-uppercase text-info">is the licensure on file?</label>
+                </div>
+                <div class="col-md-4">
+                    @if (Model.Licensure_on_File == null)
+                    {
+                        <input type="radio" class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                        <input type="radio" class="radio-inline" disabled="disabled"/>
+                        <strong>NO</strong>
+                    }
+                    else if (Model.Licensure_on_File.Value == false)
+                    {
+                        <input type="radio" class="radio-inline" disabled="disabled"/>
+                        <strong>YES</strong>
+                        <input type="radio" checked="checked" class="radio-inline" disabled="disabled"/>
+                        <strong>NO</strong>
+                    }
+                    else
+                    {
+                        <input type="radio" checked="checked" class="radio-inline" disabled="disabled"/>
+                        <strong>YES</strong>
+                        <input type="radio" class="radio-inline" disabled="disabled"/>
+                        <strong>NO</strong>
+                    }
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="text-bold text-uppercase text-info">do you have mental license?</label>
+                </div>
+                <div class="col-md-4">
+                    @if (Model.Mental_License == null)
+                    {
+                        <input type="radio" class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                        <input type="radio" class="radio-inline" disabled="disabled"/>
+                        <strong>NO</strong>
+                    }
+                    else if (Model.Mental_License.Value == false)
+                    {
+                        <input type="radio" class="radio-inline" disabled="disabled"/>
+                        <strong>YES</strong>
+                        <input type="radio" checked="checked" class="radio-inline" disabled="disabled"/>
+                        <strong>NO</strong>
+                    }
+                    else
+                    {
+                        <input type="radio" checked="checked" class="radio-inline" disabled="disabled"/>
+                        <strong>YES</strong>
+                        <input type="radio" class="radio-inline" disabled="disabled"/>
+                        <strong>NO</strong>
+                    }
+                </div>
+            </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">is the regulations on file?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.Regulations_on_File == null)
+                {
+                    <input type="radio" class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.Regulations_on_File.Value == false)
+                {
+                    <input type="radio" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio" checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio" checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">has facility billed insurance before?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.Has_facility_billed_ins_before == null)
+                {
+                    <input type="radio" class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.Has_facility_billed_ins_before.Value == false)
+                {
+                    <input type="radio" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio" checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio" checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">is the copies of all managed care contracts on file?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.Copies_of_all_managed_care_contracts_on_file == null)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.Copies_of_all_managed_care_contracts_on_file.Value == false)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">is in service scheduled?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.In_Service_scheduled == null)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.In_Service_scheduled.Value == false)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">is the form created?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.Forms_created == null)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.Forms_created.Value == false)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">is the portal training setup?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.Portal_training_setup == null)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.Portal_training_setup.Value == false)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">is the email regarding conference setup?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.email_regarding_conference_set_up == null)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.email_regarding_conference_set_up.Value == false)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">is the databse setup?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.Database_set_up == null)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.Database_set_up.Value == false)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">is the Availavility request sent out?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.Availavility_request_sent_out == null)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.Availavility_request_sent_out.Value == false)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">is the Availavility completed?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.Availavility_completed == null)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.Availavility_completed.Value == false)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">is the Fee schedule in binder?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.Fee_schedule_in_binder == null)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.Fee_schedule_in_binder.Value == false)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio" checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="text-bold text-uppercase text-info">is the Navinet request completed?</label>
+            </div>
+            <div class="col-md-4">
+                @if (Model.Navinet_request_completed == null)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else if (Model.Navinet_request_completed.Value == false)
+                {
+                    <input type="radio"  class="radio-inline" disabled="disabled"/>
+                    <strong>YES</strong>
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/>
+                    <strong>NO</strong>
+                }
+                else
+                {
+                    <input type="radio"  checked="checked" class="radio-inline" disabled="disabled"/><strong>YES</strong>
+                    <input type="radio"  class="radio-inline" disabled="disabled"/><strong>NO</strong>
+                }
+            </div>
+        </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="col-md-offset-2 col-md-8">
+        <br/>
+        @if (Model.FACInfoData_FACInfoDataID == 0)
+        {
+            <div class="pull-right">
+                <a href="@Url.Action("Create", new {facInfoData = ViewBag.FACInfoDataID})" class="btn btn-ar btn-primary">
+                    <i class="fa fa-cloud-upload"></i> FILL OUT
+                </a>
+                <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
+                    <i class="fa fa-ban"></i> CANCEL
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="pull-right">
+                <a href="@Url.Action("Edit", new {id = Model.FACInfoData_FACInfoDataID})" class="btn btn-ar btn-primary">
+                    <i class="fa fa-cloud-upload"></i> UPDATE
+                </a>
+                <a href="@Url.Action("Index", "LocationsPOS", new {area = "PlaceOfServices"})" class="btn btn-ar btn-danger">
+                    <i class="fa fa-ban"></i> CANCEL
+                </a>
+            </div>
+        }
+
+    </div>
+   
+    </div>
+</div>*@
+

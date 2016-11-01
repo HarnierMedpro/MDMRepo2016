@@ -1,0 +1,41 @@
+﻿@model MDM.WebPortal.Areas.PlaceOfServices.Models.ViewModels.VMLocPOS_Contact
+
+@{
+    int locationPOSID = ViewBag.Facility_DBs_IDPK;
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-offset-2 col-md-6">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(x => x.Facility_DBs_IDPK)
+
+                <div class="form-horizontal">
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <fieldset class="scheduler-border">
+                                <legend class="scheduler-border">CONTACTS: <sup class="text-danger">*</sup></legend>
+                                @(Html.EditorFor(model => model.Contacts))
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <div class="pull-right">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-ar btn-primary">
+                                <i class="fa fa-cloud-upload"></i> Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+

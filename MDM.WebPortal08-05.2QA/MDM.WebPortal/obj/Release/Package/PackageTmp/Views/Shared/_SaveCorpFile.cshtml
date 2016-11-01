@@ -1,0 +1,295 @@
+﻿@using MDM.WebPortal.Areas.Credentials.Models.ViewModel
+@model MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMCorpFiles
+
+<div class="container-fluid">
+
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-tabs-ar">
+        <li class="active"><a href="#home" data-toggle="tab" aria-expanded="false"><i class="fa fa-cloud-upload"></i> UPLOAD</a></li>
+        <li class=""><a href="#profile" data-toggle="tab" aria-expanded="false"><i class="fa fa fa-folder-open"></i> NEW TYPE</a></li>
+
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="home">
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    @using (Html.BeginForm("SaveCorpFiles", "POSFiles", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(x => x.corpID)
+                        @Html.HiddenFor(x => x.MasterPOSID)
+                        <div class="form-horizontal">
+                            <hr/>
+                            @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+
+                            @(Html.Kendo().Upload()
+                                  .Name("fichero")
+                                  .Multiple(false)
+                                  .TemplateId("fileTemplate")
+                             )
+
+                            <div class="form-group">
+                                <div class="col-md-11">
+                                    <label class="control-label">DESCRIPTION <sup class="text-danger">*</sup></label>
+                                    @Html.EditorFor(model => model.Description, new {htmlAttributes = new {id = "tbDescription", @class = "form-control form-control1", @style = "height:25px !important;"}})
+                                    @Html.ValidationMessageFor(model => model.Description, "", new {@class = "text-danger"})
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    <label class="control-label text-uppercase text-bold">file type <sup class="text-danger">*</sup></label>
+                                    @(Html.Kendo().DropDownListFor(x => x.FileTypeID)
+                                          .DataTextField("FileType_Name")
+                                          .DataValueField("FileTypeID")
+                                          .HtmlAttributes(new {style = "width:100%"})
+                                          .Template(" #= FileType_Name #  (#= FileLevel #)")
+                                          .Height(290)
+                                          .DataSource(source =>
+                                          {
+                                              source.Custom()
+                                                  .ServerFiltering(true)
+                                                  .ServerPaging(true)
+                                                  .PageSize(80)
+                                                  .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                                                  .Transport(transport =>
+                                                  {
+                                                      transport.Read("Read_CorpFileType", "FileTypeIs");
+                                                  })
+                                                  .Schema(schema =>
+                                                  {
+                                                      schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                                                          .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                                                  });
+                                          })
+                                          )
+                                    @Html.ValidationMessageFor(model => model.FileTypeID, "", new {@class = "text-danger"})
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-ar btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i>Close</button>
+                                    <button id="btnSave" type="submit" class="btn btn-ar btn-primary" onclick="return CheckRequired();"><i class="fa fa-cloud-upload"></i>Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="profile">
+            @Html.Partial("_SaveFileType", new VMFileType())
+        </div>
+    </div>
+</div>
+
+<style>
+    .file-icon {
+        display: inline-block;
+        float: left;
+        width: 48px;
+        height: 48px;
+        margin-left: 10px;
+        margin-top: 13.5px;
+    }
+
+    .img-file {
+        background-image: url(/content/web/upload/jpg.png);
+    }
+
+    .doc-file {
+        background-image: url(/content/web/upload/doc.png);
+    }
+
+    .pdf-file {
+        background-image: url(/content/web/upload/pdf.png);
+    }
+
+    .xls-file {
+        background-image: url(/content/web/upload/xls.png);
+    }
+
+    .zip-file {
+        background-image: url(/content/web/upload/zip.png);
+    }
+
+    .default-file {
+        background-image: url(/content/web/upload/default.png);
+    }
+
+    #example .file-heading {
+        font-family: Arial;
+        font-size: 1.1em;
+        display: inline-block;
+        float: left;
+        width: 60%;
+        margin: 0 0 0 20px;
+        height: 25px;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    #example .file-name-heading {
+        font-weight: bold;
+        margin-top: 20px;
+    }
+
+    #example .file-size-heading {
+        font-weight: normal;
+        font-style: italic;
+    }
+
+    li.k-file .file-wrapper .k-upload-action {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    li.k-file div.file-wrapper {
+        position: relative;
+        height: 75px;
+    }
+</style>
+
+<script src="~/Scripts/lib/Notify/notify.min.js"></script>
+
+<script id="fileTemplate" type="text/x-kendo-template">
+    <span class='k-progress'></span>
+    <div class='file-wrapper'>
+        <span class='file-icon #=addExtensionClass(files[0].extension, files[0].size)#'></span>
+        <h4 class='file-heading file-name-heading'>Name: #=name#</h4>
+        <h4 class='file-heading file-size-heading'>Size: #=size# bytes</h4>
+        <button type='button' class='k-upload-action'></button>
+    </div>
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#fType").submit(function () {
+            if ($.trim($("#tbType").val().length) == 0) {
+                $('#tbType').notify("This field is required.", { position: "bottom left" });
+                $('#tbType').focus();
+                return false;
+            }
+            else {
+                var domainName = "http://" + window.location.host.toString();
+                var typeName = $("#tbType").val();
+                var fileLevel = $("#fileLev").val();
+                if (typeName !== undefined && fileLevel !== undefined) {
+                    $.ajax({
+                        type: "POST",
+                        url: domainName + '/FileTypeIs/Save_FileType',
+                        data: {
+                            FileType_Name: typeName,
+                            FileLevel: fileLevel
+                        },
+                        success: function (data) {
+                            switch (data.length) {
+                            case 0:
+                                alert("Something failed. Please try again!");
+                                break;
+                            default:
+                                var drp = $("#FileTypeID").data("kendoDropDownList");
+                               
+                                $.each(data, function (index, value) {
+                                    if (value.FileTypeID > 0 && value.FileLevel == "CORPORATION") {
+                                        drp.dataSource.add({ FileTypeID: value.FileTypeID, FileType_Name: value.FileType_Name, FileLevel: value.FileLevel });
+                                    }
+                                });
+
+                                $("#tbType").val('');
+                                break;
+                            }
+                        },
+                        error: function () {
+                           
+                           alert("failed");
+                        }
+                    });
+                } else {
+                    console.log("typeName:" + typeName);
+                    console.log("fileLevel:" + fileLevel);
+                    alert("Something failed. Please try again!");
+                }
+               
+                return false;
+            }
+        });
+    });
+
+    function addExtensionClass(extension, size) {
+        if (size < 50000000) {
+            switch (extension) {
+            case '.jpg':
+            case '.img':
+            case '.png':
+            case '.gif':
+            case '.jpeg':
+                $('#btnSave').prop('disabled', false);
+                return "img-file";
+            case '.doc':
+            case '.docx':
+                $('#btnSave').prop('disabled', false);
+                return "doc-file";
+            case '.xls':
+            case '.xlsx':
+                $('#btnSave').prop('disabled', false);
+                return "xls-file";
+            case '.pdf':
+                $('#btnSave').prop('disabled', false);
+                return "pdf-file";
+            case '.zip':
+            case '.rar':
+                $('#btnSave').prop('disabled', false);
+                return "zip-file";
+            case '.rtf':
+                return "default-file";
+            default:
+                //return "default-file";
+                $('#btnSave').prop('disabled', true);
+                $.notify("This file extension is not allowed!",
+                {
+                    position: "top left",
+                    className: 'error'
+                });
+
+                return "default-file";
+            }
+        } else {
+            $.notify("The file size have to be less than 50 Mb!",
+            {
+                position: "top left",
+                className: 'error'
+            });
+            $('#btnSave').prop('disabled', true);
+            return false;
+        }
+
+    }
+
+    function CheckRequired() {
+        if (!$('input[type="file"]').val()) {
+            $.notify("You have to upload a file. Please try again!",
+            {
+                position: "top left",
+                className: 'error'
+            });
+            return false;
+        }
+        if ($.trim($("#tbDescription").val().length) === 0) {
+            $('#tbDescription').notify("This field is required.", { position: "bottom left" });
+            $('#tbDescription').focus();
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+</script>

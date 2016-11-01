@@ -1,0 +1,262 @@
+﻿@using System.Collections
+@using Kendo.Mvc.UI
+  @*@model IEnumerable<MDM.WebPortal.Models.FromDB.ADPMaster>*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<header class="main-header">
+    <div class="container">
+        <h1 class="page-title"></h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="@Url.Action("Index", "Home", new {area = ""})"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active">ADP_Master</li>
+        </ol>
+    </div>
+</header>
+
+<div class="container-fluid">
+    @(Html.Kendo().Grid<MDM.WebPortal.Areas.ADP.Models.VMAdpMaster>()
+          .Name("ADPArea")
+          .ToolBar(tools => tools.Excel())
+          .Excel(excel => excel
+              .AllPages(true))
+
+          .Columns(columns =>
+          {
+              columns.Bound(x => x.ADPMaster_ID).Hidden(true);
+
+              columns.Bound(p => p.ADP).Width(70).Filterable(true).Sortable(true);
+
+              columns.Bound(x => x.LName).Width(110);
+
+              columns.Bound(x => x.FName).Width(110);
+
+              columns.Bound(p => p.Title).Width(110);
+
+              columns.Bound(p => p.Manager).Width(110);
+
+              columns.Bound(p => p.Active).Width(110);
+
+              columns.Command(commands =>
+              {
+                  commands.Edit();
+              }).Title("COMMANDS").Width(110);
+          })
+          .Events(e => e.ExcelExport("employees_excelExport"))
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .ServerOperation(true)
+              .PageSize(10)
+              .Model(model =>
+              {
+                  model.Id(x => x.ADPMaster_ID);
+                  model.Field(x => x.ADPMaster_ID).Editable(false);
+                  model.Field(x => x.ADP).Editable(false);
+              })
+              .Events(events => events.Error("error_handler"))
+              .Update(update => update.Action("Update_Adp", "ADPMasters"))
+              .Read(read => read.Action("Read_Adp", "ADPMasters"))
+          )
+          .Filterable()
+          .Pageable(ps => ps.Refresh(true)
+          .PreviousNext(true).PageSizes(true))
+          .Sortable()
+          .Groupable()
+          .Reorderable(r => r.Columns(true))
+          .Resizable(r => r.Columns(true))
+          .ClientDetailTemplateId("template")
+          //.Selectable(s => s.Enabled(true) ERROR: Additional information: An item with the same key has already been added.
+          //.Type(GridSelectionType.Row)
+          //.Mode(GridSelectionMode.Single))
+          )
+</div>
+<script src="~/Scripts/kendo/jszip.min.js"></script>
+<script id="template" type="text/kendo-tmpl">
+    @(Html.Kendo().Grid<MDM.WebPortal.Areas.ADP.Models.VMEdgemed_Logons>()
+    .Name("EdgemedLog_#=ADPMaster_ID#")
+    .ToolBar(tools => tools.Create().Text("NEW EDGEMED_LOGONS"))
+    .Columns(columns =>
+     {    
+         columns.Bound(o => o.Edgemed_UserName).Width(110);
+
+         columns.ForeignKey(o => o.Zno, (IEnumerable<SelectListItem>)ViewData["Zno"],"Text","Value").Width(70);
+
+         columns.Bound(o => o.EdgeMed_ID).Width(110);
+
+         columns.Bound(o => o.Active).Width(110);
+
+         columns.Command(commands =>
+         {
+             commands.Edit();
+         }).Title("COMMANDS").Width(110);
+     })
+     .Events(e => e.ExcelExport("orders_excelExport"))
+     .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Model(model =>
+          {
+              model.Id(x => x.Edgemed_LogID);
+              model.Field(x => x.Edgemed_LogID).Editable(false);
+          })
+        .Events(events => events.Error("error_EdgemedLogHandler"))
+        .Read(read => read.Action("EdgeMedLogonsforAdp", "Edgemed_Logons", new { ADPMasterID = "#=ADPMaster_ID#" }))
+        .Update(update => update.Action("UpdateEdgemed", "Edgemed_Logons", new { ADPMasterID = "#=ADPMaster_ID#" }))
+        .Create(create => create.Action("CreateEdgemed", "Edgemed_Logons", new { ParentID = "#=ADPMaster_ID#" }))
+    )
+    .Pageable()
+    .Sortable()
+    .ToClientTemplate()
+    )
+</script>
+
+<script>
+    var detailExportPromises = [];
+
+    var dataSource = new kendo.data.DataSource({
+        type: "aspnetmvc-ajax",
+        transport: {
+            read: "@Url.Action("EdgeMedLogonsforAdp", "ADPMasters")",
+        type: "POST"
+    },
+        schema: {
+        data: "Data",
+        total: "Total",
+    error: "Errors"
+    }
+    });
+
+    dataSource.read();
+
+    function orders_excelExport(e) {
+        e.preventDefault();
+    }
+
+    function employees_excelExport(e) {
+        e.preventDefault();
+
+        var workbook = e.workbook;
+
+        detailExportPromises = [];
+
+        var masterData = e.data;
+
+        for (var rowIndex = 0; rowIndex < masterData.length; rowIndex++) {
+            exportChildData(masterData[rowIndex].ADPMaster_ID, rowIndex);
+        }
+
+        // wait for all detail grids to finish exporting
+        $.when.apply(null, detailExportPromises)
+        .then(function () {
+            // get the export results
+            var detailExports = $.makeArray(arguments);
+
+            // sort by masterRowIndex
+            detailExports.sort(function (a, b) {
+                return a.masterRowIndex - b.masterRowIndex;
+            });
+
+            // add an empty column
+            workbook.sheets[0].columns.unshift({ width: 30 });
+
+            // prepend an empty cell to each row
+            for (var i = 0; i < workbook.sheets[0].rows.length; i++) {
+                workbook.sheets[0].rows[i].cells.unshift({});
+            }
+
+            // merge the detail export sheet rows with the master sheet rows
+            // loop backwards so the masterRowIndex doesn't need to be updated
+            for (var i = detailExports.length - 1; i >= 0; i--) {
+                var masterRowIndex = detailExports[i].masterRowIndex + 1;
+
+                var sheet = detailExports[i].sheet;
+
+                // prepend an empty cell to each row
+                for (var ci = 0; ci < sheet.rows.length; ci++) {
+                    if (sheet.rows[ci].cells[0].value) {
+                        sheet.rows[ci].cells.unshift({});
+                    }
+                }
+
+                // insert the detail sheet rows after the master row
+                [].splice.apply(workbook.sheets[0].rows, [masterRowIndex + 1, 0].concat(sheet.rows));
+            }
+
+            // save the workbook
+            kendo.saveAs({
+                dataURI: new kendo.ooxml.Workbook(workbook).toDataURL(),
+                fileName: "ExportADP.xlsx"
+            });
+        });
+    }
+
+    function exportChildData(ADPMasterID, rowIndex) {
+        var deferred = $.Deferred();
+
+        detailExportPromises.push(deferred);
+
+        var rows = [{
+            cells: [
+                { value: "EDGEMED USERNAME" },
+                { value: "ZOOM SERVER" },
+                { value: "EDGEMED ID" },
+                { value: "ACTIVE" }
+            ]
+        }];
+
+        dataSource.filter({ field: "ADPMasterID", operator: "eq", value: ADPMasterID });
+
+        var exporter = new kendo.ExcelExporter({
+            columns: [
+                { field: "Edgemed_UserName" },
+                { field: "Zno" },
+                { field: "EdgeMed_ID" },
+                { field: "Active" }
+            ],
+            dataSource: dataSource
+        });
+
+        exporter.workbook().then(function (book, data) {
+            deferred.resolve({
+                masterRowIndex: rowIndex,
+                sheet: book.sheets[0]
+            });
+        });
+    }
+ 
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+            var grid = $("#ADPArea").data("kendoGrid");
+            grid.cancelChanges();
+        }
+    }
+
+    function error_EdgemedLogHandler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+            var grid = jQuery("[id^='EdgemedLog_']").data("kendoGrid");
+            grid.cancelChanges();
+        }
+    }
+</script>

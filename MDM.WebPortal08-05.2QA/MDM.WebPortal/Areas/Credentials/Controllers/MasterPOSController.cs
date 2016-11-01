@@ -821,7 +821,6 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return Json(new[] {masterPos}.ToDataSourceResult(request, ModelState));
         }
       
-
         public ActionResult Download(string ImageName)
         {
             string ServerLocation = @"\\fl-nas02\MDMFiles\";
@@ -882,6 +881,14 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     wic.Undo();
                 }
             }
+        }
+
+        [HttpPost]
+        public ActionResult Pdf_Export_Save(string contentType, string base64, string fileName)
+        {
+            var fileContents = Convert.FromBase64String(base64);
+
+            return File(fileContents, contentType, fileName);
         }
 
         protected override void Dispose(bool disposing)

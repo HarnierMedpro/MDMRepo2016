@@ -1,0 +1,43 @@
+﻿@model MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMPHYGrp
+@{
+    //required in order to render validation attributes
+    ViewContext.FormContext = new FormContext();
+}
+
+
+
+<div class="container-fluid">
+   
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border text-uppercase text-bold">physician group:</legend>
+                <dl>
+                    <dt>
+                        @(Html.LabelFor(model => model.PHYGroupName)):
+                    </dt>
+                    <dd>
+                       @(Html.EditorFor(model => model.PHYGroupName, new { htmlAttributes = new { style = "width:100%; border-radius:3px !important; height:28.81px;" } }))
+                        @Html.ValidationMessageFor(m => m.PHYGroupName)
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        @(Html.LabelFor(model => model.PHYGrpNPI_Num)):
+                    </dt>
+                    <dd>
+                        @(Html.EditorFor(model => model.PHYGrpNPI_Num, new { htmlAttributes = new { style = "width:100%; border-radius:3px !important; height:28.81px;" } }))
+                        @Html.ValidationMessageFor(m => m.PHYGrpNPI_Num)
+                    </dd>
+                </dl>
+
+                <dl>
+                    <dt>
+                        @(Html.Label("PHYSICIANS")):
+                    </dt>
+                    <dd>
+                        @(Html.EditorFor(model => model.Physicians))
+                    </dd>
+                </dl>
+
+            </fieldset>
+      
+</div>
