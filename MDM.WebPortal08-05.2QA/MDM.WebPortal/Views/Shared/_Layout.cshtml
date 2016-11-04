@@ -8,6 +8,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
+	
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -46,9 +47,17 @@
     
     @Scripts.Render("~/bundles/bootstrap")
     <!--Kendo UI for ASP.NET MVC-->
-    @Scripts.Render("~/bundles/kendo")
-    @Styles.Render("~/Content/kendo/css")
+    @*@Scripts.Render("~/bundles/kendo")
+    @Styles.Render("~/Content/kendo/css")*@
+    <link href="~/Content/kendo/2016.3.1028/kendo.common.min.css" rel="stylesheet" />
+    @*<link href="~/Content/kendo/2016.3.1028/kendo.metro.min.css" rel="stylesheet" />*@
 
+    <link href="~/Content/kendo/2016.3.1028/kendo.common-office365.min.css" rel="stylesheet" />
+ @*<link href="~/Content/kendo/2016.3.1028/kendo.dataviz.min.css" rel="stylesheet" />
+    <link href="~/Content/kendo/2016.3.1028/kendo.dataviz.metro.min.css" rel="stylesheet"/>*@
+
+    <script src="~/Scripts/kendo/2016.3.1028/kendo.all.min.js"></script>
+    <script src="~/Scripts/kendo/2016.3.1028/kendo.aspnetmvc.min.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

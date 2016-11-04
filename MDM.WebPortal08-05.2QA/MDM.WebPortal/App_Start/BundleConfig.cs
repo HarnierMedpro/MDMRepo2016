@@ -10,13 +10,14 @@ namespace IdentitySample
             bundles.IgnoreList.Clear();
 
             bundles.Add(new ScriptBundle("~/bundles/kendo").Include(
-                "~/Scripts/kendo/kendo.all.min.js",
+                "~/Scripts/kendo/2016.3.1028/kendo.all.min.js",
                 // "~/Scripts/kendo/kendo.timezones.min.js", // uncomment if using the Scheduler
-                "~/Scripts/kendo/kendo.aspnetmvc.min.js"));
+                "~/Scripts/kendo/2016.3.1028/kendo.aspnetmvc.min.js",
+                "~/Scripts/kendo/2016.3.1028/jszip.min.js"));
 
-            bundles.Add(new StyleBundle("~/Content/kendo/css").Include(
-                "~/Content/kendo/kendo.common-bootstrap.min.css",
-                "~/Content/kendo/kendo.bootstrap.min.css"));
+            bundles.Add(new StyleBundle("~/Content/kendo/2016.3.1028/css").Include(
+                "~/Content/kendo/2016.3.1028/kendo.common-bootstrap.min.css",
+                "~/Content/kendo/2016.3.1028/kendo.bootstrap.min.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));

@@ -1,8 +1,7 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -62,7 +61,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         public async Task<ActionResult> Upload_File([DataSourceRequest] DataSourceRequest request,
             HttpPostedFileBase files, [Bind(Include = "FileID, MasterPOSID, FileTypeID, Description")] VMPOSFile posFile, int? ParentID)
         {
-            if (ModelState.IsValid)
+           if (ModelState.IsValid)
             {
                 if (files == null || files.ContentLength == 0)
                 {
@@ -684,7 +683,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     return Json("Something failed. Please try again!");
                 }
             }
-            return Json("File Inactive");
+            return Json(file.MasterPOS_MasterPOSID);
         } 
 
         public ActionResult Download(string ImageName)
@@ -715,47 +714,100 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         }
 
         [HttpPost]
-        public ActionResult Upload()
+        public async Task<ActionResult> UploadFileWAjax([Bind(Include = "FileID, MasterPOSID, FileTypeID, Description")] VMPOSFile posFile)
         {
-            string display = Request.Files.Count.ToString();
-            try
+            string responseMessage = "";
+            if (ModelState.IsValid)
             {
-                //foreach (string file in Request.Files)
-                //{
-                //    var fileContent = Request.Files[file];
-                //    if (fileContent != null && fileContent.ContentLength > 0)
-                //    {
-                //        // get a stream
-                //        var stream = fileContent.InputStream;
-                //        // and optionally write the file to disk
-                //        var fileName = Path.GetFileName(file);
-                //        var physicalPath = Path.Combine(ServerLocation, fileName);
-                //        fileContent.SaveAs(physicalPath);
-
-                //    }
-                //}
-
-                for (int i = 0; i < Request.Files.Count; i++)
+                try
                 {
-                    HttpPostedFileBase file = Request.Files[i]; //Uploaded file
-                    //Use the following properties to get file's name, size and MIMEType
-                    int fileSize = file.ContentLength;
-                    string fileName = file.FileName;
-                    string mimeType = file.ContentType;
-                    System.IO.Stream fileContent = file.InputStream;
-                    //To save file, use SaveAs method
-                    var physicalPath = Path.Combine(ServerLocation, fileName);
-                    file.SaveAs(physicalPath); //File will be saved in application root
+                    HttpFileCollectionBase filesCollection = HttpContext.Request.Files;
+                    var file = filesCollection[0];
+                    if (file == null || file.ContentLength == 0)
+                    {
+                        return Json("You need to choose a valid file. Please try again!");
+                    }
+                    string fileName = Path.GetFileName(file.FileName);
 
+                    using (DbContextTransaction dTransaction = db.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            Guid primaryKey = Guid.NewGuid();
+                            var fileExtension = Path.GetExtension(file.FileName);
+
+                            var toStore = new MasterFile
+                            {
+                                MasterPOS_MasterPOSID = posFile.MasterPOSID,
+                                Description = posFile.Description,
+                                FileTypeID = posFile.FileTypeID,
+                                FileExtension = fileExtension,
+                                FileName = primaryKey.ToString() + fileExtension,
+                                ServerLocation = ServerLocation,
+                                UploadTime = DateTime.Now,
+                                Active = true
+                            };
+
+                            db.MasterFiles.Add(toStore);
+                            await db.SaveChangesAsync();
+                            posFile.FileID = toStore.FileID;
+                            posFile.FileName = toStore.FileName;
+                            posFile.FileExtension = toStore.FileExtension;
+
+                            AuditToStore auditLog = new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                AuditAction = "I",
+                                ModelPKey = toStore.FileID,
+                                TableName = "MasterFile",
+                                tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "MasterPOS_MasterPOSID", NewValue = toStore.MasterPOS_MasterPOSID.ToString()},
+                                    new TableInfo{Field_ColumName = "Description", NewValue = toStore.Description},
+                                    new TableInfo{Field_ColumName = "FileTypeID", NewValue = toStore.FileTypeID.ToString()},
+                                    new TableInfo{Field_ColumName = "FileExtension", NewValue = toStore.FileExtension},
+                                    new TableInfo{Field_ColumName = "FileName", NewValue = toStore.FileName},
+                                    new TableInfo{Field_ColumName = "ServerLocation", NewValue = toStore.ServerLocation},
+                                    new TableInfo{Field_ColumName = "UploadTime", NewValue = toStore.UploadTime.ToString(CultureInfo.InvariantCulture)},
+                                    new TableInfo{Field_ColumName = "Active", NewValue = toStore.Active.ToString()}
+                                }
+                            };
+
+                            new AuditLogRepository().AddAuditLogs(auditLog);
+
+                            // Retrieve the Windows account token for specific user.
+                            IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("hsuarez", "Medpro0417!", "MEDPROBILL"); //USER WITH PERMISSIONS TO CREATE AND READ
+                            //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MDMTest", "Medpro1", "MEDPROBILL");  //USER WITHOUT PERMISSIONS
+
+                            WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
+                            WindowsImpersonationContext wic = null;
+
+                            wic = wi.Impersonate();
+                            // Thread is now impersonating you can call the backend operations here...
+                            var physicalPath = Path.Combine(ServerLocation, toStore.FileName);
+                            file.SaveAs(physicalPath);
+
+                            dTransaction.Commit();
+
+                            return Json("Success!");
+                        }
+                        catch (Exception e)
+                        {
+                            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                            dTransaction.Rollback();
+                            return Json(e.Message);
+                        }
+                    }
+                }
+                catch (NotImplementedException ex)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return Json(ex.Message);
                 }
             }
-            catch (Exception)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json("Upload failed");
-            }
-
-            return Json(display);
+          
+            return Json("Something failed. Please try again!");
         }
 
         protected override void Dispose(bool disposing)
