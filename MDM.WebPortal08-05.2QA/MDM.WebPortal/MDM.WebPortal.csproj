@@ -1362,6 +1362,8 @@
     <Content Include="Content\kendo\2016.3.1028\fonts\glyphs\KendoUIGlyphs.woff" />
     <Content Include="Content\kendo\2016.3.1028\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.3.1028\images\kendoui.woff" />
+    <Content Include="Areas\Credentials\Views\POSFiles\Corp_Files.cshtml" />
+    <Content Include="Areas\Credentials\Views\POSFiles\SaveCorpFiles.cshtml" />
     <None Include="Scripts\kendo\2016.3.1028\kendo.all-vsdoc.js" />
     <None Include="Scripts\kendo\2016.3.1028\kendo.all.min.intellisense.js" />
     <Content Include="Scripts\kendo\2016.3.1028\kendo.all.min.js" />
@@ -1593,7 +1595,7 @@
     <Content Include="Areas\PlaceOfServices\Views\POSLOCExtraDatas\Edit.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\POSLOCExtraDatas\Index.cshtml" />
     <Content Include="Areas\PlaceOfServices\Views\web.config" />
-    <Content Include="Areas\Credentials\Views\POSFiles\Corp_Files.cshtml" />
+    <Content Include="Areas\Credentials\Views\POSFiles\Corp_Filesold.cshtml" />
     <Content Include="Areas\Credentials\Views\POSFiles\PosFiles.cshtml" />
     <None Include="Properties\PublishProfiles\TEST_QASite.pubxml" />
     <None Include="Properties\PublishProfiles\Site02.pubxml" />

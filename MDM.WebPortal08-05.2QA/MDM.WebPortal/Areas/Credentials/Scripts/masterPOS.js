@@ -150,6 +150,19 @@ function CheckRequired(d) {
     }
 }//Sending MasterPOS_Contacts to the server side
 
+function onOpenWdw(e) {
+    $("#fichero").kendoUpload({
+        async: {
+            autoUpload: false
+        },
+        multiple: false,
+        validation: {
+            allowedExtensions: [".jpg", ".png", ".gif", ".jpeg", ".doc", ".docx", ".xls", ".xlsx", ".pdf", ".zip", ".rar", ".rtf"],
+            maxFileSize: 50000000
+        }
+    });
+}
+
 function UploadPosFile(g) {
 
     var drpdown = $("#FileTypeID_" + g).data("kendoDropDownList");
@@ -157,14 +170,15 @@ function UploadPosFile(g) {
     var description = $("#tbDes_" + g).val();
     var domainName = "http://" + window.location.host.toString();
 
-    var input = document.querySelector('#fichero');
-    var files = input.files;
-    //var upload = $("#fichero").data("kendoUpload"),
-    //      files = upload.getFiles();
-    alert(files[0].name + files[0].extension + " " + files[0].size);
+    //var input = document.querySelector('#fichero');
+    //var files = input.files;
+    var upload = $("#fichero").data("kendoUpload"),
+          files = upload.getFiles();
 
-    if (files.length > 0) {
-       
+    if (dataItem == null || description == null || description === "" || files.length <= 0) {
+        $.notify("Please check the required files.", { position: "top right" });
+        return false;
+    } else {
         if (window.FormData !== undefined) {
 
             var data = new FormData();
@@ -172,10 +186,10 @@ function UploadPosFile(g) {
             data.append("MasterPOSID", g);
             data.append("FileTypeID", dataItem.FileTypeID);
             data.append("Description", description);
-            data.append("fichero", files[0], files[0].name);
+            data.append("fichero", files[0].rawFile, files[0].name);
 
             var reader = new FileReader();
-            reader.readAsArrayBuffer(files[0]);
+            reader.readAsArrayBuffer(files[0].rawFile);
             console.log(reader.result);
 
             $.ajax({
@@ -201,6 +215,7 @@ function UploadPosFile(g) {
             alert("This browser doesn't support HTML5 file uploads!");
         }
     }
+
 }
 /*--------------------------------------------------------------*/
 

@@ -5,7 +5,6 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
 {
     public class VMPOSFile
     {
-        
         public int FileID { get; set; }//PK
         public int MasterPOSID { get; set; } //FK from dbo.MasterPOS table
 
@@ -22,7 +21,5 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
         //FK for the type of File
         [Display(Name = "FILE TYPE")]
         public int FileTypeID { get; set; }
-
-        public HttpPostedFileBase fichero { get; set; }
     }
 }
