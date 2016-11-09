@@ -233,23 +233,31 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (corpID == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+               ViewBag.MasterPos = 0;
+               ViewBag.CorpID = 0;
+               return View();
             }
             var currentCorp = await db.CorporateMasterLists.FindAsync(corpID);
             if (currentCorp == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+                ViewBag.MasterPos = 0;
+                ViewBag.CorpID = 0;
+                return View();
             }
           
             var corpDbs = db.Corp_DBs.Include(c => c.CorporateMasterList).Include(d => d.DBList).Where(c => c.corpID == corpID).Select(d => d.DBList);
             if (!await corpDbs.AnyAsync())
             {
-                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+                ViewBag.MasterPos = 0;
+                ViewBag.CorpID = 0;
+                return View();
             }
             var corpMasterPos = corpDbs.Include(p => p.MasterPOS).Where(p => p.MasterPOS.Any()).Select(c => c.MasterPOS);
             if (!await corpMasterPos.AnyAsync())
             {
-                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+                ViewBag.MasterPos = 0;
+                ViewBag.CorpID = 0;
+                return View();
             }
             /*For convenience we go to upload the corporation's files to the first MasterPOS related with this corporation*/
             ViewBag.MasterPos = corpMasterPos.First().First().MasterPOSID;
@@ -434,6 +442,328 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
         }
 
+
+
+
+        public async Task<ActionResult> SavePosFiles(int? masterPOSID)
+        {
+           if (masterPOSID == null)
+            {
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+            }
+            var masterPos = await db.MasterPOS.FindAsync(masterPOSID);
+            if (masterPos == null)
+            {
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" }); 
+            }
+            ViewBag.MasterPos = masterPOSID;
+            return View();
+        }
+
+        public ActionResult Read_POSFiles([DataSourceRequest] DataSourceRequest request, int? MasterPOSID)
+        {
+            var result = db.MasterFiles.Include(d => d.FileTypeI).Where(x => x.Active && x.FileTypeI.FileLevel.Equals("pos", StringComparison.InvariantCultureIgnoreCase)).OrderBy(x => x.FileName).ToList();
+            if (MasterPOSID != null)
+            {
+                result = result.Where(x => x.MasterPOS_MasterPOSID == MasterPOSID.Value).ToList();
+            }
+            return Json(result.ToDataSourceResult(request, x => new VMPOSFile
+            {
+                MasterPOSID = x.MasterPOS_MasterPOSID,
+                FileID = x.FileID,
+                Description = x.Description,
+                FileExtension = x.FileExtension,
+                FileTypeID = x.FileTypeID,
+                FileName = x.FileName,
+                dateTime = x.UploadTime.ToString("G"),
+                user = x.UserLogons
+            }), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Read_CorpFiles([DataSourceRequest] DataSourceRequest request, int? MasterPOSID)
+        {
+            var result = db.MasterFiles.Include(d => d.FileTypeI).Where(x => x.Active && x.FileTypeI.FileLevel.Equals("corporation", StringComparison.InvariantCultureIgnoreCase)).OrderBy(x => x.FileName).ToList();
+            if (MasterPOSID != null)
+            {
+                result = result.Where(x => x.MasterPOS_MasterPOSID == MasterPOSID.Value).ToList();
+            }
+            return Json(result.ToDataSourceResult(request, x => new VMPOSFile
+            {
+                MasterPOSID = x.MasterPOS_MasterPOSID,
+                FileID = x.FileID,
+                Description = x.Description,
+                FileExtension = x.FileExtension,
+                FileTypeID = x.FileTypeID,
+                FileName = x.FileName,
+                dateTime = x.UploadTime.ToString("G"),
+                user = x.UserLogons
+            }), JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<ActionResult> Upload_File([DataSourceRequest] DataSourceRequest request,
+            HttpPostedFileBase files, [Bind(Include = "FileID, MasterPOSID, FileTypeID, Description")] VMPOSFile posFile, int? ParentID)
+        {
+            if (ModelState.IsValid)
+            {
+                if (files == null || files.ContentLength == 0)
+                {
+                    ModelState.AddModelError("", "You need to choose a valid file. Please try again!");
+                    return Json(new[] { posFile }.ToDataSourceResult(request, ModelState));
+                }
+                string fileName = Path.GetFileName(files.FileName);
+                try
+                {
+
+                    Guid primaryKey = Guid.NewGuid();
+                    var fileExtension = Path.GetExtension(files.FileName);
+
+                    var toStore = new MasterFile
+                    {
+                        MasterPOS_MasterPOSID = posFile.MasterPOSID,
+                        Description = posFile.Description,
+                        FileTypeID = posFile.FileTypeID,
+                        FileExtension = fileExtension,
+                        FileName = primaryKey.ToString() + fileExtension,
+                        ServerLocation = ServerLocation,
+                        UploadTime = DateTime.Now,
+                        UserLogons = User.Identity.GetUserName()
+                    };
+
+                    db.MasterFiles.Add(toStore);
+                    await db.SaveChangesAsync();
+                    posFile.FileID = toStore.FileID;
+                    posFile.FileName = toStore.FileName;
+                    posFile.FileExtension = toStore.FileExtension;
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Somethig failed. Please try again!");
+                    return Json(new[] { posFile }.ToDataSourceResult(request, ModelState));
+                }
+
+                // Retrieve the Windows account token for specific user.
+                IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("hsuarez", "Medpro705!", "MEDPROBILL"); //USER WITH PERMISSIONS TO CREATE AND READ
+                //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MDMTest", "Medpro1", "MEDPROBILL");  //USER WITHOUT PERMISSIONS
+
+                WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
+                WindowsImpersonationContext wic = null;
+                try
+                {
+                    wic = wi.Impersonate();
+                    // Thread is now impersonating you can call the backend operations here...
+                    var physicalPath = Path.Combine(ServerLocation, fileName);
+                    files.SaveAs(physicalPath);
+                }
+                catch (Exception)
+                {
+                    MasterFile currentStoredInDb = db.MasterFiles.FirstOrDefault(x => x.FileName == fileName);
+                    if (currentStoredInDb != null)
+                    {
+                        db.MasterFiles.Remove(currentStoredInDb);
+                        db.SaveChanges();
+                    }
+                    ModelState.AddModelError("", "Something failed. You need to have permissions to read/write in this directory.");
+                    return Json(new[] { posFile }.ToDataSourceResult(request, ModelState));
+                }
+                finally
+                {
+                    if (wic != null)
+                    {
+                        wic.Undo();
+                    }
+                }
+            }
+            return Json(new[] { posFile }.ToDataSourceResult(request, ModelState));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadFileWAjax([Bind(Include = "FileID, MasterPOSID, FileTypeID, Description")] VMPOSFile posFile)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    HttpFileCollectionBase filesCollection = HttpContext.Request.Files;
+                    var file = filesCollection[0];
+                    if (file == null || file.ContentLength == 0)
+                    {
+                        return Json("You need to choose a valid file. Please try again!");
+                    }
+                    string fileName = Path.GetFileName(file.FileName);
+
+                    using (DbContextTransaction dTransaction = db.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            Guid primaryKey = Guid.NewGuid();
+                            var fileExtension = Path.GetExtension(file.FileName);
+
+                            var toStore = new MasterFile
+                            {
+                                MasterPOS_MasterPOSID = posFile.MasterPOSID,
+                                Description = posFile.Description,
+                                FileTypeID = posFile.FileTypeID,
+                                FileExtension = fileExtension,
+                                FileName = primaryKey.ToString() + fileExtension,
+                                ServerLocation = ServerLocation,
+                                UploadTime = DateTime.Now,
+                                Active = true,
+                                UserLogons = User.Identity.GetUserName()
+                            };
+
+                            db.MasterFiles.Add(toStore);
+                            await db.SaveChangesAsync();
+                            posFile.FileID = toStore.FileID;
+                            posFile.FileName = toStore.FileName;
+                            posFile.FileExtension = toStore.FileExtension;
+                            posFile.dateTime = DateTime.Now.ToString("G");
+                            posFile.user = User.Identity.GetUserName();
+
+                            AuditToStore auditLog = new AuditToStore
+                            {
+                                UserLogons = User.Identity.GetUserName(),
+                                AuditDateTime = DateTime.Now,
+                                AuditAction = "I",
+                                ModelPKey = toStore.FileID,
+                                TableName = "MasterFile",
+                                tableInfos = new List<TableInfo>
+                                {
+                                    new TableInfo{Field_ColumName = "MasterPOS_MasterPOSID", NewValue = toStore.MasterPOS_MasterPOSID.ToString()},
+                                    new TableInfo{Field_ColumName = "Description", NewValue = toStore.Description},
+                                    new TableInfo{Field_ColumName = "FileTypeID", NewValue = toStore.FileTypeID.ToString()},
+                                    new TableInfo{Field_ColumName = "FileExtension", NewValue = toStore.FileExtension},
+                                    new TableInfo{Field_ColumName = "FileName", NewValue = toStore.FileName},
+                                    new TableInfo{Field_ColumName = "ServerLocation", NewValue = toStore.ServerLocation},
+                                    new TableInfo{Field_ColumName = "UploadTime", NewValue = toStore.UploadTime.ToString(CultureInfo.InvariantCulture)},
+                                    new TableInfo{Field_ColumName = "Active", NewValue = toStore.Active.ToString()}
+                                }
+                            };
+
+                            new AuditLogRepository().AddAuditLogs(auditLog);
+
+                            // Retrieve the Windows account token for specific user.
+                            IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("hsuarez", "Medpro0417!", "MEDPROBILL"); //USER WITH PERMISSIONS TO CREATE AND READ
+                            //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MDMTest", "Medpro1", "MEDPROBILL");  //USER WITHOUT PERMISSIONS
+
+                            WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
+                            WindowsImpersonationContext wic = null;
+
+                            wic = wi.Impersonate();
+                            // Thread is now impersonating you can call the backend operations here...
+                            var physicalPath = Path.Combine(ServerLocation, toStore.FileName);
+                            file.SaveAs(physicalPath);
+
+                            dTransaction.Commit();
+                           
+                            return Json("Success!"); 
+                        }
+                        catch (Exception e)
+                        {
+                            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                            dTransaction.Rollback();
+                            return Json(e.Message);
+                        }
+                    }
+                }
+                catch (NotImplementedException ex)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return Json(ex.Message);
+                }
+            }
+          
+            return Json("Something failed. Please try again!");
+        }
+
+        public ActionResult Download(string ImageName)
+        {
+            //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
+            IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MMDFiles", "Medpro123!", "MEDPROBILL");
+
+            WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
+            WindowsImpersonationContext ctx = null;
+
+            try
+            {
+                ctx = wi.Impersonate();
+                return File(ServerLocation + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet, ImageName);
+            }
+            catch
+            {
+                TempData["Access"] = "Something failed. You need to have permissions to read/write in this directory.";
+                return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
+            }
+            finally
+            {
+                if (ctx != null)
+                {
+                    ctx.Undo();
+                }
+            }
+        }
+
+        public async Task<ActionResult> DisableFiles(int? FileID, int? corpID)
+        {
+            if (FileID == null)
+            {
+                return Json("You need to choose a file.");
+            }
+            var file = await db.MasterFiles.FindAsync(FileID);
+            if (file == null)
+            {
+                return Json("This file is no longer exist in our system.");
+            }
+            using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    file.Active = false;
+                    db.MasterFiles.Attach(file);
+                    db.Entry(file).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+
+                    AuditToStore auditLog = new AuditToStore
+                    {
+                        UserLogons = User.Identity.GetUserName(),
+                        AuditDateTime = DateTime.Now,
+                        TableName = "MasterFiles",
+                        AuditAction = "U",
+                        ModelPKey = file.FileID,
+                        tableInfos = new List<TableInfo>
+                        {
+                            new TableInfo{Field_ColumName = "Active", OldValue = true.ToString(), NewValue = false.ToString()}
+                        }
+                    };
+
+                    new AuditLogRepository().AddAuditLogs(auditLog);
+
+                    dbTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbTransaction.Rollback();
+                    return Json("Something failed. Please try again!");
+                }
+            }
+            if (corpID != null)
+            {
+                return Json(corpID);
+            }
+            return Json(file.MasterPOS_MasterPOSID);
+        } 
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+
+
         //public async Task<ActionResult> Save(HttpPostedFileBase fichero, [Bind(Include = "FileID, MasterPOSID, FileTypeID, Description")] VMPOSFile posFile)
         //{
         //    if (fichero != null && fichero.ContentLength > 0)
@@ -466,7 +796,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         //                TempData["Error"] = "Something failed. Please try again!";
         //                return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
         //            }
-                   
+
         //            //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MMDFiles", "Medpro123!", "MEDPROBILL");
         //            IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
         //            WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
@@ -526,12 +856,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         //    return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
         //}
 
-       
 
-       
+
+
         //public ActionResult Download(string ImageName)
         //{
-           
+
         //    //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MMDFiles", "Medpro123!", "MEDPROBILL"); //Have permissions
         //    IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
 
@@ -540,8 +870,8 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         //    try
         //    {
         //        wic = wi.Impersonate();
-               
-                 
+
+
 
         //            MasterFile currentStoredInDb = db.MasterFiles.FirstOrDefault(x => x.FileName == ImageName);
         //            if (currentStoredInDb != null)
@@ -561,7 +891,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
         //                new AuditLogRepository().AddAuditLogs(auditLog);
         //            }
-                   
+
         //            try
         //            {
         //                return File(ServerLocation + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet, ImageName);
@@ -586,302 +916,5 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         //    }
         //}
 
-        
-
-
-
-        public ActionResult Read_POSFiles([DataSourceRequest] DataSourceRequest request, int? MasterPOSID)
-        {
-            var result = db.MasterFiles.Include(d => d.FileTypeI).Where(x => x.Active && x.FileTypeI.FileLevel.Equals("pos", StringComparison.InvariantCultureIgnoreCase)).OrderBy(x => x.FileName).ToList();
-            if (MasterPOSID != null)
-            {
-                result = result.Where(x => x.MasterPOS_MasterPOSID == MasterPOSID.Value).ToList();
-            }
-            return Json(result.ToDataSourceResult(request, x => new VMPOSFile
-            {
-                MasterPOSID = x.MasterPOS_MasterPOSID,
-                FileID = x.FileID,
-                Description = x.Description,
-                FileExtension = x.FileExtension,
-                FileTypeID = x.FileTypeID,
-                FileName = x.FileName
-            }), JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult Read_CorpFiles([DataSourceRequest] DataSourceRequest request, int? MasterPOSID)
-        {
-            var result = db.MasterFiles.Include(d => d.FileTypeI).Where(x => x.Active && x.FileTypeI.FileLevel.Equals("corporation", StringComparison.InvariantCultureIgnoreCase)).OrderBy(x => x.FileName).ToList();
-            if (MasterPOSID != null)
-            {
-                result = result.Where(x => x.MasterPOS_MasterPOSID == MasterPOSID.Value).ToList();
-            }
-            return Json(result.ToDataSourceResult(request, x => new VMPOSFile
-            {
-                MasterPOSID = x.MasterPOS_MasterPOSID,
-                FileID = x.FileID,
-                Description = x.Description,
-                FileExtension = x.FileExtension,
-                FileTypeID = x.FileTypeID,
-                FileName = x.FileName
-            }), JsonRequestBehavior.AllowGet);
-        }
-
-        public async Task<ActionResult> Upload_File([DataSourceRequest] DataSourceRequest request,
-            HttpPostedFileBase files, [Bind(Include = "FileID, MasterPOSID, FileTypeID, Description")] VMPOSFile posFile, int? ParentID)
-        {
-            if (ModelState.IsValid)
-            {
-                if (files == null || files.ContentLength == 0)
-                {
-                    ModelState.AddModelError("", "You need to choose a valid file. Please try again!");
-                    return Json(new[] { posFile }.ToDataSourceResult(request, ModelState));
-                }
-                string fileName = Path.GetFileName(files.FileName);
-                try
-                {
-
-                    Guid primaryKey = Guid.NewGuid();
-                    var fileExtension = Path.GetExtension(files.FileName);
-
-                    var toStore = new MasterFile
-                    {
-                        MasterPOS_MasterPOSID = posFile.MasterPOSID,
-                        Description = posFile.Description,
-                        FileTypeID = posFile.FileTypeID,
-                        FileExtension = fileExtension,
-                        FileName = primaryKey.ToString() + fileExtension,
-                        ServerLocation = ServerLocation,
-                        UploadTime = DateTime.Now
-                    };
-
-                    db.MasterFiles.Add(toStore);
-                    await db.SaveChangesAsync();
-                    posFile.FileID = toStore.FileID;
-                    posFile.FileName = toStore.FileName;
-                    posFile.FileExtension = toStore.FileExtension;
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Somethig failed. Please try again!");
-                    return Json(new[] { posFile }.ToDataSourceResult(request, ModelState));
-                }
-
-                // Retrieve the Windows account token for specific user.
-                IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("hsuarez", "Medpro705!", "MEDPROBILL"); //USER WITH PERMISSIONS TO CREATE AND READ
-                //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MDMTest", "Medpro1", "MEDPROBILL");  //USER WITHOUT PERMISSIONS
-
-                WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
-                WindowsImpersonationContext wic = null;
-                try
-                {
-                    wic = wi.Impersonate();
-                    // Thread is now impersonating you can call the backend operations here...
-                    var physicalPath = Path.Combine(ServerLocation, fileName);
-                    files.SaveAs(physicalPath);
-                }
-                catch (Exception)
-                {
-                    MasterFile currentStoredInDb = db.MasterFiles.FirstOrDefault(x => x.FileName == fileName);
-                    if (currentStoredInDb != null)
-                    {
-                        db.MasterFiles.Remove(currentStoredInDb);
-                        db.SaveChanges();
-                    }
-                    ModelState.AddModelError("", "Something failed. You need to have permissions to read/write in this directory.");
-                    return Json(new[] { posFile }.ToDataSourceResult(request, ModelState));
-                }
-                finally
-                {
-                    if (wic != null)
-                    {
-                        wic.Undo();
-                    }
-                }
-            }
-            return Json(new[] { posFile }.ToDataSourceResult(request, ModelState));
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> UploadFileWAjax([Bind(Include = "FileID, MasterPOSID, FileTypeID, Description")] VMPOSFile posFile, int? corpID)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    HttpFileCollectionBase filesCollection = HttpContext.Request.Files;
-                    var file = filesCollection[0];
-                    if (file == null || file.ContentLength == 0)
-                    {
-                        return Json("You need to choose a valid file. Please try again!");
-                    }
-                    string fileName = Path.GetFileName(file.FileName);
-
-                    using (DbContextTransaction dTransaction = db.Database.BeginTransaction())
-                    {
-                        try
-                        {
-                            Guid primaryKey = Guid.NewGuid();
-                            var fileExtension = Path.GetExtension(file.FileName);
-
-                            var toStore = new MasterFile
-                            {
-                                MasterPOS_MasterPOSID = posFile.MasterPOSID,
-                                Description = posFile.Description,
-                                FileTypeID = posFile.FileTypeID,
-                                FileExtension = fileExtension,
-                                FileName = primaryKey.ToString() + fileExtension,
-                                ServerLocation = ServerLocation,
-                                UploadTime = DateTime.Now,
-                                Active = true
-                            };
-
-                            db.MasterFiles.Add(toStore);
-                            await db.SaveChangesAsync();
-                            posFile.FileID = toStore.FileID;
-                            posFile.FileName = toStore.FileName;
-                            posFile.FileExtension = toStore.FileExtension;
-
-                            AuditToStore auditLog = new AuditToStore
-                            {
-                                UserLogons = User.Identity.GetUserName(),
-                                AuditDateTime = DateTime.Now,
-                                AuditAction = "I",
-                                ModelPKey = toStore.FileID,
-                                TableName = "MasterFile",
-                                tableInfos = new List<TableInfo>
-                                {
-                                    new TableInfo{Field_ColumName = "MasterPOS_MasterPOSID", NewValue = toStore.MasterPOS_MasterPOSID.ToString()},
-                                    new TableInfo{Field_ColumName = "Description", NewValue = toStore.Description},
-                                    new TableInfo{Field_ColumName = "FileTypeID", NewValue = toStore.FileTypeID.ToString()},
-                                    new TableInfo{Field_ColumName = "FileExtension", NewValue = toStore.FileExtension},
-                                    new TableInfo{Field_ColumName = "FileName", NewValue = toStore.FileName},
-                                    new TableInfo{Field_ColumName = "ServerLocation", NewValue = toStore.ServerLocation},
-                                    new TableInfo{Field_ColumName = "UploadTime", NewValue = toStore.UploadTime.ToString(CultureInfo.InvariantCulture)},
-                                    new TableInfo{Field_ColumName = "Active", NewValue = toStore.Active.ToString()}
-                                }
-                            };
-
-                            new AuditLogRepository().AddAuditLogs(auditLog);
-
-                            // Retrieve the Windows account token for specific user.
-                            IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("hsuarez", "Medpro0417!", "MEDPROBILL"); //USER WITH PERMISSIONS TO CREATE AND READ
-                            //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MDMTest", "Medpro1", "MEDPROBILL");  //USER WITHOUT PERMISSIONS
-
-                            WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
-                            WindowsImpersonationContext wic = null;
-
-                            wic = wi.Impersonate();
-                            // Thread is now impersonating you can call the backend operations here...
-                            var physicalPath = Path.Combine(ServerLocation, toStore.FileName);
-                            file.SaveAs(physicalPath);
-
-                            dTransaction.Commit();
-
-                            if (corpID != null) //Si se esta subiendo un fichero a nivel de corporacion se devuelve dicha corporacion
-                            {
-                                return Json(corpID);
-                            }
-                            return Json("Success!"); //Si se esta subiendo un fichero a nivel de POS solo se devuelve success!
-                        }
-                        catch (Exception e)
-                        {
-                            Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                            dTransaction.Rollback();
-                            return Json(e.Message);
-                        }
-                    }
-                }
-                catch (NotImplementedException ex)
-                {
-                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return Json(ex.Message);
-                }
-            }
-          
-            return Json("Something failed. Please try again!");
-        }
-
-        public ActionResult Download(string ImageName)
-        {
-            //IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("mpadmin", "Southbeach5050!", "MEDPROBILL");
-            IntPtr logonToken = ActiveDirectoryHelper.GetAuthenticationHandle("MMDFiles", "Medpro123!", "MEDPROBILL");
-
-            WindowsIdentity wi = new WindowsIdentity(logonToken, "WindowsAuthentication");
-            WindowsImpersonationContext ctx = null;
-
-            try
-            {
-                ctx = wi.Impersonate();
-                return File(ServerLocation + ImageName, System.Net.Mime.MediaTypeNames.Application.Octet, ImageName);
-            }
-            catch
-            {
-                TempData["Access"] = "Something failed. You need to have permissions to read/write in this directory.";
-                return RedirectToAction("Index_MasterPOS", "MasterPOS", new { area = "Credentials" });
-            }
-            finally
-            {
-                if (ctx != null)
-                {
-                    ctx.Undo();
-                }
-            }
-        }
-
-        public async Task<ActionResult> DisableFiles(int? FileID)
-        {
-            if (FileID == null)
-            {
-                return Json("You need to choose a file.");
-            }
-            var file = await db.MasterFiles.FindAsync(FileID);
-            if (file == null)
-            {
-                return Json("This file is no longer exist in our system.");
-            }
-            using (DbContextTransaction dbTransaction = db.Database.BeginTransaction())
-            {
-                try
-                {
-                    file.Active = false;
-                    db.MasterFiles.Attach(file);
-                    db.Entry(file).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-
-                    AuditToStore auditLog = new AuditToStore
-                    {
-                        UserLogons = User.Identity.GetUserName(),
-                        AuditDateTime = DateTime.Now,
-                        TableName = "MasterFiles",
-                        AuditAction = "U",
-                        ModelPKey = file.FileID,
-                        tableInfos = new List<TableInfo>
-                        {
-                            new TableInfo{Field_ColumName = "Active", OldValue = true.ToString(), NewValue = false.ToString()}
-                        }
-                    };
-
-                    new AuditLogRepository().AddAuditLogs(auditLog);
-
-                    dbTransaction.Commit();
-                }
-                catch (Exception)
-                {
-                    dbTransaction.Rollback();
-                    return Json("Something failed. Please try again!");
-                }
-            }
-            return Json(file.MasterPOS_MasterPOSID);
-        } 
-
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

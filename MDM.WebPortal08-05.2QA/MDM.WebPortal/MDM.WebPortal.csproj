@@ -1364,6 +1364,7 @@
     <Content Include="Content\kendo\2016.3.1028\images\kendoui.woff" />
     <Content Include="Areas\Credentials\Views\POSFiles\Corp_Files.cshtml" />
     <Content Include="Areas\Credentials\Views\POSFiles\SaveCorpFiles.cshtml" />
+    <Content Include="Areas\Credentials\Views\POSFiles\SavePosFiles.cshtml" />
     <None Include="Scripts\kendo\2016.3.1028\kendo.all-vsdoc.js" />
     <None Include="Scripts\kendo\2016.3.1028\kendo.all.min.intellisense.js" />
     <Content Include="Scripts\kendo\2016.3.1028\kendo.all.min.js" />

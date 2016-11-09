@@ -23,6 +23,7 @@ namespace MDM.WebPortal.Models.FromDB
         public int FileTypeID { get; set; }
         public int MasterPOS_MasterPOSID { get; set; }
         public bool Active { get; set; }
+        public string UserLogons { get; set; }
     
         public virtual FileTypeI FileTypeI { get; set; }
         public virtual MasterPOS MasterPOS { get; set; }

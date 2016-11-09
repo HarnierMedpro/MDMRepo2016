@@ -58,7 +58,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                                FileTypeID = x.FileTypeID,
                                FileType_Name = x.FileType_Name,
                                FileLevel = x.FileLevel
-                           });
+                           }).ToList();
             return Json(result.ToDataSourceResult(request),JsonRequestBehavior.AllowGet);
         }
 

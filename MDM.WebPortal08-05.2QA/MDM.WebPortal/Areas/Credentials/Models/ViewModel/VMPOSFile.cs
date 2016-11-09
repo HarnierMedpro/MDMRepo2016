@@ -21,5 +21,9 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
         //FK for the type of File
         [Display(Name = "FILE TYPE")]
         public int FileTypeID { get; set; }
+
+        public string dateTime { get; set; }
+
+        public string user { get; set; }
     }
 }

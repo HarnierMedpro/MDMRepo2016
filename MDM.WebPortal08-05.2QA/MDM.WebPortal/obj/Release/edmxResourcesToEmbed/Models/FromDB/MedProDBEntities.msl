@@ -443,6 +443,7 @@
     <EntitySetMapping Name="MasterFiles">
       <EntityTypeMapping TypeName="MedProDBEntities.MasterFile">
         <MappingFragment StoreEntitySet="MasterFiles">
+          <ScalarProperty Name="UserLogons" ColumnName="UserLogons" />
           <ScalarProperty Name="Active" ColumnName="Active" />
           <ScalarProperty Name="MasterPOS_MasterPOSID" ColumnName="MasterPOS_MasterPOSID" />
           <ScalarProperty Name="FileTypeID" ColumnName="FileTypeID" />

@@ -269,6 +269,7 @@
           <Property Name="FileTypeID" Type="int" Nullable="false" />
           <Property Name="MasterPOS_MasterPOSID" Type="int" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="UserLogons" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="MasterPOS">
           <Key>
@@ -2152,6 +2153,7 @@
           <Property Name="FileTypeID" Type="Int32" Nullable="false" />
           <Property Name="MasterPOS_MasterPOSID" Type="Int32" Nullable="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="UserLogons" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="FileTypeI" Relationship="MedProDBEntities.FK_POSFiles_FileTypeI" FromRole="MasterFile" ToRole="FileTypeI" />
           <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.Constr_MasterFiles" FromRole="MasterFile" ToRole="MasterPOS" />
         </EntityType>
@@ -2627,6 +2629,7 @@
           <EntitySetMapping Name="MasterFiles">
             <EntityTypeMapping TypeName="MedProDBEntities.MasterFile">
               <MappingFragment StoreEntitySet="MasterFiles">
+                <ScalarProperty Name="UserLogons" ColumnName="UserLogons" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="MasterPOS_MasterPOSID" ColumnName="MasterPOS_MasterPOSID" />
                 <ScalarProperty Name="FileTypeID" ColumnName="FileTypeID" />

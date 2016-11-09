@@ -79,9 +79,15 @@
         <EntityTypeShape EntityType="MedProDBEntities.CorporateMasterList" Width="1.5" PointX="16.625" PointY="21.125" />
         <AssociationConnector Association="MedProDBEntities.FK_Corp_DBs_CorporateMasterList" />
         <AssociationConnector Association="MedProDBEntities.FK_Corp_Owner_CorporateMasterList" />
-        <EntityTypeShape EntityType="MedProDBEntities.MasterFile" Width="1.5" PointX="8.875" PointY="37.625" />
+        <EntityTypeShape EntityType="MedProDBEntities.MasterFile" Width="1.5" PointX="10" PointY="36.625" />
         <AssociationConnector Association="MedProDBEntities.FK_POSFiles_FileTypeI" />
-        <AssociationConnector Association="MedProDBEntities.Constr_MasterFiles" />
+        <AssociationConnector Association="MedProDBEntities.Constr_MasterFiles" ManuallyRouted="true" >
+          <ConnectorPoint PointX="13.5" PointY="31.015627499999994" />
+          <ConnectorPoint PointX="13.271990624999999" PointY="31.015627499999994" />
+          <ConnectorPoint PointX="13.271990624999999" PointY="36.467677530026222" />
+          <ConnectorPoint PointX="11.40625" PointY="36.467677530026222" />
+          <ConnectorPoint PointX="11.40625" PointY="36.625" />
+        </AssociationConnector>
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

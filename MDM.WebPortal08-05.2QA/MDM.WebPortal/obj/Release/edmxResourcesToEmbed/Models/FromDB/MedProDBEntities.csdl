@@ -1095,6 +1095,7 @@
     <Property Name="FileTypeID" Type="Int32" Nullable="false" />
     <Property Name="MasterPOS_MasterPOSID" Type="Int32" Nullable="false" />
     <Property Name="Active" Type="Boolean" Nullable="false" />
+    <Property Name="UserLogons" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="FileTypeI" Relationship="MedProDBEntities.FK_POSFiles_FileTypeI" FromRole="MasterFile" ToRole="FileTypeI" />
     <NavigationProperty Name="MasterPOS" Relationship="MedProDBEntities.Constr_MasterFiles" FromRole="MasterFile" ToRole="MasterPOS" />
   </EntityType>

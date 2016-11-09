@@ -264,6 +264,7 @@
     <Property Name="FileTypeID" Type="int" Nullable="false" />
     <Property Name="MasterPOS_MasterPOSID" Type="int" Nullable="false" />
     <Property Name="Active" Type="bit" Nullable="false" />
+    <Property Name="UserLogons" Type="varchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="MasterPOS">
     <Key>
