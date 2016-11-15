@@ -1,0 +1,226 @@
+﻿@model IdentitySample.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<header class="main-header">
+    <div class="container">
+        <h1 class="page-title"></h1>
+        <ol class="breadcrumb pull-right">
+            <li><a href="@Url.Action("Index","Home")"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="@Url.Action("Index")"> Users</a></li>
+            <li class="active">New</li>
+        </ol>
+    </div>
+</header>
+
+<div class="admin-container">
+    <div class="row">
+        <div class="col-md-offset-2 col-md-9">
+            @if (ViewBag.Role != null)
+            {
+                <div class="alert alert-danger">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="Close">&times;</a>
+                    <p>@ViewBag.Role</p>
+                </div>
+            }
+            <div class="panel panel-primary box-panel-admin">
+                <div class="panel-heading"><i class="fa fa-user-plus"></i> <strong class="text-uppercase"></strong>NEW ACCOUNT</div>
+                <div class="panel-body">
+                    @using (Html.BeginForm("Create", "UsersAdmin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary("", new { @class = "text-error" })
+
+                        <div class="form-group">
+                            <div id="divEmail" class="col-sm-offset-2 col-md-offset-2 col-md-9">
+                                <label class="control-label"><strong>Email</strong> <sup class="text-danger">*</sup></label>
+                                @Html.TextBoxFor(m => m.Email, new { id = "tbEmail", @class = "form-control" })  
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })                           
+                            </div>                            
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-md-offset-2 col-md-9">
+                                <label class="control-label"><strong>Password</strong> <sup class="text-danger">*</sup></label>
+                                @Html.PasswordFor(m => m.Password, new {id="tbPass", @class = "form-control" })
+                                @*@Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })*@
+                                <meter min="0" max="4" id="password-strength-meter"></meter>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-md-offset-2 col-md-9">
+                                <label class="control-label"><strong>Confirm password</strong> <sup class="text-danger">*</sup></label>
+                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" }) 
+                                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })                              
+                            </div>                            
+                        </div>        
+                       
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-6">
+                                <fieldset class="scheduler-border">
+                                    <legend class="scheduler-border">Select User Role</legend>
+                                    @foreach (var item in (SelectList)ViewBag.RoleId)
+                                    {
+                                        <div class="radio">
+                                            <input type="radio" name="SelectedRoles" value="@item.Value" class="checkbox-inline" />
+                                            @Html.Label(item.Value)
+                                        </div>
+                                    }
+                                </fieldset>
+
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="form-group">
+                                <button id="btn-Register" type="submit" class="btn btn-sm btn-primary" value="Create" disabled>
+                                    <i class="fa fa-cloud-upload"></i> Save
+                                </button>
+                                <a href="@Url.Action("Index")" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-hand-o-left"></i> Back to List
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="panel-footer"></div>
+            </div>
+        </div>
+    </div>
+    
+    </div>
+   
+
+    
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<link href="~/Content/lib/Popover/Popover.css" rel="stylesheet" />
+<link href="~/Content/lib/PwdMeter/zxcvbn.css" rel="stylesheet" />
+
+<script src="~/Scripts/lib/Popover/Popover.js"></script>
+<script src="~/Scripts/lib/PwdMeter/zxcvbn.js"></script>
+<script src="~/Scripts/lib/Notify/notify.min.js"></script>
+
+<script>
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    });
+    $(document).ready(function () {
+        $("#tbPass").popover({
+            html: true,
+            content: '<ul><li>At least 6 characters</li><li>Include all of these elements:<ol><li>One UPPER CASE letter</li><li>One lower case letter</li><li>One special character</li><li>One number</li></ol></li></ul>',
+            toggle: "popover",
+            title: '<strong>Secure Password</strong>',
+            container: "body",
+            trigger: "focus",
+            tabindex: "0",
+            role: "password-input",
+            placement: "top"
+        });       
+        
+    });
+
+
+    var strength = {
+        0: "Worst",
+        1: "Bad",
+        2: "Weak",
+        3: "Good",
+        4: "Strong"
+    }
+
+    var password = document.getElementById('tbPass');
+    var meter = document.getElementById('password-strength-meter');
+
+    password.addEventListener('input', function () {
+        var val = password.value;
+        var result = zxcvbn(val);
+
+
+        meter.value = result.score;
+        if (val !== "") {
+            if (result.score == 4) {
+                $('#btn-Register').prop('disabled', false);
+            }
+            else {
+                $('#btn-Register').prop('disabled', true);
+            }
+        }
+    });
+</script>
+
+
+
+
+
+<script>
+    ////--------Check User Disponibility--------//
+    var domainName = "http://" + window.location.host.toString();
+    $("#tbEmail").change(function () {
+        var term = $(this).val();
+        var pattern = new RegExp("@@medprobill.com")
+        if (pattern.test(term.toString())) {
+            $.ajax({
+                //url: domainName + '/UsersAdmin/CheckUserName',
+                url: "@(Url.RouteUrl("CheckUserName"))",
+                data: { term: term },
+                success: function (data) {
+                    if (data.length == 0) {
+                        var newSpanSuccess = document.createElement('span');
+                        newSpanSuccess.setAttribute('class', 'glyphicon glyphicon-ok form-control-feedback');
+
+                        if ($("#divEmail").hasClass('has-error')) {
+                            $("#divEmail").removeClass('has-error');
+                            $(".glyphicon-remove").remove();
+
+                            $("#divEmail").addClass('has-success has-feedback');
+                            document.getElementById('divEmail').appendChild(newSpanSuccess);
+
+                        }
+                        else {
+                            $("#divEmail").addClass('has-success has-feedback');
+                            document.getElementById('divEmail').appendChild(newSpanSuccess);
+                        }
+
+
+                    }
+                    else {
+                        var newSpanFail = document.createElement('span');
+                        newSpanFail.setAttribute('class', 'glyphicon glyphicon-remove form-control-feedback');
+
+                        $('#tbEmail').notify("This Email is already in use by another user.", { position: "bottom left" });
+                        $('#tbEmail').focus();
+
+                        if ($("#divEmail").hasClass('has-success')) {
+                            $("#divEmail").removeClass('has-success');
+                            $(".glyphicon-ok").remove();
+
+                            $("#divEmail").addClass('has-error has-feedback');
+                            document.getElementById('divEmail').appendChild(newSpanFail);
+                        }
+                        else {
+                            $("#divEmail").addClass('has-error');
+
+                            document.getElementById('divEmail').appendChild(newSpanFail);
+                        }
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrwnError) {
+                    alert(domainName);
+                }
+            });
+        }
+        else {
+            $('#tbEmail').notify("The Email field is not a valid e-mail address. It must be part of the domain @@medprobill.com", { position: "bottom left" });
+            $('#tbEmail').focus();
+        }
+
+    });
+</script>

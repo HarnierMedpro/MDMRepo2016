@@ -78,17 +78,20 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
         public async Task<ActionResult> PHYGrp_Info(int? MasterPOSID)
         {
+            var toView = new List<VMPHYGrp>();
             if (MasterPOSID == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+                ViewBag.MasterPOS = 0;
+                return View();
             }
             MasterPOS pos = await db.MasterPOS.FindAsync(MasterPOSID);
             if (pos == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+                ViewBag.MasterPOS = 0;
+                return View();
             }
             var phyG = pos.PHYGroup;
-            var toView = new List<VMPHYGrp>();
+            
             if (phyG != null)
             {
                 var docs = from pInG in phyG.ProvidersInGrps

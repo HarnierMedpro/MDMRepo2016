@@ -68,21 +68,45 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AddressInfo(int? MasterPOSID)
+        public async Task<ActionResult> AddressInfo(int? MasterPOSID)
         {
-            if (MasterPOSID != null && MasterPOSID > 0)
+            var result = new List<VMLocationPOS_AddressInfo>();
+            if (MasterPOSID == null)
             {
-                ViewBag.MasterPOS = MasterPOSID.Value;
+                ViewBag.MasterPOS = 0;
+                return View();
             }
-            //ViewData["TimeZone"] = new List<SelectListItem>
-            //{
-            //    new SelectListItem{Value = "CST", Text = "Central Time Zone"},
-            //    new SelectListItem{Text = "Eastern Time Zone", Value = "EST"}, 
-            //    new SelectListItem{Text = "Mountain Time Zone",Value = "MST"},
-            //    new SelectListItem{Value = "PST", Text = "Pacific Time Zone"}
-            //};
-            //ViewData["States"] = new AllUSStates().states;
-            return View();
+            var masterPos = await db.MasterPOS.FindAsync(MasterPOSID);
+            if (masterPos == null)
+            {
+                ViewBag.MasterPOS = 0;
+                return View();
+            }
+            var posAdd = masterPos.POSAddr;
+            if (posAdd != null)
+            {
+                result.Add(new VMLocationPOS_AddressInfo
+                {
+                    MasterPOSID = MasterPOSID.Value,
+                    DBA_Name = posAdd.DBA_Name,
+                    Notes = posAdd.Notes,
+                    POSAddrID = posAdd.POSAddrID,
+                    Payment_Addr1 = posAdd.Payment_Addr1,
+                    Payment_Addr2 = posAdd.Payment_Addr2 ?? "",
+                    Payment_City = posAdd.Payment_City,
+                    Payment_Zip = posAdd.Payment_Zip,
+                    Payment_state = posAdd.Payment_state,
+                    Physical_Addr1 = posAdd.Physical_Addr1,
+                    Physical_Addr2 = posAdd.Physical_Addr2 ?? "",
+                    Physical_City = posAdd.Physical_City,
+                    Physical_Zip = posAdd.Physical_Zip,
+                    Physical_state = posAdd.Physical_state,
+                    Time_Zone = posAdd.Time_Zone
+                });
+            }
+
+           ViewBag.MasterPOS = MasterPOSID.Value;
+           return View(result);
         }
 
         public async Task<ActionResult> Address(int? MasterPOSID)
@@ -157,12 +181,12 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                         Notes = addr.Notes,
                         POSAddrID = addr.POSAddrID,
                         Payment_Addr1 = addr.Payment_Addr1,
-                        Payment_Addr2 = addr.Payment_Addr2 != null?addr.Payment_Addr2:"",
+                        Payment_Addr2 = addr.Payment_Addr2 ?? "",
                         Payment_City = addr.Payment_City,
                         Payment_Zip = addr.Payment_Zip,
                         Payment_state = addr.Payment_state,
                         Physical_Addr1 = addr.Physical_Addr1,
-                        Physical_Addr2 = addr.Physical_Addr2!=null?addr.Physical_Addr2:"",
+                        Physical_Addr2 = addr.Physical_Addr2 ?? "",
                         Physical_City = addr.Physical_City,
                         Physical_Zip = addr.Physical_Zip,
                         Physical_state = addr.Physical_state,

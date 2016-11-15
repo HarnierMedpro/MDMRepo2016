@@ -1,0 +1,36 @@
+﻿@model MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMFileType
+
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <form id="fType" action="">
+            <div class="form-horizontal">
+                <hr/>
+
+                <div class="form-group">
+                    <div class="col-md-11">
+                        <label class="control-label">FILE TYPE <sup class="text-danger">*</sup></label>
+                        @Html.Editor("FileType_Name", new {htmlAttributes = new {id = "tbType", @class = "form-control form-control1", @style = "height:25px !important;"}})
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-11">
+                        <label class="control-label">FILE LEVEL <sup class="text-danger">*</sup></label>
+                        <select id="fileLev" name="FileLevel" class="form-control form-control1" style="height: 25px !important;">
+                            <option value="CORPORATION">CORPORATION</option>
+                            <option value="POS">POS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <div class="form-group">
+                        <button id="btnSave" type="submit" class="btn btn-ar btn-primary"><i class="fa fa-cloud-upload"></i> Save</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+

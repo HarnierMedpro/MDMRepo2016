@@ -24,7 +24,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
         {
             if (MasterPOSID == null)
             {
-                return RedirectToAction("Index", "Error", new {area = "BadRequest"});
+                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
             }
             var pos = await db.MasterPOS.FindAsync(MasterPOSID);
             if (pos == null)
@@ -81,24 +81,26 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     ScholarshipRate = extraData.ScholarshipRate
                 });
             }
-            
+
             ViewBag.MasterPOS = MasterPOSID;
             return View(toView);
         }
 
         public async Task<ActionResult> ExtraInfo_Detail(int? MasterPOSID)
         {
+            var toView = new List<VMPOSLOCExtraData>();
             if (MasterPOSID == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+                ViewBag.MasterPOS = 0;
+                return View();
             }
             var pos = await db.MasterPOS.FindAsync(MasterPOSID);
             if (pos == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+                ViewBag.MasterPOS = 0;
+                return View();
             }
             var extraData = pos.POSExtraData;
-            var toView = new List<VMPOSLOCExtraData>();
             if (extraData != null)
             {
                 toView.Add(new VMPOSLOCExtraData
@@ -127,6 +129,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     In_Service_date_time = extraData.In_Service_date_time,
                     Manage_care_contracts = extraData.Manage_care_contracts ?? "",
                     //booleans
+                  
                     W_9_on_File = extraData.W_9_on_File ?? false,
                     Have_24hrs_nursing = extraData.Have_24hrs_nursing ?? false,
                     Licensure_on_File = extraData.Licensure_on_File ?? false,
@@ -146,27 +149,29 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
                     AcreditationOnFile = extraData.AcreditationOnFile ?? false,
                     HighComplexityCLIA = extraData.HighComplexityCLIA ?? false,
                     RegistrationAnalyzer = extraData.RegistrationAnalyzer ?? false
-                    
-
                 });
             }
             ViewBag.MasterPOS = MasterPOSID;
             return View(toView);
         }
 
+
+
         public async Task<ActionResult> ExtraQuestion_Detail(int? MasterPOSID)
         {
+            var toView = new List<VMPOSLOCExtraData>();
             if (MasterPOSID == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+                ViewBag.MasterPOS = 0;
+                return View();
             }
             var pos = await db.MasterPOS.FindAsync(MasterPOSID);
             if (pos == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+                ViewBag.MasterPOS = 0;
+                return View();
             }
             var extraData = pos.POSExtraData;
-            var toView = new List<VMPOSLOCExtraData>();
             if (extraData != null)
             {
                 toView.Add(new VMPOSLOCExtraData
@@ -218,6 +223,66 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             }
             ViewBag.MasterPOS = MasterPOSID;
             return View(toView);
+        }
+
+        public async Task<ActionResult> Read_ExtraData([DataSourceRequest] DataSourceRequest request, int? MasterPOSID)
+        {
+            var result = new List<VMPOSLOCExtraData>();
+            if (MasterPOSID != null)
+            {
+                var masterPos = await db.MasterPOS.FindAsync(MasterPOSID);
+                if (masterPos != null && masterPos.POSExtraData != null)
+                {
+                    var extraData = masterPos.POSExtraData;
+                    result.Add(new VMPOSLOCExtraData
+                    {
+                        MasterPOSID = MasterPOSID.Value,
+                        POSExtraDataID = extraData.POSExtraDataID,
+                        W_9_on_File = extraData.W_9_on_File ?? false,
+                        Have_24hrs_nursing = extraData.Have_24hrs_nursing ?? false,
+                        Licensure_on_File = extraData.Licensure_on_File ?? false,
+                        Mental_License = extraData.Mental_License ?? false,
+                        Regulations_on_File = extraData.Regulations_on_File ?? false,
+                        Has_facility_billed_ins_before = extraData.Has_facility_billed_ins_before ?? false,
+                        Copies_of_all_managed_care_contracts_on_file = extraData.Copies_of_all_managed_care_contracts_on_file ?? false,
+                        Forms_created = extraData.Forms_created ?? false,
+                        In_Service_scheduled = extraData.In_Service_scheduled ?? false,
+                        Portal_training_setup = extraData.Portal_training_setup ?? false,
+                        email_regarding_conference_set_up = extraData.email_regarding_conference_set_up ?? false,
+                        Database_set_up = extraData.Database_set_up ?? false,
+                        Availavility_request_sent_out = extraData.Availavility_request_sent_out ?? false,
+                        Availavility_completed = extraData.Availavility_completed ?? false,
+                        Navinet_request_completed = extraData.Navinet_request_completed ?? false,
+                        Fee_schedule_in_binder = extraData.Fee_schedule_in_binder ?? false,
+                        AcreditationOnFile = extraData.AcreditationOnFile ?? false,
+                        HighComplexityCLIA = extraData.HighComplexityCLIA ?? false,
+                        RegistrationAnalyzer = extraData.RegistrationAnalyzer ?? false,
+                        //freetext
+                        Phone_Number = extraData.Phone_Number ?? "",
+                        AdmissionPhone = extraData.AdmissionPhone ?? "",
+                        Fax_Number = extraData.Fax_Number ?? "",
+                        Website = extraData.Website ?? "",
+                        ScholarshipRate = extraData.ScholarshipRate ?? "",
+                        AverageLenOfStay = extraData.AverageLenOfStay ?? "",
+                        HowManyUAPanels = extraData.HowManyUAPanels ?? "",
+                        PaidToPatientState = extraData.PaidToPatientState ?? "",
+                        MedicareNumber = extraData.MedicareNumber ?? "",
+                        Number_of_beds = extraData.Number_of_beds ?? "",
+                        how_many_days_week_open = extraData.how_many_days_week_open ?? "",
+                        Ancillary_outpatient_services = extraData.Ancillary_outpatient_services ?? "",
+                        Out_of_Network_In_Network = extraData.Out_of_Network_In_Network ?? "",
+                        Lab_Name = extraData.Lab_Name ?? "",
+                        BCBS_ID_Number = extraData.BCBS_ID_Number ?? "",
+                        UPIN_Number = extraData.UPIN_Number ?? "",
+                        Medicaid_Number = extraData.Medicaid_Number ?? "",
+                        State_of_MD_or_PhyGrp = extraData.State_of_MD_or_PhyGrp ?? "",
+                        JACHO_CARF = extraData.JACHO_CARF ?? "",
+                        In_Service_date_time = extraData.In_Service_date_time,
+                        Manage_care_contracts = extraData.Manage_care_contracts ?? "",
+                    });
+                }
+            }
+            return Json(result.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> Create_ExtraData([DataSourceRequest] DataSourceRequest request, 
@@ -993,6 +1058,7 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             }
             return Json(new[] {toStore}.ToDataSourceResult(request, ModelState));
         }
+
       protected override void Dispose(bool disposing)
         {
             if (disposing)

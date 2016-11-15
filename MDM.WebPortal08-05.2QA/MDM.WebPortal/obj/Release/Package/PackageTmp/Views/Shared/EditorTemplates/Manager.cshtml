@@ -1,0 +1,23 @@
+﻿@using Kendo.Mvc.UI
+
+@(Html.Kendo().AutoComplete()
+        .Name("ManagerID")
+        .DataTextField("AliasName") //Specify which property of the Product to be used by the autocomplete as a text.
+        .DataSource(source =>
+        {
+            source.Custom()
+                  .ServerFiltering(true)
+                  .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances.
+                  .Transport(transport =>
+                  {
+                      transport.Read("GetManagers", "BI_DB_FvP_Access");
+                  })
+                  .Schema(schema =>
+                  {
+                      schema.Data("Data") //Define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option.
+                            .Total("Total"); //Define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option.
+                  });
+        })
+        
+      )
+

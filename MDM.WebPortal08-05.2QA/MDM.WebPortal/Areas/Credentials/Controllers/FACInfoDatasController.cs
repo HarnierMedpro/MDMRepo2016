@@ -23,13 +23,40 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
         /*-------------------------KENDO UI FOR ASP.NET MVC5------------------------------------------*/
 
-        public ActionResult LicenseInfo(int? MasterPOSID)
+        public async Task<ActionResult> LicenseInfo(int? MasterPOSID)
         {
-            if (MasterPOSID != null && MasterPOSID > 0)
+            var result = new List<VMFACInfoData>();
+            if (MasterPOSID == null)
             {
-                ViewBag.MasterPOS = MasterPOSID;
+                ViewBag.MasterPOS = 0;
+                return View();
             }
-            return View();
+            var masterPos = await db.MasterPOS.FindAsync(MasterPOSID);
+            if (masterPos == null)
+            {
+                ViewBag.MasterPOS = 0;
+                return View();
+            }
+            var license = masterPos.InfoData;
+            if (license != null)
+            {
+                result.Add(new VMFACInfoData
+                {
+                    MasterPOSID = MasterPOSID.Value,
+                    InfoDataID = license.InfoDataID,
+                    LicType = license.LicType,
+                    LicNumber = license.LicNumber,
+                    StateLic = license.StateLic,
+                    LicEffectiveDate = license.LicEffectiveDate,
+                    LicExpireDate = license.LicExpireDate,
+                    LicNumCLIA_waiver = license.LicNumCLIA_waiver,
+                    CLIA_EffectiveDate = license.CLIA_EffectiveDate,
+                    CLIA_ExpireDate = license.CLIA_ExpireDate,
+                    Taxonomy = license.Taxonomy
+                });
+            }
+            ViewBag.MasterPOS = MasterPOSID;
+            return View(result);
         }
 
         public async Task<ActionResult> Read_License([DataSourceRequest] DataSourceRequest request, int? MasterPOSID)

@@ -10,20 +10,24 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
 
         public int MasterPOSID { get; set; }
 
+        [Required]
         [Display(Name = "PHONE NUMBER")]
         [DataType(DataType.PhoneNumber)]
         [StringLength(20)]
         public string Phone_Number { get; set; }
 
+        [Required]
         [Display(Name = "FAX NUMBER")]
         [DataType(DataType.PhoneNumber)]
         [StringLength(20)]
         public string Fax_Number { get; set; }
 
+        [Required]
         [Display(Name = "WEBSITE")]
         [StringLength(50)]
         public string Website { get; set; }
 
+        [Required]
         [Display(Name = "ADMISSION PHONE NUMBER")]
         [DataType(DataType.PhoneNumber)]
         [StringLength(20)]

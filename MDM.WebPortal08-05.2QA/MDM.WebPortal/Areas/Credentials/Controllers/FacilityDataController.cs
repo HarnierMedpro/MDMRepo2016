@@ -25,17 +25,19 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
 
         public async Task<ActionResult> Facility_Info(int? MasterPOSID)
         {
+            var toView = new List<VMFacilityData>();
             if (MasterPOSID == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+                ViewBag.MasterPOS = 0;
+                return View();
             }
             var pos = await db.MasterPOS.FindAsync(MasterPOSID);
             if (pos == null)
             {
-                return RedirectToAction("Index", "Error", new { area = "BadRequest" });
+                ViewBag.MasterPOS = 0;
+                return View();
             }
             var facInfo = pos.FACInfo;
-            var toView = new List<VMFacilityData>();
             if (facInfo != null)
             {
                 toView.Add(new VMFacilityData
@@ -48,6 +50,26 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             
             ViewBag.MasterPOS = MasterPOSID;
             return View(toView);
+        }
+
+        public async Task<ActionResult> Read_Facility([DataSourceRequest] DataSourceRequest request, int? MasterPosID)
+        {
+            var result = new List<VMFacilityData>();
+            if (MasterPosID != null)
+            {
+                var masterPos = await db.MasterPOS.FindAsync(MasterPosID);
+                if (masterPos != null && masterPos.FACInfo != null)
+                {
+                    var facInfo = masterPos.FACInfo;
+                    result.Add(new VMFacilityData
+                    {
+                        FACInfoID = facInfo.FACInfoID,
+                        NPI_Number = facInfo.NPI_Number,
+                        MasterPOSID = MasterPosID.Value
+                    });
+                }
+            }
+            return Json(result.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> Create_Facility([DataSourceRequest] DataSourceRequest request, [Bind(Include = "FACInfoID,MasterPOSID,NPI_Number")] VMFacilityData facility, int? ParentID)

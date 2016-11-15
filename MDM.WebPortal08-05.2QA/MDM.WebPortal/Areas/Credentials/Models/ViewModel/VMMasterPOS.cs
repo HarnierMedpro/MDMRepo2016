@@ -60,6 +60,7 @@ namespace MDM.WebPortal.Areas.Credentials.Models.ViewModel
         [UIHint("FormsSentMultiselectEditor")]
         public IEnumerable<VMFormsDict> Forms_Sents { get; set; }
 
+        [Display(Name = "CORPORATION")]
         public string Corporation { get; set; }
 
         public VMMasterPOS()

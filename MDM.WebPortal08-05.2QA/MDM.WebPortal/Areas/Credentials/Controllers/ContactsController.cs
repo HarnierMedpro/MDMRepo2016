@@ -83,13 +83,13 @@ namespace MDM.WebPortal.Areas.Credentials.Controllers
             var result = db.ContactType_Contact.Include(cnt => cnt.Contact).Include(ty => ty.ContactType)
                            .Where(ty => ty.ContactType.ContactLevel.Equals("corporation", StringComparison.InvariantCultureIgnoreCase) && 
                                   ty.ContactType.ContactType_Name.Equals("owner", StringComparison.InvariantCultureIgnoreCase) == false)
-                           .Select(tv => tv.Contact).Distinct();
+                           .Select(tv => tv.Contact).Distinct().OrderBy(d => d.Email).ToList();
 
             if (corpID != null && corpID > 0)
             {
-                var allContactsOfThisCorp = db.Corp_Owner.Include(x => x.Contact).Where(x => x.corpID == corpID).Select(x => x.Contact);
-                var allNonOwnerOfThisCorp = result.Intersect(allContactsOfThisCorp);
-                result = result.Except(allNonOwnerOfThisCorp);
+                var allContactsOfThisCorp = db.Corp_Owner.Include(x => x.Contact).Where(x => x.corpID == corpID).Select(x => x.Contact).ToList();
+                var allNonOwnerOfThisCorp = result.Intersect(allContactsOfThisCorp).ToList();
+                result = result.Except(allNonOwnerOfThisCorp).ToList();
             }
             
             return Json(result.ToDataSourceResult(request, x => new VMContact

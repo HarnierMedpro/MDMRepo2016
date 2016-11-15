@@ -1,0 +1,33 @@
+﻿@model IEnumerable<MDM.WebPortal.Models.Identity.Menu>
+
+@*<link href="~/Content/kendo/kendo.common-bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/kendo/kendo.bootstrap.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery-2.2.4.min.js"></script>
+<script src="~/Scripts/kendo/kendo.all.min.js"></script>
+<script src="~/Scripts/kendo/kendo.aspnetmvc.min.js"></script>*@
+@(Html.Kendo().Menu()
+      .Name("Menu")
+      .BindTo(Model, mappings =>
+      {
+          mappings.For<MDM.WebPortal.Models.Identity.Menu>(binding => binding
+                  .ItemDataBound((item, menuParent) =>
+                  {
+                      item.Text = menuParent.Title;
+                  })
+                  .Children(submenu => submenu.ChildMenus));
+          mappings.For<MDM.WebPortal.Models.Identity.Menu>(binding => binding
+                  .ItemDataBound((item, menuChild) =>
+                  {
+                      //if (menuChild.ActionID == null)
+                      //{
+                      //    item.Text = menuChild.Title;
+                      //}
+                      //else
+                      //{
+                      //    item.Action(menuChild.actionSystem.Act_Name, menuChild.actionSystem.ControllerSystem.Cont_Name, menuChild.actionSystem.ControllerSystem.AreaID == null ? new {Area = ""} : new {Area = menuChild.actionSystem.ControllerSystem.AreaSystem.AreaName});
+                      //}
+                      item.Text = menuChild.Title;
+                  }));
+      })
+)

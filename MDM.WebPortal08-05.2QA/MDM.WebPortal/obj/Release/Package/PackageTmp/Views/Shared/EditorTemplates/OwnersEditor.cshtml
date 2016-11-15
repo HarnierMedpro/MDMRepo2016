@@ -1,0 +1,27 @@
+﻿@*See: C:\Users\hsuarez\Desktop\Documentation\Kendo UI for ASP.NET MVC5\ui-for-aspnet-mvc-examples-master\grid\multiselect-in-grid-popup*@
+@model IEnumerable<MDM.WebPortal.Areas.Credentials.Models.ViewModel.VMContact>
+
+@(Html.Kendo().MultiSelectFor(m => m)
+        .DataTextField("LName")
+        .DataValueField("ContactID")
+        .Placeholder("Select owners...")
+        //.BindTo((IEnumerable<MDM.WebPortal.Models.ViewModel.VMPermissionRole>)ViewData["Roles"])
+            .ItemTemplate("#= LName #, #= FName #  #= Email #")
+        .DataSource(source =>
+            {
+                source.Custom()
+                    .ServerFiltering(true)
+                    .ServerPaging(true)
+                    .PageSize(80)
+                    .Type("aspnetmvc-ajax") //Set this type if you want to use DataSourceRequest and ToDataSourceResult instances
+                    .Transport(transport =>
+                    {
+                        transport.Read("Read_Owners", "Contacts");
+                    })
+                    .Schema(schema =>
+                    {
+                        schema.Data("Data") //define the [data](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.data) option
+                              .Total("Total"); //define the [total](http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-schema.total) option
+                    });
+            })
+)

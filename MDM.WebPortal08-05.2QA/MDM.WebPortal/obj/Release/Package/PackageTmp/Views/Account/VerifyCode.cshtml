@@ -1,0 +1,74 @@
+﻿@model IdentitySample.Models.VerifyCodeViewModel
+@{
+    ViewBag.Title = "Enter Verification Code";
+}
+
+<div class="admin-container">
+    <h2 class="section-title">@ViewBag.Title.</h2>
+
+    <div class="row">
+        <div class="col-md-offset-4 col-md-4">
+            <div class="panel box-panel-admin">
+                <div class="panel-body">
+                    <div class="login-logo">
+                        <!--Put into src the pic url-->
+                        <img src="" class="img-logo" />
+                    </div>
+                    @using (Html.BeginForm("VerifyCode", "Account", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary("", new { @class = "text-danger" })
+                        @Html.Hidden("provider", @Model.Provider)
+
+                        <h4 class="text-center">Verify Authentication Code</h4>
+                        <p class="small text-center">Please enter the code you received in order to login.</p>
+                        <p class="small text-center">Please contact support if you have any issues.</p>
+
+                        <div class="form-group">
+                            @*@Html.LabelFor(m => m.Code, new { @class = "col-md-2 control-label" })*@
+                            <div class="col-md-offset-1 col-md-10">
+                                @Html.TextBoxFor(m => m.Code, new { id = "tbCode", @class = "form-control", @placeholder = "Code" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-1 col-md-10">
+                                <div class="checkbox">
+                                    @*@Html.CheckBoxFor(m => m.RememberBrowser)
+                        @Html.LabelFor(m => m.RememberBrowser)*@
+                                    <input type="checkbox" name="Remember" id="checkbox_remember">
+                                    <label for="checkbox_remember">Remember this browser</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="form-group">
+                                <input id="btn-Verify" type="submit" class="btn-social solid twitter" value="Submit" onclick="return Verify();" />
+                                <a href="@Url.Action("Index", "Home")" class="btn-social solid twitter"> Start Over</a>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script src="~/Scripts/lib/Notify/notify.min.js"></script>
+<script>
+    function Verify() {
+        if ($.trim($('#tbCode').val().length) == 0) {
+            $('#tbCode').notify("Code verification failed. Please try again.", { position: "bottom center" });
+            $('#tbCode').focus();
+            return false;
+        }
+    }
+</script>
